@@ -1,7 +1,5 @@
 package com.codered.engine.shaders.shader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +8,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL32;
 
-import com.codered.engine.managing.Paths;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -28,9 +24,9 @@ public abstract class ShaderProgram
 	
 	private int programID;
 	
-	private List<Integer> geometryShaderIds = Auto.ArrayList();
-	private List<Integer> vertexShaderIds = Auto.ArrayList();
-	private List<Integer> fragmentShaderIds = Auto.ArrayList();
+	private List<ShaderPart> geometryShaders = Auto.ArrayList();
+	private List<ShaderPart> vertexShaders = Auto.ArrayList();
+	private List<ShaderPart> fragmentShaders = Auto.ArrayList();
 	
 	private HashMap<String,Integer> uniforms = Maps.newHashMap();
 	
@@ -72,14 +68,14 @@ public abstract class ShaderProgram
 	
 	public void compile()
 	{
-		for(int i : this.geometryShaderIds)
-			GL20.glAttachShader(programID, i);
+		for(ShaderPart p : this.geometryShaders)
+			GL20.glAttachShader(programID, p.getId());
 		
-		for(int i : this.vertexShaderIds)
-			GL20.glAttachShader(programID, i);
+		for(ShaderPart p  : this.vertexShaders)
+			GL20.glAttachShader(programID, p.getId());
 		
-		for(int i : this.fragmentShaderIds)
-			GL20.glAttachShader(programID, i);
+		for(ShaderPart p  : this.fragmentShaders)
+			GL20.glAttachShader(programID, p.getId());
 
 		Shader.Attrib[] attribs = getClass().getDeclaredAnnotationsByType(Shader.Attrib.class);
 		
@@ -96,19 +92,17 @@ public abstract class ShaderProgram
 	
 	protected void attachGeometryShader(String file)
 	{
-		this.geometryShaderIds.add(loadShader(file + Paths.e_geometryShader, GL32.GL_GEOMETRY_SHADER));
+		this.geometryShaders.add(ShaderParts.builtIn().getGeometryShader(file));
 	}
 	
 	protected void attachFragmentShader(String file)
 	{
-		this.fragmentShaderIds.add(ShaderParts.builtIn().getFragmentShader(file).getId());
-		//this.fragmentShaderIds.add(loadShader(file + Paths.e_fragmentShader, GL20.GL_FRAGMENT_SHADER));
+		this.fragmentShaders.add(ShaderParts.builtIn().getFragmentShader(file));
 	}
 	
 	protected void attachVertexShader(String file)
 	{
-		this.vertexShaderIds.add(ShaderParts.builtIn().getVertexShader(file).getId());
-		//this.vertexShaderIds.add(loadShader(file + Paths.e_vertexShader, GL20.GL_VERTEX_SHADER));
+		this.vertexShaders.add(ShaderParts.builtIn().getVertexShader(file));
 	}
 
 	
@@ -128,16 +122,20 @@ public abstract class ShaderProgram
 	{
 		GL20.glUseProgram(0);
 		
-		for(int i : this.geometryShaderIds)
-			GL20.glDetachShader(this.programID, i);
+		for(ShaderPart p : this.geometryShaders)
+			GL20.glDetachShader(this.programID, p.getId());
 		
-		for(int i : this.vertexShaderIds)
-			GL20.glDetachShader(this.programID, i);
+		for(ShaderPart p : this.vertexShaders)
+			GL20.glDetachShader(this.programID, p.getId());
 		
-		for(int i : this.fragmentShaderIds)
-			GL20.glDetachShader(this.programID, i);
+		for(ShaderPart p : this.fragmentShaders)
+			GL20.glDetachShader(this.programID, p.getId());
 		
 		GL20.glDeleteProgram(this.programID);
+		
+		this.geometryShaders.clear();
+		this.vertexShaders.clear();
+		this.fragmentShaders.clear();
 	}
 	
 	protected void bindAttribute(int attrib, String var)
@@ -155,60 +153,6 @@ public abstract class ShaderProgram
 		this.uniforms.put(uniform, GL20.glGetUniformLocation(this.programID, uniform));
 	}
 	
-	private int loadShader(String file, int type)
-	{
-		int shaderID = GL20.glCreateShader(type);
-		GL20.glShaderSource(shaderID, readShader(file));
-		GL20.glCompileShader(shaderID);
-		
-		if(GL20.glGetShaderi(shaderID,GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
-		{
-			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-			System.out.println("Could not compile shader. " + file);
-			System.exit(-1);
-		}
-		
-		return shaderID;
-		
-	}
-	
-	private String readShader(String file)
-	{
-		file = Paths.p_shaders + file;
-		
-		file = file.replaceAll("\\\\","\\\\").replaceAll("/", "\\\\");
-		
-		StringBuilder shaderSource = new StringBuilder();
-		
-		String line;
-		
-		try
-		{
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			
-			while((line = reader.readLine()) != null)
-			{
-				
-				if(line.startsWith("#include"))
-				{
-					shaderSource.append(readShader(line.substring("#include".length() + 2, line.length() - 1)));
-				}
-				else
-				{
-					shaderSource.append(line).append("\n");					
-				}
-
-			}
-			
-			reader.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return shaderSource.toString();
-	}
 	
 	protected abstract void getAllUniformLocations();
 	

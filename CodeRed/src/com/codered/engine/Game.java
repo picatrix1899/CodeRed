@@ -79,6 +79,21 @@ public abstract class Game
 			loadDefaultEmbededShader(path, "t_noShading");
 			loadDefaultEmbededShader(path, "t_pointLight_N");
 			
+			path.base("/resources/shaders/ppf/");
+			loadDefaultEmbededShader(path, "ppf_blend");
+			
+			ShaderParts.builtIn().loadFragmentShader("ppf_blur", path.file("ppf_blur").extension(".fs"));
+			ShaderParts.builtIn().loadVertexShader("ppf_blurHorizontal", path.file("ppf_blurHorizontal").extension(".vs"));
+			ShaderParts.builtIn().loadVertexShader("ppf_blurVertical", path.file("ppf_blurVertical").extension(".vs"));
+			
+			loadDefaultEmbededShader(path, "ppf_brightness");
+			loadDefaultEmbededShader(path, "ppf_contrast");
+			loadDefaultEmbededShader(path, "ppf_depthMap");
+			loadDefaultEmbededShader(path, "ppf_depthTest");
+			loadDefaultEmbededShader(path, "ppf_hdr");
+			loadDefaultEmbededShader(path, "ppf_invert");
+			loadDefaultEmbededShader(path, "ppf_no");
+			loadDefaultEmbededShader(path, "ppf_radialBlur");
 			
 		}
 		catch(MalformedShaderException | ShaderNotFoundException e)

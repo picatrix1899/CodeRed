@@ -42,16 +42,6 @@ public abstract class PPFilter extends PPF
 		return PPF_RadialBlur.instance;
 	}
 	
-	public static PPF_CameraStripsHorizontal CameraStripsHorizontal()
-	{
-		return PPF_CameraStripsHorizontal.instance;
-	}
-	
-	public static PPF_CameraStripsVertical CameraStripsVertical()
-	{
-		return PPF_CameraStripsVertical.instance;
-	}
-	
 	public static PPF_HDR HDR()
 	{
 		return PPF_HDR.instance;

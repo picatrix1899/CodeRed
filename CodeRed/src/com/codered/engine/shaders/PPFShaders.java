@@ -4,8 +4,6 @@ import com.codered.engine.shaders.postprocess.filter.Blend_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.BlurH_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.BlurV_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.Brightness_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.CameraStripsHorizontal_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.CameraStripsVertical_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.Contrast_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.DepthMap_PPFilter;
 import com.codered.engine.shaders.postprocess.filter.DepthTest_PPFilter;
@@ -21,8 +19,6 @@ public class PPFShaders
 	public static final BlurH_PPFilter BlurH = new BlurH_PPFilter();
 	public static final BlurV_PPFilter BlurV = new BlurV_PPFilter();
 	public static final Brightness_PPFilter Brightness = new Brightness_PPFilter();
-	public static final CameraStripsHorizontal_PPFilter CameraStripsHorizontal = new CameraStripsHorizontal_PPFilter();
-	public static final CameraStripsVertical_PPFilter CameraStripsVertical = new CameraStripsVertical_PPFilter();
 	public static final DepthTest_PPFilter DepthTest = new DepthTest_PPFilter();
 	public static final DepthMap_PPFilter DepthMap = new DepthMap_PPFilter();
 	public static final HDR_PPFilter HDR = new HDR_PPFilter();
