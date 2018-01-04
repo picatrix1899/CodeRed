@@ -1,0 +1,93 @@
+	public RawModel loadTerrain()
+	{
+		
+		int count = Terrain.VERTEX_COUNT * Terrain.VERTEX_COUNT;
+		float[] vertices = new float[count * 3];
+		float[] normals = new float[count * 3];
+		float[] textureCoords = new float[count*2];
+		int[] indices = new int[6*(Terrain.VERTEX_COUNT-1)*(Terrain.VERTEX_COUNT-1)];
+		int vertexPointer = 0;
+		for(int i=0;i<Terrain.VERTEX_COUNT;i++)
+		{
+			for(int j=0;j<Terrain.VERTEX_COUNT;j++)
+			{
+				vertices[vertexPointer*3] = (float)j/((float)Terrain.VERTEX_COUNT - 1) * Terrain.SIZE;
+				vertices[vertexPointer*3+1] = 0;
+				vertices[vertexPointer*3+2] = (float)i/((float)Terrain.VERTEX_COUNT - 1) * Terrain.SIZE;
+				normals[vertexPointer*3] = 0;
+				normals[vertexPointer*3+1] = 1;
+				normals[vertexPointer*3+2] = 0;
+				textureCoords[vertexPointer*2] = (float)j/((float)Terrain.VERTEX_COUNT - 1);
+				textureCoords[vertexPointer*2+1] = (float)i/((float)Terrain.VERTEX_COUNT - 1);
+				vertexPointer++;
+			}
+		}
+		int pointer = 0;
+		for(int gz = 0; gz < Terrain.VERTEX_COUNT - 1; gz++)
+		{
+			for(int gx = 0; gx < Terrain.VERTEX_COUNT - 1; gx++)
+			{
+				int topLeft = gz * Terrain.VERTEX_COUNT + gx;
+				int topRight = topLeft + 1;
+				int bottomLeft = (gz + 1) * Terrain.VERTEX_COUNT + gx;
+				int bottomRight = bottomLeft + 1;
+				
+				indices[pointer++] = topLeft;
+				indices[pointer++] = bottomLeft;
+				indices[pointer++] = topRight;
+				indices[pointer++] = topRight;
+				indices[pointer++] = bottomLeft;
+				indices[pointer++] = bottomRight;
+			}
+		}
+		
+		System.out.println("BEFORE");
+		
+
+		
+		for(int i = 0; i < count; i++)
+		{
+			System.out.print(vertices[i * 3] + ", ");
+			System.out.print(vertices[i * 3 + 1] + ", ");
+			System.out.println(vertices[i * 3 + 2] + "");
+		}
+		
+		for(int i = 0; i < count; i++)
+		{
+			System.out.print(textureCoords[i * 2] + ", ");
+			System.out.println(textureCoords[i * 2 + 1] + "");
+		}
+		
+		for(int i = 0; i < indices.length; i++)
+		{
+			System.out.print(indices[i] + ", ");
+		}	
+		
+		System.out.println("");
+		
+		TerrainLoader loader = new TerrainLoader();
+//		
+//		System.out.println("AFTER");
+//		
+//		Mesh m = loader.loadTerrain();
+//		
+//		m.load();
+		
+		return loadToVAO(vertices,textureCoords,normals,indices);
+		
+//		return new RawModel(m.getVAO(), m.getVertexCount());
+		
+	}
+	
+		public RawModel loadToVAO(float[] positions,float[] texCoords,float[] normals, int[] indices)
+	{
+		VAO vao = VAOManager.get().createVAO();
+		
+		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
+		
+		vao.storeData(0, 3, positions, GL15.GL_STATIC_DRAW);
+		vao.storeData(1, 2, texCoords, GL15.GL_STATIC_DRAW);
+		vao.storeData(2, 3, normals, GL15.GL_STATIC_DRAW);
+
+		return new RawModel(vao, indices.length);
+	}

@@ -1,0 +1,29 @@
+	public void test()
+	{
+		World w = Session.get().getWorld();
+		
+		StaticEntity e = w.getStaticEntity(0);
+		
+		Quaternion q = e.getRot();
+		Vector3f c = e.getTransformedAABB().center.addN(0,10,0);
+	
+		PrimitiveRenderer.drawLine(c, c.addN(q.getForward().mulN(10)), new Color3f(1.0f, 1.0f, 0.0f));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		Vector3f a = q.getForward().normalize();
+		Vector3f b =  new Vector3f(-1.0f, -1.0f, 0.0f).normalize();
+		
+		Quaternion q2 = new Quaternion();
+		Vector3f c2 = a.cross(b);
+		q2.setX(c2.x).setY(c2.y).setZ(c2.z);
+		q2.setW(1 + a.dot(b));
+		q2.normalize();
+		PrimitiveRenderer.drawLine(c, c.addN(q2.getForward().mulN(10)), new Color3f(1.0f, 1.0f, 1.0f));
+	}

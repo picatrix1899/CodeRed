@@ -1,0 +1,87 @@
+	private Vec3f min = new Vector3f();
+	private Vec3f max = new Vector3f();
+	public Vec3f extend = new Vector3f();
+	public Vec3f center = new Vector3f();
+	public Vec3f size = new Vector3f();
+	
+	private AABB(Vec3fBase min, Vec3fBase max)
+	{
+		this.min.set(min);
+		this.max.set(max);
+		
+		this.size = max.subN(min);
+		this.extend = size.mulN(0.5f);
+		this.center = min.addN(this.extend);
+		
+		
+	}
+	
+	public AABB clone()
+	{
+		return new AABB(this.min, this.max);
+	}
+	
+	public Vec3f getMin()
+	{
+		return this.min;
+	}
+	
+	public Vec3f getMax()
+	{
+		return this.max;
+	}
+	
+	public AABB minkowskiDifference(AABB b)
+	{
+		Vec3f topLeft = min.subN(b.max);
+		Vec3f fullSize = this.size.addN(b.size);
+		
+		Vec3f ext = fullSize.mulN(0.5f);
+		Vec3f c = topLeft.addN(ext);
+		
+		Vec3f mi = c.subN(ext);
+		Vec3f ma = c.addN(ext);
+		
+		return new AABB(mi, ma);
+	}
+	
+	public boolean containsPoint(Vec3fBase v)
+	{
+		return	min.getX() < v.getX() && max.getX() > v.getX() &&
+				min.getY() < v.getY() && max.getY() > v.getY() &&
+				min.getZ() < v.getZ() && max.getZ() > v.getZ() ;
+	}
+	
+	public Vector3f closestPointOnBoundsToPoint(Vec3fBase point)
+	{
+		float minDist = Math.abs(max.getX() - point.getX());
+		Vector3f boundsPoint = new Vector3f(max.getX(), point.getY(), point.getZ());
+		
+		if(Math.abs(point.getX() - min.getX()) < minDist)
+		{
+			minDist = Math.abs(min.getX() - point.getX());
+			boundsPoint.set(min.getX(), point.getY(), point.getZ());
+		}
+		if(Math.abs(max.getY() - point.getY()) < minDist)
+		{
+			minDist = Math.abs(max.getY() - point.getY());
+			boundsPoint.set(point.getX(), max.getY(), point.getZ());
+		}
+		if(Math.abs(min.getY() - point.getY()) <minDist)
+		{
+			minDist = Math.abs(min.getY() - point.getY());
+			boundsPoint.set(point.getX(), min.getY(), point.getZ());
+		}
+		if(Math.abs(max.getZ() - point.getZ()) < minDist)
+		{
+			minDist = Math.abs(max.getZ() - point.getZ());
+			boundsPoint.set(point.getX(), point.getY(), max.getZ());
+		}
+		if(Math.abs(min.getZ() - point.getZ()) < minDist)
+		{
+			minDist = Math.abs(min.getZ() - point.getZ());
+			boundsPoint.set(point.getX(), point.getY(), min.getZ());
+		}
+		
+		return boundsPoint;
+	}

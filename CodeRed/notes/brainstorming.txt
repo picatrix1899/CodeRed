@@ -1,0 +1,20 @@
+depth: 4
+rot: 27.2
+step: 3
+F->FF
+X->F[+X][-X]FF[XX]
+axiom: X
+------------------------------------
+depth: 4
+rot: 27.2
+step: 3
+F->FF
+X->F[+X]F[-X]FF[XFX]
+axiom: X
+------------------------------------
+depth: 4
+rot: 27.2
+step: 3
+F->FF
+X->F[-X]F[+X]X
+axiom: X

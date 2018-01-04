@@ -1,0 +1,5 @@
+name=steelfloor
+texture=steelfloor
+normalMap=steelfloor_normal
+specular.intensity=0.4
+specular.power=2.0

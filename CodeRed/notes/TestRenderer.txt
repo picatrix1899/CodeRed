@@ -1,0 +1,222 @@
+package com.picatrix1899.codered.demo.renderer;
+package com.picatrix1899.codered.demo;
+
+
+import org.lwjgl.opengl.GL11;
+
+import com.picatrix1899.codered.engine.WindowManager;
+import com.picatrix1899.codered.engine.entities.Camera;
+import com.picatrix1899.codered.engine.entities.StaticEntity;
+import com.picatrix1899.codered.engine.light.AmbientLight;
+import com.picatrix1899.codered.engine.light.DirectionalLight;
+import com.picatrix1899.codered.engine.light.PointLight;
+import com.picatrix1899.codered.engine.managing.FBO;
+import com.picatrix1899.codered.engine.managing.MSFBO;
+import com.picatrix1899.codered.engine.managing.Scene;
+import com.picatrix1899.codered.engine.managing.Window;
+import com.picatrix1899.codered.engine.managing.World;
+import com.picatrix1899.codered.engine.managing.FBO.Target;
+import com.picatrix1899.codered.engine.rendering.CustomRenderer;
+import com.picatrix1899.codered.engine.rendering.PrimitiveRenderer;
+import com.picatrix1899.codered.engine.rendering.ppf.HDRPPFilter;
+import com.picatrix1899.codered.engine.shaders.object.SimpleObjectShader;
+import com.picatrix1899.codered.engine.shaders.terrain.SimpleTerrainShader;
+
+import cmn.picatrix1899.utilslib.color.LDRColor3;
+import cmn.picatrix1899.utilslib.matrix.Matrix4f;
+import cmn.picatrix1899.utilslib.vector.Quaternion;
+import cmn.picatrix1899.utilslib.vector.Vector3f;
+
+public class TestRenderer implements CustomRenderer
+{
+
+	public static TestRenderer instance = new TestRenderer();
+	
+	private MSFBO msSceneMain;
+	private MSFBO msSceneBloom;
+	private FBO sceneMain;
+	private FBO sceneBloom;
+	
+	public DirectionalLight sun = new DirectionalLight(LDRColor3.get(128, 102, 0), 0.5f, new Vector3f(-1.0f, -1.0f, 0.0f));
+	public PointLight p1 = new PointLight(new Vector3f(-30, 2f, -40), LDRColor3.get(255, 0, 0), 10f, 0.0f, 0.1f, 0.4f);
+	public PointLight p2 = new PointLight(new Vector3f(-30, 8f, -60), LDRColor3.get(0, 0, 0), 10f, 0.37f, 0f, 0.4f);
+	public AmbientLight ambient = new AmbientLight(LDRColor3.get(255,76,76), 0.5f);//new AmbientLight(Color3f.get(255,255,255), 1.0f);new AmbientLight(Color3f.get(0,0,0), 0.0f);
+	
+	public Scene a;
+	public Scene b;
+	
+	public Camera c;
+	
+	public void init()
+	{
+		msSceneMain = new MSFBO(WindowManager.active.WIDTH, WindowManager.active.HEIGHT, 3);
+		msSceneMain.applyHDRColorAttachment(FBO.Target.COLOR0);
+		msSceneMain.applyDepthBufferAttachment();
+		
+		msSceneBloom = new MSFBO(WindowManager.active.WIDTH, WindowManager.active.HEIGHT, 3);
+		msSceneBloom.applyHDRColorAttachment(FBO.Target.COLOR0);
+		msSceneBloom.applyDepthBufferAttachment();
+		
+		sceneMain = new FBO(WindowManager.active.WIDTH, WindowManager.active.HEIGHT);
+		sceneMain.applyHDRColorAttachment(FBO.Target.COLOR0);
+		sceneMain.applyDepthBufferAttachment();
+		
+		sceneBloom = new FBO(WindowManager.active.WIDTH, WindowManager.active.HEIGHT);
+		sceneBloom.applyHDRColorAttachment(FBO.Target.COLOR0);
+		sceneBloom.applyDepthBufferAttachment();
+		
+		World w = Session.get().getWorld();
+
+		a = new Scene();
+		
+		
+		a.add(w.getStaticTerrain(0));
+		a.add(w.getStaticTerrain(1));
+		
+		a.add(w.getStaticEntity(0));
+		a.add(w.getStaticEntity(1));
+		a.add(w.getStaticEntity(2));
+		a.add(w.getStaticEntity(3));
+		a.add(w.getStaticEntity(4));
+		
+		Window win = WindowManager.active;
+		
+		SimpleObjectShader.No().loadProjectionMatrix(win.projectionMatrix);
+		SimpleObjectShader.AmbientLight().loadProjectionMatrix(win.projectionMatrix);
+		SimpleObjectShader.Glow().loadProjectionMatrix(win.projectionMatrix);
+		SimpleObjectShader.DirectionalLight_N().loadProjectionMatrix(win.projectionMatrix);
+		SimpleObjectShader.PointLight_N().loadProjectionMatrix(win.projectionMatrix);
+		
+		SimpleTerrainShader.No().loadProjectionMatrix(win.projectionMatrix);
+		SimpleTerrainShader.AmbientLight().loadProjectionMatrix(win.projectionMatrix);
+		SimpleTerrainShader.DirectionalLight_N().loadProjectionMatrix(win.projectionMatrix);
+		SimpleTerrainShader.PointLight_N().loadProjectionMatrix(win.projectionMatrix);
+		
+		
+		c = new Camera();
+		c = Session.get().getPlayer().getCamera();
+		c.pos = p1.position;
+		
+		StaticEntity e = Session.get().getWorld().getStaticEntity(1);
+		
+		Vector3f v = e.getTransformedAABB().center.subN(p1.position);
+		c.rot = new Quaternion(new Matrix4f().initRotation(v.normalize().invert(), Vector3f.aY.getVector()));
+	}
+	
+	public void prepare()
+	{
+		StaticEntity e = Session.get().getWorld().getStaticEntity(1);
+	
+		Vector3f v = e.getTransformedAABB().center.subN(Session.get().getPlayer().getCamera().pos);
+		e.setRot( new Quaternion(new Matrix4f().initRotation(v.normalize().invert(), Vector3f.aY.getVector())));
+		
+		Vector3f camPos = c.pos;
+		
+		SimpleObjectShader.DirectionalLight_N().loadCameraPos(camPos);
+		SimpleObjectShader.PointLight_N().loadCameraPos(camPos);
+		SimpleTerrainShader.PointLight_N().loadCameraPos(camPos);
+		SimpleTerrainShader.DirectionalLight_N().loadCameraPos(camPos);
+		SimpleObjectShader.AmbientLight().setInput("camera", camPos);
+		SimpleTerrainShader.AmbientLight().setInput("camera", camPos);
+		
+		SimpleObjectShader.AABB().loadViewMatrix(c.getViewMatrix());
+		
+		msSceneMain.clearAttachment(FBO.Target.COLOR0);
+		msSceneBloom.clearAttachment(FBO.Target.COLOR0);
+		sceneMain.clearAttachment(Target.COLOR0);
+		sceneBloom.clearAttachment(Target.COLOR0);
+	}
+		
+	
+	public void render()
+	{
+		
+		prepare();
+		
+		msSceneMain.bind();
+		{
+		
+			//Session.get().getWorld().getStaticEntity(1).getTransformedAABB().drawAABB(new Color3f(1.0f,1.0f,1.0f));
+			//Session.get().getWorld().getStaticEntity(3.getTransformedAABB().drawDir(Session.get().getWorld().getStaticEntity(1).getRot().getForward());
+			Vector3f v = Session.get().getWorld().getStaticEntity(3).getPos().subN(p1.position);
+			
+			v.normalize();
+			
+			//Session.get().getWorld().getStaticEntity(3).getTransformedAABB().drawDir(v);
+			
+			//PrimitiveRenderer.drawLine(p1.position, p1.position.addN(v), new Color3f(1.0f, 0.0f, 0.0f));
+			
+			Quaternion q = Quaternion.getFromVector(v);
+			
+			PrimitiveRenderer.drawLine(p1.position, p1.position.addN(q.getForward().mul(10)), LDRColor3.RED);
+			
+			SimpleObjectShader.AmbientLight().loadAmbientLight(ambient);
+			SimpleTerrainShader.AmbientLight().loadAmbientLight(ambient);
+	
+			a.renderBoth(c, SimpleObjectShader.AmbientLight(), SimpleTerrainShader.AmbientLight());				
+			
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GL11.glDepthMask(false);
+			GL11.glDepthFunc(GL11.GL_EQUAL);
+			
+			SimpleObjectShader.DirectionalLight_N().loadDirectionalLight(sun);
+			SimpleTerrainShader.DirectionalLight_N().loadDirectionalLight(sun);
+			
+			a.renderBoth(c, SimpleObjectShader.DirectionalLight_N(), SimpleTerrainShader.DirectionalLight_N());
+			
+			SimpleObjectShader.PointLight_N().loadPointLight(p1);
+			SimpleTerrainShader.PointLight_N().loadPointLight(p1);
+			
+			a.renderBoth(c, SimpleObjectShader.PointLight_N(), SimpleTerrainShader.PointLight_N());
+			
+			SimpleObjectShader.PointLight_N().loadPointLight(p2);
+			SimpleTerrainShader.PointLight_N().loadPointLight(p2);
+			
+			a.renderBoth(c, SimpleObjectShader.PointLight_N(), SimpleTerrainShader.PointLight_N());
+			
+			GL11.glDepthFunc(GL11.GL_LESS);
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_BLEND);
+			
+
+		}
+		msSceneMain.unbind();
+		
+		msSceneMain.copyAttachment(sceneMain, FBO.Target.COLOR0, FBO.Target.COLOR0);
+		
+		msSceneBloom.bind();
+		{
+			a.renderObjects(Session.get().getPlayer().getCamera(), SimpleObjectShader.Glow());
+		}
+		msSceneBloom.unbind();
+		
+		msSceneBloom.copyAttachment(sceneBloom, FBO.Target.COLOR0, FBO.Target.COLOR0);
+		
+		HDRPPFilter.HDRRadialBlur().setAmplitude(0.1f).setCycles(20).setDelta(0.994f);
+		HDRPPFilter.HDRRadialBlur().doPostProcess(sceneBloom, FBO.Target.COLOR0, sceneBloom, FBO.Target.COLOR0);	
+		
+		HDRPPFilter.HDRSimpleBlend().doPostProcess(sceneMain, sceneBloom, sceneMain, FBO.Target.COLOR0, FBO.Target.COLOR0);
+		
+		HDRPPFilter.HDR().setExposure(2f);
+		HDRPPFilter.HDR().doPostProcess(sceneMain, FBO.Target.COLOR0, sceneMain,FBO.Target.COLOR0);
+		
+		sceneMain.bind();
+		
+	
+		
+			
+		
+		sceneMain.unbind();
+		
+		sceneMain.resolveAttachmentToScreen(FBO.Target.COLOR0);
+	
+		//GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
+		
+
+		
+		
+	}
+	
+
+}

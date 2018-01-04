@@ -1,0 +1,125 @@
+//		Player p = world.p;
+//		
+//		Vector3f forward = p.getRotation().getForward().clone();
+//		Vector3f eyePos = p.getEyePos().clone();
+//		
+//		forward.normalize();
+//		
+//		Entity e = world.getStaticEntity(0);
+//		
+//		AABB aabb = e.getTransformedAABB();		
+//		
+//		aabb.drawAABB(new Color3f(1.0f,0.5f,0));	
+//
+//		Vector3f invForward = forward.inversed();
+//		
+//	    float tmin = (aabb.getMin().x - eyePos.x) / forward.x; 
+//	    float tmax = (aabb.getMax().x - eyePos.x) / forward.x; 
+//	 
+//	    if (invForward.x >= 0) { 
+//	        tmin = (aabb.getMin().x - eyePos.x) * invForward.x; 
+//	        tmax = (aabb.getMax().x - eyePos.x) * invForward.x; 
+//	    } 
+//	    else { 
+//	        tmin = (aabb.getMax().x - eyePos.x) * invForward.x; 
+//	        tmax = (aabb.getMin().x - eyePos.x) * invForward.x; 
+//	    }
+//	 
+//	    float tymin = (aabb.getMin().y - eyePos.y) / forward.y; 
+//	    float tymax = (aabb.getMin().y - eyePos.y) / forward.y; 
+//	 
+//	    if (invForward.y >= 0) { 
+//	        tymin = (aabb.getMin().y - eyePos.y) * invForward.y; 
+//	        tymax = (aabb.getMax().y - eyePos.y) * invForward.y; 
+//	    } 
+//	    else { 
+//	        tymin = (aabb.getMax().y - eyePos.y) * invForward.y; 
+//	        tymax = (aabb.getMin().y - eyePos.y) * invForward.y; 
+//	    }
+//	 
+//	    if ((tmin > tymax) || (tymin > tmax)) 
+//	        return;
+//	 
+//	    if (tymin > tmin) 
+//	        tmin = tymin; 
+//	 
+//	    if (tymax < tmax) 
+//	        tmax = tymax; 
+//	 
+//	    float tzmin = (aabb.getMin().z - eyePos.z) / forward.z; 
+//	    float tzmax = (aabb.getMax().z - eyePos.z) / forward.z; 
+//	 
+//	    if (invForward.z >= 0) { 
+//	        tzmin = (aabb.getMin().z - eyePos.z) * invForward.z; 
+//	        tzmax = (aabb.getMax().z - eyePos.z) * invForward.z; 
+//	    } 
+//	    else { 
+//	        tzmin = (aabb.getMax().z - eyePos.z) * invForward.z; 
+//	        tzmax = (aabb.getMin().z - eyePos.z) * invForward.z; 
+//	    }
+//	 
+//	    if ((tmin > tzmax) || (tzmin > tmax)) 
+//	        return ; 
+//	 
+//	    if (tzmin > tmin) 
+//	        tmin = tzmin; 
+//	 
+//	    if (tzmax < tmax) 
+//	        tmax = tzmax;
+//	    
+//		Vector3f pointMin = eyePos.addN(forward.mulN(tmin));
+//		Vector3f pointMax = eyePos.addN(forward.mulN(tmax));
+//		
+//		PrimitiveRenderer.drawLine(pointMin, e.getPos(), new Color3f(1.0f, 0.0f, 0.0f));
+//		PrimitiveRenderer.drawPoint(pointMax,  new Color3f(0.0f, 1.0f, 0.0f), 10.0f);
+
+		
+//		if(forward.y > 0.0f)
+//		{
+//			
+//			
+//			
+//			double fact = eyePos.y / forward.y;
+//			
+//			Vector3f point = eyePos.subN(forward.mulN(fact));
+//			
+//			Vector3f dist = point.subN(position);
+			
+			
+//			if(dist.length() < 50)
+//			{
+//				
+//				
+//			
+//				Vector3f vE = e.getPos().subN(eyePos);
+//				
+//				
+//				vE.normalize();
+//				vE.invert();
+//				
+//				double angle = forward.angleDeg(vE);
+//				
+//				if(angle < 45.0d && angle > -45.0d)
+//				{
+//					
+//					Vector3f projE = eyePos.addN(e.getPos().project(forward));
+//					
+//					
+//					
+//					if(e.getTransformedAABB().containsPoint(projE))
+//					{
+//						Vector3f bound = e.getTransformedAABB().closestPointOnBoundsToPoint(projE);
+//						PrimitiveRendering.drawPoint(bound, new Color3f(1.0f, 0.0f, 0.0f), 10.0f);
+//						PrimitiveRendering.drawLine(e.getTransformedAABB().center, bound, new Color3f(1,1,1));
+//					}
+//				}
+//				else
+//				{
+//					PrimitiveRendering.drawPoint(point, new Color3f(1.0f, 1.0f, 1.0f), 10.0f);					
+//				}
+//				
+//				
+//			}
+//			
+//
+//		}

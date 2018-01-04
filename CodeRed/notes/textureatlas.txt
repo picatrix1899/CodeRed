@@ -1,0 +1,20 @@
+<HEADER>
+- [string] name of atlas
+- [int] texture-count
+
+	<TEXTURE-HEADER>
+	- [string] name of texture
+	- [int] count of pixels in image-data
+	- [int] count of sub indices
+	- [string] RGBA32/RGB32 /RGBA16/RGB16
+	
+	
+	<DATA>
+	- [int] r
+	- [int] g
+	- [int] b
+	- [int] a
+	
+	<SUB-INDEX-ENTRY>
+	- [string] name
+	- [float4] uvs

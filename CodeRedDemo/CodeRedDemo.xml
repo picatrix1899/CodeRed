@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project CodeRedDemo with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="K:/picatrix1899_portable/workspace"/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+		<jar destfile="${dir.jarfile}/CodeRedDemo.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.picatrix1899.codered.demo.Main"/>
+                <attribute name="Class-Path" value="lib/utilslib.jar lib/CodeRed.jar lib/guava-19.0.jar lib/jorbis-0.0.15.jar lib/jogg-0.0.7.jar lib/lwjgl-glfw-natives-windows.jar lib/lwjgl-glfw.jar lib/lwjgl-natives-windows.jar lib/lwjgl-nuklear-natives-windows.jar lib/lwjgl-nuklear.jar lib/lwjgl-openal.jar lib/lwjgl-opencl.jar lib/lwjgl-opengl.jar lib/lwjgl-ovr.jar lib/lwjgl-ovr-natives-windows.jar lib/lwjgl-openal-natives-windows.jar lib/lwjgl.jar lib/lwjgl-glfw.jar lib/lwjgl.jar lib/lwjgl-natives-windows.jar lib/lwjgl-opengl.jar lib/guava-19.0.jar"/>
+            </manifest>
+            <fileset dir="${dir.workspace}/CodeRedDemo/bin"/>
+        </jar>
+        <delete dir="${dir.jarfile}/lib"/>
+        <mkdir dir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/guava-19.0.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/jorbis-0.0.15.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/jogg-0.0.7.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-glfw-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-glfw.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-nuklear-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-nuklear.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-openal.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-opencl.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-opengl.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-ovr.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-ovr-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-openal-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-glfw.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-natives-windows.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-opengl.jar" todir="${dir.jarfile}/lib"/>
+        <copy file="${dir.workspace}/CodeRedDemo/lib/guava-19.0.jar" todir="${dir.jarfile}/lib"/>
+		<jar destfile="${dir.jarfile}/lib/utilslib.jar">
+            <fileset dir="${dir.workspace}/git/utilslib/utilslib/bin"/>
+        </jar>
+		<jar destfile="${dir.jarfile}/lib/CodeRed.jar">
+            <manifest>
+                <attribute name="Class-Path" value="lib/utilslib.jar lib/guava-19.0.jar lib/jorbis-0.0.15.jar lib/jogg-0.0.7.jar lib/lwjgl-glfw-natives-windows.jar lib/lwjgl-glfw.jar lib/lwjgl-natives-windows.jar lib/lwjgl-nuklear-natives-windows.jar lib/lwjgl-nuklear.jar lib/lwjgl-openal.jar lib/lwjgl-opencl.jar lib/lwjgl-opengl.jar lib/lwjgl-ovr.jar lib/lwjgl-ovr-natives-windows.jar lib/lwjgl-openal-natives-windows.jar lib/lwjgl.jar lib/lwjgl-glfw.jar lib/lwjgl.jar lib/lwjgl-natives-windows.jar lib/lwjgl-opengl.jar lib/guava-19.0.jar"/>
+            </manifest>
+            <fileset dir="${dir.workspace}/git/CodRed3Engine/bin"/>
+        </jar>
+		
+    </target>
+	
+</project>

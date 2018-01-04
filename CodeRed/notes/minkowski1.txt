@@ -1,0 +1,27 @@
+		Vector3f vel = translation.mulN(Time.getDelta());
+		
+		Vector3f tempPos = e.getPos().addN(vel);
+		
+		Matrix4f m = Matrix4f.iModelMatrix(tempPos, new Quaternion(1.0f, 0.0f, 0.0f, 0.0f), new Vector3f(1.0f)).mul(e.getModel().getModel().getMatrix().mul(Matrix4f.iScaling(e.getTransform().getScale())));
+		
+		AABB tempAABB = e.getModel().getModel().aabb.getTransformedAABB(m);
+		
+		DynamicEntity en = w.getDynamicEntity(1);
+		
+		AABB mink = en.getTransformedAABB().minkowskiDifference(tempAABB);
+		
+		if(mink.containsPoint(new Vector3f()))
+		{
+			vel.add(mink.closestPointOnBoundsToPoint(new Vector3f()));
+		}
+		
+		e.getPos().add(vel);
+		
+		
+		
+		
+		
+		
+		
+		
+		

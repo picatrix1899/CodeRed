@@ -1,0 +1,18 @@
+in vec2 pass_texCoords;
+
+out vec4 out_Color;
+
+uniform sampler2D textureMap;
+
+const float near = 0.1;
+const float far = 1000;
+
+void main()
+{
+	float z = texture(textureMap, pass_texCoords).r;
+	
+	z = z * 2.0 - 1.0;
+	
+	z = (2.0 * near * far) / (far + near - z * (far - near));
+
+	out_Color = vec4(vec3(z / far), 1.0);

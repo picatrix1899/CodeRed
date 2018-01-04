@@ -1,0 +1,6 @@
+name=crate
+texture=crate
+normalMap=crate_normal
+specular.intensity=0.2
+specular.power=1.0
+glowMap=crate_glow
