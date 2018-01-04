@@ -9,7 +9,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class No_PPFilter extends PPFShader
 {
 	
-	public static final No_PPFilter instance = new No_PPFilter();
+
 
 	protected void getAllUniformLocations()
 	{

@@ -10,7 +10,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class DepthTest_PPFilter extends PPFShader
 {
 	
-	public static final DepthTest_PPFilter instance = new DepthTest_PPFilter();
+
 	
 
 

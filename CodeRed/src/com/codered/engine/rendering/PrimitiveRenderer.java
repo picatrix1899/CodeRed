@@ -3,6 +3,7 @@ package com.codered.engine.rendering;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
+import com.codered.engine.GLUtils;
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.shaders.SOShaders;
@@ -34,13 +35,13 @@ public class PrimitiveRenderer
 		
 		int[] indices = new int[]
 		{
-						0
+			0
 		};
 		
 		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		vao.bind(0);
+		GLUtils.bindVAO(vao, 0);
 		
 		SOShaders.Colored.setInput("color", c);
 		
@@ -62,7 +63,7 @@ public class PrimitiveRenderer
 		
 		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
 		
-		vao.bind(0);
+		GLUtils.bindVAO(vao, 0);
 		
 		SOShaders.Colored.setInput("color",c);
 		SOShaders.Colored.use();
@@ -105,7 +106,7 @@ public class PrimitiveRenderer
 		vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		vao.bind(0, 1);
+		GLUtils.bindVAO(vao, 0, 1);
 		
 		shader.setInput("material", m);
 		
@@ -234,7 +235,7 @@ public class PrimitiveRenderer
 		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		vao.bind(0);
+		GLUtils.bindVAO(vao, 0);
 		
 		SOShaders.Colored.setInput("color",c);
 		

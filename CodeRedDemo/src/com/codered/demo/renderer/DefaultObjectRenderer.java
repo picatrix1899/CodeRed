@@ -20,8 +20,8 @@ import com.codered.engine.rendering.CustomRenderer;
 import com.codered.engine.rendering.MasterRenderer;
 import com.codered.engine.rendering.ppf.PPFilter;
 import com.codered.engine.shaders.SOShaders;
+import com.codered.engine.shaders.STShaders;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shaders.terrain.STShaders;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 import com.codered.engine.terrain.Terrain;
 
@@ -129,8 +129,6 @@ public class DefaultObjectRenderer implements CustomRenderer
 	{
 		for(StaticEntity e : this.world.getStaticEntities())
 		{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
-			
 			oShader.setInput("material", e.getModel().getTexture());
 			oShader.setInput("glow", e.getGlow());
 			
@@ -139,7 +137,9 @@ public class DefaultObjectRenderer implements CustomRenderer
 			oShader.loadCamera(c);
 			
 			oShader.use();			
-			{
+			{	
+				GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
+				
 				GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}
 			oShader.stop();	
@@ -150,7 +150,7 @@ public class DefaultObjectRenderer implements CustomRenderer
 	{
 		for(Terrain t : this.world.getStaticTerrains())
 		{
-			t.getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(t.getModel().getVAO(), 0, 1, 2, 3);
 			
 			tShader.setInput("material", t.getTexture());
 

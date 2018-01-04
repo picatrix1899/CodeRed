@@ -177,9 +177,7 @@ public class WriteDepthTestRenderer implements CustomRenderer
 		DBGShaders.DepthWrite.setInput("frame", this.objFBO_DepthAtt);
 		DBGShaders.DepthWrite.use();
 		{
-			UnityScreen.quad.getVAO().bind(0);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-			
+			UnityScreen.draw();
 		}
 		DBGShaders.DepthWrite.stop();
 		
@@ -192,9 +190,7 @@ public class WriteDepthTestRenderer implements CustomRenderer
 		DBGShaders.DepthWrite.setInput("frame", this.resFBO_DepthAtt);
 		DBGShaders.DepthWrite.use();
 		{
-			UnityScreen.quad.getVAO().bind(0);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-			
+			UnityScreen.draw();	
 		}
 		DBGShaders.DepthWrite.stop();
 	}
@@ -203,7 +199,7 @@ public class WriteDepthTestRenderer implements CustomRenderer
 	
 	public void renderObject(Camera c, StaticEntity e, SimpleObjectShader oShader)
 	{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
+		GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
 			oShader.setInput("material", e.getModel().getTexture());
 			

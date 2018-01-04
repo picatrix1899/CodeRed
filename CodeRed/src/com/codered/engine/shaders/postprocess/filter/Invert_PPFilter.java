@@ -10,7 +10,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class Invert_PPFilter extends PPFShader
 {
 	
-	public static final Invert_PPFilter instance = new Invert_PPFilter();
+
 	
 
 

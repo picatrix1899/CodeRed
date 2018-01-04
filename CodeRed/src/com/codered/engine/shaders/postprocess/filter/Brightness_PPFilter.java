@@ -11,7 +11,7 @@ public class Brightness_PPFilter extends PPFShader
 {
 	
 	
-	public static final Brightness_PPFilter instance = new Brightness_PPFilter();
+
 	
 
 

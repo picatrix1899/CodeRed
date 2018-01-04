@@ -3,7 +3,7 @@ package com.codered.engine.rendering.ppf;
 import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
 import com.codered.engine.managing.FBO.Target;
-import com.codered.engine.shaders.postprocess.filter.PPFShader;
+import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_BlurH extends PPF
 {
@@ -14,17 +14,14 @@ public class PPF_BlurH extends PPF
 	{
 		bindBuffer();
 		
-		start();
-		
-		PPFShader.BlurH().setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
-		PPFShader.BlurH().setInput("targetWidth", (float)srcFbo.getWidth());
-		PPFShader.BlurH().use();	
+		PPFShaders.BlurH.setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
+		PPFShaders.BlurH.setInput("targetWidth", (float)srcFbo.getWidth());
+		PPFShaders.BlurH.use();	
 		{
 			drawQuad();
 		}
-		PPFShader.BlurH().stop();	
-		
-		stop();
+		PPFShaders.BlurH.stop();	
+
 		
 		fbo.blitAttachment(dstFbo, Target.COLOR0, tRes, true);
 	}

@@ -3,7 +3,8 @@ package com.codered.engine.rendering.ppf;
 import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
 import com.codered.engine.managing.FBO.Target;
-import com.codered.engine.shaders.postprocess.filter.PPFShader;
+import com.codered.engine.shaders.PPFShaders;
+
 
 public class PPF_CameraStripsVertical extends PPF
 {
@@ -31,19 +32,16 @@ public class PPF_CameraStripsVertical extends PPF
 	{
 		bindBuffer();
 		
-		start();
-		
-		PPFShader.CameraStripsVertical().setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
-		PPFShader.CameraStripsVertical().setInput("width", srcFbo.getWidth());
-		PPFShader.CameraStripsVertical().setInput("stripWidth", this.stripWidth);
-		PPFShader.CameraStripsVertical().setInput("intensity", this.intensity);
-		PPFShader.CameraStripsVertical().use();
+		PPFShaders.CameraStripsVertical.setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
+		PPFShaders.CameraStripsVertical.setInput("width", srcFbo.getWidth());
+		PPFShaders.CameraStripsVertical.setInput("stripWidth", this.stripWidth);
+		PPFShaders.CameraStripsVertical.setInput("intensity", this.intensity);
+		PPFShaders.CameraStripsVertical.use();
 		{
 			drawQuad();
 		}
-		PPFShader.CameraStripsVertical().stop();	
-		
-		stop();
+		PPFShaders.CameraStripsVertical.stop();	
+
 
 		fbo.blitAttachment(dstFbo, Target.COLOR0, tRes, true);
 	}

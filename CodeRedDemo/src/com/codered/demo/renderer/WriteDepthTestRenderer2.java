@@ -177,8 +177,7 @@ public class WriteDepthTestRenderer2 implements CustomRenderer
 		DBGShaders.DepthWrite.setInput("frame", fbo1.getDepthTexture());
 		DBGShaders.DepthWrite.use();
 		{
-			UnityScreen.quad.getVAO().bind(0);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+			UnityScreen.draw();
 			
 		}
 		DBGShaders.DepthWrite.stop();
@@ -192,8 +191,7 @@ public class WriteDepthTestRenderer2 implements CustomRenderer
 		DBGShaders.DepthWrite.setInput("frame", fbo2.getDepthTexture());
 		DBGShaders.DepthWrite.use();
 		{
-			UnityScreen.quad.getVAO().bind(0);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+			UnityScreen.draw();
 			
 		}
 		DBGShaders.DepthWrite.stop();
@@ -203,18 +201,18 @@ public class WriteDepthTestRenderer2 implements CustomRenderer
 	
 	public void renderObject(Camera c, StaticEntity e, SimpleObjectShader oShader)
 	{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
+		GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
-			oShader.setInput("material", e.getModel().getTexture());
+		oShader.setInput("material", e.getModel().getTexture());
 			
-			oShader.loadModelMatrix(e.getTransformationMatrix());
-			oShader.loadProjectionMatrix(this.T_projection);
-			oShader.loadCamera(c);
+		oShader.loadModelMatrix(e.getTransformationMatrix());
+		oShader.loadProjectionMatrix(this.T_projection);
+		oShader.loadCamera(c);
 			
-			oShader.use();			
-			{
-				GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-			}
-			oShader.stop();	
+		oShader.use();			
+		{
+			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+		}
+		oShader.stop();	
 	}
 }

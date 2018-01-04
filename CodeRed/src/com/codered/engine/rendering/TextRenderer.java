@@ -3,6 +3,7 @@ package com.codered.engine.rendering;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
+import com.codered.engine.GLUtils;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.shaders.gui.GUIShader;
@@ -72,7 +73,7 @@ public class TextRenderer
 			vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
 			vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 			
-			vao.bind(0, 1);
+			GLUtils.bindVAO(vao, 0, 1);
 			
 			GUIShader.No().loadTexture(f.getTexture());
 			GUIShader.No().use();

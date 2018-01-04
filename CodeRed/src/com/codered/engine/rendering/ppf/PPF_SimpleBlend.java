@@ -3,7 +3,7 @@ package com.codered.engine.rendering.ppf;
 import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
 import com.codered.engine.managing.FBO.Target;
-import com.codered.engine.shaders.postprocess.filter.PPFShader;
+import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_SimpleBlend extends PPF
 {
@@ -34,21 +34,17 @@ public class PPF_SimpleBlend extends PPF
 	public void doPostProcess(FBO fbo1, FBO fbo2, FBO re, Target t1, Target t2, Target tRes)
 	{
 		bindBuffer();
-		
-		start();
-		
-		PPFShader.Blend().setInput("scene1", t1.getType() == 0 ? fbo1.getBufferTexture(t1) : fbo1.getDepthTexture());
-		PPFShader.Blend().setInput("scene2", t2.getType() == 0 ? fbo2.getBufferTexture(t2) : fbo2.getDepthTexture());
-		PPFShader.Blend().setInput("src", this.src);
-		PPFShader.Blend().setInput("dst", this.dst);
-		PPFShader.Blend().setInput("op", this.op);
-		PPFShader.Blend().use();	
+
+		PPFShaders.Blend.setInput("scene1", t1.getType() == 0 ? fbo1.getBufferTexture(t1) : fbo1.getDepthTexture());
+		PPFShaders.Blend.setInput("scene2", t2.getType() == 0 ? fbo2.getBufferTexture(t2) : fbo2.getDepthTexture());
+		PPFShaders.Blend.setInput("src", this.src);
+		PPFShaders.Blend.setInput("dst", this.dst);
+		PPFShaders.Blend.setInput("op", this.op);
+		PPFShaders.Blend.use();	
 		{
 			drawQuad();			
 		}
-		PPFShader.Blend().stop();			
-
-		stop();
+		PPFShaders.Blend.stop();			
 
 		fbo.blitAttachment(re, Target.COLOR0, tRes, true);
 	}

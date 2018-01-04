@@ -2,10 +2,12 @@ package com.codered.engine;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.MSFBO;
+import com.codered.engine.managing.VAO;
 
 public class GLUtils
 {
@@ -18,6 +20,7 @@ public class GLUtils
 	
 	private static int CURRENT_TEXTURE2D = 0;
 	private static int CURRENT_FRAMEBUFFER = 0;
+	private static int CURRENT_VAO = 0;
 	
 	public static void toggleBlend(boolean state)
 	{
@@ -89,4 +92,31 @@ public class GLUtils
 	}
 	
 	public static int getFramebuffer() { return CURRENT_FRAMEBUFFER; }
+	
+	
+	public static void bindVAO(VAO vao, int... attribs)
+	{
+		GL30.glBindVertexArray(vao.getID());
+		
+		for(int i : attribs)
+		{
+			GL20.glEnableVertexAttribArray(i);
+		}
+		
+		CURRENT_VAO = vao.getID();
+	}
+	
+	public static void bindVAO(int vao, int...attribs)
+	{
+		GL30.glBindVertexArray(vao);
+		
+		for(int i : attribs)
+		{
+			GL20.glEnableVertexAttribArray(i);
+		}
+		
+		CURRENT_VAO = vao;
+	}
+	
+	public static int getVAO() { return CURRENT_VAO; }
 }

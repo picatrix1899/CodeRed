@@ -15,7 +15,7 @@ import com.codered.engine.rendering.CustomRenderer;
 import com.codered.engine.rendering.MasterRenderer;
 import com.codered.engine.rendering.ppf.Blend;
 import com.codered.engine.rendering.ppf.PPFilter;
-import com.codered.engine.shaders.terrain.STShaders;
+import com.codered.engine.shaders.STShaders;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 import com.codered.engine.terrain.Terrain;
 
@@ -100,7 +100,7 @@ public class DefaultTerrainRenderer implements CustomRenderer
 	{
 		for(Terrain t : this.world.getStaticTerrains())
 		{
-			t.getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(t.getModel().getVAO(), 0, 1, 2, 3);
 			
 			tShader.setInput("material", t.getTexture());
 

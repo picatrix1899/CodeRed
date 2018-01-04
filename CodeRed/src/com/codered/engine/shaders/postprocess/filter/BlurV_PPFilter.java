@@ -11,7 +11,7 @@ public class BlurV_PPFilter extends PPFShader
 {
 	
 	
-	public static final BlurV_PPFilter instance = new BlurV_PPFilter();
+
 
 
 	protected void getAllUniformLocations()

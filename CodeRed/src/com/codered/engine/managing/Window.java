@@ -6,7 +6,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.engine.Input;

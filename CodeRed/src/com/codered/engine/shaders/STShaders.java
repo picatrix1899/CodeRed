@@ -1,4 +1,4 @@
-package com.codered.engine.shaders.terrain;
+package com.codered.engine.shaders;
 
 import com.codered.engine.shaders.terrain.simple.AmbientLight_TShader;
 import com.codered.engine.shaders.terrain.simple.DirectionalLight_N_TShader;

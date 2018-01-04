@@ -17,8 +17,8 @@ import com.codered.engine.rendering.CustomRenderer;
 import com.codered.engine.rendering.MasterRenderer;
 import com.codered.engine.rendering.ppf.PPFilter;
 import com.codered.engine.shaders.SOShaders;
+import com.codered.engine.shaders.STShaders;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shaders.terrain.STShaders;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 import com.codered.engine.terrain.Terrain;
 
@@ -106,7 +106,7 @@ public class OrthoTestRenderer implements CustomRenderer
 	{
 		for(StaticEntity e : this.world.getStaticEntities())
 		{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
 			
 			oShader.setInput("material", e.getModel().getTexture());
@@ -128,7 +128,7 @@ public class OrthoTestRenderer implements CustomRenderer
 	{
 		for(Terrain t : this.world.getStaticTerrains())
 		{
-			t.getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(t.getModel().getVAO(), 0, 1, 2, 3);
 			
 			tShader.setInput("material", t.getTexture());
 

@@ -10,7 +10,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class DepthMap_PPFilter extends PPFShader
 {
 	
-	public static final DepthMap_PPFilter instance = new DepthMap_PPFilter();
+
 	
 
 

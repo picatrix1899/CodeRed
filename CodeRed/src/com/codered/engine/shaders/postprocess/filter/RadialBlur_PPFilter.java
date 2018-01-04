@@ -10,7 +10,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class RadialBlur_PPFilter extends PPFShader
 {
 	
-	public static final RadialBlur_PPFilter instance = new RadialBlur_PPFilter();
+
 
 
 	protected void getAllUniformLocations()

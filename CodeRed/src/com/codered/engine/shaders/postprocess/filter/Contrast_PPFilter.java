@@ -9,10 +9,6 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 @Attrib(pos=0, var="pos")
 public class Contrast_PPFilter extends PPFShader
 {
-	
-	public static final Contrast_PPFilter instance = new Contrast_PPFilter();	
-	
-
 
 	protected void getAllUniformLocations()
 	{

@@ -10,7 +10,7 @@ import com.codered.engine.shaders.shader.Shader.VertexShader;
 public class HDR_PPFilter extends PPFShader
 {
 	
-	public static final HDR_PPFilter instance = new HDR_PPFilter();
+
 	
 	
 

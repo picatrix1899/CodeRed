@@ -8,7 +8,7 @@ import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.FBO.Target;
-import com.codered.engine.shaders.postprocess.filter.PPFShader;
+import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_DepthTest extends PPF
 {
@@ -31,23 +31,19 @@ public class PPF_DepthTest extends PPF
 		GLUtils.bindFramebuffer(depthTestFbo);
 		
 		FBO.updateDraws();
-		
-		start();
-		
+
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthMask(true);
 		
-		PPFShader.DepthTest().setInput("frameSrc", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
-		PPFShader.DepthTest().setInput("frameDst", t2.getType() == 0 ? dstFbo.getBufferTexture(t2) : dstFbo.getDepthTexture());
-		PPFShader.DepthTest().setInput("near", Window.active.NEAR);
-		PPFShader.DepthTest().setInput("far", Window.active.FAR);
-		PPFShader.DepthTest().use();	
+		PPFShaders.DepthTest.setInput("frameSrc", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
+		PPFShaders.DepthTest.setInput("frameDst", t2.getType() == 0 ? dstFbo.getBufferTexture(t2) : dstFbo.getDepthTexture());
+		PPFShaders.DepthTest.setInput("near", Window.active.NEAR);
+		PPFShaders.DepthTest.setInput("far", Window.active.FAR);
+		PPFShaders.DepthTest.use();	
 		{
 			drawQuad();
 		}
-		PPFShader.DepthTest().stop();	
-		
-		stop();
+		PPFShaders.DepthTest.stop();	
 
 		depthTestFbo.blitAttachment(out, Target.COLOR0, tRes, true);
 	}

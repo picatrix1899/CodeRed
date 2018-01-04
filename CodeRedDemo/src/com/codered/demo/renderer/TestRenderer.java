@@ -114,7 +114,7 @@ public class TestRenderer implements CustomRenderer
 	
 	public void renderObject(Camera c, StaticEntity e, SimpleObjectShader oShader)
 	{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
+		GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
 			oShader.setInput("material", e.getModel().getTexture());
 			oShader.setInput("glow", e.getGlow());
@@ -134,7 +134,7 @@ public class TestRenderer implements CustomRenderer
 	{
 		for(StaticEntity e : this.world.getStaticEntities())
 		{
-			e.getModel().getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
 			oShader.setInput("material", e.getModel().getTexture());
 			oShader.setInput("glow", e.getGlow());
@@ -155,7 +155,7 @@ public class TestRenderer implements CustomRenderer
 	{
 		for(Terrain t : this.world.getStaticTerrains())
 		{
-			t.getModel().getVAO().bind(0, 1, 2, 3);
+			GLUtils.bindVAO(t.getModel().getVAO(), 0, 1, 2, 3);
 			
 			tShader.setInput("material", t.getTexture());
 

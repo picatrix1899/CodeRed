@@ -10,6 +10,8 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.codered.engine.GLUtils;
+
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.BufferUtils;
 import cmn.utilslib.math.vector.Vector4f;
@@ -41,16 +43,6 @@ public class VAO
 		return this.id;
 	}
 	
-	public void bind(int... ids)
-	{
-		GL30.glBindVertexArray(this.id);
-		
-		for(int i : ids)
-		{
-			GL20.glEnableVertexAttribArray(i);
-		}
-	}
-	
 	public static void clearAll()
 	{
 		for(VAO vao : vaos)
@@ -64,7 +56,7 @@ public class VAO
 	
 	public void storeData(int attrib, int blocksize, float[] data, int drawFlag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.vbos.containsKey(attrib))
 		{
@@ -98,7 +90,7 @@ public class VAO
 	
 	public void storeData(int attrib, int blocksize, int[] data, int drawFlag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.vbos.containsKey(attrib))
 		{
@@ -132,7 +124,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vec2fBase[] data, int drawFlag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.vbos.containsKey(attrib))
 		{
@@ -166,7 +158,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vec3fBase[] data, int drawFlag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.vbos.containsKey(attrib))
 		{
@@ -200,7 +192,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vector4f[] data, int drawFlag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.vbos.containsKey(attrib))
 		{
@@ -234,7 +226,7 @@ public class VAO
 	
 	public void storeIndices(int[] indices, int drawflag)
 	{
-		bind();
+		GLUtils.bindVAO(this);
 		
 		if(this.indicesVBO != 0)
 		{
