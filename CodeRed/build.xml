@@ -5,8 +5,8 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="CodeRed">
     <property environment="env"/>
-    <property name="CodeRedDemo.location" value="../../CodeRedDemo"/>
-    <property name="utilslib.location" value="../utilslib/utilslib"/>
+    <property name="CodeRedDemo.location" value="../CodeRedDemo"/>
+    <property name="utilslib.location" value="../../utilslib/utilslib"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
@@ -65,7 +65,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <src path="embeded"/>
+        	<src path="embeded"/>
             <classpath refid="CodeRed.classpath"/>
         </javac>
     </target>
