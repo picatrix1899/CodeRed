@@ -21,10 +21,6 @@ import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
 
-import com.codered.demo.GlobalSettings.Keys;
-import com.codered.demo.renderer.DefaultObjectRenderer;
-import com.codered.demo.renderer.NewObjectRenderer;
-import com.codered.demo.renderer.WriteDepthTestRenderer2;
 import com.codered.engine.DebugInfo;
 import com.codered.engine.Game;
 import com.codered.engine.Input;
@@ -40,12 +36,17 @@ import com.codered.engine.rendering.MasterRenderer;
 import com.codered.engine.rendering.PrimitiveRenderer;
 import com.codered.engine.rendering.TextRenderer;
 import com.codered.engine.shaders.gui.GUIShader;
-import com.codered.engine.shaders.object.DerefObjectShader;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.postprocess.filter.PPFShader;
 import com.codered.engine.shaders.shader.MalformedShaderException;
 import com.codered.engine.shaders.shader.ShaderNotFoundException;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
+
+import com.codered.demo.GlobalSettings.Keys;
+import com.codered.demo.renderer.DefaultObjectRenderer;
+import com.codered.demo.renderer.NewObjectRenderer;
+import com.codered.demo.renderer.WriteDepthTestRenderer2;
+
 import com.google.common.collect.Lists;
 
 
@@ -62,7 +63,6 @@ public class DemoGame extends Game
 		SimpleObjectShader.clean();
 		SimpleTerrainShader.clean();
 		PPFShader.clean();
-		DerefObjectShader.clean();
 		
 		Window.closeDisplays();
 	}

@@ -66,7 +66,6 @@ public abstract class Game
 			path.base("/resources/shaders/object/simple/");
 			loadDefaultEmbededShader(path, "o_ambientLight");
 			loadDefaultEmbededShader(path, "o_colored");
-			loadDefaultEmbededShader(path, "o_deref");
 			loadDefaultEmbededShader(path, "o_directionalLight");
 			loadDefaultEmbededShader(path, "o_directionalLight_N");
 			loadDefaultEmbededShader(path, "o_glow");
@@ -75,7 +74,6 @@ public abstract class Game
 			
 			path.base("/resources/shaders/terrain/simple/");
 			loadDefaultEmbededShader(path, "t_ambientLight");
-			loadDefaultEmbededShader(path, "t_deref");
 			loadDefaultEmbededShader(path, "t_directionalLight");
 			loadDefaultEmbededShader(path, "t_directionalLight_N");
 			loadDefaultEmbededShader(path, "t_noShading");
