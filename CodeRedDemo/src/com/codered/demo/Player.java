@@ -131,7 +131,7 @@ public class Player extends BaseEntity
 		vel.set(dir).mul(acceleration);
 		
 		vel = checkCollisionStatic(vel);
-		//vel = checkCollisionDynamic(vel);
+		vel = checkCollisionDynamic(vel);
 		
 		this.transform.moveBy(vel);
 		
@@ -206,55 +206,66 @@ public class Player extends BaseEntity
 		return vel;		
 	}
 	
-//	public Vec3f checkCollisionDynamic(Vec3f vel)
-//	{
-//		World w = Session.get().getWorld();
-//		List<DynamicEntity> dynents = Auto.ArrayList(w.getDynamicEntities());
-//		
-//		Vector3f sum = new Vector3f();
-//		Vector3f partial = new Vector3f();
-//		
-//		Matrix4f translation;
-//		
-//		Vector3f tempPos = this.transform.getPos().clone().add(vel);
-//		
-//		AABB tempAABB;
-//		
-//		if(dynents != null)
-//		{
-//			
-//			Collections.sort(dynents, new Comparator<DynamicEntity>()
-//			{
-//
-//				public int compare(DynamicEntity o1, DynamicEntity o2)
-//				{
-//					return Double.compare(o1.getPos().subN(tempPos).length(), o2.getPos().subN(tempPos).length());
-//				}
-//				
-//			});
-//			
-//			for(DynamicEntity e : dynents)
-//			{
-//				translation = Matrix4f.translation(tempPos);
-//				tempAABB = this.aabb.getTransformedAABB(translation);
-//				
-//				AABB mink = e.getTransformedAABB().minkowskiDifference(tempAABB);
-//				
-//				if(mink.containsPoint(Vec3f.ZERO))
-//				{
-//					partial = mink.closestPointOnBoundsToPoint(Vec3f.ZERO);
-//					
-//					sum.add(partial);
-//					
-//					tempPos.add(partial);
-//				}
-//			}
-//			
-//			vel.add(sum);
-//		}
-//		
-//		return vel;
-//	}
+	public Vec3f checkCollisionDynamic(Vec3f vel)
+	{
+	Vector3f sum = Vector3f.getInstance();
+	Vector3f partial = Vector3f.getInstance();
+	Vector3f tempPos = Vector3f.getInstance();
+	
+	World w = Session.get().getWorld();
+	List<StaticEntity> statents = Auto.ArrayList(w.getDynamicEntities());
+	
+	Matrix4f translation;
+	
+	tempPos.set(this.transform.getTransformedPos()).add(vel);
+
+	OBB3f tempOBB;
+	
+	OBB3f entityOBB;
+	
+	if(statents != null)
+	{
+		
+		Collections.sort(statents, new Comparator<StaticEntity>()
+		{
+
+			public int compare(StaticEntity o1, StaticEntity o2)
+			{
+				return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
+			}
+			
+		});
+		
+		for(StaticEntity e : statents)
+		{
+			
+			entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
+			
+			translation = Matrix4f.translation(tempPos);
+			
+			tempOBB = this.aabb2.transform(translation).getOBBf();
+
+				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+				{
+					
+					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+					
+					sum.add(partial);
+					tempPos.add(partial);
+				}
+
+		}
+		
+		vel.add(sum);
+
+	}
+	
+	Vector3f.storeInstance(sum);
+	Vector3f.storeInstance(partial);
+	Vector3f.storeInstance(tempPos);
+	
+	return vel;	
+	}
 	
 	private void updateOrientation()
 	{

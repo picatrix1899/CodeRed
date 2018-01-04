@@ -22,8 +22,10 @@ import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
 
 import com.codered.engine.DebugInfo;
+import com.codered.engine.GLUtils;
 import com.codered.engine.Game;
 import com.codered.engine.Input;
+import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.Paths;
@@ -32,9 +34,9 @@ import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 import com.codered.engine.managing.loader.LambdaFont;
-import com.codered.engine.rendering.MasterRenderer;
 import com.codered.engine.rendering.PrimitiveRenderer;
 import com.codered.engine.rendering.TextRenderer;
+import com.codered.engine.rendering.WorldRenderer;
 import com.codered.engine.shaders.gui.GUIShader;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.postprocess.filter.PPFShader;
@@ -43,9 +45,6 @@ import com.codered.engine.shaders.shader.ShaderNotFoundException;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 
 import com.codered.demo.GlobalSettings.Keys;
-import com.codered.demo.renderer.DefaultObjectRenderer;
-import com.codered.demo.renderer.NewObjectRenderer;
-import com.codered.demo.renderer.WriteDepthTestRenderer2;
 
 import com.google.common.collect.Lists;
 
@@ -53,9 +52,6 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("unused")
 public class DemoGame extends Game
 {
-
-	private MasterRenderer renderer;
-	
 	public void release()
 	{
 		VAO.clearAll();
@@ -103,28 +99,13 @@ public class DemoGame extends Game
 		if(!new File(Paths.p_fonts).exists()) new File(Paths.p_fonts).mkdirs();
 		
 		glClearColor(0,0,0,1);		
-		
-		renderer = new MasterRenderer();
 
-//		renderer.addRenderer(OrthoTestRenderer.instance);
-//		renderer.addRenderer(DerefRenderer.instance);
-//		renderer.addRenderer(Test2Renderer.instance);
-//		renderer.addRenderer(OBBTestRenderer.instance);
-//		renderer.addRenderer(WriteDepthTestRenderer2.instance);
-		renderer.addRenderer(DefaultObjectRenderer.instance);
-//		renderer.addRenderer(DefaultTerrainRenderer.instance);
-
-//		renderer.addRenderer(BloomRenderer.instance);
-//		renderer.addRenderer(DarknessRenderer.instance);
-//		renderer.addRenderer(GuiRenderer.instance);
 		
 		ResourceManager.registerFont("lucida", new File(Paths.p_fonts + "lucida" + Paths.e_lambdafont));
 			
 		Session.get().setWorld(new DemoWorld());
 		Session.get().setPlayer(new Player());
 		Session.get().getPlayer().window = new GUIIngameOverlay();
-		
-		renderer.init();
 	}
 
 	public void update()
@@ -136,7 +117,12 @@ public class DemoGame extends Game
 		
 		if(Session.get().getPlayer().window.allowWorldProcessing())
 		{
-			Session.get().getPlayer().update();		
+			for(DynamicEntity e : Session.get().getWorld().getDynamicEntities())
+			{
+				e.update(Session.get().getWorld());
+			}
+			
+			Session.get().getPlayer().update();
 		}
 		
 		Session.get().getPlayer().window.update();
@@ -144,7 +130,11 @@ public class DemoGame extends Game
 
 	public void render()
 	{
-		renderer.render();			
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	
+		GLUtils.bindFramebuffer(0);
+		
+		WorldRenderer.render(Session.get().getWorld(), Session.get().getPlayer().getCamera());			
 	}
 
 	public void preInit()

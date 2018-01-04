@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_contrast")
-@FragmentShader("ppf/ppf_contrast")
+@VertexShader("ppf_contrast")
+@FragmentShader("ppf_contrast")
 @Attrib(pos=0, var="pos")
 public class Contrast_PPFilter extends PPFShader
 {

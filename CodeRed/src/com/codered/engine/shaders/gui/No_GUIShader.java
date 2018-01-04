@@ -1,29 +1,31 @@
 package com.codered.engine.shaders.gui;
 
-import com.codered.engine.Time;
 import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("gui/gui_noShading")
-@FragmentShader("gui/gui_noShading")
+@VertexShader("gui_no")
+@FragmentShader("gui_no")
 @Attrib(pos=0, var="vertexPos")
 @Attrib(pos=1, var="texCoords")
-public class No_GUIShader extends Base_GUIShader
+public class No_GUIShader extends GUIShader
 {
-	
-	public static final No_GUIShader instance = new No_GUIShader();
-	
-	
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
-		addUniform("time");
+		
+		addUniform("textureMap");
+	}
+
+	public void loadTextureMap(int id)
+	{
+		setInput("textureMap", id);
 	}
 
 	public void use()
 	{
 		super.use();
-		loadInt("time", (int) Time.getTime());
+		
+		loadTexture("textureMap", 0, getInput("textureMap"));
 	}
 }

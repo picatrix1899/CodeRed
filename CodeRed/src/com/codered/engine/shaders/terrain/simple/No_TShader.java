@@ -6,8 +6,8 @@ import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 
-@VertexShader("t_noShading")
-@FragmentShader("t_noShading")
+@VertexShader("t_no")
+@FragmentShader("t_no")
 @Attrib(pos=0, var="vertexPos")
 @Attrib(pos=1, var="texCoords")
 public class No_TShader extends SimpleTerrainShader

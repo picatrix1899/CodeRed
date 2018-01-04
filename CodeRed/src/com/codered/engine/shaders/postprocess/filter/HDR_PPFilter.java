@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_hdr")
-@FragmentShader("ppf/ppf_hdr")
+@VertexShader("ppf_hdr")
+@FragmentShader("ppf_hdr")
 @Attrib(pos=0, var="pos")
 public class HDR_PPFilter extends PPFShader
 {

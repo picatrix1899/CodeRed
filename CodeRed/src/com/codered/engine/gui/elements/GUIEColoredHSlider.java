@@ -36,7 +36,7 @@ public class GUIEColoredHSlider extends GUIElement
 	private float mouseOffY;
 	
 	private int value;
-	
+	private int min;
 	private int max;
 	
 	public GUIEColoredHSlider(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, int val, int max)

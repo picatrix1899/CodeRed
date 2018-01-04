@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_blend")
-@FragmentShader("ppf/ppf_blend")
+@VertexShader("ppf_blend")
+@FragmentShader("ppf_blend")
 @Attrib(pos=0, var="pos")
 public class Blend_PPFilter extends PPFShader
 {

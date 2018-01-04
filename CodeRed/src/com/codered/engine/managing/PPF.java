@@ -13,13 +13,14 @@ public abstract class PPF
 	{
 		fbo = new FBO(Window.active.WIDTH, Window.active.HEIGHT);
 		fbo.applyColorAttachment(Target.COLOR0, true);
-		fbo.applyDepthBufferAttachment();
+		fbo.applyDepthColorAttachment();
 	}
 
 	
 	public void bindBuffer()
 	{
 		GLUtils.bindFramebuffer(fbo);
+		fbo.clearAllAttachments();
 	}
 	
 	public abstract void doPostProcess(FBO srcFbo, Target t, FBO dstFbo, Target tRes, boolean blend);

@@ -112,6 +112,14 @@ public abstract class World
 		return e;
 	}
 	
+	protected DynamicEntity addDynamicEntity(long id, DynamicEntity e)
+	{
+		e.id = id;
+
+		this.dynamicEntities.add(e.id, e);
+		return e;
+	}
+	
 	protected void addStaticTerrain(long id, Terrain t)
 	{
 		t.id = id;

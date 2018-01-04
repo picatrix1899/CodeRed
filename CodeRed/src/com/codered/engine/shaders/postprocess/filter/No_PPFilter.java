@@ -3,8 +3,8 @@ package com.codered.engine.shaders.postprocess.filter;
 import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
-@VertexShader("ppf/ppf_no")
-@FragmentShader("ppf/ppf_no")
+@VertexShader("ppf_no")
+@FragmentShader("ppf_no")
 @Attrib(pos=0, var="pos")
 public class No_PPFilter extends PPFShader
 {

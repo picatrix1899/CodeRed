@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_depthMap")
-@FragmentShader("ppf/ppf_depthMap")
+@VertexShader("ppf_depthMap")
+@FragmentShader("ppf_depthMap")
 @Attrib(pos=0, var="pos")
 public class DepthMap_PPFilter extends PPFShader
 {

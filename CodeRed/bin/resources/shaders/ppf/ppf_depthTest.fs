@@ -6,6 +6,8 @@ layout(location=0) out vec4 out_Color;
 
 uniform sampler2D frameSrc;
 uniform sampler2D frameDst;
+uniform sampler2D depthSrc;
+uniform sampler2D depthDst;
 
 uniform float near;
 uniform float far;
@@ -19,28 +21,28 @@ float LinearizeDepth(float depth)
 
 void main()
 {             
-    float depthSrc = texture(frameSrc, pass_texCoords).r;
-    float depthDst = texture(frameDst, pass_texCoords).r;
+    float dSrc = texture(depthSrc, pass_texCoords).r;
+    float dDst = texture(depthDst, pass_texCoords).r;
     
-    float linSrc = LinearizeDepth(depthSrc) / far;
-    float linDst = LinearizeDepth(depthDst) / far;
+    float linSrc = LinearizeDepth(dSrc) / far;
+    float linDst = LinearizeDepth(dDst) / far;
  
-    if(linSrc > 1)
+    if(dSrc > 1)
     {
-    	out_Color = vec4(vec3(linDst), 1.0);
-    	gl_FragDepth = depthDst;
+    	out_Color = texture(frameDst, pass_texCoords);
+    	gl_FragDepth = dDst;
     }
     else
     {
-    	if(linSrc <= linDst)
+    	if(dSrc < dDst)
     	{
-			out_Color = vec4(vec3(linSrc), 1.0);
-			gl_FragDepth = depthSrc;
+			out_Color = texture(frameSrc, pass_texCoords);
+			gl_FragDepth = dSrc;
     	}
     	else
     	{
-    		out_Color = vec4(vec3(linDst), 1.0);
-    		gl_FragDepth = depthDst;
+    		out_Color = texture(frameDst, pass_texCoords);
+    		gl_FragDepth = dDst;
     	}
     }
 }  

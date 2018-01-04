@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_invert")
-@FragmentShader("ppf/ppf_invert")
+@VertexShader("ppf_invert")
+@FragmentShader("ppf_invert")
 @Attrib(pos=0, var="pos")
 public class Invert_PPFilter extends PPFShader
 {

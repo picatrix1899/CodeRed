@@ -6,8 +6,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("o_noShading")
-@FragmentShader("o_noShading")
+@VertexShader("o_no")
+@FragmentShader("o_no")
 @Attrib(pos=0, var="vertexPos")
 @Attrib(pos=1, var="texCoords")
 public class No_OShader extends SimpleObjectShader

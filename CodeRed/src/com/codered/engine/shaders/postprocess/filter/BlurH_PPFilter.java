@@ -4,8 +4,8 @@ import com.codered.engine.shaders.shader.Shader.Attrib;
 import com.codered.engine.shaders.shader.Shader.FragmentShader;
 import com.codered.engine.shaders.shader.Shader.VertexShader;
 
-@VertexShader("ppf/ppf_blurHorizontal")
-@FragmentShader("ppf/ppf_blur")
+@VertexShader("ppf_blurHorizontal")
+@FragmentShader("ppf_blur")
 @Attrib(pos=0, var="pos")
 public class BlurH_PPFilter extends PPFShader
 {

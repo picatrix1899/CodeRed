@@ -69,14 +69,14 @@ public abstract class Game
 			loadDefaultEmbededShader(path, "o_directionalLight");
 			loadDefaultEmbededShader(path, "o_directionalLight_N");
 			loadDefaultEmbededShader(path, "o_glow");
-			loadDefaultEmbededShader(path, "o_noShading");
+			loadDefaultEmbededShader(path, "o_no");
 			loadDefaultEmbededShader(path, "o_pointLight_N");
 			
 			path.base("/resources/shaders/terrain/simple/");
 			loadDefaultEmbededShader(path, "t_ambientLight");
 			loadDefaultEmbededShader(path, "t_directionalLight");
 			loadDefaultEmbededShader(path, "t_directionalLight_N");
-			loadDefaultEmbededShader(path, "t_noShading");
+			loadDefaultEmbededShader(path, "t_no");
 			loadDefaultEmbededShader(path, "t_pointLight_N");
 			
 			path.base("/resources/shaders/ppf/");
@@ -94,6 +94,11 @@ public abstract class Game
 			loadDefaultEmbededShader(path, "ppf_invert");
 			loadDefaultEmbededShader(path, "ppf_no");
 			loadDefaultEmbededShader(path, "ppf_radialBlur");
+			
+			path.base("/resources/shaders/gui/");
+			loadDefaultEmbededShader(path, "gui_color");
+			loadDefaultEmbededShader(path, "gui_no");
+			loadDefaultEmbededShader(path, "gui_texture");
 			
 		}
 		catch(MalformedShaderException | ShaderNotFoundException e)

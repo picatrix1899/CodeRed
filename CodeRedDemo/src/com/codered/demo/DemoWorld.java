@@ -16,7 +16,7 @@ public class DemoWorld extends World
 		loadResources();
 		
 //		addStaticEntity(0, "crate", 	Vector3f.TEMP.set(0, 0,0), 0.0f, 45.0f, 0.0f);
-		addStaticEntity(0, "crate", 	Vector3f.TEMP.set(-20, 0, -30), 0.0f, 45.0f, 0.0f);
+		addDynamicEntity(0, new RotatingBox(ResourceManager.getTexturedModel("crate"), Vector3f.TEMP.set(-20, 0, -30), 0.0f, 45.0f, 0.0f));
 		addStaticEntity(1, "crate", 	Vector3f.TEMP.set(-20, 10, -30), 0.0f, 0.0f, 0.0f);
 		addStaticEntity(2, "crate", 	Vector3f.TEMP.set(-20, 0, -40), 0.0f, 0.0f, 0.0f);
 		addStaticEntity(3, "crate", 	Vector3f.TEMP.set(-20, 10, -40), 0.0f, 0.0f, 0.0f);
@@ -55,6 +55,7 @@ public class DemoWorld extends World
 		ResourceManager.registerRawModel("terrain", new TerrainLoader().loadTerrain());
 		
 		ResourceManager.registerColorMap("pacman1", "pac01");
+		ResourceManager.registerColorMap("button", "grass");
 		
 		ResourceManager.registerMaterialFromFile("crate");
 		ResourceManager.registerMaterialFromFile("bricks2");
