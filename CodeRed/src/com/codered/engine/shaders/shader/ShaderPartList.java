@@ -2,12 +2,13 @@ package com.codered.engine.shaders.shader;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
+
+import com.codered.engine.managing.ResourcePath;
 
 import cmn.utilslib.essentials.Auto;
 
@@ -18,75 +19,19 @@ public class ShaderPartList
 	private HashMap<String, ShaderPart> fragmentShaders = Auto.HashMap();
 	
 	
-	
-	public void loadVertexShader(String name, File f, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
+	public void loadVertexShader(String name, ResourcePath res) throws ShaderNotFoundException, MalformedShaderException
 	{
-		try
-		{
-			vertexShaders.put(name, new ShaderPart().loadShader(f.toURI().toURL(), clazz, GL20.GL_VERTEX_SHADER));
-		}
-		catch(MalformedURLException e)
-		{
-			throw new ShaderNotFoundException(f.getAbsolutePath().toString());
-		}
-
+		vertexShaders.put(name, new ShaderPart().loadShader(toUrl(res), res.src(), GL20.GL_VERTEX_SHADER));
 	}
 	
-	public void loadGeometryShader(String name, File f, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
+	public void loadGeometryShader(String name, ResourcePath res) throws ShaderNotFoundException, MalformedShaderException
 	{
-		try
-		{
-			geometryShaders.put(name, new ShaderPart().loadShader(f.toURI().toURL(), clazz, GL32.GL_GEOMETRY_SHADER));
-		}
-		catch(MalformedURLException e)
-		{
-			throw new ShaderNotFoundException(f.getAbsolutePath().toString());
-		}
-
+		geometryShaders.put(name, new ShaderPart().loadShader(toUrl(res), res.src(), GL32.GL_GEOMETRY_SHADER));
 	}
 	
-	public void loadFragmentShader(String name, File f, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
+	public void loadFragmentShader(String name, ResourcePath res) throws ShaderNotFoundException, MalformedShaderException
 	{
-		try
-		{
-			fragmentShaders.put(name, new ShaderPart().loadShader(f.toURI().toURL(), clazz, GL20.GL_FRAGMENT_SHADER));
-		}
-		catch(MalformedURLException e)
-		{
-			throw new ShaderNotFoundException(f.getAbsolutePath().toString());
-		}
-
-	}
-	
-	public void loadVertexShader(String name, String path, boolean embeded, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		vertexShaders.put(name, new ShaderPart().loadShader(toUrl(path, embeded), clazz, GL20.GL_VERTEX_SHADER));
-	}
-	
-	public void loadGeometryShader(String name, String path, boolean embeded, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		geometryShaders.put(name, new ShaderPart().loadShader(toUrl(path, embeded), clazz, GL32.GL_GEOMETRY_SHADER));
-	}
-	
-	public void loadFragmentShader(String name, String path, boolean embeded, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		fragmentShaders.put(name, new ShaderPart().loadShader(toUrl(path, embeded), clazz, GL20.GL_FRAGMENT_SHADER));
-	}
-	
-	
-	public void loadVertexShader(String name, URL url, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		vertexShaders.put(name, new ShaderPart().loadShader(url, clazz, GL20.GL_VERTEX_SHADER));
-	}
-	
-	public void loadGeometryShader(String name, URL url, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		geometryShaders.put(name, new ShaderPart().loadShader(url, clazz, GL32.GL_GEOMETRY_SHADER));
-	}
-	
-	public void loadFragmentShader(String name, URL url, Class<?> clazz) throws ShaderNotFoundException, MalformedShaderException
-	{
-		fragmentShaders.put(name, new ShaderPart().loadShader(url, clazz, GL20.GL_FRAGMENT_SHADER));
+		fragmentShaders.put(name, new ShaderPart().loadShader(toUrl(res), res.src(), GL20.GL_FRAGMENT_SHADER));
 	}
 	
 	
@@ -120,24 +65,38 @@ public class ShaderPartList
 		fragmentShaders.clear();
 	}
 	
-	private URL toUrl(String path, boolean embeded) throws ShaderNotFoundException
+	private URL toUrl(ResourcePath res) throws ShaderNotFoundException
 	{
-		URL url;
+		URL url = null;
 		
 		try
 		{
-			if(embeded)
-				url = ShaderParts.class.getResource(path);
-			else
-				url = new File(path).toURI().toURL();
+			switch(res.dest())
+			{
+				case EMBEDED:
+				{
+					url = res.src().getResource(res.toString());
+					break;
+				}
+				case LOCAL:
+				{
+					url = new File(res.toString()).toURI().toURL();
+					break;
+				}
+				case URL:
+				{
+					url = new URL(res.toString());
+					break;
+				}
+			}
 			
-			if(url == null) throw new ShaderNotFoundException(path);
+			if(url == null) throw new ShaderNotFoundException(res.toString());
 			
 			return url;
 		}
 		catch(IOException e)
 		{
-			throw new ShaderNotFoundException(path);
+			throw new ShaderNotFoundException(res.toString());
 		}
 	}
 }

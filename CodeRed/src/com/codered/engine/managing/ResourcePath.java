@@ -7,25 +7,18 @@ public class ResourcePath
 	private String file = "";
 	private String extension = "";
 	
+	private Class<?> src = getClass();
+	private ResourceDestination dest = ResourceDestination.LOCAL;
+	
 	public ResourcePath() { }
 	
-	public ResourcePath(String base)
-	{
-		this.base = base;
-	}
+	public Class<?> src() { return this.src; }
 	
-	public ResourcePath(String base, String file)
-	{
-		this.base = base;
-		this.file = file;
-	}
+	public ResourcePath src(Class<?> clazz) { this.src = clazz; return this; }
 	
-	public ResourcePath(String base, String file, String extension)
-	{
-		this.base = base;
-		this.file = file;
-		this.extension = extension;
-	}
+	public ResourceDestination dest() { return this.dest; }
+	
+	public ResourcePath dest(ResourceDestination dest) { this.dest = dest; return this; }
 	
 	public String base() { return this.base; }
 	
@@ -43,5 +36,12 @@ public class ResourcePath
 	public String toString()
 	{
 		return this.base + this.file + this.extension;
+	}
+	
+	public static enum ResourceDestination
+	{
+		EMBEDED,
+		URL,
+		LOCAL
 	}
 }

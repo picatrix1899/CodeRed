@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import com.codered.engine.managing.ResourcePath;
+import com.codered.engine.managing.ResourcePath.ResourceDestination;
 import com.codered.engine.shaders.shader.MalformedShaderException;
 import com.codered.engine.shaders.shader.ShaderNotFoundException;
 import com.codered.engine.shaders.shader.ShaderPartList;
@@ -59,6 +60,8 @@ public abstract class Game
 		try
 		{
 			ResourcePath path = new ResourcePath();
+			path.dest(ResourceDestination.EMBEDED);
+			path.src(Game.class);
 			
 			path.base("/resources/shaders/object/simple/");
 			loadDefaultEmbededShader(path, "o_ambientLight");
@@ -77,6 +80,8 @@ public abstract class Game
 			loadDefaultEmbededShader(path, "t_directionalLight_N");
 			loadDefaultEmbededShader(path, "t_noShading");
 			loadDefaultEmbededShader(path, "t_pointLight_N");
+			
+			
 		}
 		catch(MalformedShaderException | ShaderNotFoundException e)
 		{
@@ -91,8 +96,8 @@ public abstract class Game
 		
 		ShaderPartList sh = ShaderParts.builtIn();
 		
-		sh.loadVertexShader(vfs, res.extension(".vs").toString(), true, Game.class);
-		sh.loadFragmentShader(vfs, res.extension(".fs").toString(), true, Game.class);
+		sh.loadVertexShader(vfs, res.extension(".vs"));
+		sh.loadFragmentShader(vfs, res.extension(".fs"));
 	}
 	
 	public final class ArgumentInterpreter
