@@ -3,6 +3,7 @@ package com.codered.demo;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.managing.World;
 import com.codered.engine.managing.models.TexturedModel;
+import com.codered.engine.rendering.EntityRenderer;
 
 import cmn.utilslib.math.vector.Vector3f;
 
@@ -19,5 +20,10 @@ public class RotatingBox extends DynamicEntity
 		super.update(w);
 		
 		rotateYaw(2);
+	}
+	
+	public EntityRenderer getRenderer()
+	{
+		return TestRenderer.INSTANCE;
 	}
 }

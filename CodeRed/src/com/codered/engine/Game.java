@@ -88,8 +88,10 @@ public abstract class Game
 			
 			loadDefaultEmbededShader(path, "ppf_brightness");
 			loadDefaultEmbededShader(path, "ppf_contrast");
+			loadDefaultEmbededShader(path, "ppf_contrastMS");
 			loadDefaultEmbededShader(path, "ppf_depthMap");
 			loadDefaultEmbededShader(path, "ppf_depthTest");
+			loadDefaultEmbededShader(path, "ppf_depthTestMS");
 			loadDefaultEmbededShader(path, "ppf_hdr");
 			loadDefaultEmbededShader(path, "ppf_invert");
 			loadDefaultEmbededShader(path, "ppf_no");

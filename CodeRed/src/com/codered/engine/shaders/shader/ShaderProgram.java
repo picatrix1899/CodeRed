@@ -8,6 +8,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL32;
 
 import com.google.common.collect.Maps;
 
@@ -249,6 +250,13 @@ public abstract class ShaderProgram
 	{
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		loadInt(uniform, attrib);
+	}
+	
+	protected void loadTextureMS(String uniform, int attrib, int texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
 		loadInt(uniform, attrib);
 	}
 }

@@ -10,6 +10,11 @@ public abstract class PPFilter extends PPF
 		return PPF_Contrast.instance;
 	}
 	
+	public static PPF_ContrastMS ContrastMS()
+	{
+		return PPF_ContrastMS.instance;
+	}
+	
 	public static PPF_No No()
 	{
 		return PPF_No.instance;
@@ -55,5 +60,10 @@ public abstract class PPFilter extends PPF
 	public static PPF_DepthTest DepthTest()
 	{
 		return PPF_DepthTest.instance;
+	}
+	
+	public static PPF_DepthTestMS DepthTestMS()
+	{
+		return PPF_DepthTestMS.instance;
 	}
 }

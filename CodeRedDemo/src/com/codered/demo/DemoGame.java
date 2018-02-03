@@ -1,7 +1,5 @@
 package com.codered.demo;
 
-import static org.lwjgl.opengl.GL11.glClearColor;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,12 +25,12 @@ import com.codered.engine.Game;
 import com.codered.engine.Input;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
-import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.ResourceManager;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
+import com.codered.engine.fbo.FBO;
 import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.rendering.PrimitiveRenderer;
 import com.codered.engine.rendering.TextRenderer;
@@ -98,7 +96,7 @@ public class DemoGame extends Game
 		if(!new File(Paths.p_shaders).exists()) new File(Paths.p_shaders).mkdirs();
 		if(!new File(Paths.p_fonts).exists()) new File(Paths.p_fonts).mkdirs();
 		
-		glClearColor(0,0,0,1);		
+		GL11.glClearColor(0,0,0,1);		
 
 		
 		ResourceManager.registerFont("lucida", new File(Paths.p_fonts + "lucida" + Paths.e_lambdafont));

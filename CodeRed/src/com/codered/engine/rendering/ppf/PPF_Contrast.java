@@ -1,8 +1,8 @@
 package com.codered.engine.rendering.ppf;
 
-import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.FBO.Target;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_Contrast extends PPF
@@ -18,11 +18,11 @@ public class PPF_Contrast extends PPF
 		return this;
 	}
 	
-	public void doPostProcess(FBO srcFbo, Target t, FBO dstFbo, Target tRes, boolean blend)
+	public void doPostProcess(FBO srcFbo, FBOTarget t, FBO dstFbo, FBOTarget tRes, boolean blend)
 	{
 		bindBuffer();
 		
-		PPFShaders.Contrast.setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
+		PPFShaders.Contrast.setInput("frame", srcFbo.getAttachmentId(t));
 		PPFShaders.Contrast.setInput("contrast", contrast);
 		PPFShaders.Contrast.use();	
 		{
@@ -30,7 +30,7 @@ public class PPF_Contrast extends PPF
 		}
 		PPFShaders.Contrast.stop();
 
-		fbo.blitAttachment(dstFbo, Target.COLOR0, tRes, true);
+		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);
 	}
 
 }

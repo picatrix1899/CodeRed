@@ -6,20 +6,25 @@ import com.codered.engine.GLUtils;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
-import com.codered.engine.managing.FBO;
-import com.codered.engine.managing.MSFBO;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
+import com.codered.engine.fbo.MSFBO;
 import com.codered.engine.terrain.Terrain;
 
 public class WorldRenderer
 {
-	private static MSFBO main = new MSFBO(Window.active.WIDTH, Window.active.HEIGHT, 6);
+	public static MSFBO main = new MSFBO(4);
+	
+	public static FBO test = new FBO();
 	
 	static
 	{
-		main.applyColorAttachment(FBO.Target.COLOR0, true);
-		main.applyDepthBufferAttachment();
+		main.applyColorTextureAttachment(FBOTarget.COLOR0, true);
+		main.applyDepthTextureAttachment();
+		
+		test.applyColorTextureAttachment(FBOTarget.COLOR0, true);
+		test.applyDepthBufferAttachment();
 	}
 	
 	public static void render(World w, Camera c)
@@ -34,7 +39,7 @@ public class WorldRenderer
 			e.getRenderer().init(e, w, c);
 			e.getRenderer().render(e);
 		}
-		
+
 		for(DynamicEntity e : w.getDynamicEntities())
 		{
 			e.getRenderer().init(e, w, c);
@@ -46,9 +51,11 @@ public class WorldRenderer
 			t.getRenderer().init(t, w, c);
 			t.getRenderer().render(t);
 		}
-		
+
 		GLUtils.toggleMultisample(false);
 		
-		main.resolveAttachmentToScreen(FBO.Target.COLOR0);
+		main.blitAttachment(test, FBOTarget.COLOR0, FBOTarget.COLOR0, true);
+		
+		test.resolveAttachmentToScreen(FBOTarget.COLOR0);
 	}
 }

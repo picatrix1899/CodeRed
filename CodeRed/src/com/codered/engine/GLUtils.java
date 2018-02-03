@@ -5,9 +5,8 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.managing.FBO;
-import com.codered.engine.managing.MSFBO;
 import com.codered.engine.managing.VAO;
+import com.codered.engine.fbo.Framebuffer;
 
 public class GLUtils
 {
@@ -64,29 +63,24 @@ public class GLUtils
 	
 	public static int getTexture2D() { return CURRENT_TEXTURE2D; }
 	
-	public static void bindFramebuffer(FBO fbo)
+	public static void bindFramebuffer(Framebuffer fbo)
 	{
+		if(fbo.getFramebuffer() == CURRENT_FRAMEBUFFER) return;
+		
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo.getFramebuffer());
 		
-		FBO.updateDraws();
-		
-		CURRENT_FRAMEBUFFER = fbo.getFramebuffer();
-	}
-	
-	public static void bindFramebuffer(MSFBO fbo)
-	{
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo.getFramebuffer());
-		
-		MSFBO.updateDraws();
+		GL.glDrawBuffersAll();
 		
 		CURRENT_FRAMEBUFFER = fbo.getFramebuffer();
 	}
 	
 	public static void bindFramebuffer(int framebuffer)
 	{
+		if(framebuffer == CURRENT_FRAMEBUFFER) return;
+		
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
 		
-		FBO.updateDraws();
+		GL.glDrawBuffersAll();
 		
 		CURRENT_FRAMEBUFFER = framebuffer;
 	}

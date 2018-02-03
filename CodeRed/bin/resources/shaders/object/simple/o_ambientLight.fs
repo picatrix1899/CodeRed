@@ -12,6 +12,7 @@ uniform vec3 skyColor;
 
 void main(void)
 {
+
 	vec4 totalLight = calcAmbientLight(ambientLight);
 
 	out_Color = texture(textureMap, pass_texCoords) * totalLight;

@@ -12,20 +12,10 @@ uniform sampler2D depthDst;
 uniform float near;
 uniform float far;
 
-
-float LinearizeDepth(float depth)
-{
-    float z = depth * 2.0 - 1.0; // Back to NDC 
-    return (2.0 * near * far) / (far + near - z * (far - near));
-}
-
 void main()
 {             
-    float dSrc = texture(depthSrc, pass_texCoords).r;
+    float dSrc = texelFetch(depthSrc, ivec2(gl_FragCoord), 0).r; //texture(depthSrc, pass_texCoords).r;
     float dDst = texture(depthDst, pass_texCoords).r;
-    
-    float linSrc = LinearizeDepth(dSrc) / far;
-    float linDst = LinearizeDepth(dDst) / far;
  
     if(dSrc > 1)
     {

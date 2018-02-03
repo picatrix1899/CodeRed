@@ -1,8 +1,8 @@
 package com.codered.engine.managing;
 
 import com.codered.engine.GLUtils;
-import com.codered.engine.managing.Window;
-import com.codered.engine.managing.FBO.Target;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
 
 public abstract class PPF
 {
@@ -11,9 +11,9 @@ public abstract class PPF
 
 	static
 	{
-		fbo = new FBO(Window.active.WIDTH, Window.active.HEIGHT);
-		fbo.applyColorAttachment(Target.COLOR0, true);
-		fbo.applyDepthColorAttachment();
+		fbo = new FBO();
+		fbo.applyColorTextureAttachment(FBOTarget.COLOR0, true);
+		fbo.applyDepthTextureAttachment();
 	}
 
 	
@@ -23,7 +23,7 @@ public abstract class PPF
 		fbo.clearAllAttachments();
 	}
 	
-	public abstract void doPostProcess(FBO srcFbo, Target t, FBO dstFbo, Target tRes, boolean blend);
+	public abstract void doPostProcess(FBO srcFbo, FBOTarget t, FBO dstFbo, FBOTarget tRes, boolean blend);
 	
 	protected void drawQuad()
 	{
@@ -32,7 +32,7 @@ public abstract class PPF
 	
 	public int getTexture()
 	{
-		return fbo.getBufferTexture(Target.COLOR0);
+		return fbo.getAttachmentId(FBOTarget.COLOR0);
 	}
 	
 	public FBO getFBO()

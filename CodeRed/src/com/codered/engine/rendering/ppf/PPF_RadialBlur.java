@@ -1,8 +1,8 @@
 package com.codered.engine.rendering.ppf;
 
-import com.codered.engine.managing.FBO;
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.FBO.Target;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_RadialBlur extends PPF
@@ -32,11 +32,11 @@ public class PPF_RadialBlur extends PPF
 		return this;
 	}
 	
-	public void doPostProcess(FBO srcFbo, Target t, FBO dstFbo, Target tRes, boolean blend)
+	public void doPostProcess(FBO srcFbo, FBOTarget t, FBO dstFbo, FBOTarget tRes, boolean blend)
 	{
 		bindBuffer();
 
-		PPFShaders.RadialBlur.setInput("frame", t.getType() == 0 ? srcFbo.getBufferTexture(t) : srcFbo.getDepthTexture());
+		PPFShaders.RadialBlur.setInput("frame", srcFbo.getAttachmentId(t));
 		PPFShaders.RadialBlur.setInput("amplitude", this.amp);
 		PPFShaders.RadialBlur.setInput("delta", this.delta);
 		PPFShaders.RadialBlur.setInput("cycles", this.cycles);
@@ -46,7 +46,7 @@ public class PPF_RadialBlur extends PPF
 		}
 		PPFShaders.RadialBlur.stop();	
 
-		PPFilter.SimpleBlend().doPostProcess(fbo, dstFbo, dstFbo, FBO.Target.COLOR0, tRes);
+		PPFilter.SimpleBlend().doPostProcess(fbo, dstFbo, dstFbo, FBOTarget.COLOR0, tRes);
 	}
 
 }
