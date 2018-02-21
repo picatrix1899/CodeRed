@@ -2,12 +2,10 @@ package com.codered.demo;
 
 import com.codered.engine.managing.ResourceManager;
 import com.codered.engine.managing.World;
-import com.codered.engine.managing.loader.TerrainLoader;
 import com.codered.engine.managing.loader.WorldEntityLoader;
 import com.codered.engine.managing.loader.WorldResourceLoader;
 import com.codered.engine.terrain.Terrain;
 
-import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.vector.Vector3f;
 
 public class DemoWorld extends World
