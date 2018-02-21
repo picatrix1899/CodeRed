@@ -77,7 +77,7 @@ public abstract class World
 	}
 	
 	
-	protected StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz, Glow g)
+	public StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz, Glow g)
 	{
 		
 		StaticEntity e = new StaticEntity(tmodel, pos, rx, ry, rz);
@@ -88,22 +88,22 @@ public abstract class World
 		return e;
 	}
 	
-	protected StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz, Glow g)
+	public StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz, Glow g)
 	{
 		return addStaticEntity(id, ResourceManager.getTexturedModel(name),pos, rx, ry, rz, g);
 	}
 	
-	protected StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)
+	public StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)
 	{
 		return addStaticEntity(id, tmodel, pos,  rx,  ry , rz, Glow.DEFAULT);
 	}
 	
-	protected StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz)
+	public StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz)
 	{
 		return addStaticEntity(id, ResourceManager.getTexturedModel(name),pos, rx, ry, rz);
 	}
 	
-	protected DynamicEntity addDynamicEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)
+	public DynamicEntity addDynamicEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)
 	{
 		DynamicEntity e = new DynamicEntity(tmodel, pos, rx, ry, rz);
 		e.id = id;
@@ -112,7 +112,7 @@ public abstract class World
 		return e;
 	}
 	
-	protected DynamicEntity addDynamicEntity(long id, DynamicEntity e)
+	public DynamicEntity addDynamicEntity(long id, DynamicEntity e)
 	{
 		e.id = id;
 
@@ -120,21 +120,21 @@ public abstract class World
 		return e;
 	}
 	
-	protected void addStaticTerrain(long id, Terrain t)
+	public void addStaticTerrain(long id, Terrain t)
 	{
 		t.id = id;
 		
 		this.staticTerrain.add(t.id, t);
 	}
 	
-	protected PointLight addStaticPointLight(long id, Vector3f pos, IColor3Base color, float intensity, float constant, float linear, float exponent)
+	public PointLight addStaticPointLight(long id, Vector3f pos, IColor3Base color, float intensity, float constant, float linear, float exponent)
 	{
 		PointLight light = new PointLight(pos, color, intensity, constant, linear, exponent);
 		
 		return addStaticPointLight(id, light);
 	}
 	
-	protected PointLight addStaticPointLight(long id, PointLight light)
+	public PointLight addStaticPointLight(long id, PointLight light)
 	{
 		light.id = id;
 		

@@ -6,6 +6,7 @@ public class Paths
 	public static final String p_materials			= "res/materials/";
 	public static final String p_models				= "res/models/";
 	public static final String p_fonts				= "res/fonts/";
+	public static final String p_maps				= "res/maps/";
 	
 	public static final String e_vertexShader		= ".vs";
 	public static final String e_fragmentShader		= ".fs";

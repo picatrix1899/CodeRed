@@ -17,13 +17,11 @@ public class GUIIngameOverlay extends GUIWindow
 	
 	public GUIEColoredHSlider s = new GUIEColoredHSlider(0, this, 0, 0, 600, 20, 20, 100);
 	public GUIEImage img = new GUIEImage(1, this, 0, 200, 40, 40, "pacman1");
-	public GUIEButton btn = new GUIEButton(2, this, 0, 400, 100, 40, "Test", ResourceManager.getColorMap("button").getId());
 	
 	public GUIIngameOverlay()
 	{
 		addElement(s);
 		addElement(img);
-		addElement(btn);
 	}
 	
 	public int getMinX()
