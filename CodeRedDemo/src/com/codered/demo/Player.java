@@ -20,6 +20,7 @@ import cmn.utilslib.math.geometry.AABB3f;
 import cmn.utilslib.math.geometry.OBB3f;
 import cmn.utilslib.math.geometry.OBBOBBResolver;
 import cmn.utilslib.math.geometry.Point3f;
+import cmn.utilslib.math.geometry.RayOBBResolver;
 import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec3f;
 
@@ -35,6 +36,10 @@ public class Player extends BaseEntity
 	public GUIWindow window;
 	
 	private Camera camera;
+	
+	private long selectedEntity = -1;
+	
+	
 	
 	public Player()
 	{
@@ -52,6 +57,8 @@ public class Player extends BaseEntity
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
+		
+		
 	}
 	
 	public Camera getCamera() { return this.camera; }
@@ -62,6 +69,19 @@ public class Player extends BaseEntity
 	
 	public void update()
 	{
+		if(Window.active.getInputManager().isKeyPressed(Keys.k_delete))
+		{
+			if(this.selectedEntity != -1)
+			{
+				if(Session.get().getWorld().removeStaticEntity(this.selectedEntity))
+				{
+					
+				}
+				
+				this.selectedEntity = -1;
+			}
+		}
+		
 		if(Window.active.getInputManager().isButtonPressed(Keys.b_moveCam))
 		{
 			Window.active.getInputManager().setMouseGrabbed(true);
@@ -184,15 +204,14 @@ public class Player extends BaseEntity
 				
 				tempOBB = this.aabb2.transform(translation).getOBBf();
 
-					if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-					{
-						
-						partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-						
-						sum.add(partial);
-						tempPos.add(partial);
-					}
-
+				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+				{
+					
+					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+					
+					sum.add(partial);
+					tempPos.add(partial);
+				}
 			}
 			
 			vel.add(sum);
@@ -272,6 +291,44 @@ public class Player extends BaseEntity
 		this.camera.rotateYaw(-Window.active.getInputManager().getDX());
 
 		this.camera.rotatePitch(Window.active.getInputManager().getDY());
+		
+		World w = Session.get().getWorld();
+		
+		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
+		
+		double minlength = Double.MAX_VALUE;
+		StaticEntity ent = null;
+		
+		for(StaticEntity e : statents)
+		{
+			OBB3f entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
+
+			Vector3f center = getCamera().getTotalPos();
+			Vector3f dir = getCamera().getTotalRot().getForwardf().negate();
+
+			if(RayOBBResolver.hit(center, dir, entityOBB))
+			{
+				Vector3f delta = getCamera().getTotalPos().subN(entityOBB.center);
+				
+				if(delta.length() <= minlength)
+				{
+					minlength = delta.length();
+					ent = e;
+				}
+			}
+			
+			e.highlighted = false;
+		}
+		
+		if(ent != null)
+		{
+			ent.highlighted = true;
+			this.selectedEntity = ent.id;
+		}
+		else
+		{
+			this.selectedEntity = -1;
+		}
 	}
 	
 	public Vector3f getPos() { return this.transform.getPos(); }

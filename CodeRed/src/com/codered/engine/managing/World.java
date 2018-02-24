@@ -76,6 +76,17 @@ public abstract class World
 		return this.enviroment;
 	}
 	
+	public boolean removeStaticEntity(long id)
+	{
+		if(this.staticEntities.containsA(id))
+		{
+			this.staticEntities.removeByA(id);
+			
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz, Glow g)
 	{
@@ -117,6 +128,14 @@ public abstract class World
 		e.id = id;
 
 		this.dynamicEntities.add(e.id, e);
+		return e;
+	}
+	
+	public StaticEntity addStaticEntity(long id, StaticEntity e)
+	{
+		e.id = id;
+
+		this.staticEntities.add(e.id, e);
 		return e;
 	}
 	

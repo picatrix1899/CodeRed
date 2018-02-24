@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import org.lwjgl.glfw.GLFW;
+import com.codered.engine.input.Key;
 
 public class GlobalSettings
 {
@@ -23,14 +23,15 @@ public class GlobalSettings
 	
 	public static class Keys
 	{
-		public static int k_forward		= GLFW.GLFW_KEY_W;
-		public static int k_back		= GLFW.GLFW_KEY_S;
-		public static int k_left		= GLFW.GLFW_KEY_A;
-		public static int k_right		= GLFW.GLFW_KEY_D;
-		public static int k_up			= GLFW.GLFW_KEY_SPACE;
-		public static int k_exit		= GLFW.GLFW_KEY_ESCAPE;
-		public static int k_turnLeft	= GLFW.GLFW_KEY_Q;
-		public static int k_turnRight	= GLFW.GLFW_KEY_E;
+		public static int k_forward		= Key.W.getId();
+		public static int k_back		= Key.S.getId();
+		public static int k_left		= Key.A.getId();
+		public static int k_right		= Key.D.getId();
+		public static int k_up			= Key.SPACE.getId();
+		public static int k_exit		= Key.ESCAPE.getId();
+		public static int k_turnLeft	= Key.Q.getId();
+		public static int k_turnRight	= Key.E.getId();
+		public static int k_delete		= Key.DELETE.getId();
 		
 		public static int b_moveCam		= 2;
 	}

@@ -11,7 +11,10 @@ import com.codered.engine.managing.World;
 import com.codered.engine.shaders.SOShaders;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 
+import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
+import cmn.utilslib.math.vector.Vector3f;
+import cmn.utilslib.math.vector.api.Vec3f;
 
 public class DefaultEntityRenderer implements EntityRenderer
 {
@@ -52,6 +55,14 @@ public class DefaultEntityRenderer implements EntityRenderer
 			renderObject(e, camera, SOShaders.PointLight_N);
 		}
 		
+		if(e.highlighted)
+		{
+			SOShaders.Colored.loadViewMatrix(this.camera.getViewMatrix());
+			SOShaders.Colored.loadProjectionMatrix(this.T_projection);
+			
+			BBRenderer.drawOBB3f(e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix()), LDRColor3.GREEN);
+		}
+
 		GLUtils.toggleBlend(false);
 		GLUtils.toggleDepthTest(false);
 	}

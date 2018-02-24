@@ -20,6 +20,8 @@ public abstract class BaseEntity
 	
 	public long id;
 	
+	public boolean highlighted;
+	
 	public EntityRenderer getRenderer()
 	{
 		return DefaultEntityRenderer.instance;

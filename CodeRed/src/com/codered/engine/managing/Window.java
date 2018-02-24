@@ -3,13 +3,14 @@ package com.codered.engine.managing;
 import java.util.HashMap;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
-import com.codered.engine.Input;
-import com.google.common.collect.Maps;
+import com.codered.engine.input.Input;
+import com.codered.engine.input.Input2;
+
+import cmn.utilslib.events.EmptyArgs;
+import cmn.utilslib.events.Event;
 
 import cmn.utilslib.math.Maths;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -19,10 +20,10 @@ import cmn.utilslib.math.vector.api.Vec2f;
 public class Window
 {
 	
-	public static HashMap<String, Window> windows = Maps.newHashMap();
+	public static HashMap<String, Window> named_windows = new HashMap<String, Window>();
+	public static HashMap<Long, Window> id_windows = new HashMap<Long, Window>();
 	
 	public static Window active;
-	
 	
 	public int WIDTH = 1600;
 	public int HEIGHT = 1000;
@@ -39,29 +40,21 @@ public class Window
 	
 	public GLCapabilities capabilities;
 	
-	public GLFWErrorCallback err;
-	
 	private boolean isCreated;
 	
 	private Input input;
+	private Input2 input2;
+	
+	private String id;
+	
+	public Event<EmptyArgs> CloseRequested = new Event<EmptyArgs>();
 	
 	public Window(String id, int width, int height, String title)
 	{
 		
 		WIDTH = width;
 		HEIGHT = height;
-		
-		GLFW.glfwInit();
-		
-		GLFW.glfwSetErrorCallback(err = GLFWErrorCallback.createPrint(System.err));
-		
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-		GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-		
-		
+	
 		window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, title, 0, 0);
 		
 		if(window == 0)
@@ -72,15 +65,32 @@ public class Window
 		GLFW.glfwMakeContextCurrent(window);
 		capabilities = GL.createCapabilities();
 		
+		GLFW.glfwSetWindowFocusCallback(window, (a, b) -> {focusChanged(a,b);});
+		
 		GLFW.glfwShowWindow(window);
 		
 		isCreated = true;
 		
 		createProjectionMatrix();
 		
-		windows.put(id, this);
+		this.id = id;
+		named_windows.put(id, this);
+		id_windows.put(window, this);
 		this.input = new Input(this);
-		
+		this.input2 = new Input2(this);
+	}
+	
+	public String getId()
+	{
+		return this.id;
+	}
+	
+	public void focusChanged(long id, boolean gain)
+	{
+		if(gain)
+		{
+			id_windows.get(id).bind();
+		}
 	}
 	
 	public void bind()
@@ -95,7 +105,11 @@ public class Window
 		GLFW.glfwPollEvents();
 		GLFW.glfwSwapBuffers(window);
 		
+		if(GLFW.glfwWindowShouldClose(this.window)) this.CloseRequested.raise(EmptyArgs.getInstance());
+		
+		
 		input.update();
+		input2.update();
 	}
 	
 	public void closeDisplay()
@@ -112,6 +126,11 @@ public class Window
 	public Input getInputManager()
 	{
 		return this.input;
+	}
+	
+	public Input2 getInputManager2()
+	{
+		return this.input2;
 	}
 	
 	public boolean isCreated()
@@ -141,7 +160,7 @@ public class Window
 	
 	public static void closeDisplays()
 	{
-		for (Window w : windows.values())
+		for (Window w : named_windows.values())
 		{
 			w.closeDisplay();
 		}

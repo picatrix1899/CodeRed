@@ -1,6 +1,7 @@
 package com.codered.engine.rendering;
 
 
+import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.geometry.AABB3f;
 import cmn.utilslib.math.geometry.OBB3f;
@@ -19,14 +20,14 @@ public class BBRenderer
 		
 	}
 	
-	public static void drawOBB3f(OBB3f obb, Matrix4f m, IColor3Base c)
+	public static void drawOBB3f(OBB3f obb, IColor3Base c)
 	{
 		
-		drawOBBBox(obb, m, c);
+		drawOBBBox(obb, c);
 		
 	}
 	
-	public static void drawOBBBox(OBB3f obb, Matrix4f m, IColor3Base c)
+	public static void drawOBBBox(OBB3f obb, IColor3Base c)
 	{
 		Point3f[] points = obb.getPoints();
 		
@@ -40,9 +41,7 @@ public class BBRenderer
 		vertices[5] = points[5].asVector3f();
 		vertices[6] = points[6].asVector3f();
 		vertices[7] = points[7].asVector3f();
-	
-		//System.out.println(points[0]);
-		
+
 		PrimitiveRenderer.drawBox(	vertices[0], vertices[1], vertices[2], vertices[3],
 									vertices[4], vertices[5], vertices[6], vertices[7], c);
 	}

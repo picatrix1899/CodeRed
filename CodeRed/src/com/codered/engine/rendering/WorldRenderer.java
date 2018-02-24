@@ -27,11 +27,14 @@ public class WorldRenderer
 		test.applyDepthBufferAttachment();
 	}
 	
-	public static void render(World w, Camera c)
+	public static void bindFramebuffer()
 	{
 		GLUtils.bindFramebuffer(main);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		
+	}
+	
+	public static void render(World w, Camera c)
+	{
 		GLUtils.toggleMultisample(true);
 		
 		for(StaticEntity e : w.getStaticEntities())

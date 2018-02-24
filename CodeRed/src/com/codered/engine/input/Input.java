@@ -1,5 +1,5 @@
 
- package com.codered.engine;
+ package com.codered.engine.input;
 
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
