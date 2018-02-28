@@ -2,7 +2,7 @@ package com.codered.engine.shaders.gui;
 
 import java.util.ArrayList;
 
-import com.codered.engine.shaders.shader.ShaderProgram;
+import com.codered.engine.shader.ShaderProgram;
 import com.google.common.collect.Lists;
 
 public abstract class GUIShader extends ShaderProgram

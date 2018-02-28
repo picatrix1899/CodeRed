@@ -37,17 +37,16 @@ public class TestRenderer implements EntityRenderer
 	
 	public static TestRenderer INSTANCE = new TestRenderer();
 	
-	private MSFBO test = new MSFBO(Window.active.WIDTH, Window.active.HEIGHT, 4);
-	
-	private MSFBO main = new MSFBO(Window.active.WIDTH, Window.active.HEIGHT, 4);
+	private MSFBO test = new MSFBO(4);
+	private MSFBO test2 = new MSFBO(4);
 	
 	public TestRenderer()
 	{
 		test.applyColorTextureAttachment(FBOTarget.COLOR0, true);
 		test.applyDepthTextureAttachment();
+		test2.applyColorTextureAttachment(FBOTarget.COLOR0, true);
+		test2.applyDepthTextureAttachment();
 		
-		main.applyColorTextureAttachment(FBOTarget.COLOR0, true);
-		main.applyDepthTextureAttachment();
 	}
 	
 	public void init(StaticEntity e, World w, Camera c)
@@ -55,23 +54,27 @@ public class TestRenderer implements EntityRenderer
 		this.T_projection = Window.active.projectionMatrix;
 		this.camera = c;
 		this.world = w;
+		
+
 	}
 
 	public void render(StaticEntity e)
-	{
+	{	
+//		test.clear();
+//		test2.clear();
+//		
+//		GLUtils.bindFramebuffer(test);
 
-		//GLUtils.bindFramebuffer(test);
-		//draw(e);
-
-		//GL11.glEnable(GL40.GL_SAMPLE_SHADING);
-		//GL40.glMinSampleShading(1);
+		draw(e);
 		
-		//PPFilter.DepthTestMS().doPostProcess(test, Target.COLOR0, WorldRenderer.main, Target.COLOR0, WorldRenderer.main, Target.COLOR0, true);
-
-
-		//GL11.glDisable(GL40.GL_SAMPLE_SHADING);
-		
-		//GLUtils.bindFramebuffer(main);
+//		GLUtils.toggleMultisample(true);
+//		GLUtils.toggleDepthTest(true);
+//		
+//		PPFilter.DepthTestMS().doPostProcess(test, FBOTarget.COLOR0, WorldRenderer.main, FBOTarget.COLOR0, WorldRenderer.main, FBOTarget.COLOR0, true);
+//
+//		GLUtils.toggleDepthTest(false);
+//
+//		GLUtils.bindFramebuffer(WorldRenderer.main);
 	}
 
 	public void draw(StaticEntity e)

@@ -1,8 +1,8 @@
 package com.codered.engine.shaders.debug;
 
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.matrix.Matrix4f;

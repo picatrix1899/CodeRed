@@ -2,7 +2,7 @@ package com.codered.engine.shaders.debug;
 
 import java.util.ArrayList;
 
-import com.codered.engine.shaders.shader.ShaderProgram;
+import com.codered.engine.shader.ShaderProgram;
 
 import cmn.utilslib.essentials.Auto;
 

@@ -1,4 +1,4 @@
-package com.codered.engine.shaders.shader;
+package com.codered.engine.shader;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,9 +1,9 @@
 package com.codered.engine.shaders.object.simple;
 
-import com.codered.engine.shaders.shader.ShaderProgram;
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
+import com.codered.engine.shader.ShaderProgram;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.matrix.Matrix4f;

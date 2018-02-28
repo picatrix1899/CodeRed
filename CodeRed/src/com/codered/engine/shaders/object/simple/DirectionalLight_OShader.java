@@ -3,9 +3,9 @@ package com.codered.engine.shaders.object.simple;
 import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 
 @VertexShader("o_directionalLight")
 @FragmentShader("o_directionalLight")

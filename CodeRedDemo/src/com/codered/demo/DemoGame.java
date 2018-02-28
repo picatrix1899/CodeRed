@@ -40,8 +40,8 @@ import com.codered.engine.rendering.WorldRenderer;
 import com.codered.engine.shaders.gui.GUIShader;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.postprocess.filter.PPFShader;
-import com.codered.engine.shaders.shader.MalformedShaderException;
-import com.codered.engine.shaders.shader.ShaderNotFoundException;
+import com.codered.engine.shader.MalformedShaderException;
+import com.codered.engine.shader.ShaderNotFoundException;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 
 import com.codered.demo.GlobalSettings.Keys;

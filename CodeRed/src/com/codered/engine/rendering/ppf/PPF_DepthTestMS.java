@@ -25,10 +25,8 @@ public class PPF_DepthTestMS extends PPF
 	public void doPostProcess(MSFBO srcFbo, FBOTarget t, MSFBO dstFbo, FBOTarget t2, MSFBO out, FBOTarget tRes, boolean blend)
 	{
 		GLUtils.bindFramebuffer(msfbo);
+		msfbo.clear();
 
-		GLUtils.toggleDepthTest(true);
-		GLUtils.toggleMultisample(true);
-		
 		PPFShaders.DepthTestMS.setInput("frameSrc", srcFbo.getAttachmentId(t));
 		PPFShaders.DepthTestMS.setInput("frameDst", dstFbo.getAttachmentId(t2));
 		PPFShaders.DepthTestMS.setInput("depthSrc", srcFbo.getAttachmentId(FBOTarget.DEPTH));
@@ -40,9 +38,6 @@ public class PPF_DepthTestMS extends PPF
 			drawQuad();
 		}
 		PPFShaders.DepthTestMS.stop();	
-
-		GLUtils.toggleMultisample(false);
-		GLUtils.toggleDepthTest(false);
 		
 		msfbo.blitAttachment(out, FBOTarget.COLOR0, tRes, true);
 	}

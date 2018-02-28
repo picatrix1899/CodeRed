@@ -14,10 +14,10 @@ uniform float far;
 
 void main()
 {             
-  /*  float dSrc = texelFetch(depthSrc, ivec2(gl_FragCoord.xy), 0).r;
+    float dSrc = texelFetch(depthSrc, ivec2(gl_FragCoord.xy), 0).r;
     float dDst = texelFetch(depthDst, ivec2(gl_FragCoord.xy), 0).r;
- */
-  /*  if(dSrc > 1)
+ 
+    if(dSrc > 1)
     {
     	out_Color = texelFetch(frameDst, ivec2(gl_FragCoord.xy), 0);
     	gl_FragDepth = dDst;
@@ -35,7 +35,7 @@ void main()
     		gl_FragDepth = dDst;
     	}
     }
-    */
     
-    out_Color = texelFetch(frameSrc, ivec2(gl_FragCoord.xy), gl_SampleID);
+    
+    //out_Color = texelFetch(frameSrc, ivec2(gl_FragCoord.xy), gl_SampleID);
 }  

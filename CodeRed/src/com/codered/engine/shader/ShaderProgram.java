@@ -1,4 +1,4 @@
-package com.codered.engine.shaders.shader;
+package com.codered.engine.shader;
 
 import java.nio.FloatBuffer;
 import java.util.HashMap;

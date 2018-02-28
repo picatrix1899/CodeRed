@@ -2,9 +2,9 @@ package com.codered.engine.shaders.terrain.simple;
 
 import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 
 

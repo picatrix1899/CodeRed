@@ -3,7 +3,7 @@ package com.codered.engine.shaders.object;
 import java.util.ArrayList;
 
 import com.codered.engine.entities.Camera;
-import com.codered.engine.shaders.shader.ShaderProgram;
+import com.codered.engine.shader.ShaderProgram;
 import com.google.common.collect.Lists;
 
 import cmn.utilslib.math.matrix.Matrix4f;

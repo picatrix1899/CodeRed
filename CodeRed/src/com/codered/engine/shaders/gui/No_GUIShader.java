@@ -1,8 +1,8 @@
 package com.codered.engine.shaders.gui;
 
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 
 @VertexShader("gui_no")
 @FragmentShader("gui_no")

@@ -1,9 +1,9 @@
 package com.codered.engine.shaders.debug;
 
 import com.codered.engine.managing.Window;
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 
 @VertexShader("debug/dbg_writeDepth")
 @FragmentShader("debug/dbg_writeDepth")

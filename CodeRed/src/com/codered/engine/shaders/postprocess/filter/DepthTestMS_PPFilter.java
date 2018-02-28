@@ -1,8 +1,8 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 
 @VertexShader("ppf_depthTestMS")
 @FragmentShader("ppf_depthTestMS")
@@ -23,10 +23,10 @@ public class DepthTestMS_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTexture("frameSrc", 0, (int) getInput("frameSrc"));
-		loadTexture("frameDst", 1, (int) getInput("frameDst"));
-		loadTexture("depthSrc", 2, (int) getInput("depthSrc"));
-		loadTexture("depthDst", 3, (int) getInput("depthDst"));
+		loadTextureMS("frameSrc", 0, (int) getInput("frameSrc"));
+		loadTextureMS("frameDst", 1, (int) getInput("frameDst"));
+		loadTextureMS("depthSrc", 2, (int) getInput("depthSrc"));
+		loadTextureMS("depthDst", 3, (int) getInput("depthDst"));
 		loadFloat("near", (float) getInput("near"));
 		loadFloat("far", (float) getInput("far"));
 	}

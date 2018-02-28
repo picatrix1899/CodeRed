@@ -1,8 +1,8 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shaders.shader.Shader.Attrib;
-import com.codered.engine.shaders.shader.Shader.FragmentShader;
-import com.codered.engine.shaders.shader.Shader.VertexShader;
+import com.codered.engine.shader.Shader.Attrib;
+import com.codered.engine.shader.Shader.FragmentShader;
+import com.codered.engine.shader.Shader.VertexShader;
 @VertexShader("ppf_no")
 @FragmentShader("ppf_no")
 @Attrib(pos=0, var="pos")

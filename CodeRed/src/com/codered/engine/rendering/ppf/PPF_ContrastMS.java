@@ -31,20 +31,18 @@ public class PPF_ContrastMS extends PPF
 	
 	public void doPostProcess(MSFBO srcFbo, FBOTarget t, MSFBO dstFbo, FBOTarget tRes)
 	{
-		//bindBuffer();
-		
 		GLUtils.bindFramebuffer(msfbo);
 		msfbo.clearAllAttachments();
 		
-		PPFShaders.Contrast.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.Contrast.setInput("contrast", contrast);
-		PPFShaders.Contrast.use();	
+		PPFShaders.ContrastMS.setInput("frame", srcFbo.getAttachmentId(t));
+		PPFShaders.ContrastMS.setInput("contrast", contrast);
+		PPFShaders.ContrastMS.use();	
 		{
 		drawQuad();
 		}
-		PPFShaders.Contrast.stop();
+		PPFShaders.ContrastMS.stop();
 
-		msfbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);
+		msfbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, false);
 	}
 
 	public void doPostProcess(FBO srcFbo, FBOTarget t, FBO dstFbo, FBOTarget tRes, boolean blend)

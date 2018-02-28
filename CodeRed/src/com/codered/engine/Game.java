@@ -6,10 +6,10 @@ import java.util.function.Consumer;
 
 import com.codered.engine.managing.ResourcePath;
 import com.codered.engine.managing.ResourcePath.ResourceDestination;
-import com.codered.engine.shaders.shader.MalformedShaderException;
-import com.codered.engine.shaders.shader.ShaderNotFoundException;
-import com.codered.engine.shaders.shader.ShaderPartList;
-import com.codered.engine.shaders.shader.ShaderParts;
+import com.codered.engine.shader.MalformedShaderException;
+import com.codered.engine.shader.ShaderNotFoundException;
+import com.codered.engine.shader.ShaderPartList;
+import com.codered.engine.shader.ShaderParts;
 
 import cmn.utilslib.essentials.Auto;
 
