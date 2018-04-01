@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_Brightness extends PPF
 {
@@ -14,12 +14,12 @@ public class PPF_Brightness extends PPF
 	{
 		bindBuffer();
 		
-		PPFShaders.Brightness.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.Brightness.use();
+		Window.active.getContext().ppfShaders.Brightness.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.Brightness.use();
 		{
 			drawQuad();
 		}
-		PPFShaders.Brightness.stop();	
+		Window.active.getContext().ppfShaders.Brightness.stop();	
 
 
 		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);

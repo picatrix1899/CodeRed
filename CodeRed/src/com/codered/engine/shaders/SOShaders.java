@@ -10,13 +10,11 @@ import com.codered.engine.shaders.object.simple.PointLight_N_OShader;
 
 public class SOShaders
 {
-	private SOShaders() { }
-	
-	public static final Colored_OShader Colored = new Colored_OShader();
-	public static final AmbientLight_OShader AmbientLight = new AmbientLight_OShader();
-	public static final DirectionalLight_N_OShader DirectionalLight_N = new DirectionalLight_N_OShader();
-	public static final DirectionalLight_OShader DirectionalLight = new DirectionalLight_OShader();
-	public static final Glow_OShader Glow = new Glow_OShader();
-	public static final No_OShader No = new No_OShader();
-	public static final PointLight_N_OShader PointLight_N = new PointLight_N_OShader();
+	public Colored_OShader Colored = new Colored_OShader();
+	public AmbientLight_OShader AmbientLight = new AmbientLight_OShader();
+	public DirectionalLight_N_OShader DirectionalLight_N = new DirectionalLight_N_OShader();
+	public DirectionalLight_OShader DirectionalLight = new DirectionalLight_OShader();
+	public Glow_OShader Glow = new Glow_OShader();
+	public No_OShader No = new No_OShader();
+	public PointLight_N_OShader PointLight_N = new PointLight_N_OShader();
 }

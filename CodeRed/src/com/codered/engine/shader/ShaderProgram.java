@@ -44,7 +44,7 @@ public abstract class ShaderProgram
 		if(vertexShaders.length > 0)
 			for(Shader.VertexShader vs : vertexShaders)
 				attachVertexShader(vs.value());
-		
+
 		if(fragmentShaders.length > 0)
 			for(Shader.FragmentShader fs : fragmentShaders)
 				attachFragmentShader(fs.value());
@@ -74,7 +74,7 @@ public abstract class ShaderProgram
 		
 		for(ShaderPart p  : this.vertexShaders)
 			GL20.glAttachShader(programID, p.getId());
-		
+
 		for(ShaderPart p  : this.fragmentShaders)
 			GL20.glAttachShader(programID, p.getId());
 

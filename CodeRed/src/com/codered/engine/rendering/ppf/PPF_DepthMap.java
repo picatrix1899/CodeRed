@@ -4,7 +4,6 @@ import com.codered.engine.managing.PPF;
 import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_DepthMap extends PPF
 {
@@ -15,14 +14,14 @@ public class PPF_DepthMap extends PPF
 	{
 		bindBuffer();
 
-		PPFShaders.DepthMap.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.DepthMap.setInput("near", Window.active.NEAR);
-		PPFShaders.DepthMap.setInput("far", Window.active.FAR);
-		PPFShaders.DepthMap.use();	
+		Window.active.getContext().ppfShaders.DepthMap.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.DepthMap.setInput("near", Window.active.NEAR);
+		Window.active.getContext().ppfShaders.DepthMap.setInput("far", Window.active.FAR);
+		Window.active.getContext().ppfShaders.DepthMap.use();	
 		{
 			drawQuad();
 		}
-		PPFShaders.DepthMap.stop();	
+		Window.active.getContext().ppfShaders.DepthMap.stop();	
 
 		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);
 	}

@@ -7,7 +7,6 @@ import com.codered.engine.entities.Camera;
 import com.codered.engine.light.PointLight;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
-import com.codered.engine.shaders.STShaders;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
 import com.codered.engine.terrain.Terrain;
 
@@ -34,22 +33,22 @@ public class DefaultTerrainRenderer implements TerrainRenderer
 		GLUtils.toggleDepthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
-		STShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
-		renderTerrain(t, camera, STShaders.AmbientLight);				
+		Window.active.getContext().stShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
+		renderTerrain(t, camera, Window.active.getContext().stShaders.AmbientLight);				
 		
 		
 		GLUtils.toggleBlend(true);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);		
 		
-		STShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
-		renderTerrain(t, camera, STShaders.DirectionalLight_N);
+		Window.active.getContext().stShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
+		renderTerrain(t, camera, Window.active.getContext().stShaders.DirectionalLight_N);
 		
 		
 		for(PointLight p : this.world.getStaticPointLights())
 		{
-			STShaders.PointLight_N.loadPointLight(p);
+			Window.active.getContext().stShaders.PointLight_N.loadPointLight(p);
 			
-			renderTerrain(t, camera, STShaders.PointLight_N);
+			renderTerrain(t, camera, Window.active.getContext().stShaders.PointLight_N);
 		}
 		
 		GLUtils.toggleBlend(false);

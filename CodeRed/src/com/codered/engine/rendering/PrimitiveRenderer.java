@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL15;
 import com.codered.engine.GLUtils;
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.VAO;
-import com.codered.engine.shaders.SOShaders;
+import com.codered.engine.managing.Window;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -43,14 +43,14 @@ public class PrimitiveRenderer
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		SOShaders.Colored.setInput("color", c);
+		Window.active.getContext().soShaders.Colored.setInput("color", c);
 		
-		SOShaders.Colored.use();
+		Window.active.getContext().soShaders.Colored.use();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawElements(GL11.GL_POINTS, indices.length, GL11.GL_UNSIGNED_INT, 0);
 		
-		SOShaders.Colored.stop();
+		Window.active.getContext().soShaders.Colored.stop();
 	}
 	
 	public static void drawLine(Vec3fBase p1, Vec3fBase p2, IColor3Base c)
@@ -65,13 +65,13 @@ public class PrimitiveRenderer
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		SOShaders.Colored.setInput("color",c);
-		SOShaders.Colored.use();
+		Window.active.getContext().soShaders.Colored.setInput("color",c);
+		Window.active.getContext().soShaders.Colored.use();
 		
 		GL11.glLineWidth(3);
 		GL11.glDrawArrays(GL11.GL_LINES,  0, 2);
 		
-		SOShaders.Colored.stop();
+		Window.active.getContext().soShaders.Colored.stop();
 	}
 	
 	public static void drawTexturedQuad(Vec3fBase p0, Vec3fBase p1, Vec3fBase p2, Vec3fBase p3, Material m, SimpleObjectShader shader)
@@ -237,13 +237,13 @@ public class PrimitiveRenderer
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		SOShaders.Colored.setInput("color",c);
+		Window.active.getContext().soShaders.Colored.setInput("color",c);
 		
-		SOShaders.Colored.use();
+		Window.active.getContext().soShaders.Colored.use();
 		
 		GL11.glLineWidth(10);
 		GL11.glDrawElements(GL11.GL_LINES, indices.length, GL11.GL_UNSIGNED_INT, 0);
 		
-		SOShaders.Colored.stop();
+		Window.active.getContext().soShaders.Colored.stop();
 	}
 }

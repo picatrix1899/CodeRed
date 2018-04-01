@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_SimpleBlend extends PPF
 {
@@ -35,16 +35,16 @@ public class PPF_SimpleBlend extends PPF
 	{
 		bindBuffer();
 
-		PPFShaders.Blend.setInput("scene1", fbo1.getAttachmentId(t1));
-		PPFShaders.Blend.setInput("scene2", fbo2.getAttachmentId(t2));
-		PPFShaders.Blend.setInput("src", this.src);
-		PPFShaders.Blend.setInput("dst", this.dst);
-		PPFShaders.Blend.setInput("op", this.op);
-		PPFShaders.Blend.use();	
+		Window.active.getContext().ppfShaders.Blend.setInput("scene1", fbo1.getAttachmentId(t1));
+		Window.active.getContext().ppfShaders.Blend.setInput("scene2", fbo2.getAttachmentId(t2));
+		Window.active.getContext().ppfShaders.Blend.setInput("src", this.src);
+		Window.active.getContext().ppfShaders.Blend.setInput("dst", this.dst);
+		Window.active.getContext().ppfShaders.Blend.setInput("op", this.op);
+		Window.active.getContext().ppfShaders.Blend.use();	
 		{
 			drawQuad();			
 		}
-		PPFShaders.Blend.stop();			
+		Window.active.getContext().ppfShaders.Blend.stop();			
 
 		fbo.blitAttachment(re, FBOTarget.COLOR0, tRes, true);
 	}

@@ -6,7 +6,6 @@ import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_DepthTestMS extends PPF
 {
@@ -27,17 +26,17 @@ public class PPF_DepthTestMS extends PPF
 		GLUtils.bindFramebuffer(msfbo);
 		msfbo.clear();
 
-		PPFShaders.DepthTestMS.setInput("frameSrc", srcFbo.getAttachmentId(t));
-		PPFShaders.DepthTestMS.setInput("frameDst", dstFbo.getAttachmentId(t2));
-		PPFShaders.DepthTestMS.setInput("depthSrc", srcFbo.getAttachmentId(FBOTarget.DEPTH));
-		PPFShaders.DepthTestMS.setInput("depthDst", dstFbo.getAttachmentId(FBOTarget.DEPTH));
-		PPFShaders.DepthTestMS.setInput("near", Window.active.NEAR);
-		PPFShaders.DepthTestMS.setInput("far", Window.active.FAR);
-		PPFShaders.DepthTestMS.use();	
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("frameSrc", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("frameDst", dstFbo.getAttachmentId(t2));
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("depthSrc", srcFbo.getAttachmentId(FBOTarget.DEPTH));
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("depthDst", dstFbo.getAttachmentId(FBOTarget.DEPTH));
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("near", Window.active.NEAR);
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("far", Window.active.FAR);
+		Window.active.getContext().ppfShaders.DepthTestMS.use();	
 		{
 			drawQuad();
 		}
-		PPFShaders.DepthTestMS.stop();	
+		Window.active.getContext().ppfShaders.DepthTestMS.stop();	
 		
 		msfbo.blitAttachment(out, FBOTarget.COLOR0, tRes, true);
 	}

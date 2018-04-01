@@ -8,7 +8,6 @@ import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.light.PointLight;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
-import com.codered.engine.shaders.SOShaders;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 
 import cmn.utilslib.color.colors.LDRColor3;
@@ -35,28 +34,28 @@ public class DefaultEntityRenderer implements EntityRenderer
 		GLUtils.toggleDepthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
-		SOShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
-		renderObject(e, camera, SOShaders.AmbientLight);				
+		Window.active.getContext().soShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
+		renderObject(e, camera, Window.active.getContext().soShaders.AmbientLight);				
 		
 		
 		GLUtils.toggleBlend(true);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);		
 		
-		SOShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
-		renderObject(e, camera, SOShaders.DirectionalLight_N);
+		Window.active.getContext().soShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
+		renderObject(e, camera, Window.active.getContext().soShaders.DirectionalLight_N);
 		
 		
 		for(PointLight p : this.world.getStaticPointLights())
 		{
-			SOShaders.PointLight_N.loadPointLight(p);
+			Window.active.getContext().soShaders.PointLight_N.loadPointLight(p);
 			
-			renderObject(e, camera, SOShaders.PointLight_N);
+			renderObject(e, camera, Window.active.getContext().soShaders.PointLight_N);
 		}
 		
 		if(e.highlighted)
 		{
-			SOShaders.Colored.loadViewMatrix(this.camera.getViewMatrix());
-			SOShaders.Colored.loadProjectionMatrix(this.T_projection);
+			Window.active.getContext().soShaders.Colored.loadViewMatrix(this.camera.getViewMatrix());
+			Window.active.getContext().soShaders.Colored.loadProjectionMatrix(this.T_projection);
 			
 			BBRenderer.drawOBB3f(e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix()), LDRColor3.GREEN);
 		}

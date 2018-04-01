@@ -6,7 +6,6 @@ import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_ContrastMS extends PPF
 {
@@ -34,13 +33,13 @@ public class PPF_ContrastMS extends PPF
 		GLUtils.bindFramebuffer(msfbo);
 		msfbo.clearAllAttachments();
 		
-		PPFShaders.ContrastMS.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.ContrastMS.setInput("contrast", contrast);
-		PPFShaders.ContrastMS.use();	
+		Window.active.getContext().ppfShaders.ContrastMS.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.ContrastMS.setInput("contrast", contrast);
+		Window.active.getContext().ppfShaders.ContrastMS.use();	
 		{
 		drawQuad();
 		}
-		PPFShaders.ContrastMS.stop();
+		Window.active.getContext().ppfShaders.ContrastMS.stop();
 
 		msfbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, false);
 	}

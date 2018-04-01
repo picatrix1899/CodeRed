@@ -82,22 +82,22 @@ public class TestRenderer implements EntityRenderer
 		GLUtils.toggleDepthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
-		SOShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
-		renderObject(e, camera, SOShaders.AmbientLight);				
+		Window.active.getContext().soShaders.AmbientLight.loadAmbientLight(world.getEnviroment().ambient);
+		renderObject(e, camera, Window.active.getContext().soShaders.AmbientLight);				
 		
 		
 		GLUtils.toggleBlend(true);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);		
 		
-		SOShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
-		renderObject(e, camera, SOShaders.DirectionalLight_N);
+		Window.active.getContext().soShaders.DirectionalLight_N.loadDirectionalLight(world.getEnviroment().sun);
+		renderObject(e, camera, Window.active.getContext().soShaders.DirectionalLight_N);
 		
 		
 		for(PointLight p : this.world.getStaticPointLights())
 		{
-			SOShaders.PointLight_N.loadPointLight(p);
+			Window.active.getContext().soShaders.PointLight_N.loadPointLight(p);
 			
-			renderObject(e, camera, SOShaders.PointLight_N);
+			renderObject(e, camera, Window.active.getContext().soShaders.PointLight_N);
 		}
 		
 		GLUtils.toggleBlend(false);

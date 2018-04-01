@@ -5,7 +5,6 @@ import com.codered.engine.gui.GUIWindow;
 import com.codered.engine.gui.elements.GUIELabel;
 
 import com.codered.engine.managing.Window;
-import com.codered.engine.shaders.GUIShaders;
 
 import cmn.utilslib.math.vector.Vector2f;
 
@@ -42,8 +41,8 @@ public class GUIIngameOverlay extends GUIWindow
 	
 	public void render()
 	{	
-		GUIShaders.No.setInput("screenSpace", new Vector2f(getMaxX(), getMaxY()));
-		GUIShaders.Color.setInput("screenSpace", new Vector2f(getMaxX(), getMaxY()));
+		Window.active.getContext().guiShaders.No.setInput("screenSpace", new Vector2f(getMaxX(), getMaxY()));
+		Window.active.getContext().guiShaders.Color.setInput("screenSpace", new Vector2f(getMaxX(), getMaxY()));
 		
 		super.render();
 	}

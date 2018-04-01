@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_RadialBlur extends PPF
 {
@@ -36,15 +36,15 @@ public class PPF_RadialBlur extends PPF
 	{
 		bindBuffer();
 
-		PPFShaders.RadialBlur.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.RadialBlur.setInput("amplitude", this.amp);
-		PPFShaders.RadialBlur.setInput("delta", this.delta);
-		PPFShaders.RadialBlur.setInput("cycles", this.cycles);
-		PPFShaders.RadialBlur.use();	
+		Window.active.getContext().ppfShaders.RadialBlur.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.RadialBlur.setInput("amplitude", this.amp);
+		Window.active.getContext().ppfShaders.RadialBlur.setInput("delta", this.delta);
+		Window.active.getContext().ppfShaders.RadialBlur.setInput("cycles", this.cycles);
+		Window.active.getContext().ppfShaders.RadialBlur.use();	
 		{
 			drawQuad();
 		}
-		PPFShaders.RadialBlur.stop();	
+		Window.active.getContext().ppfShaders.RadialBlur.stop();	
 
 		PPFilter.SimpleBlend().doPostProcess(fbo, dstFbo, dstFbo, FBOTarget.COLOR0, tRes);
 	}

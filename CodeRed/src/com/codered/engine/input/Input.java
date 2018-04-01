@@ -102,74 +102,77 @@ public class Input
 		ArrayList<Integer> buttonHolds = new ArrayList<Integer>();
 		ArrayList<Integer> buttonReleases = new ArrayList<Integer>();
 		
-		for(int key : this.configuration.getRegisteredKeys())
+		if(this.configuration != null)
 		{
-			this.lastKeyDown.put(key, this.isKeyDown.get(key));
-			
-			if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_PRESS)
+			for(int key : this.configuration.getRegisteredKeys())
 			{
-				this.isKeyDown.put(key, true);		
+				this.lastKeyDown.put(key, this.isKeyDown.get(key));
+				
+				if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_PRESS)
+				{
+					this.isKeyDown.put(key, true);		
+				}
+				else if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_RELEASE)
+				{
+					this.isKeyDown.put(key, false);	
+				}
+				
+				if(this.lastKeyDown.get(key) == false && this.isKeyDown.get(key) == true)
+				{
+					keyStrokes.add(key);
+					keyHolds.add(key);
+				}
+				
+				if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == false)
+				{
+					keyHolds.add(key);
+				}
+				
+				if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == true)
+				{
+					keyReleases.add(key);
+					keyHolds.add(key);
+				}
 			}
-			else if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_RELEASE)
-			{
-				this.isKeyDown.put(key, false);	
-			}
-			
-			if(this.lastKeyDown.get(key) == false && this.isKeyDown.get(key) == true)
-			{
-				keyStrokes.add(key);
-				keyHolds.add(key);
-			}
-			
-			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == false)
-			{
-				keyHolds.add(key);
-			}
-			
-			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == true)
-			{
-				keyReleases.add(key);
-				keyHolds.add(key);
-			}
-		}
 
-		for(int button : this.configuration.getRegisteredButtons())
-		{
-			lastButtonDown.put(button, isButtonDown.get(button));
-			if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_PRESS)
+			for(int button : this.configuration.getRegisteredButtons())
 			{
-				isButtonDown.put(button, true);
-			}
-			else if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_RELEASE)
-			{
-				isButtonDown.put(button, false);
-			}
-			
-			if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
-			{
-				buttonStrokes.add(button);
-				buttonHolds.add(button);
-			}
-			
-			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
-			{
-				buttonHolds.add(button);
-			}
-			else
-			{
+				lastButtonDown.put(button, isButtonDown.get(button));
+				if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_PRESS)
+				{
+					isButtonDown.put(button, true);
+				}
+				else if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_RELEASE)
+				{
+					isButtonDown.put(button, false);
+				}
+				
 				if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
+				{
+					buttonStrokes.add(button);
+					buttonHolds.add(button);
+				}
+				
+				if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
 				{
 					buttonHolds.add(button);
 				}
-			}
-			
-			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == false)
-			{
-				buttonReleases.add(button);
-				buttonHolds.add(button);
+				else
+				{
+					if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
+					{
+						buttonHolds.add(button);
+					}
+				}
+				
+				if(lastButtonDown.get(button) == true && isButtonDown.get(button) == false)
+				{
+					buttonReleases.add(button);
+					buttonHolds.add(button);
+				}
 			}
 		}
-		
+
 		if(this.pendingConfiguration != null)
 		{
 			if(!this.isKeyDown.containsValue(true) && !this.isButtonDown.containsValue(true))

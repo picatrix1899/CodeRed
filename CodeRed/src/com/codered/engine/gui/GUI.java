@@ -7,7 +7,6 @@ import com.codered.engine.GLUtils;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.loader.LambdaFont;
-import com.codered.engine.shaders.GUIShaders;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.vector.Vector2f;
@@ -55,12 +54,12 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0, 1);
 		
-		GUIShaders.No.loadTextureMap(t);
-		GUIShaders.No.use();
+		Window.active.getContext().guiShaders.No.loadTextureMap(t);
+		Window.active.getContext().guiShaders.No.use();
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
-		GUIShaders.No.stop();
+		Window.active.getContext().guiShaders.No.stop();
 	}
 	
 	protected void drawLine(IColor3Base c, float width, Vector2f start, Vector2f... p)
@@ -77,13 +76,13 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		GUIShaders.Color.setInput("color", c);
-		GUIShaders.Color.use();
+		Window.active.getContext().guiShaders.Color.setInput("color", c);
+		Window.active.getContext().guiShaders.Color.use();
 		
 		GL11.glLineWidth(width);
 		GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, vertices.length);
 		
-		GUIShaders.Color.stop();
+		Window.active.getContext().guiShaders.Color.stop();
 	}
 	
 	protected void drawPoints(IColor3Base c, float size, Vector2f start, Vector2f... p)
@@ -99,13 +98,13 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		GUIShaders.Color.setInput("color", c);
-		GUIShaders.Color.use();
+		Window.active.getContext().guiShaders.Color.setInput("color", c);
+		Window.active.getContext().guiShaders.Color.use();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawArrays(GL11.GL_POINTS, 0, vertices.length);
 		
-		GUIShaders.Color.stop();
+		Window.active.getContext().guiShaders.Color.stop();
 	}
 	
 	protected void drawColoredRect(IColor3Base c, float posX, float posY, float sizeX, float sizeY)
@@ -121,12 +120,12 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		GUIShaders.Color.setInput("color", c);
-		GUIShaders.Color.use();
+		Window.active.getContext().guiShaders.Color.setInput("color", c);
+		Window.active.getContext().guiShaders.Color.use();
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
-		GUIShaders.Color.stop();
+		Window.active.getContext().guiShaders.Color.stop();
 	}
 	
 	protected void drawText(String text, float posX, float posY, float sizeX, float sizeY, LambdaFont f)
@@ -172,12 +171,12 @@ public abstract class GUI
 			
 			GLUtils.bindVAO(vao, 0, 1);
 			
-			GUIShaders.No.loadTextureMap(f.getTexture().getId());
-			GUIShaders.No.use();
+			Window.active.getContext().guiShaders.No.loadTextureMap(f.getTexture().getId());
+			Window.active.getContext().guiShaders.No.use();
 			
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 			
-			GUIShaders.No.stop();
+			Window.active.getContext().guiShaders.No.stop();
 			
 			p += inc;
 		}

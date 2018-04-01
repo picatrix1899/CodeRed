@@ -51,7 +51,6 @@ public class Window
 	
 	public Window(String id, int width, int height, String title)
 	{
-		
 		WIDTH = width;
 		HEIGHT = height;
 	
@@ -77,7 +76,11 @@ public class Window
 		Window.named_windows.put(this.id, this);
 		Window.id_windows.put(this.window, this);
 		this.input = new Input(this);
-		
+	}
+	
+	public void initContext()
+	{
+		bind();
 		this.context = new WindowContext(this);
 	}
 	

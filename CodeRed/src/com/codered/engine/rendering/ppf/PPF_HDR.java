@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_HDR extends PPF
 {
@@ -23,13 +23,13 @@ public class PPF_HDR extends PPF
 	{
 		bindBuffer();
 
-		PPFShaders.HDR.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.HDR.setInput("exposure", this.exposure);
-		PPFShaders.HDR.use();
+		Window.active.getContext().ppfShaders.HDR.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.HDR.setInput("exposure", this.exposure);
+		Window.active.getContext().ppfShaders.HDR.use();
 		{
 			drawQuad();
 		}
-		PPFShaders.HDR.stop();	
+		Window.active.getContext().ppfShaders.HDR.stop();	
 
 		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);
 	}

@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.GLUtils;
 import com.codered.engine.managing.VAO;
+import com.codered.engine.managing.Window;
 import com.codered.engine.managing.loader.LambdaFont;
-import com.codered.engine.shaders.GUIShaders;
 
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector4f;
@@ -75,12 +75,12 @@ public class TextRenderer
 			
 			GLUtils.bindVAO(vao, 0, 1);
 			
-			GUIShaders.No.loadTextureMap(f.getTexture().getId());
-			GUIShaders.No.use();
+			Window.active.getContext().guiShaders.No.loadTextureMap(f.getTexture().getId());
+			Window.active.getContext().guiShaders.No.use();
 			
 			GL11.glDrawElements(GL11.GL_QUADS, indices.length, GL11.GL_UNSIGNED_INT, 0);
 			
-			GUIShaders.No.stop();
+			Window.active.getContext().guiShaders.No.stop();
 			
 			p += inc;
 		}

@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_Invert extends PPF
 {
@@ -14,12 +14,12 @@ public class PPF_Invert extends PPF
 	{
 		bindBuffer();
 
-		PPFShaders.Invert.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.Invert.use();	
+		Window.active.getContext().ppfShaders.Invert.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.Invert.use();	
 		{
 			drawQuad();
 		}
-		PPFShaders.Invert.stop();	
+		Window.active.getContext().ppfShaders.Invert.stop();	
 
 		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);
 	}

@@ -16,17 +16,17 @@ import com.codered.engine.shaders.postprocess.filter.RadialBlur_PPFilter;
 
 public class PPFShaders
 {
-	public static final Contrast_PPFilter Contrast = new Contrast_PPFilter();
-	public static final ContrastMS_PPFilter ContrastMS = new ContrastMS_PPFilter();
-	public static final Blend_PPFilter Blend = new Blend_PPFilter();
-	public static final BlurH_PPFilter BlurH = new BlurH_PPFilter();
-	public static final BlurV_PPFilter BlurV = new BlurV_PPFilter();
-	public static final Brightness_PPFilter Brightness = new Brightness_PPFilter();
-	public static final DepthTest_PPFilter DepthTest = new DepthTest_PPFilter();
-	public static final DepthTestMS_PPFilter DepthTestMS = new DepthTestMS_PPFilter();
-	public static final DepthMap_PPFilter DepthMap = new DepthMap_PPFilter();
-	public static final HDR_PPFilter HDR = new HDR_PPFilter();
-	public static final Invert_PPFilter Invert = new Invert_PPFilter();
-	public static final No_PPFilter No = new No_PPFilter();
-	public static final RadialBlur_PPFilter RadialBlur = new RadialBlur_PPFilter();
+	public Contrast_PPFilter Contrast = new Contrast_PPFilter();
+	public ContrastMS_PPFilter ContrastMS = new ContrastMS_PPFilter();
+	public Blend_PPFilter Blend = new Blend_PPFilter();
+	public BlurH_PPFilter BlurH = new BlurH_PPFilter();
+	public BlurV_PPFilter BlurV = new BlurV_PPFilter();
+	public Brightness_PPFilter Brightness = new Brightness_PPFilter();
+	public DepthTest_PPFilter DepthTest = new DepthTest_PPFilter();
+	public DepthTestMS_PPFilter DepthTestMS = new DepthTestMS_PPFilter();
+	public DepthMap_PPFilter DepthMap = new DepthMap_PPFilter();
+	public HDR_PPFilter HDR = new HDR_PPFilter();
+	public Invert_PPFilter Invert = new Invert_PPFilter();
+	public No_PPFilter No = new No_PPFilter();
+	public RadialBlur_PPFilter RadialBlur = new RadialBlur_PPFilter();
 }

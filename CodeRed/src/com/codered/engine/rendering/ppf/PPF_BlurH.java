@@ -1,9 +1,9 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
+import com.codered.engine.managing.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.shaders.PPFShaders;
 
 public class PPF_BlurH extends PPF
 {
@@ -14,13 +14,13 @@ public class PPF_BlurH extends PPF
 	{
 		bindBuffer();
 		
-		PPFShaders.BlurH.setInput("frame", srcFbo.getAttachmentId(t));
-		PPFShaders.BlurH.setInput("targetWidth", (float)srcFbo.getWidth());
-		PPFShaders.BlurH.use();	
+		Window.active.getContext().ppfShaders.BlurH.setInput("frame", srcFbo.getAttachmentId(t));
+		Window.active.getContext().ppfShaders.BlurH.setInput("targetWidth", (float)srcFbo.getWidth());
+		Window.active.getContext().ppfShaders.BlurH.use();	
 		{
 			drawQuad();
 		}
-		PPFShaders.BlurH.stop();	
+		Window.active.getContext().ppfShaders.BlurH.stop();	
 
 		
 		fbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, true);

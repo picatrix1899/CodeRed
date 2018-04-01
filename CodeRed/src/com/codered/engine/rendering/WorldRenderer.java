@@ -14,11 +14,11 @@ import com.codered.engine.terrain.Terrain;
 
 public class WorldRenderer
 {
-	public static MSFBO main = new MSFBO(4);
+	public MSFBO main = new MSFBO(4);
 	
-	public static FBO test = new FBO();
+	public FBO test = new FBO();
 	
-	static
+	public WorldRenderer()
 	{
 		main.applyColorTextureAttachment(FBOTarget.COLOR0, true);
 		main.applyDepthTextureAttachment();
@@ -27,13 +27,13 @@ public class WorldRenderer
 		test.applyDepthBufferAttachment();
 	}
 	
-	public static void bindFramebuffer()
+	public void bindFramebuffer()
 	{
 		GLUtils.bindFramebuffer(main);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
-	public static void render(World w, Camera c)
+	public void render(World w, Camera c)
 	{
 		GLUtils.toggleMultisample(true);
 		

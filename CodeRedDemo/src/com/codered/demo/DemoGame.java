@@ -79,8 +79,7 @@ public class DemoGame extends Game
 		printDebugInfo();
 		
 		Window.named_windows.get("main").CloseRequested.addHandler((a,b) -> {stop();});
-		
-		Input i = Window.named_windows.get("main").getInputManager();
+		Window.named_windows.get("test").CloseRequested.addHandler((a,b) -> {stop();});
 		
 		InputConfiguration config = new InputConfiguration();
 		config.registerKey(Keys.k_forward);
@@ -96,9 +95,8 @@ public class DemoGame extends Game
 		config.registerButton(Keys.b_moveCam);
 		config.registerButton(0);
 		
-		i.setConfiguration(config);
-		
-		i.keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) {stop();} });
+		Window.named_windows.get("main").getInputManager().setConfiguration(config);
+		Window.named_windows.get("main").getInputManager().keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) {stop();} });
 		
 		GL11.glClearColor(0,0,0,1);		
 			
@@ -107,27 +105,34 @@ public class DemoGame extends Game
 		Session.get().getPlayer().window = new GUIIngameOverlay();
 		
 		PrimitiveRenderer.create();
+		
+		Window.named_windows.get("main").initContext();
+		gui1 = new GUIIngameOverlay();
+		
+		Window.named_windows.get("test").initContext();
+		gui2 = new GUIIngameOverlay();		
+
 	}
 
 	public void update()
 	{
 		Window.active.updateDisplay();
-		
-		if(Window.active.getId() == "main")
-		{
-			if(Session.get().getPlayer().window.allowWorldProcessing())
-			{
 
-				for(DynamicEntity e : Session.get().getWorld().getDynamicEntities())
-				{
-					e.update(Session.get().getWorld());
-				}
+		if(Session.get().getPlayer().window.allowWorldProcessing())
+		{
+			for(DynamicEntity e : Session.get().getWorld().getDynamicEntities())
+			{
+				e.update(Session.get().getWorld());
 			}
-			
-			Session.get().getPlayer().window.update();
 		}
+		
+		gui1.update();
+		gui2.update();
 	}
 
+	GUIIngameOverlay gui1;
+	GUIIngameOverlay gui2;
+	
 	public void render()
 	{
 		if(Window.active.getId() == "main")
@@ -136,11 +141,20 @@ public class DemoGame extends Game
 			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			
-			WorldRenderer.bindFramebuffer();
+			Window.named_windows.get("main").getContext().worldRenderer.bindFramebuffer();
 			
-			WorldRenderer.render(Session.get().getWorld(), Session.get().getPlayer().getCamera());	
+			Window.named_windows.get("main").getContext().worldRenderer.render(Session.get().getWorld(), Session.get().getPlayer().getCamera());	
 			
-			Session.get().getPlayer().window.render();
+			gui1.render();
+		}
+		
+		if(Window.active.getId() == "test")
+		{
+			GLUtils.bindFramebuffer(0);
+			
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+			gui2.render();
 		}
 	}
 
@@ -157,6 +171,7 @@ public class DemoGame extends Game
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		
 		Window w = new Window("main", 800, 600, "CoderRed 3");
+		Window w2 = new Window("test", 800, 600, "CoderRed 3 - Test");
 		w.bind();
 	}
 

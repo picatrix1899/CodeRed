@@ -5,8 +5,6 @@ import com.codered.engine.shaders.debug.DepthWrite_DBGShader;
 
 public class DBGShaders
 {
-	private DBGShaders() { }
-	
-	public static final Colored_DBGShader Colored = new Colored_DBGShader();
-	public static final DepthWrite_DBGShader DepthWrite = new DepthWrite_DBGShader();
+	public Colored_DBGShader Colored = new Colored_DBGShader();
+	public DepthWrite_DBGShader DepthWrite = new DepthWrite_DBGShader();
 }
