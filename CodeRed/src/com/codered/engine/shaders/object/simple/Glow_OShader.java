@@ -2,6 +2,7 @@ package com.codered.engine.shaders.object.simple;
 
 import com.codered.engine.light.Glow;
 import com.codered.engine.managing.Material;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shader.Shader.Attrib;
 import com.codered.engine.shader.Shader.FragmentShader;
@@ -29,7 +30,7 @@ public class Glow_OShader extends SimpleObjectShader
 	
 	private void loadMaterial0(Material m)
 	{
-		loadTexture("glowMap", 0, m.getGlowMap().getId());
+		loadTexture("glowMap", 0, ResourceManager.getGlowMap(m.getGlowMap()).getId());
 	}	
 	
 	private void loadGlow0(Glow glow)

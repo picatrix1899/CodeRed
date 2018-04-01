@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.loader.OBJFile2;
+import com.codered.engine.managing.loader.OBJFile;
 import com.codered.engine.managing.loader.TriangleData;
 
 import cmn.utilslib.essentials.Auto;
@@ -130,7 +130,7 @@ public class Mesh
 		return this.yc;
 	}
 	
-	public Mesh loadFromObj(OBJFile2 obj)
+	public Mesh loadFromObj(OBJFile obj)
 	{
 		this.indices = obj.indices;
 		this.triangles = obj.triangles;
@@ -186,10 +186,10 @@ public class Mesh
 		
 		this.vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		this.vao.storeData(0, positions, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(1, texCoords, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(2, normals, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(3, tangents, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(0, positions, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(1, texCoords, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(2, normals, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(3, tangents, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		return this;
 	}

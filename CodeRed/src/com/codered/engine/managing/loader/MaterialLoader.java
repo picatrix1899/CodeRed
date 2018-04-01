@@ -6,12 +6,10 @@ import java.io.FileReader;
 
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.Paths;
-import com.codered.engine.managing.ResourceManager;
-import com.codered.engine.managing.Texture;
 
 public class MaterialLoader
 {
-	public static void load(String file)
+	public static Material load(String file)
 	{
 
 		try
@@ -30,12 +28,12 @@ public class MaterialLoader
 			float intensity = 0.0f;
 			float power = 0.0f;
 			
-			Texture colorMap;
-			Texture normalMap;
-			Texture dispMap;
-			Texture glowMap;
+			String colorMap;
+			String normalMap;
+			String dispMap;
+			String glowMap;
 			
-			Material m;
+			Material m = null;
 			
 			
 			while((line = reader.readLine()) != null)
@@ -90,57 +88,54 @@ public class MaterialLoader
 			
 				if(texture != "")
 				{
-					ResourceManager.registerColorMap(texture, texture);
-					colorMap = ResourceManager.getColorMap(texture);
+					
+					colorMap = texture;
 				}
 				else
 				{
-					colorMap = ResourceManager.getColorMap("black");
+					colorMap = "black";
 				}
 				
 				if(normal != "")
 				{
-					ResourceManager.registerNormalMap(normal, normal);
-					normalMap = ResourceManager.getNormalMap(normal);
+					normalMap = normal;
 				}
 				else
 				{
-					normalMap = ResourceManager.getNormalMap("black");
+					normalMap = "black";
 				}
 				
 				if(displacement != "")
 				{
-					ResourceManager.registerDisplacementMap(displacement, displacement);
-					dispMap = ResourceManager.getDisplacementMap(displacement);
+					dispMap = displacement;
 				}
 				else
 				{
-					dispMap = ResourceManager.getDisplacementMap("black");
+					dispMap = "black";
 				}
 				
 				if(glow != "")
 				{
-					ResourceManager.registerGlowMap(glow, glow);
-					glowMap = ResourceManager.getGlowMap(glow);
+					glowMap = glow;
 				}
 				else
 				{
-					glowMap = ResourceManager.getGlowMap("black");
+					glowMap = "black";
 				}
 				
-				m = new Material(colorMap, normalMap, glowMap, dispMap, power, intensity);
-				
-				ResourceManager.registerMaterial(name, m);
-				
+				m = new Material(name, colorMap, normalMap, glowMap, dispMap, power, intensity);
 			}
 		
 			reader.close();	
-		
+			
+			return m;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 
+		return null;
+		
 	}
 }

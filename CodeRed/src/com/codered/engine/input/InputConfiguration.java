@@ -2,11 +2,14 @@ package com.codered.engine.input;
 
 import java.util.ArrayList;
 
+
 public class InputConfiguration
 {
 	private ArrayList<Integer> registeredKeys = new ArrayList<Integer>();
 	private ArrayList<Integer> registeredButtons = new ArrayList<Integer>();
 
+
+	
 	public void registerKey(int key)
 	{
 		registeredKeys.add(key);
@@ -25,5 +28,15 @@ public class InputConfiguration
 	public void unregisterButton(int button)
 	{
 		registeredButtons.remove(button);
+	}
+	
+	public ArrayList<Integer> getRegisteredKeys()
+	{
+		return this.registeredKeys;
+	}
+	
+	public ArrayList<Integer> getRegisteredButtons()
+	{
+		return this.registeredButtons;
 	}
 }

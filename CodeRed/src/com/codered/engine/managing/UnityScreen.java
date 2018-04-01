@@ -19,7 +19,7 @@ public class UnityScreen
 	static
 	{
 		VAO vao = new VAO();
-		vao.storeData(0, CORNERS, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, CORNERS, 0, 0, GL15.GL_STATIC_DRAW);
 		quad = new RawModel(vao, 4);
 		
 	}

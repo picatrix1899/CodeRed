@@ -13,8 +13,6 @@ import com.codered.engine.shaders.object.SimpleObjectShader;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 public class DefaultEntityRenderer implements EntityRenderer
 {

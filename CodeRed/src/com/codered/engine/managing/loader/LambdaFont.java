@@ -8,9 +8,10 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
+import com.codered.engine.GLUtils;
 import com.codered.engine.managing.Paths;
+import com.codered.engine.managing.Texture;
 
 import cmn.utilslib.validation.Validate;
 import cmn.utilslib.math.vector.Vector4f;
@@ -28,7 +29,7 @@ public class LambdaFont
 	
 	private File f;
 	
-	private int id;
+	private Texture texture;
 	
 	public LambdaFont(File f) throws Exception
 	{
@@ -36,7 +37,7 @@ public class LambdaFont
 		this.f = f;
 	}
 	
-	public void load() throws Exception
+	public LambdaFont load() throws Exception
 	{
 		InputStream gz = new FileInputStream(this.f);
 		
@@ -69,30 +70,20 @@ public class LambdaFont
 			
 		}
 		
-		this.id = loadTexture();
+		loadTexture();
 		
 		stream.close();
+		
+		return this;
 	}
 	
-	private int loadTexture()
+	private void loadTexture()
 	{
-		int textureID = GL11.glGenTextures();
-
+		this.texture = Texture.createTexture(this.width, this.height, false);
+    
+		GLUtils.bindTexture2D(this.texture.getId());
 		
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-
-    
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-
-    
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-   
-    
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.im);
-		
-		return textureID;
 	}
 	
 	public Vector4f getUVs(String c)
@@ -103,9 +94,9 @@ public class LambdaFont
 		return new Vector4f(this.uvwa[index + 0], this.uvwa[index + 1], this.uvwa[index + 2], this.uvwa[index + 3]);
 	}
 	
-	public int getTexture()
+	public Texture getTexture()
 	{
-		return this.id;
+		return this.texture;
 	}
 	
 }

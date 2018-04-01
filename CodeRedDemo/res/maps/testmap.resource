@@ -15,5 +15,3 @@ crate:crate:crate
 tesla:tesla:tesla_very_wet
 barrel:barrel:barrel_very_wet
 boulder:boulder:boulder_wet
-[terrain]
-terrain

@@ -25,18 +25,18 @@ import com.codered.engine.Game;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.managing.Paths;
-import com.codered.engine.managing.ResourceManager;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.input.Input;
-import com.codered.engine.input.Input2;
+import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.rendering.PrimitiveRenderer;
 import com.codered.engine.rendering.TextRenderer;
 import com.codered.engine.rendering.WorldRenderer;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shaders.gui.GUIShader;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.postprocess.filter.PPFShader;
@@ -69,7 +69,8 @@ public class DemoGame extends Game
 		
 		info.add("OpenGL/LWJGL Version: ", GL11.glGetString(GL11.GL_VERSION));
 		info.add("Supported Color Attachments: ", "" + GL11.glGetInteger(GL30.GL_MAX_COLOR_ATTACHMENTS));
-
+		info.add("Supported Texture Size:", "" + GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE));
+		info.add("Supported TexArray Layers:", "" + GL11.glGetInteger(GL30.GL_MAX_ARRAY_TEXTURE_LAYERS));
 		info.print();
 	}
 
@@ -80,35 +81,26 @@ public class DemoGame extends Game
 		Window.named_windows.get("main").CloseRequested.addHandler((a,b) -> {stop();});
 		
 		Input i = Window.named_windows.get("main").getInputManager();
-		i.registerKey(Keys.k_forward);
-		i.registerKey(Keys.k_back);
-		i.registerKey(Keys.k_left);
-		i.registerKey(Keys.k_right);
-		i.registerKey(Keys.k_up);
-		i.registerKey(Keys.k_exit);
-		i.registerKey(Keys.k_turnLeft);
-		i.registerKey(Keys.k_turnRight);
-		i.registerKey(Keys.k_delete);
 		
-		i.registerButton(Keys.b_moveCam);
-		i.registerButton(0);
-		
-		Input2 i2 = Window.named_windows.get("main").getInputManager2();
-		i2.registerKey(Keys.k_forward);
-		i2.registerKey(Keys.k_back);
-		i2.registerKey(Keys.k_left);
-		i2.registerKey(Keys.k_right);
-		i2.registerKey(Keys.k_up);
-		i2.registerKey(Keys.k_exit);
-		i2.registerKey(Keys.k_turnLeft);
-		i2.registerKey(Keys.k_turnRight);
-		i2.registerKey(Keys.k_delete);
+		InputConfiguration config = new InputConfiguration();
+		config.registerKey(Keys.k_forward);
+		config.registerKey(Keys.k_back);
+		config.registerKey(Keys.k_left);
+		config.registerKey(Keys.k_right);
+		config.registerKey(Keys.k_up);
+		config.registerKey(Keys.k_exit);
+		config.registerKey(Keys.k_turnLeft);
+		config.registerKey(Keys.k_turnRight);
+		config.registerKey(Keys.k_delete);
 
-		i2.keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) {stop();} });
+		config.registerButton(Keys.b_moveCam);
+		config.registerButton(0);
+		
+		i.setConfiguration(config);
+		
+		i.keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) {stop();} });
 		
 		GL11.glClearColor(0,0,0,1);		
-
-		ResourceManager.registerFont("lucida", new File(Paths.p_fonts + "lucida" + Paths.e_lambdafont));
 			
 		Session.get().setWorld(new DemoWorld());
 		Session.get().setPlayer(new Player());
@@ -130,8 +122,6 @@ public class DemoGame extends Game
 				{
 					e.update(Session.get().getWorld());
 				}
-					
-				Session.get().getPlayer().update();
 			}
 			
 			Session.get().getPlayer().window.update();
@@ -168,6 +158,18 @@ public class DemoGame extends Game
 		
 		Window w = new Window("main", 800, 600, "CoderRed 3");
 		w.bind();
+	}
+
+	public void loadStaticResources()
+	{
+		try
+		{
+			ResourceManager.GUI.regFont("lucida", new LambdaFont(new File(Paths.p_fonts + "lucida" + Paths.e_lambdafont)).load());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 }

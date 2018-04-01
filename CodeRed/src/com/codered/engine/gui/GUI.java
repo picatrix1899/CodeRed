@@ -50,8 +50,8 @@ public abstract class GUI
 
 		};
 
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
-		vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0, 1);
 		
@@ -73,7 +73,7 @@ public abstract class GUI
 			vertices[i + 1] = p[i];
 		}
 		
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);
 		
@@ -95,7 +95,7 @@ public abstract class GUI
 			vertices[i + 1] = p[i];
 		}
 		
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);
 		
@@ -117,7 +117,7 @@ public abstract class GUI
 		vertices[2] = new Vector2f(posX + sizeX, posY +sizeY);		
 		vertices[3] = new Vector2f(posX, posY + sizeY);
 
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);
 		
@@ -167,12 +167,12 @@ public abstract class GUI
 
 
 			
-			vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
-			vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
+			vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
+			vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 			
 			GLUtils.bindVAO(vao, 0, 1);
 			
-			GUIShaders.No.loadTextureMap(f.getTexture());
+			GUIShaders.No.loadTextureMap(f.getTexture().getId());
 			GUIShaders.No.use();
 			
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);

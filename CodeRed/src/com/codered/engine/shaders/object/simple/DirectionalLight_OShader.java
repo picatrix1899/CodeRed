@@ -2,6 +2,7 @@ package com.codered.engine.shaders.object.simple;
 
 import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shader.Shader.Attrib;
 import com.codered.engine.shader.Shader.FragmentShader;
@@ -33,7 +34,7 @@ public class DirectionalLight_OShader extends SimpleObjectShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, mat.getColorMap().getId());
+		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
 		
 		loadFloat("specularPower", mat.getSpecularPower());
 		loadFloat("specularIntensity", mat.getSpecularIntensity());

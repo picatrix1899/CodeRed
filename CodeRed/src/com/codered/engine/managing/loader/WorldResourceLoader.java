@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import com.codered.engine.managing.Paths;
-import com.codered.engine.managing.ResourceManager;
+import com.codered.engine.managing.models.Mesh;
+import com.codered.engine.managing.models.TexturedModel;
+import com.codered.engine.resource.ResourceManager;
 
 import cmn.utilslib.essentials.Auto;
 
@@ -56,24 +58,26 @@ public class WorldResourceLoader
 			{
 				String[] parts = l.split(":");
 				
-				ResourceManager.registerStaticMesh(parts[0], parts[1]);
+				OBJFile obj = new OBJFile();
+				
+				obj.load(new File(Paths.p_models + parts[1] + Paths.e_obj));
+				
+				Mesh m = new Mesh();
+				
+				m.loadFromObj(obj);
+				
+				ResourceManager.WORLD.regStaticMesh(parts[0], m);
 			}
 			
 			for(String l : materials)
 			{
-				ResourceManager.registerMaterialFromFile(l);
+				ResourceManager.WORLD.regMaterial(l, MaterialLoader.load(l));
 			}
 			
 			for(String l : static_models)
 			{
 				String[] parts = l.split(":");
-				
-				ResourceManager.registerTexturedModel(parts[0], parts[1], parts[2]);
-			}
-			
-			for(String l : terrain)
-			{
-				ResourceManager.registerRawModel(l, new TerrainLoader().loadTerrain());
+				ResourceManager.WORLD.regTexturedModel(parts[0], new TexturedModel(ResourceManager.getStaticMesh(parts[1]), ResourceManager.getMaterial(parts[2])));
 			}
 			
 			reader.close();	

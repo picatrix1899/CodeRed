@@ -8,6 +8,7 @@ import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.light.Glow;
 import com.codered.engine.light.PointLight;
 import com.codered.engine.managing.models.TexturedModel;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.terrain.Terrain;
 
 import cmn.utilslib.color.colors.api.IColor3Base;

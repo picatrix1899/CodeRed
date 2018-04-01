@@ -1,4 +1,4 @@
-package com.codered.engine.managing;
+package com.codered.engine.resource;
 
 
 public class ResourcePath

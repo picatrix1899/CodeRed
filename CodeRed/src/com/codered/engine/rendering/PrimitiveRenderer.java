@@ -38,7 +38,7 @@ public class PrimitiveRenderer
 			0
 		};
 		
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);
@@ -61,7 +61,7 @@ public class PrimitiveRenderer
 		vertices[1] = p2;
 		
 		
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);
 		
@@ -102,8 +102,8 @@ public class PrimitiveRenderer
 		new Vector2f(0,1)
 		};
 
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
-		vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0, 1);
@@ -232,7 +232,7 @@ public class PrimitiveRenderer
 		3,5
 		};
 
-		vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
 		GLUtils.bindVAO(vao, 0);

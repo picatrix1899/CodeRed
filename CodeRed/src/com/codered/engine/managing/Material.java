@@ -3,16 +3,19 @@ package com.codered.engine.managing;
 public class Material
 {
 	
-	private Texture colorMap;
-	private Texture normalMap;
-	private Texture glowMap;
-	private Texture dispMap;
+	private String name;
+	
+	private String colorMap;
+	private String normalMap;
+	private String glowMap;
+	private String dispMap;
 	
 	private float specularIntensity;
 	private float specularPower;
 	
-	public Material(Texture colorMap, Texture normalMap, Texture glowMap, Texture dispMap, float power, float intensity)
+	public Material(String name, String colorMap, String normalMap, String glowMap, String dispMap, float power, float intensity)
 	{
+		this.name = name;
 		this.colorMap = colorMap;
 		this.normalMap = normalMap;
 		this.glowMap = glowMap;
@@ -22,23 +25,27 @@ public class Material
 		this.specularIntensity = intensity;
 	}
 
+	public String getName()
+	{
+		return this.name;
+	}
 	
-	public Texture getColorMap()
+	public String getColorMap()
 	{
 		return this.colorMap;
 	}
 	
-	public Texture getNormalMap()
+	public String getNormalMap()
 	{
 		return this.normalMap;
 	}
 	
-	public Texture getGlowMap()
+	public String getGlowMap()
 	{
 		return this.glowMap;
 	}
 	
-	public Texture getDisplacementMap()
+	public String getDisplacementMap()
 	{
 		return this.dispMap;
 	}

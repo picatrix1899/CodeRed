@@ -4,7 +4,6 @@ import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.managing.World;
 import com.codered.engine.rendering.DefaultEntityRenderer;
-import com.codered.engine.rendering.EntityRenderer;
 
 import cmn.utilslib.math.geometry.OBB3f;
 import cmn.utilslib.math.geometry.RayOBBResolver;

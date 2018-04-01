@@ -8,7 +8,7 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
-import com.codered.engine.managing.ResourcePath;
+import com.codered.engine.resource.ResourcePath;
 
 import cmn.utilslib.essentials.Auto;
 

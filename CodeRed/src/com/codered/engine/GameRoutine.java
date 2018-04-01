@@ -80,7 +80,8 @@ public class GameRoutine
 	public void init()
 	{
 		this.game.preInit();
-		this.game.initShaderParts();		
+		this.game.loadStaticResources();
+		this.game.initShaderParts();	
 		this.game.init();
 	}
 	

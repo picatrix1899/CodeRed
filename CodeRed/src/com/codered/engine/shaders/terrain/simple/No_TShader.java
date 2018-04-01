@@ -1,6 +1,7 @@
 package com.codered.engine.shaders.terrain.simple;
 
 import com.codered.engine.managing.Material;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shader.Shader.Attrib;
 import com.codered.engine.shader.Shader.FragmentShader;
 import com.codered.engine.shader.Shader.VertexShader;
@@ -24,7 +25,7 @@ public class No_TShader extends SimpleTerrainShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, mat.getColorMap().getId());
+		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
 	}
 
 	public void use()

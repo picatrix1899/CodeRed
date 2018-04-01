@@ -17,7 +17,6 @@ import cmn.utilslib.essentials.BufferUtils;
 import cmn.utilslib.math.vector.Vector4f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
 import cmn.utilslib.math.vector.api.Vec3fBase;
-import cmn.utilslib.math.vector.api.Vec4f;
 
 public class VAO
 {
@@ -32,7 +31,6 @@ public class VAO
 	
 	public VAO()
 	{
-		
 		this.id = GL30.glGenVertexArrays();
 		
 		vaos.add(this);
@@ -54,200 +52,132 @@ public class VAO
 	}
 	
 	
-	public void storeData(int attrib, int blocksize, float[] data, int drawFlag)
+	public void storeData(int attrib, int blocksize, float[] data, int stride, int pointer, int drawFlag)
 	{
 		GLUtils.bindVAO(this);
 		
-		if(this.vbos.containsKey(attrib))
-		{
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbos.get(attrib));
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedFloatBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		}
-		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedFloatBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			
-			vbos.put(attrib, vboID);				
-		}	
-	}
-	
-	public void storeData(int attrib, int blocksize, int[] data, int drawFlag)
-	{
-		GLUtils.bindVAO(this);
-		
-		if(this.vbos.containsKey(attrib))
-		{
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbos.get(attrib));
-			
-			IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_INT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		}
-		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-			
-			IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_INT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		int vboID = 0;
 
-			vbos.put(attrib, vboID);	
+		if(!this.vbos.containsKey(attrib))
+		{
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
 		}
+		else
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		FloatBuffer buffer = BufferUtils.wrapFlippedFloatBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_FLOAT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Vec2fBase[] data, int drawFlag)
+	public void storeData(int attrib, int blocksize, int[] data, int stride, int pointer, int drawFlag)
 	{
 		GLUtils.bindVAO(this);
 		
-		if(this.vbos.containsKey(attrib))
+		int vboID = 0;
+
+		if(!this.vbos.containsKey(attrib))
 		{
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbos.get(attrib));
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector2FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
 		}
 		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector2FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			
-			vbos.put(attrib, vboID);				
-		}	
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_INT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Vec3fBase[] data, int drawFlag)
+	public void storeData(int attrib, Vec2fBase[] data, int stride, int pointer, int drawFlag)
 	{
 		GLUtils.bindVAO(this);
 		
-		if(this.vbos.containsKey(attrib))
+		int vboID = 0;
+
+		if(!this.vbos.containsKey(attrib))
 		{
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbos.get(attrib));
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector3FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, 3, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
 		}
 		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector3FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, 3, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			
-			vbos.put(attrib, vboID);			
-		}
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		FloatBuffer buffer = BufferUtils.wrapFlippedVector2FBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Vector4f[] data, int drawFlag)
+	public void storeData(int attrib, Vec3fBase[] data, int stride, int pointer, int drawFlag)
 	{
 		GLUtils.bindVAO(this);
 		
-		if(this.vbos.containsKey(attrib))
+		int vboID = 0;
+
+		if(!this.vbos.containsKey(attrib))
 		{
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.vbos.get(attrib));
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector4FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, Vec4f.DIMENSIONS, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
 		}
 		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-			
-			FloatBuffer buffer = BufferUtils.wrapFlippedVector4FBuffer(data);
-			
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-			
-			GL20.glVertexAttribPointer(attrib, Vec4f.DIMENSIONS, GL11.GL_FLOAT, false, 0, 0);
-			
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			
-			vbos.put(attrib, vboID);				
-		}
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		FloatBuffer buffer = BufferUtils.wrapFlippedVector3FBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, 3, GL11.GL_FLOAT, false, stride, pointer);
 	}
+	
+	public void storeData(int attrib, Vector4f[] data, int stride, int pointer, int drawFlag)
+	{
+		GLUtils.bindVAO(this);
+		
+		int vboID = 0;
+
+		if(!this.vbos.containsKey(attrib))
+		{
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
+		}
+		else
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		FloatBuffer buffer = BufferUtils.wrapFlippedVector4FBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, 4, GL11.GL_FLOAT, false, stride, pointer);
+}
 	
 	public void storeIndices(int[] indices, int drawflag)
 	{
 		GLUtils.bindVAO(this);
 		
-		if(this.indicesVBO != 0)
-		{
-			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
-			
-			IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(indices);
-			
-			GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
-		}
-		else
-		{
-			int vboID = GL15.glGenBuffers();
-			
-			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
-			
-			IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(indices);
-			
-			GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
+		if(this.indicesVBO == 0) this.indicesVBO = GL15.glGenBuffers();
+
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
 		
-			this.indicesVBO = vboID;
-		}
+		IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(indices);
+		
+		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
 	}
 	
 	

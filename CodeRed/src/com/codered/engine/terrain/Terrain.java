@@ -17,13 +17,13 @@ public class Terrain
 	private float x;
 	private float z;
 	private RawModel model;
-	private Material texture;
+	private Material material;
 	public long id;
 
-	public Terrain(int gridX, int gridZ, RawModel model, Material texture)
+	public Terrain(int gridX, int gridZ, RawModel model, Material material)
 	{
-		this.texture = texture;
 		this.model = model;
+		this.material = material;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
 	}
@@ -48,9 +48,9 @@ public class Terrain
 		return model;
 	}
 
-	public Material getTexture()
+	public Material getMaterial()
 	{
-		return texture;
+		return this.material;
 	}
 	
 	public Matrix4f getTransformationMatrix()

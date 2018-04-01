@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import com.codered.engine.managing.ResourcePath;
-import com.codered.engine.managing.ResourcePath.ResourceDestination;
+import com.codered.engine.resource.ResourcePath;
+import com.codered.engine.resource.ResourcePath.ResourceDestination;
 import com.codered.engine.shader.MalformedShaderException;
 import com.codered.engine.shader.ShaderNotFoundException;
 import com.codered.engine.shader.ShaderPartList;
@@ -16,40 +16,24 @@ import cmn.utilslib.essentials.Auto;
 public abstract class Game
 {
 	
-	private GameRoutine routine;
-	private ArgumentInterpreter argInterpreter;
+	private GameRoutine routine = new GameRoutine(this);
+	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
 	
-	public Game()
-	{
-		this.routine = new GameRoutine(this);
-		this.argInterpreter = new ArgumentInterpreter();
-	}
+	public void setArguments(String[] args) { this.argInterpreter.interpret(args); }
 	
-	public void setArguments(String[] args)
-	{
-		this.argInterpreter.interpret(args);
-	}
+	public ArgumentInterpreter getArgInterpreter() { return this.argInterpreter; }
 	
-	public ArgumentInterpreter getArgInterpreter()
-	{
-		return this.argInterpreter;
-	}
+	public void start() { this.routine.start(); }
 	
-	public void start()
-	{
-		this.routine.start();
-	}
-	
-	public void stop()
-	{
-		this.routine.stop();
-	}
+	public void stop() { this.routine.stop(); }
 	
 	public abstract void release();
 	
 	public abstract void preInit();
 	
 	public abstract void init();
+	
+	public abstract void loadStaticResources();
 	
 	public abstract void update();
 	
@@ -175,7 +159,8 @@ public abstract class Game
 				index++;
 			}
 		}
+		
+
 	}
-	
 	public interface Argument extends Consumer<String[]> { }
 }

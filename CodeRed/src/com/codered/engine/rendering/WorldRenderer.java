@@ -7,7 +7,6 @@ import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.managing.World;
-import com.codered.engine.rendering.ppf.PPFilter;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;

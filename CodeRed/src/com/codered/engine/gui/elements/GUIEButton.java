@@ -2,8 +2,8 @@ package com.codered.engine.gui.elements;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.managing.ResourceManager;
 import com.codered.engine.managing.Window;
+import com.codered.engine.resource.ResourceManager;
 
 public class GUIEButton extends GUIElement
 {

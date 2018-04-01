@@ -10,6 +10,8 @@ import com.codered.engine.entities.BaseEntity;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.gui.GUIWindow;
+import com.codered.engine.input.Input.ButtonEventArgs;
+import com.codered.engine.input.Input.KeyEventArgs;
 import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 
@@ -58,84 +60,79 @@ public class Player extends BaseEntity
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
 		
-		
+		Window.active.getInputManager().keyPress.addHandler((a, b) -> updateMovement(a));
+		Window.active.getInputManager().buttonStroke.addHandler((a, b) -> buttonStroke(a));
+		Window.active.getInputManager().buttonRelease.addHandler((a, b) -> buttonRelease(a));
+		Window.active.getInputManager().buttonPress.addHandler((a, b) -> buttonPress(a));
 	}
 	
-	public Camera getCamera() { return this.camera; }
-	
-	public Quaternion getPitch() { return this.transform.getRotation().getRotationPitch(); }
-	public Quaternion getYaw() { return this.transform.getRotation().getRotationYaw(); }
-	public Quaternion getRoll() { return this.transform.getRotation().getRotationRoll(); }
-	
-	public void update()
+	private void buttonStroke(ButtonEventArgs args)
 	{
-		if(Window.active.getInputManager().isKeyPressed(Keys.k_delete))
-		{
-			if(this.selectedEntity != -1)
-			{
-				if(Session.get().getWorld().removeStaticEntity(this.selectedEntity))
-				{
-					
-				}
-				
-				this.selectedEntity = -1;
-			}
-		}
-		
-		if(Window.active.getInputManager().isButtonPressed(Keys.b_moveCam))
+		if(args.response.buttonPresent(Keys.b_moveCam))
 		{
 			Window.active.getInputManager().setMouseGrabbed(true);
 		}
-		
-		
+	}
+	
+	private void buttonPress(ButtonEventArgs args)
+	{
 		if(Window.active.getInputManager().isButtonHelt(Keys.b_moveCam))
 		{
-			
 			updateOrientation();
-			
 		}
-		
-		updateMovement();
-
-		if(Window.active.getInputManager().isButtonReleased(Keys.b_moveCam))
+	}
+	
+	private void buttonRelease(ButtonEventArgs args)
+	{
+		if(args.response.buttonPresent(Keys.b_moveCam))
 		{
 			Window.active.getInputManager().setMouseGrabbed(false);
 		}
 	}
 	
-	private void updateMovement()
+	
+	
+	private void updateMovement(KeyEventArgs args)
 	{
-
 		Vec3f dir = Vector3f.getInstance();
 		Vec3f vel = Vector3f.getInstance();
 
+		if(args.response.keyPresent(Keys.k_delete))
+		{
+			if(this.selectedEntity != -1)
+			{
+				Session.get().getWorld().removeStaticEntity(this.selectedEntity);
+				
+				this.selectedEntity = -1;
+			}
+		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_forward))
+		if(args.response.keyPresent(Keys.k_forward))
 		{
 			dir.sub(this.camera.getYaw().getForwardf().normalize());
 		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_right))
+		if(args.response.keyPresent(Keys.k_right))
 		{
 			dir.sub(this.camera.getYaw().getRightf().normalize());
 		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_left))
+		if(args.response.keyPresent(Keys.k_left))
 		{
 			dir.sub(this.camera.getYaw().getLeftf().normalize());
 		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_back))
+		if(args.response.keyPresent(Keys.k_back))
 		{
 			dir.sub(this.camera.getYaw().getBackf().normalize());
 		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_turnLeft))
+		if(args.response.keyPresent(Keys.k_turnLeft))
 		{
 			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * Time.getDelta() * 1000.0f);
 		}
 		
-		if(Window.active.getInputManager().isKeyHelt(Keys.k_turnRight))
+		if(args.response.keyPresent(Keys.k_turnRight))
 		{
 			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * -Time.getDelta() * 1000.0f);
 		}
@@ -158,6 +155,12 @@ public class Player extends BaseEntity
 		Vector3f.storeInstance((Vector3f) dir);
 		Vector3f.storeInstance((Vector3f) vel);
 	}
+	
+	public Camera getCamera() { return this.camera; }
+	
+	public Quaternion getPitch() { return this.transform.getRotation().getRotationPitch(); }
+	public Quaternion getYaw() { return this.transform.getRotation().getRotationYaw(); }
+	public Quaternion getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
 	public AABB3f getTransformedAABB()
 	{

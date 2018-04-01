@@ -1,9 +1,10 @@
 package com.codered.demo;
 
-import com.codered.engine.managing.ResourceManager;
 import com.codered.engine.managing.World;
+import com.codered.engine.managing.loader.TerrainLoader;
 import com.codered.engine.managing.loader.WorldEntityLoader;
 import com.codered.engine.managing.loader.WorldResourceLoader;
+import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.terrain.Terrain;
 
 import cmn.utilslib.math.vector.Vector3f;
@@ -14,6 +15,9 @@ public class DemoWorld extends World
 	public void load()
 	{
 		WorldResourceLoader.load("testmap");
+		
+		ResourceManager.WORLD.regRawModel("terrain", new TerrainLoader().loadTerrain());
+		
 		WorldEntityLoader.load("testmap", this);
 		
 		addDynamicEntity(0, new RotatingBox(ResourceManager.getTexturedModel("crate"), Vector3f.TEMP.set(-20, 0, -30), 0.0f, 45.0f, 0.0f));

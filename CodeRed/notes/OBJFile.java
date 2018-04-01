@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import com.codered.engine.managing.Vertex;
+import com.codered.engine.managing.models.Mesh;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.geometry.Point3f;
@@ -15,16 +16,17 @@ import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec2f;
 import cmn.utilslib.math.vector.api.Vec3f;
 
-public class OBJFile2
+public class OBJFile
 {
 	
 	public ArrayList<Triangle3f> triangles = Auto.ArrayList();
 	public ArrayList<TriangleData> data = Auto.ArrayList();
-
+	public ArrayList<Integer> indices = Auto.ArrayList();
+	
 	private ArrayList<Vector2f> uvs = Auto.ArrayList();
 	private ArrayList<Vector3f> normals =Auto.ArrayList();
 	private ArrayList<Point3f> pos = Auto.ArrayList();
-	public ArrayList<Integer> indices = Auto.ArrayList();
+
 	
 	public void load(File file)
 	{
@@ -35,7 +37,9 @@ public class OBJFile2
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "";
 			String[] parts;
-
+			
+			Mesh m = new Mesh();
+			
 			Point3f position;
 			
 			while((line = reader.readLine()) != null)
@@ -46,7 +50,7 @@ public class OBJFile2
 					
 					position = new Point3f(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]));
 					
-					this.pos.add(position);
+					this.pos.add(position);	
 				}
 				else if(line.startsWith("vt "))
 				{
@@ -63,11 +67,11 @@ public class OBJFile2
 					parts = line.split(" ");
 					
 					
-					Vertex vA = processVertex(parts[1]);
-					Vertex vB = processVertex(parts[2]);
-					Vertex vC = processVertex(parts[3]);
+					Vertex vA = processVertex(parts[1], m);
+					Vertex vB = processVertex(parts[2], m);
+					Vertex vC = processVertex(parts[3], m);
 
-					calculateTangents(vA, vB, vC);	
+					calculateTangents(vA, vB, vC);					
 					
 					Triangle3f tr = new Triangle3f();
 					tr.a = vA.pos;
@@ -86,9 +90,10 @@ public class OBJFile2
 					d.tangentA = vA.tangent;
 					d.tangentB = vB.tangent;
 					d.tangentC = vC.tangent;
-
+					
 					this.triangles.add(tr);
 					this.data.add(d);
+					
 				}
 			}
 			
@@ -101,7 +106,7 @@ public class OBJFile2
 		}
 	}
 	
-	private Vertex processVertex(String line)
+	private Vertex processVertex(String line, Mesh m)
 	{
 		String[] vertex = line.split("/");
 		
@@ -110,14 +115,12 @@ public class OBJFile2
 		int normalIndex =	Integer.parseInt(vertex[2]) - 1;
 		
 		Vertex v;
-		
 		v = new Vertex();
 		
 		v.pos = this.pos.get(posIndex);
 		v.uv = this.uvs.get(textureIndex);
 		v.normal = this.normals.get(normalIndex);
-		v.tangent = new Vector3f();
-
+		
 		this.indices.add(this.indices.size());
 		
 		return v;
@@ -145,5 +148,5 @@ public class OBJFile2
 		b.tangent.add(tangent);
 		c.tangent.add(tangent);
 	}
-	
+
 }

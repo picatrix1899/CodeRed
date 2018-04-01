@@ -29,10 +29,10 @@ public class TerrainLoader
 		
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		vao.storeData(0, positions, GL15.GL_STATIC_DRAW);
-		vao.storeData(1, texCoords, GL15.GL_STATIC_DRAW);
-		vao.storeData(2, normals, GL15.GL_STATIC_DRAW);
-		vao.storeData(3, tangents, GL15.GL_STATIC_DRAW);
+		vao.storeData(0, positions, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeData(1, texCoords, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeData(2, normals, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeData(3, tangents, 0, 0, GL15.GL_STATIC_DRAW);
 		
 		
 		return new RawModel(vao, indices.length);

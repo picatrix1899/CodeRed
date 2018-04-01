@@ -2,11 +2,8 @@ package com.codered.demo;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.gui.elements.GUIEButton;
-import com.codered.engine.gui.elements.GUIEColoredHSlider;
-import com.codered.engine.gui.elements.GUIEImage;
 import com.codered.engine.gui.elements.GUIELabel;
-import com.codered.engine.managing.ResourceManager;
+
 import com.codered.engine.managing.Window;
 import com.codered.engine.shaders.GUIShaders;
 

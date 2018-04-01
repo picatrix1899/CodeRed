@@ -60,7 +60,7 @@ public class DefaultTerrainRenderer implements TerrainRenderer
 	{
 			GLUtils.bindVAO(t.getModel().getVAO(), 0, 1, 2, 3);
 			
-			tShader.setInput("material", t.getTexture());
+			tShader.setInput("material", t.getMaterial());
 
 			tShader.loadModelMatrix(t.getTransformationMatrix());
 			tShader.loadProjectionMatrix(this.T_projection);

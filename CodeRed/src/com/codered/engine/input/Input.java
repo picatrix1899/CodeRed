@@ -10,18 +10,30 @@ import org.lwjgl.glfw.GLFW;
 import com.codered.engine.managing.Window;
 
 import cmn.utilslib.essentials.BufferUtils;
+import cmn.utilslib.events.Event;
+import cmn.utilslib.events.EventArgs;
 import cmn.utilslib.math.vector.Vector2f;
 
 public class Input
 {
+	private Window w;
+
+	public Event<KeyEventArgs> keyStroke = new Event<KeyEventArgs>();
+	public Event<KeyEventArgs> keyPress = new Event<KeyEventArgs>();
+	public Event<KeyEventArgs> keyRelease = new Event<KeyEventArgs>();
 	
-	private ArrayList<Integer> registeredKeys = new ArrayList<Integer>();
+	public Event<ButtonEventArgs> buttonStroke = new Event<ButtonEventArgs>();
+	public Event<ButtonEventArgs> buttonPress = new Event<ButtonEventArgs>();
+	public Event<ButtonEventArgs> buttonRelease = new Event<ButtonEventArgs>();
+	
 	private HashMap<Integer,Boolean> lastKeyDown = new HashMap<Integer,Boolean>();
 	private HashMap<Integer,Boolean> isKeyDown = new HashMap<Integer,Boolean>();
 	
-	private ArrayList<Integer> registeredButtons = new ArrayList<Integer>();
 	private HashMap<Integer,Boolean> lastButtonDown = new HashMap<Integer,Boolean>();
 	private HashMap<Integer,Boolean> isButtonDown = new HashMap<Integer,Boolean>();
+
+	private InputConfiguration configuration;
+	private InputConfiguration pendingConfiguration;
 	
 	private float DX = 0;
 	private float DY = 0;
@@ -31,71 +43,19 @@ public class Input
 	
 	private boolean lock;
 	
-	private Window w;
 	private Vector2f center;
-	
 	
 	public Input(Window w)
 	{
 		this.w = w;
 		
 		this.center = new Vector2f(this.w.WIDTH / 2.0, this.w.HEIGHT / 2.0);
-		
-	}
-	
-	public void registerKey(int key)
-	{
-		registeredKeys.add(key);
-		lastKeyDown.put(key, false);
-		isKeyDown.put(key, false);
-	}
-	
-	public void registerButton(int button)
-	{
-		registeredButtons.add(button);
-		lastButtonDown.put(button, false);
-		isButtonDown.put(button, false);
-	}
-	
-	public void unregisterKey(int key)
-	{
-		registeredKeys.remove(key);
-		lastKeyDown.remove(key);
-		isKeyDown.remove(key);
-	}
-	
-	public void unregisterButton(int button)
-	{
-		registeredButtons.remove(button);
-		lastButtonDown.remove(button);
-		isButtonDown.remove(button);
-	}
-	
-	public boolean isKeyPressed(int key)
-	{
-		
-		if(lastKeyDown.get(key) == false && isKeyDown.get(key) == true)
-		{
-			return true;
-		}
-		
-		return false;
 	}
 	
 	public boolean isButtonPressed(int button)
 	{
 		
 		if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public  boolean isKeyReleased(int key)
-	{
-		if(lastKeyDown.get(key) == true && isKeyDown.get(key) == false)
 		{
 			return true;
 		}
@@ -113,18 +73,6 @@ public class Input
 		return false;
 	}
 	
-	public boolean isKeyHelt(int key)
-	{
-		if(lastKeyDown.get(key) == true && isKeyDown.get(key) == true)
-		{
-			return true;
-		}
-		else
-		{
-			return isKeyPressed(key);
-		}	
-	}
-	
 	public  boolean isButtonHelt(int button)
 	{
 		if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
@@ -137,45 +85,106 @@ public class Input
 		}	
 	}
 	
-	public float getDX()
+	public void setConfiguration(InputConfiguration config)
 	{
-		return DX;
+		this.pendingConfiguration = config;
+		
+		if(this.configuration == null) applyPendingConfiguration();
 	}
-	
-	public float getDY()
-	{
-		return -DY;
-	}
-	
+
 	public void update()
 	{
+		ArrayList<Integer> keyStrokes = new ArrayList<Integer>();
+		ArrayList<Integer> keyHolds = new ArrayList<Integer>();
+		ArrayList<Integer> keyReleases = new ArrayList<Integer>();
 		
-		for (int key : registeredKeys)
+		ArrayList<Integer> buttonStrokes = new ArrayList<Integer>();
+		ArrayList<Integer> buttonHolds = new ArrayList<Integer>();
+		ArrayList<Integer> buttonReleases = new ArrayList<Integer>();
+		
+		for(int key : this.configuration.getRegisteredKeys())
 		{
-			lastKeyDown.put(key, isKeyDown.get(key));
+			this.lastKeyDown.put(key, this.isKeyDown.get(key));
 			
 			if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_PRESS)
 			{
-				isKeyDown.put(key, true);		
+				this.isKeyDown.put(key, true);		
 			}
 			else if(GLFW.glfwGetKey(this.w.window, key) == GLFW.GLFW_RELEASE)
 			{
-				isKeyDown.put(key, false);	
+				this.isKeyDown.put(key, false);	
+			}
+			
+			if(this.lastKeyDown.get(key) == false && this.isKeyDown.get(key) == true)
+			{
+				keyStrokes.add(key);
+				keyHolds.add(key);
+			}
+			
+			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == false)
+			{
+				keyHolds.add(key);
+			}
+			
+			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == true)
+			{
+				keyReleases.add(key);
+				keyHolds.add(key);
 			}
 		}
-		
-		
-		for(int button : registeredButtons)
+
+		for(int button : this.configuration.getRegisteredButtons())
 		{
 			lastButtonDown.put(button, isButtonDown.get(button));
 			if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_PRESS)
 			{
-				isButtonDown.put(button, true);		
+				isButtonDown.put(button, true);
 			}
 			else if(GLFW.glfwGetMouseButton(this.w.window, button) == GLFW.GLFW_RELEASE)
 			{
-				isButtonDown.put(button, false);	
+				isButtonDown.put(button, false);
 			}
+			
+			if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
+			{
+				buttonStrokes.add(button);
+				buttonHolds.add(button);
+			}
+			
+			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
+			{
+				buttonHolds.add(button);
+			}
+			else
+			{
+				if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
+				{
+					buttonHolds.add(button);
+				}
+			}
+			
+			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == false)
+			{
+				buttonReleases.add(button);
+				buttonHolds.add(button);
+			}
+		}
+		
+		if(this.pendingConfiguration != null)
+		{
+			if(!this.isKeyDown.containsValue(true) && !this.isButtonDown.containsValue(true))
+			{
+				applyPendingConfiguration();
+			}
+		}
+		else
+		{
+			if(!keyStrokes.isEmpty()) this.keyStroke.raise(new KeyEventArgs(new KeyResponse(keyStrokes)));
+			if(!keyHolds.isEmpty()) this.keyPress.raise(new KeyEventArgs(new KeyResponse(keyHolds)));
+			if(!keyReleases.isEmpty()) this.keyRelease.raise(new KeyEventArgs(new KeyResponse(keyReleases)));
+			if(!buttonStrokes.isEmpty()) this.buttonStroke.raise(new ButtonEventArgs(new ButtonResponse(buttonStrokes)));
+			if(!buttonHolds.isEmpty()) this.buttonPress.raise(new ButtonEventArgs(new ButtonResponse(buttonHolds)));
+			if(!buttonReleases.isEmpty()) this.buttonRelease.raise(new ButtonEventArgs(new ButtonResponse(buttonReleases)));
 		}
 		
 		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
@@ -193,7 +202,69 @@ public class Input
 			
 			GLFW.glfwSetCursorPos(this.w.window, center.x, center.y);
 		}
+	}
 
+	public float getDX()
+	{
+		return DX;
+	}
+	
+	public float getDY()
+	{
+		return -DY;
+	}
+	
+	private void applyPendingConfiguration()
+	{
+		this.configuration = this.pendingConfiguration;
+		this.pendingConfiguration = null;
+		
+		this.isKeyDown.clear();
+		this.lastKeyDown.clear();
+		this.isButtonDown.clear();
+		this.lastButtonDown.clear();
+		
+		for(int key : this.configuration.getRegisteredKeys())
+		{
+			this.isKeyDown.put(key, false);
+			this.lastKeyDown.put(key, false);
+		}
+
+		for(int button : this.configuration.getRegisteredButtons())
+		{
+			this.isButtonDown.put(button, false);
+			this.lastButtonDown.put(button, false);
+		}
+	}
+	
+	public class KeyEventArgs implements EventArgs
+	{
+		public KeyResponse response;
+		
+		public KeyEventArgs(KeyResponse response)
+		{
+			this.response = response;
+		}
+		
+		public EventArgs cloneArgs()
+		{
+			return new KeyEventArgs(this.response.clone());
+		}
+	}
+
+	public class ButtonEventArgs implements EventArgs
+	{
+		public ButtonResponse response;
+		
+		public ButtonEventArgs(ButtonResponse response)
+		{
+			this.response = response;
+		}
+		
+		public EventArgs cloneArgs()
+		{
+			return new ButtonEventArgs(this.response.clone());
+		}
 	}
 	
 	public int getMouseX()

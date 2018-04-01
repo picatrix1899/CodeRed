@@ -69,13 +69,13 @@ public class TextRenderer
 
 			};
 
-			vao.storeData(0, vertices, GL15.GL_STATIC_DRAW);
-			vao.storeData(1, uvs, GL15.GL_STATIC_DRAW);
+			vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
+			vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 			vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 			
 			GLUtils.bindVAO(vao, 0, 1);
 			
-			GUIShaders.No.loadTextureMap(f.getTexture());
+			GUIShaders.No.loadTextureMap(f.getTexture().getId());
 			GUIShaders.No.use();
 			
 			GL11.glDrawElements(GL11.GL_QUADS, indices.length, GL11.GL_UNSIGNED_INT, 0);

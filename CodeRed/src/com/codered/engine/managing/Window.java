@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.engine.input.Input;
-import com.codered.engine.input.Input2;
 
 import cmn.utilslib.events.EmptyArgs;
 import cmn.utilslib.events.Event;
@@ -43,11 +42,12 @@ public class Window
 	private boolean isCreated;
 	
 	private Input input;
-	private Input2 input2;
 	
 	private String id;
 	
 	public Event<EmptyArgs> CloseRequested = new Event<EmptyArgs>();
+	
+	private WindowContext context;
 	
 	public Window(String id, int width, int height, String title)
 	{
@@ -55,29 +55,30 @@ public class Window
 		WIDTH = width;
 		HEIGHT = height;
 	
-		window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, title, 0, 0);
+		this.window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, title, 0, 0);
 		
 		if(window == 0)
 		{
 			System.exit(-1);
 		}
 		
-		GLFW.glfwMakeContextCurrent(window);
-		capabilities = GL.createCapabilities();
+		GLFW.glfwMakeContextCurrent(this.window);
+		this.capabilities = GL.createCapabilities();
 		
-		GLFW.glfwSetWindowFocusCallback(window, (a, b) -> {focusChanged(a,b);});
+		GLFW.glfwSetWindowFocusCallback(this.window, (a, b) -> {focusChanged(a,b);});
 		
-		GLFW.glfwShowWindow(window);
+		GLFW.glfwShowWindow(this.window);
 		
-		isCreated = true;
+		this.isCreated = true;
 		
 		createProjectionMatrix();
 		
 		this.id = id;
-		named_windows.put(id, this);
-		id_windows.put(window, this);
+		Window.named_windows.put(this.id, this);
+		Window.id_windows.put(this.window, this);
 		this.input = new Input(this);
-		this.input2 = new Input2(this);
+		
+		this.context = new WindowContext(this);
 	}
 	
 	public String getId()
@@ -85,37 +86,40 @@ public class Window
 		return this.id;
 	}
 	
+	public WindowContext getContext()
+	{
+		return this.context;
+	}
+	
 	public void focusChanged(long id, boolean gain)
 	{
 		if(gain)
 		{
-			id_windows.get(id).bind();
+			Window.id_windows.get(id).bind();
 		}
 	}
 	
 	public void bind()
 	{
-		GLFW.glfwMakeContextCurrent(window);
-		GLFW.glfwShowWindow(window);
-		active = this;
+		GLFW.glfwMakeContextCurrent(this.window);
+		GLFW.glfwShowWindow(this.window);
+		Window.active = this;
 	}
 	
 	public void updateDisplay()
 	{
 		GLFW.glfwPollEvents();
-		GLFW.glfwSwapBuffers(window);
+		GLFW.glfwSwapBuffers(this.window);
 		
 		if(GLFW.glfwWindowShouldClose(this.window)) this.CloseRequested.raise(EmptyArgs.getInstance());
 		
-		
-		input.update();
-		input2.update();
+		this.input.update();
 	}
 	
 	public void closeDisplay()
 	{
-		GLFW.glfwDestroyWindow(window);
-		isCreated = false;
+		GLFW.glfwDestroyWindow(this.window);
+		this.isCreated = false;
 	}
 	
 	public Vec2f getSize()
@@ -126,11 +130,6 @@ public class Window
 	public Input getInputManager()
 	{
 		return this.input;
-	}
-	
-	public Input2 getInputManager2()
-	{
-		return this.input2;
 	}
 	
 	public boolean isCreated()
