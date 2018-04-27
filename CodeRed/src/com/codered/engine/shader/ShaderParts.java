@@ -2,15 +2,20 @@ package com.codered.engine.shader;
 
 public class ShaderParts
 {
-	private static ShaderPartList builtIn = new ShaderPartList();
-	private static ShaderPartList custom = new ShaderPartList();
+	private ShaderPartList builtIn = new ShaderPartList();
+	private ShaderPartList custom = new ShaderPartList();
 	
-	public static ShaderPartList builtIn()
+	public ShaderParts()
+	{
+		
+	}
+	
+	public ShaderPartList builtIn()
 	{
 		return builtIn;
 	}
 	
-	public static ShaderPartList custom()
+	public ShaderPartList custom()
 	{
 		return custom;
 	}

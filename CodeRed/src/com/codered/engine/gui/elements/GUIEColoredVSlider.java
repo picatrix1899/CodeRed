@@ -2,7 +2,7 @@ package com.codered.engine.gui.elements;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.managing.Window;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.Func;
@@ -147,7 +147,7 @@ public class GUIEColoredVSlider extends GUIElement
 		{
 			if(this.drag)
 			{
-				setMousePos((int)(this.sliderPosX + this.mouseOffX), (int)(Window.active.HEIGHT - (this.sliderPosY - this.mouseOffY)));					
+				setMousePos((int)(this.sliderPosX + this.mouseOffX), (int)(com.codered.engine.window.active.HEIGHT - (this.sliderPosY - this.mouseOffY)));					
 				Window.active.getInputManager().setMouseGrabbed(false);
 
 				this.drag = false;

@@ -2,7 +2,6 @@ package com.codered.engine.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
@@ -11,6 +10,7 @@ import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
 import com.codered.engine.terrain.Terrain;
+import com.codered.engine.utils.GLUtils;
 
 public class WorldRenderer
 {

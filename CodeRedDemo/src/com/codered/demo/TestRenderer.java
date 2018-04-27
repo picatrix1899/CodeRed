@@ -12,11 +12,9 @@ import org.lwjgl.opengl.GL31;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.light.PointLight;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
@@ -25,6 +23,8 @@ import com.codered.engine.rendering.WorldRenderer;
 import com.codered.engine.rendering.ppf.PPFilter;
 import com.codered.engine.shaders.SOShaders;
 import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.math.matrix.Matrix4f;
 
@@ -51,7 +51,7 @@ public class TestRenderer implements EntityRenderer
 	
 	public void init(StaticEntity e, World w, Camera c)
 	{
-		this.T_projection = Window.active.projectionMatrix;
+		this.T_projection = com.codered.engine.window.active.projectionMatrix;
 		this.camera = c;
 		this.world = w;
 		

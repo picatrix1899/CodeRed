@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import com.codered.engine.managing.Paths;
+import com.codered.engine.managing.loader.data.OBJFile;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.TexturedModel;
 import com.codered.engine.resource.ResourceManager;

@@ -1,24 +1,26 @@
 package com.codered.engine.shaders.object.simple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.codered.engine.light.AmbientLight;
 import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import com.codered.engine.window.IWindowContext;
 
+import cmn.utilslib.dmap.dmaps.DMap2;
 import cmn.utilslib.math.vector.Vector3f;
 
-@VertexShader("o_ambientLight")
-@FragmentShader("o_ambientLight")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
-@Attrib(pos=2, var="normal")
-@Attrib(pos=3, var="tangent")
+
 public class AmbientLight_OShader extends SimpleObjectShader
 {
-
+	public AmbientLight_OShader(IWindowContext context)
+	{
+		super(context);
+		
+		compile();
+	}
+	
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
@@ -41,7 +43,7 @@ public class AmbientLight_OShader extends SimpleObjectShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
+		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()).getId());
 	}	
 	
 	private void loadAmbientLight0(AmbientLight light)
@@ -55,10 +57,32 @@ public class AmbientLight_OShader extends SimpleObjectShader
 		start();
 		
 		super.use();
-		
+	
 		loadMaterial0(getInput("material"));
 		loadAmbientLight0(getInput("ambientLight"));
 		loadVector3("skyColor", new Vector3f(0.0f));
+	}
+
+
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_ambientLight"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_ambientLight"));
+	}
+
+
+
+	public List<DMap2<Integer,String>> getAttribs()
+	{
+		ArrayList<DMap2<Integer,String>> attribs = new ArrayList<DMap2<Integer,String>>();
+		
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
+		attribs.add(new DMap2<Integer,String>(2, "normal"));
+		attribs.add(new DMap2<Integer,String>(3, "tangent"));
+		
+		return attribs;
 	}
 	
 }

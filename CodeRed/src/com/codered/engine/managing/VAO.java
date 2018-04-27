@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.GLUtils;
+import com.codered.engine.utils.GLUtils;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.BufferUtils;

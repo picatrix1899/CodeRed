@@ -6,7 +6,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		
-		DemoGame game = new DemoGame();
-		game.start();
+		DemoBootstrap boot = new DemoBootstrap();
+		boot.boot();
 	}
 }

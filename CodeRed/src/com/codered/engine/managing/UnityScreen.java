@@ -3,8 +3,8 @@ package com.codered.engine.managing;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.models.RawModel;
+import com.codered.engine.utils.GLUtils;
 
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.api.Vec2f;

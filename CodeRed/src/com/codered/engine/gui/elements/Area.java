@@ -1,6 +1,6 @@
 package com.codered.engine.gui.elements;
 
-import com.codered.engine.managing.Window;
+import com.codered.engine.window.Window;
 
 public class Area
 {

@@ -1,7 +1,7 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.Window;
+import com.codered.engine.window.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 
@@ -15,8 +15,8 @@ public class PPF_DepthMap extends PPF
 		bindBuffer();
 
 		Window.active.getContext().ppfShaders.DepthMap.setInput("frame", srcFbo.getAttachmentId(t));
-		Window.active.getContext().ppfShaders.DepthMap.setInput("near", Window.active.NEAR);
-		Window.active.getContext().ppfShaders.DepthMap.setInput("far", Window.active.FAR);
+		Window.active.getContext().ppfShaders.DepthMap.setInput("near", com.codered.engine.window.active.NEAR);
+		Window.active.getContext().ppfShaders.DepthMap.setInput("far", com.codered.engine.window.active.FAR);
 		Window.active.getContext().ppfShaders.DepthMap.use();	
 		{
 			drawQuad();

@@ -1,8 +1,8 @@
 package com.codered.engine.managing;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
+import com.codered.engine.utils.GLUtils;
 
 public abstract class PPF
 {

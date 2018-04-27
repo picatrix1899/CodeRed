@@ -3,23 +3,24 @@ package com.codered.engine.fbo;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
-import com.codered.engine.GLUtils;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.IWindowContext;
 
 
 public class MSFBO extends Framebuffer
 {
 	private int samples;
 	
-	public MSFBO(int samples)
+	public MSFBO(IWindowContext context, int samples)
 	{
-		super();
+		super(context);
 		
 		this.samples = samples;
 	}
 	
-	public MSFBO(int width, int height, int samples)
+	public MSFBO(IWindowContext context,int width, int height, int samples)
 	{
-		super(width, height);
+		super(context, width, height);
 		
 		this.samples = samples;
 	}

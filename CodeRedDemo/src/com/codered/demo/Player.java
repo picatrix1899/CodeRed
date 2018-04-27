@@ -5,15 +5,16 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.codered.demo.GlobalSettings.Keys;
-import com.codered.engine.Time;
 import com.codered.engine.entities.BaseEntity;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.gui.GUIWindow;
 import com.codered.engine.input.Input.ButtonEventArgs;
 import com.codered.engine.input.Input.KeyEventArgs;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
+import com.codered.engine.utils.Time;
+import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -41,10 +42,12 @@ public class Player extends BaseEntity
 	
 	private long selectedEntity = -1;
 	
+	private IWindowContext context;
 	
-	
-	public Player()
+	public Player(IWindowContext context)
 	{
+		this.context = context;
+		
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(3, 9, 3));
 		
 		this.transform.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
@@ -60,23 +63,23 @@ public class Player extends BaseEntity
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
 		
-		Window.active.getInputManager().keyPress.addHandler((a, b) -> updateMovement(a));
-		Window.active.getInputManager().buttonStroke.addHandler((a, b) -> buttonStroke(a));
-		Window.active.getInputManager().buttonRelease.addHandler((a, b) -> buttonRelease(a));
-		Window.active.getInputManager().buttonPress.addHandler((a, b) -> buttonPress(a));
+		this.context.getInputManager().keyPress.addHandler((a, b) -> updateMovement(a));
+		this.context.getInputManager().buttonStroke.addHandler((a, b) -> buttonStroke(a));
+		this.context.getInputManager().buttonRelease.addHandler((a, b) -> buttonRelease(a));
+		this.context.getInputManager().buttonPress.addHandler((a, b) -> buttonPress(a));
 	}
 	
 	private void buttonStroke(ButtonEventArgs args)
 	{
 		if(args.response.buttonPresent(Keys.b_moveCam))
 		{
-			Window.active.getInputManager().setMouseGrabbed(true);
+			this.context.getInputManager().setMouseGrabbed(true);
 		}
 	}
 	
 	private void buttonPress(ButtonEventArgs args)
 	{
-		if(Window.active.getInputManager().isButtonHelt(Keys.b_moveCam))
+		if(this.context.getInputManager().isButtonHelt(Keys.b_moveCam))
 		{
 			updateOrientation();
 		}
@@ -86,7 +89,7 @@ public class Player extends BaseEntity
 	{
 		if(args.response.buttonPresent(Keys.b_moveCam))
 		{
-			Window.active.getInputManager().setMouseGrabbed(false);
+			this.context.getInputManager().setMouseGrabbed(false);
 		}
 	}
 	
@@ -127,15 +130,15 @@ public class Player extends BaseEntity
 			dir.sub(this.camera.getYaw().getBackf().normalize());
 		}
 		
-		if(args.response.keyPresent(Keys.k_turnLeft))
-		{
-			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * Time.getDelta() * 1000.0f);
-		}
-		
-		if(args.response.keyPresent(Keys.k_turnRight))
-		{
-			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * -Time.getDelta() * 1000.0f);
-		}
+//		if(args.response.keyPresent(Keys.k_turnLeft))
+//		{
+//			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * Time.getDelta() * 1000.0f);
+//		}
+//		
+//		if(args.response.keyPresent(Keys.k_turnRight))
+//		{
+//			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * -Time.getDelta() * 1000.0f);
+//		}
 		
 		if(dir.length() == 0) { return; }
 		
@@ -291,9 +294,9 @@ public class Player extends BaseEntity
 	
 	private void updateOrientation()
 	{
-		this.camera.rotateYaw(-Window.active.getInputManager().getDX());
+		this.camera.rotateYaw(-this.context.getInputManager().getDX());
 
-		this.camera.rotatePitch(Window.active.getInputManager().getDY());
+		this.camera.rotatePitch(this.context.getInputManager().getDY());
 		
 		World w = Session.get().getWorld();
 		

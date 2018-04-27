@@ -9,9 +9,9 @@ import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.Texture;
+import com.codered.engine.utils.GLUtils;
 
 import cmn.utilslib.validation.Validate;
 import cmn.utilslib.math.vector.Vector4f;

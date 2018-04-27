@@ -1,8 +1,8 @@
 package com.codered.engine.rendering.ppf;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.Window;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
@@ -30,8 +30,8 @@ public class PPF_DepthTestMS extends PPF
 		Window.active.getContext().ppfShaders.DepthTestMS.setInput("frameDst", dstFbo.getAttachmentId(t2));
 		Window.active.getContext().ppfShaders.DepthTestMS.setInput("depthSrc", srcFbo.getAttachmentId(FBOTarget.DEPTH));
 		Window.active.getContext().ppfShaders.DepthTestMS.setInput("depthDst", dstFbo.getAttachmentId(FBOTarget.DEPTH));
-		Window.active.getContext().ppfShaders.DepthTestMS.setInput("near", Window.active.NEAR);
-		Window.active.getContext().ppfShaders.DepthTestMS.setInput("far", Window.active.FAR);
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("near", com.codered.engine.window.active.NEAR);
+		Window.active.getContext().ppfShaders.DepthTestMS.setInput("far", com.codered.engine.window.active.FAR);
 		Window.active.getContext().ppfShaders.DepthTestMS.use();	
 		{
 			drawQuad();

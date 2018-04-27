@@ -10,9 +10,11 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
+import com.codered.engine.window.IWindowContext;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
+import cmn.utilslib.dmap.dmaps.DMap2;
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
@@ -21,7 +23,7 @@ import cmn.utilslib.math.vector.api.Vec4fBase;
 
 public abstract class ShaderProgram
 {
-	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
+	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
 	private int programID;
 	
@@ -33,27 +35,11 @@ public abstract class ShaderProgram
 	
 	private HashMap<String,Object> inputs = Maps.newHashMap();
 	
-	protected ShaderProgram()
+	protected IWindowContext context;
+	
+	public ShaderProgram(IWindowContext context)
 	{
-		this.programID = GL20.glCreateProgram();
-		
-		Shader.VertexShader[] vertexShaders = getClass().getDeclaredAnnotationsByType(Shader.VertexShader.class);
-		Shader.FragmentShader[] fragmentShaders = getClass().getDeclaredAnnotationsByType(Shader.FragmentShader.class);
-		Shader.GeometryShader[] geometryShaders = getClass().getDeclaredAnnotationsByType(Shader.GeometryShader.class);
-		
-		if(vertexShaders.length > 0)
-			for(Shader.VertexShader vs : vertexShaders)
-				attachVertexShader(vs.value());
-
-		if(fragmentShaders.length > 0)
-			for(Shader.FragmentShader fs : fragmentShaders)
-				attachFragmentShader(fs.value());
-		
-		if(geometryShaders.length > 0)
-			for(Shader.GeometryShader gs : geometryShaders)
-				attachGeometryShader(gs.value());
-		
-		compile();
+		this.context = context;
 	}
 	
 	public void setInput(String name, Object val)
@@ -69,6 +55,10 @@ public abstract class ShaderProgram
 	
 	public void compile()
 	{
+		this.programID = GL20.glCreateProgram();
+
+		attachShaderParts();
+		
 		for(ShaderPart p : this.geometryShaders)
 			GL20.glAttachShader(programID, p.getId());
 		
@@ -78,11 +68,10 @@ public abstract class ShaderProgram
 		for(ShaderPart p  : this.fragmentShaders)
 			GL20.glAttachShader(programID, p.getId());
 
-		Shader.Attrib[] attribs = getClass().getDeclaredAnnotationsByType(Shader.Attrib.class);
 		
-		for(Shader.Attrib attrib : attribs)
+		for(DMap2<Integer,String> attrib : getAttribs())
 		{
-			bindAttribute(attrib.pos(), attrib.var());
+			bindAttribute(attrib.getA(), attrib.getB());
 		}
 		
 		GL20.glLinkProgram(this.programID);
@@ -91,23 +80,26 @@ public abstract class ShaderProgram
 		getAllUniformLocations();
 	}
 	
-	protected void attachGeometryShader(String file)
+	protected void attachGeometryShader(ShaderPart part)
 	{
-		this.geometryShaders.add(ShaderParts.builtIn().getGeometryShader(file));
+		this.geometryShaders.add(part);
 	}
 	
-	protected void attachFragmentShader(String file)
+	protected void attachFragmentShader(ShaderPart part)
 	{
-		this.fragmentShaders.add(ShaderParts.builtIn().getFragmentShader(file));
+		this.fragmentShaders.add(part);
 	}
 	
-	protected void attachVertexShader(String file)
+	protected void attachVertexShader(ShaderPart part)
 	{
-		this.vertexShaders.add(ShaderParts.builtIn().getVertexShader(file));
+		this.vertexShaders.add(part);
 	}
 
-	
 	public abstract void use();
+
+	public abstract void attachShaderParts();
+	
+	public abstract List<DMap2<Integer,String>> getAttribs();
 	
 	public void start()
 	{

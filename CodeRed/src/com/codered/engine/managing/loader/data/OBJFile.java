@@ -1,4 +1,4 @@
- package com.codered.engine.managing.loader;
+ package com.codered.engine.managing.loader.data;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import com.codered.engine.managing.Vertex;
+import com.codered.engine.managing.loader.TriangleData;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.geometry.Point3f;

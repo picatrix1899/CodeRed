@@ -3,9 +3,9 @@ package com.codered.engine.fbo;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.GL;
-import com.codered.engine.GLUtils;
-import com.codered.engine.managing.Window;
+import com.codered.engine.utils.GL;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.IWindowContext;
 
 public abstract class Framebuffer
 {
@@ -17,16 +17,20 @@ public abstract class Framebuffer
 	
 	protected FBOAttachment depth;
 	
-	public Framebuffer()
+	protected IWindowContext context;
+	
+	public Framebuffer(IWindowContext context)
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
-		this.width = Window.active.WIDTH;
-		this.height = Window.active.HEIGHT;
+		this.context = context;
+		this.width = context.getWidth();
+		this.height = context.getHeight();
 	}
 	
-	public Framebuffer(int width, int height)
+	public Framebuffer(IWindowContext context, int width, int height)
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
+		this.context = context;
 		this.width = width;
 		this.height = height;
 	}
@@ -67,7 +71,7 @@ public abstract class Framebuffer
 		GL11.glReadBuffer(t.getTarget());
 		GL11.glDrawBuffer(GL11.GL_BACK);
 		
-		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, Window.active.WIDTH, Window.active.HEIGHT, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWidth(), this.context.getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
 	}
 	
 	public void clearAllAttachments()

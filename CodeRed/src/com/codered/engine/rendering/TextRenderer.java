@@ -3,10 +3,10 @@ package com.codered.engine.rendering;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.loader.LambdaFont;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector4f;

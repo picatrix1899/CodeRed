@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
-import com.codered.engine.light.Glow;
 import com.codered.engine.light.PointLight;
 import com.codered.engine.managing.models.TexturedModel;
-import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.terrain.Terrain;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -89,30 +87,16 @@ public abstract class World
 		return false;
 	}
 	
-	public StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz, Glow g)
+	public StaticEntity addStaticEntity(long id, StaticEntity entity, Vector3f pos, float rx, float ry ,float rz)
 	{
+		entity.id = id;
+		entity.setPos(pos);
+		entity.setRotX(rx);
+		entity.setRotY(ry);
+		entity.setRotZ(rz);
 		
-		StaticEntity e = new StaticEntity(tmodel, pos, rx, ry, rz);
-		e.setGlow(g);
-		e.id = id;
-
-		this.staticEntities.add(e.id, e);
-		return e;
-	}
-	
-	public StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz, Glow g)
-	{
-		return addStaticEntity(id, ResourceManager.getTexturedModel(name),pos, rx, ry, rz, g);
-	}
-	
-	public StaticEntity addStaticEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)
-	{
-		return addStaticEntity(id, tmodel, pos,  rx,  ry , rz, Glow.DEFAULT);
-	}
-	
-	public StaticEntity addStaticEntity(long id, String name, Vector3f pos, float rx, float ry ,float rz)
-	{
-		return addStaticEntity(id, ResourceManager.getTexturedModel(name),pos, rx, ry, rz);
+		this.staticEntities.add(entity.id, entity);
+		return entity;
 	}
 	
 	public DynamicEntity addDynamicEntity(long id, TexturedModel tmodel, Vector3f pos, float rx, float ry ,float rz)

@@ -2,13 +2,13 @@ package com.codered.engine.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.light.PointLight;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -23,7 +23,7 @@ public class DefaultEntityRenderer implements EntityRenderer
 	
 	public void init(StaticEntity e, World w, Camera c)
 	{
-		this.T_projection = Window.active.projectionMatrix;
+		this.T_projection = com.codered.engine.window.active.projectionMatrix;
 		this.camera = c;
 		this.world = w;
 	}

@@ -1,7 +1,7 @@
 package com.codered.engine.rendering.ppf;
 
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.Window;
+import com.codered.engine.window.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 

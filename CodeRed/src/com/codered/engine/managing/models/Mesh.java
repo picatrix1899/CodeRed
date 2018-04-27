@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.loader.OBJFile;
 import com.codered.engine.managing.loader.TriangleData;
+import com.codered.engine.managing.loader.data.OBJFile;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.ListUtils;

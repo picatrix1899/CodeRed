@@ -2,7 +2,7 @@ package com.codered.demo;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.managing.Window;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.math.vector.Vector2f;
 
@@ -25,12 +25,12 @@ public class GUIStartMenu extends GUIWindow
 
 	public int getMaxX()
 	{
-		return Window.active.WIDTH;
+		return com.codered.engine.window.active.WIDTH;
 	}
 
 	public int getMinY()
 	{
-		return Window.active.HEIGHT;
+		return com.codered.engine.window.active.HEIGHT;
 	}
 
 	public int getMaxY()

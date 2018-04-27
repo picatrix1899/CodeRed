@@ -19,14 +19,11 @@ import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
 
-import com.codered.engine.DebugInfo;
-import com.codered.engine.GLUtils;
 import com.codered.engine.Game;
 import com.codered.engine.entities.DynamicEntity;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.World;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.input.Input;
@@ -43,61 +40,20 @@ import com.codered.engine.shaders.postprocess.filter.PPFShader;
 import com.codered.engine.shader.MalformedShaderException;
 import com.codered.engine.shader.ShaderNotFoundException;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
-
+import com.codered.engine.utils.DebugInfo;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 import com.codered.demo.GlobalSettings.Keys;
 
 import com.google.common.collect.Lists;
 
 
 @SuppressWarnings("unused")
-public class DemoGame extends Game
+public class DemoGame
 {
-	public void release()
-	{
-		VAO.clearAll();
-		
-		SimpleObjectShader.clean();
-		SimpleTerrainShader.clean();
-		PPFShader.clean();
-		
-		Window.closeDisplays();
-	}
-	
-	public void printDebugInfo()
-	{
-		DebugInfo info = new DebugInfo();
-		
-		info.add("OpenGL/LWJGL Version: ", GL11.glGetString(GL11.GL_VERSION));
-		info.add("Supported Color Attachments: ", "" + GL11.glGetInteger(GL30.GL_MAX_COLOR_ATTACHMENTS));
-		info.add("Supported Texture Size:", "" + GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE));
-		info.add("Supported TexArray Layers:", "" + GL11.glGetInteger(GL30.GL_MAX_ARRAY_TEXTURE_LAYERS));
-		info.print();
-	}
 
 	public void init()
 	{
-		printDebugInfo();
-		
-		Window.named_windows.get("main").CloseRequested.addHandler((a,b) -> {stop();});
-		Window.named_windows.get("test").CloseRequested.addHandler((a,b) -> {stop();});
-		
-		InputConfiguration config = new InputConfiguration();
-		config.registerKey(Keys.k_forward);
-		config.registerKey(Keys.k_back);
-		config.registerKey(Keys.k_left);
-		config.registerKey(Keys.k_right);
-		config.registerKey(Keys.k_up);
-		config.registerKey(Keys.k_exit);
-		config.registerKey(Keys.k_turnLeft);
-		config.registerKey(Keys.k_turnRight);
-		config.registerKey(Keys.k_delete);
-
-		config.registerButton(Keys.b_moveCam);
-		config.registerButton(0);
-		
-		Window.named_windows.get("main").getInputManager().setConfiguration(config);
-		Window.named_windows.get("main").getInputManager().keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) {stop();} });
-		
 		GL11.glClearColor(0,0,0,1);		
 			
 		Session.get().setWorld(new DemoWorld());
@@ -156,23 +112,6 @@ public class DemoGame extends Game
 
 			gui2.render();
 		}
-	}
-
-	public void preInit()
-	{
-		GLFW.glfwInit();
-		
-		GLFW.glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
-		
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-		GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-		
-		Window w = new Window("main", 800, 600, "CoderRed 3");
-		Window w2 = new Window("test", 800, 600, "CoderRed 3 - Test");
-		w.bind();
 	}
 
 	public void loadStaticResources()

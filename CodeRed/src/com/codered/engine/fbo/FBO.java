@@ -4,20 +4,21 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.GLUtils;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.IWindowContext;
 
 
 
 public class FBO extends Framebuffer
 {
-	public FBO()
+	public FBO(IWindowContext context)
 	{
-		super();
+		super(context);
 	}
 	
-	public FBO(int width, int height)
+	public FBO(IWindowContext context, int width, int height)
 	{
-		super(width, height);
+		super(context, width, height);
 	}
 	
 	public void applyColorTextureAttachment(FBOTarget t, boolean hdr)

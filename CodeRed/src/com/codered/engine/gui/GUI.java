@@ -3,10 +3,10 @@ package com.codered.engine.gui;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.Window;
 import com.codered.engine.managing.loader.LambdaFont;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.vector.Vector2f;
@@ -28,7 +28,7 @@ public abstract class GUI
 	
 	protected void setMousePos(float x, float y)
 	{
-		Window.active.getInputManager().setMousePos(x, Window.active.HEIGHT - y);
+		Window.active.getInputManager().setMousePos(x, com.codered.engine.window.active.HEIGHT - y);
 	}
 	
 	protected void drawTexturedRect(int t, float posX, float posY, float sizeX, float sizeY)

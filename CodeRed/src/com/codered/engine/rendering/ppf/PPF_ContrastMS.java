@@ -1,8 +1,8 @@
 package com.codered.engine.rendering.ppf;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.PPF;
-import com.codered.engine.managing.Window;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
@@ -14,7 +14,7 @@ public class PPF_ContrastMS extends PPF
 	
 	private float contrast;
 	
-	private static MSFBO msfbo = new MSFBO(Window.active.WIDTH, Window.active.HEIGHT, 4);
+	private static MSFBO msfbo = new MSFBO(com.codered.engine.window.active.WIDTH, com.codered.engine.window.active.HEIGHT, 4);
 	
 	static
 	{

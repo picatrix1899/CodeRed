@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.GLUtils;
+import com.codered.engine.utils.GLUtils;
 
 public class Texture
 {

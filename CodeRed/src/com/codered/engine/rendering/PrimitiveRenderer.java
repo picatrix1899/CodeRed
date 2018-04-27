@@ -3,11 +3,11 @@ package com.codered.engine.rendering;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.engine.GLUtils;
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.Window;
 import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.utils.GLUtils;
+import com.codered.engine.window.Window;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.matrix.Matrix4f;
