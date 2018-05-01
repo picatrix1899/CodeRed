@@ -1,19 +1,21 @@
 package com.codered.engine.shaders.object.simple;
 
+import java.util.List;
+
 import com.codered.engine.light.Glow;
 import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import com.codered.engine.window.IWindowContext;
 
-@VertexShader("o_glow")
-@FragmentShader("o_glow")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class Glow_OShader extends SimpleObjectShader
 {
+
+	public Glow_OShader(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -30,7 +32,7 @@ public class Glow_OShader extends SimpleObjectShader
 	
 	private void loadMaterial0(Material m)
 	{
-		loadTexture("glowMap", 0, ResourceManager.getGlowMap(m.getGlowMap()).getId());
+		loadTexture("glowMap", 0, this.context.getResourceManager().getTexture(m.getGlowMap()));
 	}	
 	
 	private void loadGlow0(Glow glow)
@@ -49,6 +51,18 @@ public class Glow_OShader extends SimpleObjectShader
 		
 		loadMaterial0(getInput("material"));
 		loadGlow0(getInput("glow"));
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_glow"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_glow"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(0, "texCoords"));
 	}
 	
 }

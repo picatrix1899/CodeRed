@@ -1,18 +1,20 @@
 package com.codered.engine.shaders.object.simple;
 
-import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("o_no")
-@FragmentShader("o_no")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
+import com.codered.engine.managing.Material;
+import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class No_OShader extends SimpleObjectShader
 {
+
+	public No_OShader(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -23,7 +25,7 @@ public class No_OShader extends SimpleObjectShader
 
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
+		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
 	}
 	
 	public void use()
@@ -33,6 +35,18 @@ public class No_OShader extends SimpleObjectShader
 		super.use();
 		
 		loadMaterial0(getInput("material"));
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_no"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_no"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
 	}
 	
 }

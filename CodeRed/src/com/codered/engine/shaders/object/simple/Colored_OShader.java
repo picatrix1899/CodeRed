@@ -1,18 +1,24 @@
 package com.codered.engine.shaders.object.simple;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
+
 import com.codered.engine.shader.ShaderProgram;
+import com.codered.engine.shader.UniformMatrix4x4;
+import com.codered.engine.window.IWindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
+import cmn.utilslib.dmap.dmaps.DMap2;
 import cmn.utilslib.math.matrix.Matrix4f;
 
-@VertexShader("o_colored")
-@FragmentShader("o_colored")
-@Attrib(pos=0, var="vertexPos")
 public class Colored_OShader extends ShaderProgram
 {
+
+	public UniformMatrix4x4 u_T_view;
+	
+	public Colored_OShader(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -44,6 +50,17 @@ public class Colored_OShader extends ShaderProgram
 		start();
 		loadMatrices0(getInput("T_view"), getInput("T_model"), getInput("T_projection"));
 		loadColor3("color", getInput("color"));
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_colored"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_colored"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
 	}
 	
 }

@@ -1,14 +1,18 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("ppf_contrastMS")
-@FragmentShader("ppf_contrastMS")
-@Attrib(pos=0, var="pos")
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class ContrastMS_PPFilter extends PPFShader
 {
+
+	public ContrastMS_PPFilter(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -19,8 +23,18 @@ public class ContrastMS_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTextureMS("frame", 0, getInput("frame"));
+		loadTextureMSId("frame", 0, getInput("frame"));
 		loadFloat("contrast", getInput("contrast"));
 	}
 
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("ppf_contrastMS"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("ppf_contrastMS"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "pos"));
+	}
 }

@@ -1,6 +1,7 @@
 package com.codered.engine.shader;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
+import com.codered.engine.managing.Texture;
 import com.codered.engine.window.IWindowContext;
 import com.google.common.collect.Maps;
 
@@ -25,7 +27,7 @@ public abstract class ShaderProgram
 {
 	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
-	private int programID;
+	protected int programID;
 	
 	private List<ShaderPart> geometryShaders = Auto.ArrayList();
 	private List<ShaderPart> vertexShaders = Auto.ArrayList();
@@ -68,8 +70,11 @@ public abstract class ShaderProgram
 		for(ShaderPart p  : this.fragmentShaders)
 			GL20.glAttachShader(programID, p.getId());
 
+		ArrayList<DMap2<Integer,String>> attribs = new ArrayList<DMap2<Integer,String>>();
 		
-		for(DMap2<Integer,String> attrib : getAttribs())
+		getAttribs(attribs);
+		
+		for(DMap2<Integer,String> attrib : attribs)
 		{
 			bindAttribute(attrib.getA(), attrib.getB());
 		}
@@ -77,7 +82,6 @@ public abstract class ShaderProgram
 		GL20.glLinkProgram(this.programID);
 		
 		GL20.glValidateProgram(this.programID);
-		getAllUniformLocations();
 	}
 	
 	protected void attachGeometryShader(ShaderPart part)
@@ -99,7 +103,7 @@ public abstract class ShaderProgram
 
 	public abstract void attachShaderParts();
 	
-	public abstract List<DMap2<Integer,String>> getAttribs();
+	public abstract void getAttribs(List<DMap2<Integer,String>> attribs);
 	
 	public void start()
 	{
@@ -238,17 +242,31 @@ public abstract class ShaderProgram
 		matrixBuffer = BufferUtils.createFloatBuffer(16);
 	}
 	
-	protected void loadTexture(String uniform, int attrib, int texture)
+	protected void loadTextureId(String uniform, int attrib, int texture)
 	{
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		loadInt(uniform, attrib);
 	}
 	
-	protected void loadTextureMS(String uniform, int attrib, int texture)
+	protected void loadTexture(String uniform, int attrib, Texture texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getId());
+		loadInt(uniform, attrib);
+	}
+	
+	protected void loadTextureMSId(String uniform, int attrib, int texture)
 	{
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
 		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
+		loadInt(uniform, attrib);
+	}
+	
+	protected void loadTextureMS(String uniform, int attrib, Texture texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture.getId());
 		loadInt(uniform, attrib);
 	}
 }

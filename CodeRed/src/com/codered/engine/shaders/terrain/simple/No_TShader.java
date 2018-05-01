@@ -1,18 +1,20 @@
 package com.codered.engine.shaders.terrain.simple;
 
-import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
-import com.codered.engine.shaders.terrain.SimpleTerrainShader;
+import java.util.List;
 
-@VertexShader("t_no")
-@FragmentShader("t_no")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
+import com.codered.engine.managing.Material;
+import com.codered.engine.shaders.terrain.SimpleTerrainShader;
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class No_TShader extends SimpleTerrainShader
 {
+
+	public No_TShader(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -25,7 +27,7 @@ public class No_TShader extends SimpleTerrainShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
+		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
 	}
 
 	public void use()
@@ -35,5 +37,17 @@ public class No_TShader extends SimpleTerrainShader
 		super.use();
 		
 		loadMaterial0(getInput("material"));
+	}
+	
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_no"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_no"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
 	}
 }

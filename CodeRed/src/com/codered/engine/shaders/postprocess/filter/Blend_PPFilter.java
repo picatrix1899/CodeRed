@@ -1,17 +1,18 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("ppf_blend")
-@FragmentShader("ppf_blend")
-@Attrib(pos=0, var="pos")
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class Blend_PPFilter extends PPFShader
 {
-	
 
-	
+	public Blend_PPFilter(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -25,12 +26,23 @@ public class Blend_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTexture("scene1", 0, getInput("scene1"));
-		loadTexture("scene2", 1, getInput("scene2"));
+		loadTextureId("scene1", 0, getInput("scene1"));
+		loadTextureId("scene2", 1, getInput("scene2"));
 		loadInt("src", getInput("src"));
 		loadInt("dst", getInput("dst"));
 		loadInt("op", getInput("op"));
 		
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("ppf_blend"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("ppf_blend"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "pos"));
 	}
 
 }

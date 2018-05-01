@@ -1,29 +1,16 @@
 package com.codered.engine.shaders.gui;
 
-import java.util.ArrayList;
-
 import com.codered.engine.shader.ShaderProgram;
-import com.google.common.collect.Lists;
+import com.codered.engine.window.IWindowContext;
 
 public abstract class GUIShader extends ShaderProgram
 {
-	private static ArrayList<GUIShader> shaders = Lists.newArrayList();
-	
-	public GUIShader()
+
+	public GUIShader(IWindowContext context)
 	{
-		shaders.add(this);
+		super(context);
 	}
-	
-	public static void clean()
-	{
-		for(GUIShader s : shaders)
-		{
-			s.cleanup();
-		}
-		
-		shaders.clear();
-	}
-	
+
 	protected void getAllUniformLocations()
 	{
 		addUniform("screenSpace");

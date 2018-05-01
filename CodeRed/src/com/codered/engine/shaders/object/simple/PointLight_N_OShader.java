@@ -1,69 +1,38 @@
 package com.codered.engine.shaders.object.simple;
 
-import com.codered.engine.light.PointLight;
-import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("o_pointLight_N")
-@FragmentShader("o_pointLight_N")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
-@Attrib(pos=2, var="normal")
-@Attrib(pos=3, var="tangent")
+import com.codered.engine.shader.UniformMaterial;
+import com.codered.engine.shader.UniformPointLight;
+import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class PointLight_N_OShader extends SimpleObjectShader
 {
+
+	public UniformMaterial u_material;
+	public UniformPointLight u_pointLight;
+	
+	public PointLight_N_OShader(IWindowContext context)
+	{
+		super(context);
+		
+		this.u_material = new UniformMaterial("material", 0, context, this);
+		this.u_pointLight = new UniformPointLight("light", context, this);
+		
+		compile();
+	
+		getAllUniformLocations();
+	}
 
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
 		
-		for(int i = 0; i < 4; i++)
-		{
-			addUniform("lights[" + i + "].base.color");
-			addUniform("lights[" + i + "].base.intensity");
-			addUniform("lights[" + i + "].position");
-			addUniform("lights[" + i + "].attenuation.constant");
-			addUniform("lights[" + i + "].attenuation.linear");
-			addUniform("lights[" + i + "].attenuation.exponent");
-		}
-		
-		addUniform("textureMap");
-		addUniform("normalMap");		
-		
-		addUniform("specularPower");
-		addUniform("specularIntensity");
+		this.u_pointLight.getUniformLocations();
 	}
-	
-	public void loadPointLight(PointLight light)
-	{
-		setInput("pointLight", light);
-	}
-	
-	private void loadMaterial0(Material mat)
-	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
-		loadTexture("normalMap", 1, ResourceManager.getNormalMap(mat.getNormalMap()).getId());		
-		
-		loadFloat("specularPower", mat.getSpecularPower());
-		loadFloat("specularIntensity", mat.getSpecularIntensity());
-		
-
-	}
-	
-	private void loadPointLight0(PointLight light)
-	{
-		loadColor3("lights[0].base.color", light.base.color);
-		loadFloat("lights[0].base.intensity", light.base.intensity);
-		loadVector3("lights[0].position", light.position);
-		loadFloat("lights[0].attenuation.constant",light.attenuation.constant);
-		loadFloat("lights[0].attenuation.linear",light.attenuation.linear);
-		loadFloat("lights[0].attenuation.exponent",light.attenuation.exponent);
-	}
-	
 
 	public void use()
 	{
@@ -71,7 +40,24 @@ public class PointLight_N_OShader extends SimpleObjectShader
 		
 		super.use();
 		
-		loadMaterial0(getInput("material"));
-		loadPointLight0(getInput("pointLight"));
+		this.u_material.set(getInput("material"));
+		this.u_pointLight.set(getInput("pointLight"));
+		
+		this.u_material.load();
+		this.u_pointLight.load();
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_pointLight_N"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_pointLight_N"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
+		attribs.add(new DMap2<Integer,String>(2, "normal"));
+		attribs.add(new DMap2<Integer,String>(3, "tangent"));
 	}
 }

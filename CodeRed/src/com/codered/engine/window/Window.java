@@ -1,7 +1,6 @@
 package com.codered.engine.window;
 
 import org.lwjgl.glfw.GLFW;
-
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
@@ -80,7 +79,7 @@ public class Window
 			return;
 		}
 		
-		this.context.update();
+		this.context.update(delta);
 		
 		this.routine.update(delta);
 	}

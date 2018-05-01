@@ -1,18 +1,18 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("ppf_invert")
-@FragmentShader("ppf_invert")
-@Attrib(pos=0, var="pos")
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class Invert_PPFilter extends PPFShader
 {
-	
 
-	
-
+	public Invert_PPFilter(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -22,7 +22,17 @@ public class Invert_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTexture("frame", 0, getInput("frame"));
+		loadTextureId("frame", 0, getInput("frame"));
 	}
 
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("ppf_invert"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("ppf_invert"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "pos"));
+	}
 }

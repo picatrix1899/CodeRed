@@ -1,17 +1,20 @@
 package com.codered.engine.shaders.debug;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
+
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
+import cmn.utilslib.dmap.dmaps.DMap2;
 import cmn.utilslib.math.matrix.Matrix4f;
 
-@VertexShader("debug/dbg_colored")
-@FragmentShader("debug/dbg_colored")
-@Attrib(pos=0, var="vertexPos")
 public class Colored_DBGShader extends DebugShader
 {
+	public Colored_DBGShader(WindowContext context)
+	{
+		super(context);
+	}
+
 	protected void getAllUniformLocations()
 	{
 		addUniform("T_model");
@@ -42,6 +45,17 @@ public class Colored_DBGShader extends DebugShader
 		start();
 		loadMatrices0(getInput("T_view"), getInput("T_model"), getInput("T_projection"));
 		loadColor3("color", getInput("color"));
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("debug/dbg_colored"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("debug/dbg_colored"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0,"vertexPos"));
 	}
 	
 }

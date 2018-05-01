@@ -34,9 +34,9 @@ public class WindowContext implements IWindowContext
 		this.objectShaders = new ShaderList();
 	}
 
-	public void update()
+	public void update(double delta)
 	{
-		this.input.update();
+		this.input.update(delta);
 	}
 	
 	public void release()

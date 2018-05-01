@@ -1,21 +1,21 @@
 package com.codered.engine.shaders.terrain.simple;
 
+import java.util.List;
+
 import com.codered.engine.light.AmbientLight;
 import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
+import com.codered.engine.window.IWindowContext;
 
-@VertexShader("t_ambientLight")
-@FragmentShader("t_ambientLight")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
-@Attrib(pos=2, var="normal")
-@Attrib(pos=3, var="tanget")
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class AmbientLight_TShader extends SimpleTerrainShader
 {
+	public AmbientLight_TShader(IWindowContext context)
+	{
+		super(context);
+	}
+
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
@@ -38,7 +38,7 @@ public class AmbientLight_TShader extends SimpleTerrainShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
+		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
 	}
 	
 	
@@ -52,4 +52,17 @@ public class AmbientLight_TShader extends SimpleTerrainShader
 		loadAmbientLight0(getInput("ambientLight"));
 	}
 	
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_ambientLight"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_ambientLight"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
+		attribs.add(new DMap2<Integer,String>(2, "normal"));
+		attribs.add(new DMap2<Integer,String>(3, "tanget"));
+	}
 }

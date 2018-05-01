@@ -1,15 +1,18 @@
 package com.codered.engine.shaders.gui;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("gui_texture")
-@FragmentShader("gui_texture")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class Texture_GUIShader extends GUIShader
 {
+	public Texture_GUIShader(IWindowContext context)
+	{
+		super(context);
+	}
+
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
@@ -26,6 +29,18 @@ public class Texture_GUIShader extends GUIShader
 	{
 		super.use();
 		
-		loadTexture("textureMap", 0, getInput("textureMap"));
+		loadTextureId("textureMap", 0, getInput("textureMap"));
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("gui_color"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("gui_color"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
 	}
 }

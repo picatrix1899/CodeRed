@@ -12,6 +12,7 @@ import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.light.AmbientLight;
+import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.loader.MaterialLoader;
@@ -22,6 +23,8 @@ import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.TexturedModel;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.object.simple.AmbientLight_OShader;
+import com.codered.engine.shaders.object.simple.DirectionalLight_N_OShader;
+import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.engine.utils.GLUtils;
 import com.codered.engine.utils.MathUtils;
 import com.codered.engine.utils.TextureUtils;
@@ -29,7 +32,6 @@ import com.codered.engine.window.IWindowContext;
 import com.codered.engine.window.IWindowRoutine;
 
 import cmn.utilslib.color.colors.LDRColor3;
-import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector3f;
 
 public class DemoWindowContext2 implements IWindowRoutine
@@ -41,15 +43,15 @@ public class DemoWindowContext2 implements IWindowRoutine
 	private Material mat;
 	private TexturedModel model;
 	private StaticEntity entity;
-	
-	private Matrix4f projection;
-	private Camera camera;
-	
+
 	private AmbientLight ambient;
+	private DirectionalLight directionalLight;
+	
+	private Player player;
 	
 	public void initWindowHints()
 	{
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
+		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
 		GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
@@ -78,30 +80,31 @@ public class DemoWindowContext2 implements IWindowRoutine
 		
 		BuiltInShaders.init(this.context);
 		
-
-		
 		this.context.getObjectShaders().addShader(AmbientLight_OShader.class, new AmbientLight_OShader(this.context));
-	
-	
-		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
+		this.context.getObjectShaders().addShader(DirectionalLight_N_OShader.class, new DirectionalLight_N_OShader(this.context));
+		this.context.getObjectShaders().addShader(DirectionalLight_OShader.class, new DirectionalLight_OShader(this.context));
 		
 		OBJFile obj = new OBJFile();
 		obj.load(new File(Paths.p_models + "barrel.obj"));
 		this.mesh.loadFromObj(obj);
 		
-		this.mat = MaterialLoader.load("barrel_dry");
+		this.mat = MaterialLoader.load("barrel_wet");
 		
 		this.model = new TexturedModel(this.mesh, this.mat);
 		
 		this.entity = new StaticEntity(this.model, new Vector3f(0,0,-40), -45, 45, 0);
 		
 		TextureData tdata = TextureLoader.loadTexture("barrel");
+		TextureData tdata2 = TextureLoader.loadTexture("barrel_normal");
 		
 		this.context.getResourceManager().WORLD.regTexture("barrel", TextureUtils.genTexture(tdata, this.context));
+		this.context.getResourceManager().WORLD.regTexture("barrel_normal", TextureUtils.genTexture(tdata2, this.context));
 		
-		this.camera = new Camera();
+		this.player = new Player(this.context);
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 2);
+		
+		this.directionalLight = new DirectionalLight(new LDRColor3(200, 100, 100), 4, new Vector3f(1.0f, -1.0f, 0));
 	} 
 	
 
@@ -114,29 +117,45 @@ public class DemoWindowContext2 implements IWindowRoutine
 
 	public void render(double delta)
 	{
+		GLUtils.toggleMultisample(true);
+		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		
 		GLUtils.toggleDepthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		renderObject(this.entity, this.camera, this.context.getObjectShaders().getShader(AmbientLight_OShader.class));
+		
+		renderObject(this.entity, this.player.getCamera(), this.context.getObjectShaders().getShader(AmbientLight_OShader.class));			
+		
+		GLUtils.toggleBlend(true);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);		
+		
+		renderObject(this.entity, this.player.getCamera(), this.context.getObjectShaders().getShader(DirectionalLight_N_OShader.class));
+		
+
+		GLUtils.toggleBlend(false);
+		GLUtils.toggleDepthTest(false);
+
+		GLUtils.toggleMultisample(false);
 	}
 
 	public void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
 	{
-			oShader.setInput("material", e.getModel().getTexture());
+		oShader.u_camera.set(c);
+		oShader.u_T_model.set(e.getTransformationMatrix());
+		oShader.u_T_projection.set(MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000));
+		
+		oShader.setInput("material", e.getModel().getTexture());
+		
+		oShader.setInput("directionalLight", this.directionalLight);
+		oShader.setInput("ambientLight", this.ambient);
+		
+		oShader.use();			
+		{	
+			GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 			
-			oShader.loadModelMatrix(e.getTransformationMatrix());
-			oShader.loadProjectionMatrix(this.projection);
-			oShader.loadCamera(c);
-			oShader.setInput("ambientLight", this.ambient);
-			
-			oShader.use();			
-			{	
-				GLUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
-				
-				GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-			}
-			oShader.stop();	
+			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+		}
+		oShader.stop();	
 	}
 	
 	public void release()

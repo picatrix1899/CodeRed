@@ -1,8 +1,8 @@
 #version 400 core
 
-#include embeded base "base.fsh"
 #include embeded base "light.fsh"
 #include embeded base "camera.sh"
+#include embeded base "material.fsh"
 
 in vec2 pass_texCoords;
 in vec3 pass_normal;
@@ -11,37 +11,28 @@ in mat3 pass_tbn;
 in float pass_vis;
 in Camera pass_camera;
 
-uniform float specularPower;
-uniform float specularIntensity;
+out vec4 out_Color;
+
 uniform vec3 skyColor;
 
-uniform PointLight lights[4];
+uniform PointLight light;
 
-uniform sampler2D normalMap;
-
+uniform Material material;
 
 void main(void)
 {
-	vec4 textureColor = texture(textureMap, pass_texCoords);
+	vec4 textureColor = texture(material.albedoMap, pass_texCoords);
 	
-	vec3 nrm = normalize(pass_tbn * ((2 * texture(normalMap, pass_texCoords).rgb) - 1));
+	vec3 nrm = normalize(pass_tbn * ((2 * texture(material.normalMap, pass_texCoords).rgb) - 1));
 	
-	PointLight l;
-	vec3 dir;
-	vec4 lightColor;
-	float atten;
-	vec4 color;
-	for(int i = 0; i < 4; i++)
-	{
-		l = lights[i];
-		dir = pass_worldPos - l.position;
-		//atten = calcAttenuation(l.attenuation,length(dir));
+		vec3 dir = pass_worldPos - light.position;
+		//atten = calcAttenuation(light.attenuation,length(dir));
 		
-		lightColor = calcPointLight(l, pass_worldPos, nrm);
-		atten = 1 / (calcBrightness(lightColor) + (l.base.intensity / 10));
+		vec4 lightColor = calcPointLight(light, pass_worldPos, nrm);
+		float atten = 1 / (calcBrightness(lightColor) + (light.base.intensity / 10));
 		
-		//lightColor += calcSpecularReflection(l.base, dir, pass_camera.position, pass_worldPos, nrm, specularIntensity, specularPower, atten);
-		color += lightColor;
+		lightColor += calcSpecularReflection(light.base, dir, pass_camera.position, pass_worldPos, nrm, specularIntensity, specularPower, atten);
+		vec4 color += lightColor;
 	}
 
 	out_Color = textureColor * color;

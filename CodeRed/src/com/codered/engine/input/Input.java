@@ -41,10 +41,14 @@ public class Input
 	private int X = 0;
 	private int Y = 0;
 	
+	private double grabX = 0;
+	private double grabY = 0;
+	
 	private boolean lock;
+	private boolean startLocked;
 	
 	private Vector2f center;
-	
+
 	public Input(IWindowContext w)
 	{
 		this.w = w;
@@ -92,7 +96,7 @@ public class Input
 		if(this.configuration == null) applyPendingConfiguration();
 	}
 
-	public void update()
+	public void update(double delta)
 	{
 		ArrayList<Integer> keyStrokes = new ArrayList<Integer>();
 		ArrayList<Integer> keyHolds = new ArrayList<Integer>();
@@ -182,12 +186,12 @@ public class Input
 		}
 		else
 		{
-			if(!keyStrokes.isEmpty()) this.keyStroke.raise(new KeyEventArgs(new KeyResponse(keyStrokes)));
-			if(!keyHolds.isEmpty()) this.keyPress.raise(new KeyEventArgs(new KeyResponse(keyHolds)));
-			if(!keyReleases.isEmpty()) this.keyRelease.raise(new KeyEventArgs(new KeyResponse(keyReleases)));
-			if(!buttonStrokes.isEmpty()) this.buttonStroke.raise(new ButtonEventArgs(new ButtonResponse(buttonStrokes)));
-			if(!buttonHolds.isEmpty()) this.buttonPress.raise(new ButtonEventArgs(new ButtonResponse(buttonHolds)));
-			if(!buttonReleases.isEmpty()) this.buttonRelease.raise(new ButtonEventArgs(new ButtonResponse(buttonReleases)));
+			if(!keyStrokes.isEmpty()) this.keyStroke.raise(new KeyEventArgs(new KeyResponse(keyStrokes), delta));
+			if(!keyHolds.isEmpty()) this.keyPress.raise(new KeyEventArgs(new KeyResponse(keyHolds), delta));
+			if(!keyReleases.isEmpty()) this.keyRelease.raise(new KeyEventArgs(new KeyResponse(keyReleases), delta));
+			if(!buttonStrokes.isEmpty()) this.buttonStroke.raise(new ButtonEventArgs(new ButtonResponse(buttonStrokes), delta));
+			if(!buttonHolds.isEmpty()) this.buttonPress.raise(new ButtonEventArgs(new ButtonResponse(buttonHolds), delta));
+			if(!buttonReleases.isEmpty()) this.buttonRelease.raise(new ButtonEventArgs(new ButtonResponse(buttonReleases), delta));
 		}
 		
 		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
@@ -198,13 +202,24 @@ public class Input
 		this.X = (int)x.get();
 		this.Y = (int)y.get();	
 			
-		if(lock)
+		if(this.lock)
 		{
-			this.DX = this.X - this.center.x;
-			this.DY = this.Y - this.center.y;
-			
-			GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), center.x, center.y);
+			if(this.startLocked)
+			{
+				GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), center.x, center.y);
+				
+				this.startLocked = false;
+			}
+			else
+			{
+				this.DX = this.X - this.center.x;
+				this.DY = this.Y - this.center.y;
+				
+				GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), center.x, center.y);
+			}
 		}
+		
+		
 	}
 
 	public float getDX()
@@ -243,30 +258,34 @@ public class Input
 	public class KeyEventArgs implements EventArgs
 	{
 		public KeyResponse response;
+		public double delta;
 		
-		public KeyEventArgs(KeyResponse response)
+		public KeyEventArgs(KeyResponse response, double delta)
 		{
 			this.response = response;
+			this.delta = delta;
 		}
 		
 		public EventArgs cloneArgs()
 		{
-			return new KeyEventArgs(this.response.clone());
+			return new KeyEventArgs(this.response.clone(), this.delta);
 		}
 	}
 
 	public class ButtonEventArgs implements EventArgs
 	{
 		public ButtonResponse response;
+		public double delta;
 		
-		public ButtonEventArgs(ButtonResponse response)
+		public ButtonEventArgs(ButtonResponse response, double delta)
 		{
 			this.response = response;
+			this.delta = delta;
 		}
 		
 		public EventArgs cloneArgs()
 		{
-			return new ButtonEventArgs(this.response.clone());
+			return new ButtonEventArgs(this.response.clone(), this.delta);
 		}
 	}
 	
@@ -296,6 +315,14 @@ public class Input
 		
 		if(lock)
 		{
+			this.startLocked = true;
+			
+			DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+			DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+			GLFW.glfwGetCursorPos(this.w.getWindow().getWindowId(), x, y);
+			
+			this.grabX = x.get();
+			this.grabY = y.get();
 			
 			GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), this.w.getWidth() / 2.0, this.w.getHeight() / 2.0);
 
@@ -304,6 +331,7 @@ public class Input
 		else
 		{
 			GLFW.glfwSetInputMode(this.w.getWindow().getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+			GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), this.grabX, this.grabY);
 		}
 	}
 }

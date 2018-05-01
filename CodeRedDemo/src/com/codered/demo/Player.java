@@ -12,9 +12,7 @@ import com.codered.engine.gui.GUIWindow;
 import com.codered.engine.input.Input.ButtonEventArgs;
 import com.codered.engine.input.Input.KeyEventArgs;
 import com.codered.engine.managing.World;
-import com.codered.engine.utils.Time;
 import com.codered.engine.window.IWindowContext;
-import com.codered.engine.window.Window;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -144,7 +142,7 @@ public class Player extends BaseEntity
 		
 		dir.normalize();
 		
-		float time = (float)Time.getDelta();
+		float time = (float)args.delta;
 		
 		float acceleration = 20.0f * time;
 		
@@ -177,8 +175,8 @@ public class Player extends BaseEntity
 		Vector3f partial = Vector3f.getInstance();
 		Vector3f tempPos = Vector3f.getInstance();
 		
-		World w = Session.get().getWorld();
-		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
+//		World w = Session.get().getWorld();
+//		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
 		
 		Matrix4f translation;
 		
@@ -188,41 +186,41 @@ public class Player extends BaseEntity
 		
 		OBB3f entityOBB;
 		
-		if(statents != null)
-		{
-			
-			Collections.sort(statents, new Comparator<StaticEntity>()
-			{
-
-				public int compare(StaticEntity o1, StaticEntity o2)
-				{
-					return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
-				}
-				
-			});
-			
-			for(StaticEntity e : statents)
-			{
-				
-				entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
-				
-				translation = Matrix4f.translation(tempPos);
-				
-				tempOBB = this.aabb2.transform(translation).getOBBf();
-
-				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-				{
-					
-					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-					
-					sum.add(partial);
-					tempPos.add(partial);
-				}
-			}
-			
-			vel.add(sum);
-
-		}
+//		if(statents != null)
+//		{
+//			
+//			Collections.sort(statents, new Comparator<StaticEntity>()
+//			{
+//
+//				public int compare(StaticEntity o1, StaticEntity o2)
+//				{
+//					return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
+//				}
+//				
+//			});
+//			
+//			for(StaticEntity e : statents)
+//			{
+//				
+//				entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
+//				
+//				translation = Matrix4f.translation(tempPos);
+//				
+//				tempOBB = this.aabb2.transform(translation).getOBBf();
+//
+//				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+//				{
+//					
+//					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+//					
+//					sum.add(partial);
+//					tempPos.add(partial);
+//				}
+//			}
+//			
+//			vel.add(sum);
+//
+//		}
 		
 		Vector3f.storeInstance(sum);
 		Vector3f.storeInstance(partial);
@@ -237,8 +235,8 @@ public class Player extends BaseEntity
 	Vector3f partial = Vector3f.getInstance();
 	Vector3f tempPos = Vector3f.getInstance();
 	
-	World w = Session.get().getWorld();
-	List<StaticEntity> statents = Auto.ArrayList(w.getDynamicEntities());
+//	World w = Session.get().getWorld();
+//	List<StaticEntity> statents = Auto.ArrayList(w.getDynamicEntities());
 	
 	Matrix4f translation;
 	
@@ -248,42 +246,42 @@ public class Player extends BaseEntity
 	
 	OBB3f entityOBB;
 	
-	if(statents != null)
-	{
-		
-		Collections.sort(statents, new Comparator<StaticEntity>()
-		{
-
-			public int compare(StaticEntity o1, StaticEntity o2)
-			{
-				return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
-			}
-			
-		});
-		
-		for(StaticEntity e : statents)
-		{
-			
-			entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
-			
-			translation = Matrix4f.translation(tempPos);
-			
-			tempOBB = this.aabb2.transform(translation).getOBBf();
-
-				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-				{
-					
-					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-					
-					sum.add(partial);
-					tempPos.add(partial);
-				}
-
-		}
-		
-		vel.add(sum);
-
-	}
+//	if(statents != null)
+//	{
+//		
+//		Collections.sort(statents, new Comparator<StaticEntity>()
+//		{
+//
+//			public int compare(StaticEntity o1, StaticEntity o2)
+//			{
+//				return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
+//			}
+//			
+//		});
+//		
+//		for(StaticEntity e : statents)
+//		{
+//			
+//			entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
+//			
+//			translation = Matrix4f.translation(tempPos);
+//			
+//			tempOBB = this.aabb2.transform(translation).getOBBf();
+//
+//				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+//				{
+//					
+//					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+//					
+//					sum.add(partial);
+//					tempPos.add(partial);
+//				}
+//
+//		}
+//		
+//		vel.add(sum);
+//
+//	}
 	
 	Vector3f.storeInstance(sum);
 	Vector3f.storeInstance(partial);
@@ -298,33 +296,33 @@ public class Player extends BaseEntity
 
 		this.camera.rotatePitch(this.context.getInputManager().getDY());
 		
-		World w = Session.get().getWorld();
-		
-		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
+//		World w = Session.get().getWorld();
+//		
+//		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
 		
 		double minlength = Double.MAX_VALUE;
 		StaticEntity ent = null;
 		
-		for(StaticEntity e : statents)
-		{
-			OBB3f entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
-
-			Vector3f center = getCamera().getTotalPos();
-			Vector3f dir = getCamera().getTotalRot().getForwardf().negate();
-
-			if(RayOBBResolver.hit(center, dir, entityOBB))
-			{
-				Vector3f delta = getCamera().getTotalPos().subN(entityOBB.center);
-				
-				if(delta.length() <= minlength)
-				{
-					minlength = delta.length();
-					ent = e;
-				}
-			}
-			
-			e.highlighted = false;
-		}
+//		for(StaticEntity e : statents)
+//		{
+//			OBB3f entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
+//
+//			Vector3f center = getCamera().getTotalPos();
+//			Vector3f dir = getCamera().getTotalRot().getForwardf().negate();
+//
+//			if(RayOBBResolver.hit(center, dir, entityOBB))
+//			{
+//				Vector3f delta = getCamera().getTotalPos().subN(entityOBB.center);
+//				
+//				if(delta.length() <= minlength)
+//				{
+//					minlength = delta.length();
+//					ent = e;
+//				}
+//			}
+//			
+//			e.highlighted = false;
+//		}
 		
 		if(ent != null)
 		{

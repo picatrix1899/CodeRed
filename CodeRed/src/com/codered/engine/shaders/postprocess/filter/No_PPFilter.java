@@ -1,15 +1,18 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
-@VertexShader("ppf_no")
-@FragmentShader("ppf_no")
-@Attrib(pos=0, var="pos")
+import java.util.List;
+
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class No_PPFilter extends PPFShader
 {
-	
 
+	public No_PPFilter(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -19,7 +22,17 @@ public class No_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTexture("frame", 0, getInput("frame"));
+		loadTextureId("frame", 0, getInput("frame"));
 	}
 
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("ppf_no"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("ppf_no"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "pos"));
+	}
 }

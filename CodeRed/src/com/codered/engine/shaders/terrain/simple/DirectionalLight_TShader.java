@@ -1,21 +1,22 @@
 package com.codered.engine.shaders.terrain.simple;
 
+import java.util.List;
+
 import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
 
 
-@VertexShader("t_directionalLight")
-@FragmentShader("t_directionalLight")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
-@Attrib(pos=2, var="normal")
 public class DirectionalLight_TShader extends SimpleTerrainShader
 {
+
+	public DirectionalLight_TShader(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -38,7 +39,7 @@ public class DirectionalLight_TShader extends SimpleTerrainShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
+		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
 		loadFloat("specularPower", mat.getSpecularPower());
 		loadFloat("specularIntensity", mat.getSpecularIntensity());
 	}
@@ -60,5 +61,18 @@ public class DirectionalLight_TShader extends SimpleTerrainShader
 		loadMaterial0(getInput("material"));
 		
 		loadDirectionalLight0(getInput("directionalLight"));
+	}
+	
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_directionalLight"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_directionalLight"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(0, "texCoords"));
+		attribs.add(new DMap2<Integer,String>(0, "normal"));
 	}
 }

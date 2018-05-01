@@ -1,14 +1,18 @@
 package com.codered.engine.shaders.postprocess.filter;
 
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("ppf_depthTestMS")
-@FragmentShader("ppf_depthTestMS")
-@Attrib(pos=0, var="pos")
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class DepthTestMS_PPFilter extends PPFShader
 {
+
+	public DepthTestMS_PPFilter(IWindowContext context)
+	{
+		super(context);
+	}
 
 	protected void getAllUniformLocations()
 	{
@@ -23,12 +27,22 @@ public class DepthTestMS_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTextureMS("frameSrc", 0, (int) getInput("frameSrc"));
-		loadTextureMS("frameDst", 1, (int) getInput("frameDst"));
-		loadTextureMS("depthSrc", 2, (int) getInput("depthSrc"));
-		loadTextureMS("depthDst", 3, (int) getInput("depthDst"));
+		loadTextureMSId("frameSrc", 0, (int) getInput("frameSrc"));
+		loadTextureMSId("frameDst", 1, (int) getInput("frameDst"));
+		loadTextureMSId("depthSrc", 2, (int) getInput("depthSrc"));
+		loadTextureMSId("depthDst", 3, (int) getInput("depthDst"));
 		loadFloat("near", (float) getInput("near"));
 		loadFloat("far", (float) getInput("far"));
 	}
 
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("ppf_depthTestMS"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("ppf_depthTestMS"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "pos"));
+	}
 }

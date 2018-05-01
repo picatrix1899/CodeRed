@@ -52,12 +52,12 @@ public class Material
 	
 	public boolean hasNormalMap()
 	{
-		return this.normalMap != null;
+		return this.normalMap != "";
 	}
 	
 	public boolean hasGlowMap()
 	{
-		return this.glowMap != null;
+		return this.glowMap != "";
 	}
 	
 	public float getSpecularPower()

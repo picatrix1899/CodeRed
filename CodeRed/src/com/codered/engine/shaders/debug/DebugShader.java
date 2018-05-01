@@ -1,27 +1,13 @@
 package com.codered.engine.shaders.debug;
 
-import java.util.ArrayList;
-
 import com.codered.engine.shader.ShaderProgram;
-
-import cmn.utilslib.essentials.Auto;
+import com.codered.engine.window.WindowContext;
 
 public abstract class DebugShader extends ShaderProgram
 {
-	private static ArrayList<DebugShader> shaders = Auto.ArrayList();
 	
-	public DebugShader()
+	public DebugShader(WindowContext context)
 	{
-		shaders.add(this);
-	}
-	
-	public static void clean()
-	{
-		for(DebugShader s : shaders)
-		{
-			s.cleanup();
-		}
-		
-		shaders.clear();
+		super(context);
 	}
 }

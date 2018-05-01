@@ -6,4 +6,3 @@ in vec3 tangent;
 
 uniform mat4 T_model;
 uniform mat4 T_projection;
-uniform mat4 T_view;

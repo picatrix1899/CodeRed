@@ -1,51 +1,42 @@
 package com.codered.engine.shaders.object.simple;
 
-import com.codered.engine.light.DirectionalLight;
-import com.codered.engine.managing.Material;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shader.Shader.Attrib;
-import com.codered.engine.shader.Shader.FragmentShader;
-import com.codered.engine.shader.Shader.VertexShader;
+import java.util.List;
 
-@VertexShader("o_directionalLight")
-@FragmentShader("o_directionalLight")
-@Attrib(pos=0, var="vertexPos")
-@Attrib(pos=1, var="texCoords")
-@Attrib(pos=2, var="normal")
+import com.codered.engine.light.DirectionalLight;
+import com.codered.engine.shader.UniformDirectionalLight;
+import com.codered.engine.shader.UniformMaterial;
+import com.codered.engine.shaders.object.SimpleObjectShader;
+import com.codered.engine.window.IWindowContext;
+
+import cmn.utilslib.dmap.dmaps.DMap2;
+
 public class DirectionalLight_OShader extends SimpleObjectShader
 {
+
+	public UniformMaterial u_material;
+	public UniformDirectionalLight u_directionalLight;
+	
+	public DirectionalLight_OShader(IWindowContext context)
+	{
+		super(context);
+		
+		this.u_material = new UniformMaterial("material", 0, context, this);
+		this.u_directionalLight = new UniformDirectionalLight("directionalLight", context, this);
+		
+		compile();
+		
+		getAllUniformLocations();
+	}
 
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
 		
-		addUniform("textureMap");	
-		
-		addUniform("directionalLight.base.color");
-		addUniform("directionalLight.base.intensity");
-		addUniform("directionalLight.direction");
-
-		addUniform("specularPower");
-		addUniform("specularIntensity");		
+		this.u_material.getUniformLocations();
+		this.u_directionalLight.getUniformLocations();		
 	}
 	
 	public void loadDirectionalLight(DirectionalLight light) { setInput("directionalLight", light); }
-	
-	private void loadMaterial0(Material mat)
-	{
-		loadTexture("textureMap", 0, ResourceManager.getColorMap(mat.getColorMap()).getId());
-		
-		loadFloat("specularPower", mat.getSpecularPower());
-		loadFloat("specularIntensity", mat.getSpecularIntensity());
-	}
-	
-	private void loadDirectionalLight0(DirectionalLight light)
-	{
-		loadColor3("directionalLight.base.color", light.base.color);
-		loadFloat("directionalLight.base.intensity", light.base.intensity);
-		loadVector3("directionalLight.direction", light.direction);
-	}
 	
 	public void use()
 	{
@@ -53,7 +44,23 @@ public class DirectionalLight_OShader extends SimpleObjectShader
 		
 		super.use();
 		
-		loadMaterial0(getInput("material"));
-		loadDirectionalLight0(getInput("directionalLight"));
+		this.u_material.set(getInput("material"));
+		this.u_directionalLight.set(getInput("directionalLight"));
+		
+		this.u_material.load();
+		this.u_directionalLight.load();
+	}
+
+	public void attachShaderParts()
+	{
+		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_directionalLight"));
+		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_directionalLight"));
+	}
+
+	public void getAttribs(List<DMap2<Integer,String>> attribs)
+	{
+		attribs.add(new DMap2<Integer,String>(0, "vertexPos"));
+		attribs.add(new DMap2<Integer,String>(1, "texCoords"));
+		attribs.add(new DMap2<Integer,String>(2, "normal"));
 	}
 }
