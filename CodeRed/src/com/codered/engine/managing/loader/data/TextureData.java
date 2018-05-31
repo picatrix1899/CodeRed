@@ -1,21 +1,19 @@
 package com.codered.engine.managing.loader.data;
 
-import java.nio.ByteBuffer;
-
 public class TextureData
 {
-	private ByteBuffer data;
+	private byte[] data;
 	private int width;
 	private int height;
 	
-	public TextureData(ByteBuffer data, int width, int height)
+	public TextureData(byte[] data, int width, int height)
 	{
 		this.data = data;
 		this.width = width;
 		this.height = height;
 	}
 	
-	public ByteBuffer data()
+	public byte[] data()
 	{
 		return this.data;
 	}

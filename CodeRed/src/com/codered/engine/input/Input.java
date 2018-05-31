@@ -7,7 +7,8 @@ import java.util.HashMap;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.essentials.BufferUtils;
 import cmn.utilslib.events.Event;
@@ -16,7 +17,7 @@ import cmn.utilslib.math.vector.Vector2f;
 
 public class Input
 {
-	private IWindowContext w;
+	private WindowContext context;
 
 	public Event<KeyEventArgs> keyStroke = new Event<KeyEventArgs>();
 	public Event<KeyEventArgs> keyPress = new Event<KeyEventArgs>();
@@ -49,11 +50,11 @@ public class Input
 	
 	private Vector2f center;
 
-	public Input(IWindowContext w)
+	public Input()
 	{
-		this.w = w;
+		this.context = WindowContextHelper.getCurrentContext();
 		
-		this.center = new Vector2f(this.w.getWidth() / 2.0, this.w.getHeight() / 2.0);
+		this.center = new Vector2f(this.context.getWidth() / 2.0, this.context.getHeight() / 2.0);
 	}
 	
 	public boolean isButtonPressed(int button)
@@ -112,11 +113,11 @@ public class Input
 			{
 				this.lastKeyDown.put(key, this.isKeyDown.get(key));
 				
-				if(GLFW.glfwGetKey(this.w.getWindow().getWindowId(), key) == GLFW.GLFW_PRESS)
+				if(GLFW.glfwGetKey(this.context.getWindowId(), key) == GLFW.GLFW_PRESS)
 				{
 					this.isKeyDown.put(key, true);		
 				}
-				else if(GLFW.glfwGetKey(this.w.getWindow().getWindowId(), key) == GLFW.GLFW_RELEASE)
+				else if(GLFW.glfwGetKey(this.context.getWindowId(), key) == GLFW.GLFW_RELEASE)
 				{
 					this.isKeyDown.put(key, false);	
 				}
@@ -142,11 +143,11 @@ public class Input
 			for(int button : this.configuration.getRegisteredButtons())
 			{
 				lastButtonDown.put(button, isButtonDown.get(button));
-				if(GLFW.glfwGetMouseButton(this.w.getWindow().getWindowId(), button) == GLFW.GLFW_PRESS)
+				if(GLFW.glfwGetMouseButton(this.context.getWindowId(), button) == GLFW.GLFW_PRESS)
 				{
 					isButtonDown.put(button, true);
 				}
-				else if(GLFW.glfwGetMouseButton(this.w.getWindow().getWindowId(), button) == GLFW.GLFW_RELEASE)
+				else if(GLFW.glfwGetMouseButton(this.context.getWindowId(), button) == GLFW.GLFW_RELEASE)
 				{
 					isButtonDown.put(button, false);
 				}
@@ -197,7 +198,7 @@ public class Input
 		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 		
-		GLFW.glfwGetCursorPos(this.w.getWindow().getWindowId(), x, y);
+		GLFW.glfwGetCursorPos(this.context.getWindowId(), x, y);
 		
 		this.X = (int)x.get();
 		this.Y = (int)y.get();	
@@ -206,7 +207,7 @@ public class Input
 		{
 			if(this.startLocked)
 			{
-				GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), center.x, center.y);
+				GLFW.glfwSetCursorPos(this.context.getWindowId(), center.x, center.y);
 				
 				this.startLocked = false;
 			}
@@ -215,7 +216,7 @@ public class Input
 				this.DX = this.X - this.center.x;
 				this.DY = this.Y - this.center.y;
 				
-				GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), center.x, center.y);
+				GLFW.glfwSetCursorPos(this.context.getWindowId(), center.x, center.y);
 			}
 		}
 		
@@ -306,7 +307,7 @@ public class Input
 	
 	public void setMousePos(float x, float y)
 	{
-		GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), x, y);
+		GLFW.glfwSetCursorPos(this.context.getWindowId(), x, y);
 	}
 	
 	public void setMouseGrabbed(boolean lock)
@@ -319,19 +320,19 @@ public class Input
 			
 			DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
 			DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-			GLFW.glfwGetCursorPos(this.w.getWindow().getWindowId(), x, y);
+			GLFW.glfwGetCursorPos(this.context.getWindowId(), x, y);
 			
 			this.grabX = x.get();
 			this.grabY = y.get();
 			
-			GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), this.w.getWidth() / 2.0, this.w.getHeight() / 2.0);
+			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.context.getWidth() / 2.0, this.context.getHeight() / 2.0);
 
-			GLFW.glfwSetInputMode(this.w.getWindow().getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+			GLFW.glfwSetInputMode(this.context.getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 		}
 		else
 		{
-			GLFW.glfwSetInputMode(this.w.getWindow().getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-			GLFW.glfwSetCursorPos(this.w.getWindow().getWindowId(), this.grabX, this.grabY);
+			GLFW.glfwSetInputMode(this.context.getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.grabX, this.grabY);
 		}
 	}
 }

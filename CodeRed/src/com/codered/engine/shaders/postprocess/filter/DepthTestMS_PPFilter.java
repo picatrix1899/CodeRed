@@ -2,14 +2,14 @@ package com.codered.engine.shaders.postprocess.filter;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class DepthTestMS_PPFilter extends PPFShader
 {
 
-	public DepthTestMS_PPFilter(IWindowContext context)
+	public DepthTestMS_PPFilter(WindowContext context)
 	{
 		super(context);
 	}

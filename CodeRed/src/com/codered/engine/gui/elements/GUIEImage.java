@@ -50,29 +50,29 @@ public class GUIEImage extends GUIElement
 		float sMaxX = this.posX + this.sizeX;
 		float sMaxY = this.posY + this.sizeY;
 		
-		if(Window.active.getInputManager().isButtonPressed(0))
+		if(this.context.getInputManager().isButtonPressed(0))
 		{
 			if(mouseIsInsideInclusive(sMinX, sMinY, sMaxX, sMaxY))
 			{
-				Window.active.getInputManager().setMouseGrabbed(true);
+				this.context.getInputManager().setMouseGrabbed(true);
 				this.drag = true;
 			}			
 		}
 		
-		if(Window.active.getInputManager().isButtonHelt(0))
+		if(this.context.getInputManager().isButtonHelt(0))
 		{
 			if(this.drag)
 			{
-				this.posX += Window.active.getInputManager().getDX();
-				this.posY += -Window.active.getInputManager().getDY();
+				this.posX += this.context.getInputManager().getDX();
+				this.posY += -this.context.getInputManager().getDY();
 			}
 		}
 		
-		if(Window.active.getInputManager().isButtonReleased(0))
+		if(this.context.getInputManager().isButtonReleased(0))
 		{
 			if(this.drag)
 			{			
-				Window.active.getInputManager().setMouseGrabbed(false);
+				this.context.getInputManager().setMouseGrabbed(false);
 
 				this.drag = false;
 			}

@@ -5,13 +5,13 @@ import java.util.List;
 import com.codered.engine.light.AmbientLight;
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class AmbientLight_TShader extends SimpleTerrainShader
 {
-	public AmbientLight_TShader(IWindowContext context)
+	public AmbientLight_TShader(WindowContext context)
 	{
 		super(context);
 	}

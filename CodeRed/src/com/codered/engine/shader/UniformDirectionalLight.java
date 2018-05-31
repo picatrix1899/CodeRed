@@ -1,14 +1,14 @@
 package com.codered.engine.shader;
 
 import com.codered.engine.light.DirectionalLight;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public class UniformDirectionalLight extends Uniform
 {
 
 	private DirectionalLight light;
 	
-	public UniformDirectionalLight(String name, IWindowContext context, ShaderProgram shader)
+	public UniformDirectionalLight(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
 	}

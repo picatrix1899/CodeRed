@@ -6,7 +6,7 @@ import com.codered.engine.shader.UniformAmbientLight;
 import com.codered.engine.shader.UniformMaterial;
 import com.codered.engine.shader.UniformVector3;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 import cmn.utilslib.math.vector.Vector3f;
@@ -19,7 +19,7 @@ public class AmbientLight_OShader extends SimpleObjectShader
 	public UniformAmbientLight u_ambientLight;
 	public UniformVector3 u_skyColor;
 	
-	public AmbientLight_OShader(IWindowContext context)
+	public AmbientLight_OShader(WindowContext context)
 	{
 		super(context);
 		

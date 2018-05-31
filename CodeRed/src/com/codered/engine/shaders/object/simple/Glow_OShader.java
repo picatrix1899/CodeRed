@@ -5,14 +5,14 @@ import java.util.List;
 import com.codered.engine.light.Glow;
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Glow_OShader extends SimpleObjectShader
 {
 
-	public Glow_OShader(IWindowContext context)
+	public Glow_OShader(WindowContext context)
 	{
 		super(context);
 	}

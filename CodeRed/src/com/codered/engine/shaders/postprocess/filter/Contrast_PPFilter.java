@@ -2,14 +2,14 @@ package com.codered.engine.shaders.postprocess.filter;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Contrast_PPFilter extends PPFShader
 {
 
-	public Contrast_PPFilter(IWindowContext context)
+	public Contrast_PPFilter(WindowContext context)
 	{
 		super(context);
 	}

@@ -1,6 +1,6 @@
 package com.codered.engine.shader;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.math.vector.api.Vec3fBase;
 
@@ -9,7 +9,7 @@ public class UniformVector3 extends Uniform
 
 	private Vec3fBase vector;
 	
-	public UniformVector3(String name, IWindowContext context, ShaderProgram shader)
+	public UniformVector3(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
 	}

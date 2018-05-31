@@ -2,7 +2,6 @@ package com.codered.demo;
 
 import java.io.File;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.demo.GlobalSettings.Keys;
@@ -28,18 +27,16 @@ import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.engine.utils.GLUtils;
 import com.codered.engine.utils.MathUtils;
 import com.codered.engine.utils.TextureUtils;
-import com.codered.engine.window.IWindowContext;
-import com.codered.engine.window.IWindowRoutine;
+import com.codered.engine.utils.WindowHint;
+import com.codered.engine.utils.WindowHint.GLProfile;
+import com.codered.engine.window.WindowRoutine;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector3f;
 
-public class DemoWindowContext1 implements IWindowRoutine
+public class DemoWindowContext1 extends WindowRoutine
 {
-
-	private IWindowContext context;
-	
 	private Mesh mesh = new Mesh();
 	private Material mat;
 	private TexturedModel model;
@@ -54,11 +51,12 @@ public class DemoWindowContext1 implements IWindowRoutine
 	
 	public void initWindowHints()
 	{
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-		GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+		WindowHint.resizable(false);
+		WindowHint.glVersion("4.2");
+		WindowHint.glProfile(GLProfile.CORE);
+		WindowHint.depthBits(24);
+		WindowHint.doubleBuffering(true);
+		WindowHint.samples(16);
 	}
 
 	public void init()
@@ -75,17 +73,17 @@ public class DemoWindowContext1 implements IWindowRoutine
 		config.registerKey(Keys.k_delete);
 
 		config.registerButton(Keys.b_moveCam);
-		config.registerButton(0);
+		config.registerButton(Keys.b_fire);
 		
 		this.context.getInputManager().setConfiguration(config);
 		
 		this.context.getInputManager().keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) this.context.getWindow().setWindowShouldClose(); });
 		
-		BuiltInShaders.init(this.context);
+		BuiltInShaders.init();
 		
-		this.context.getObjectShaders().addShader(AmbientLight_OShader.class, new AmbientLight_OShader(this.context));
-		this.context.getObjectShaders().addShader(DirectionalLight_N_OShader.class, new DirectionalLight_N_OShader(this.context));
-		this.context.getObjectShaders().addShader(DirectionalLight_OShader.class, new DirectionalLight_OShader(this.context));
+		this.context.addShader(AmbientLight_OShader.class);
+		this.context.addShader(DirectionalLight_N_OShader.class);
+		this.context.addShader(DirectionalLight_OShader.class);
 		
 		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
 		
@@ -105,20 +103,12 @@ public class DemoWindowContext1 implements IWindowRoutine
 		this.context.getResourceManager().WORLD.regTexture("crate", TextureUtils.genTexture(tdata, this.context));
 		this.context.getResourceManager().WORLD.regTexture("crate_normal", TextureUtils.genTexture(tdata2, this.context));
 		
-		this.player = new Player(this.context);
+		this.player = new Player();
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		
-		this.directionalLight = new DirectionalLight(new LDRColor3(200, 100, 100), 2, new Vector3f(1.0f, -1.0f, 0));
+		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
 	} 
-	
-
-	
-
-	
-	public void update(double delta)
-	{
-	}
 
 	public void render(double delta)
 	{
@@ -129,12 +119,12 @@ public class DemoWindowContext1 implements IWindowRoutine
 		GLUtils.toggleDepthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
-		renderObject(this.entity, this.player.getCamera(), this.context.getObjectShaders().getShader(AmbientLight_OShader.class));			
+		renderObject(this.entity, this.player.getCamera(), this.context.getShader(AmbientLight_OShader.class));			
 		
 		GLUtils.toggleBlend(true);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);		
 		
-		renderObject(this.entity, this.player.getCamera(), this.context.getObjectShaders().getShader(DirectionalLight_N_OShader.class));
+		renderObject(this.entity, this.player.getCamera(), this.context.getShader(DirectionalLight_N_OShader.class));
 		
 
 		GLUtils.toggleBlend(false);
@@ -143,7 +133,7 @@ public class DemoWindowContext1 implements IWindowRoutine
 		GLUtils.toggleMultisample(false);
 	}
 
-	public void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
+	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
 	{
 		oShader.u_camera.set(c);
 		oShader.u_T_model.set(e.getTransformationMatrix());
@@ -161,15 +151,6 @@ public class DemoWindowContext1 implements IWindowRoutine
 			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		}
 		oShader.stop();	
-	}
-	
-	public void release()
-	{
-	}
-
-	public void setWindow(IWindowContext w)
-	{
-		this.context = w;
 	}
 
 	public void preloadResources()

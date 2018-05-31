@@ -1,5 +1,7 @@
 package com.codered.engine.utils;
 
+import java.nio.ByteBuffer;
+
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
@@ -7,14 +9,18 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.managing.Texture;
 import com.codered.engine.managing.loader.data.TextureData;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
+
+import cmn.utilslib.essentials.BufferUtils;
 
 public class TextureUtils
 {
-	public static Texture genTexture(TextureData data, IWindowContext context)
+	public static Texture genTexture(TextureData data, WindowContext context)
 	{
 		int textureID = GL11.glGenTextures();
 
+		ByteBuffer buffer = BufferUtils.wrapFlippedByteBuffer(data.data()); //4 for RGBA, 3 for RGB
+		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
@@ -22,7 +28,7 @@ public class TextureUtils
 		
 
 
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, data.width(), data.height(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.data());
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, data.width(), data.height(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
 		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 		

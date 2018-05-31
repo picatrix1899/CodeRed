@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.utils.GL;
 import com.codered.engine.utils.GLUtils;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public abstract class Framebuffer
 {
@@ -17,9 +17,9 @@ public abstract class Framebuffer
 	
 	protected FBOAttachment depth;
 	
-	protected IWindowContext context;
+	protected WindowContext context;
 	
-	public Framebuffer(IWindowContext context)
+	public Framebuffer(WindowContext context)
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
 		this.context = context;
@@ -27,7 +27,7 @@ public abstract class Framebuffer
 		this.height = context.getHeight();
 	}
 	
-	public Framebuffer(IWindowContext context, int width, int height)
+	public Framebuffer(WindowContext context, int width, int height)
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
 		this.context = context;

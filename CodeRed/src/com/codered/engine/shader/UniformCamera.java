@@ -1,14 +1,14 @@
 package com.codered.engine.shader;
 
 import com.codered.engine.entities.Camera;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public class UniformCamera extends Uniform
 {
 
 	private Camera camera;
 	
-	public UniformCamera(String name, IWindowContext context, ShaderProgram shader)
+	public UniformCamera(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
 	}

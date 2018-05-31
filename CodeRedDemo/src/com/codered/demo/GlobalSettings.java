@@ -34,6 +34,7 @@ public class GlobalSettings
 		public static int k_delete		= Key.DELETE.getId();
 		
 		public static int b_moveCam		= 2;
+		public static int b_fire		= 0;
 	}
 	
 }

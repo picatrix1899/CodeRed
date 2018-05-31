@@ -6,28 +6,19 @@ import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
-import com.codered.engine.window.WindowContext;
 
 public class ResourceManager
 {
 	
-	public final InternalResourceManager WORLD = new InternalResourceManager(this);
-	public final InternalResourceManager GUI = new InternalResourceManager(this);
-	public final InternalResourceManager STATIC = new InternalResourceManager(this);
+	public final InternalResourceManager WORLD = new InternalResourceManager();
+	public final InternalResourceManager GUI = new InternalResourceManager();
+	public final InternalResourceManager STATIC = new InternalResourceManager();
 
-	private WindowContext context;
-	
-	public ResourceManager(WindowContext context)
+	public ResourceManager()
 	{
-		this.context = context;
 		STATIC.renew();
 		WORLD.renew();
 		GUI.renew();
-	}
-	
-	public WindowContext getWindowContext()
-	{
-		return this.context;
 	}
 	
 	public Material getMaterial(String name)

@@ -5,8 +5,11 @@ import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.managing.VAO;
 import com.codered.engine.managing.loader.LambdaFont;
+import com.codered.engine.shaders.gui.Color_GUIShader;
+import com.codered.engine.shaders.gui.No_GUIShader;
 import com.codered.engine.utils.GLUtils;
-import com.codered.engine.window.Window;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.vector.Vector2f;
@@ -18,17 +21,20 @@ public abstract class GUI
 	
 	protected VAO vao;
 	
+	protected WindowContext context;
+	
 	public abstract void render();
 	public abstract void update();
 	
 	public GUI()
 	{
 		vao = new VAO();
+		WindowContextHelper.getCurrentContext();
 	}
 	
 	protected void setMousePos(float x, float y)
 	{
-		Window.active.getInputManager().setMousePos(x, com.codered.engine.window.active.HEIGHT - y);
+		this.context.getInputManager().setMousePos(x, this.context.getHeight() - y);
 	}
 	
 	protected void drawTexturedRect(int t, float posX, float posY, float sizeX, float sizeY)
@@ -54,12 +60,12 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0, 1);
 		
-		Window.active.getContext().guiShaders.No.loadTextureMap(t);
-		Window.active.getContext().guiShaders.No.use();
+		this.context.getShader(No_GUIShader.class).loadTextureMap(t);
+		this.context.getShader(No_GUIShader.class).use();
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
-		Window.active.getContext().guiShaders.No.stop();
+		this.context.getShader(No_GUIShader.class).stop();
 	}
 	
 	protected void drawLine(IColor3Base c, float width, Vector2f start, Vector2f... p)
@@ -76,13 +82,13 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		Window.active.getContext().guiShaders.Color.setInput("color", c);
-		Window.active.getContext().guiShaders.Color.use();
+		this.context.getShader(Color_GUIShader.class).setInput("color", c);
+		this.context.getShader(Color_GUIShader.class).use();
 		
 		GL11.glLineWidth(width);
 		GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, vertices.length);
 		
-		Window.active.getContext().guiShaders.Color.stop();
+		this.context.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawPoints(IColor3Base c, float size, Vector2f start, Vector2f... p)
@@ -98,13 +104,13 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		Window.active.getContext().guiShaders.Color.setInput("color", c);
-		Window.active.getContext().guiShaders.Color.use();
+		this.context.getShader(Color_GUIShader.class).setInput("color", c);
+		this.context.getShader(Color_GUIShader.class).use();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawArrays(GL11.GL_POINTS, 0, vertices.length);
 		
-		Window.active.getContext().guiShaders.Color.stop();
+		this.context.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawColoredRect(IColor3Base c, float posX, float posY, float sizeX, float sizeY)
@@ -120,12 +126,12 @@ public abstract class GUI
 		
 		GLUtils.bindVAO(vao, 0);
 		
-		Window.active.getContext().guiShaders.Color.setInput("color", c);
-		Window.active.getContext().guiShaders.Color.use();
+		this.context.getShader(Color_GUIShader.class).setInput("color", c);
+		this.context.getShader(Color_GUIShader.class).use();
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
-		Window.active.getContext().guiShaders.Color.stop();
+		this.context.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawText(String text, float posX, float posY, float sizeX, float sizeY, LambdaFont f)
@@ -171,12 +177,12 @@ public abstract class GUI
 			
 			GLUtils.bindVAO(vao, 0, 1);
 			
-			Window.active.getContext().guiShaders.No.loadTextureMap(f.getTexture().getId());
-			Window.active.getContext().guiShaders.No.use();
+			this.context.getShader(No_GUIShader.class).loadTextureMap(f.getTexture().getId());
+			this.context.getShader(No_GUIShader.class).use();
 			
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 			
-			Window.active.getContext().guiShaders.No.stop();
+			this.context.getShader(No_GUIShader.class).stop();
 			
 			p += inc;
 		}
@@ -186,8 +192,8 @@ public abstract class GUI
 	
 	public boolean mouseIsInsideInclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = Window.active.getInputManager().getMouseX();
-		float mY = Window.active.getInputManager().getMouseY();
+		float mX = this.context.getInputManager().getMouseX();
+		float mY = this.context.getInputManager().getMouseY();
 
 		boolean bX = mX >= minX && mX <= maxX;
 		boolean bY = mY >= minY && mY <= maxY;
@@ -197,8 +203,8 @@ public abstract class GUI
 
 	public boolean mouseIsInsideExclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = Window.active.getInputManager().getMouseX();
-		float mY = Window.active.getInputManager().getMouseY();
+		float mX = this.context.getInputManager().getMouseX();
+		float mY = this.context.getInputManager().getMouseY();
 
 		boolean bX = mX > minX && mX < maxX;
 		boolean bY = mY > minY && mY < maxY;

@@ -2,14 +2,14 @@ package com.codered.engine.shaders.postprocess.filter;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Brightness_PPFilter extends PPFShader
 {
 
-	public Brightness_PPFilter(IWindowContext context)
+	public Brightness_PPFilter(WindowContext context)
 	{
 		super(context);
 	}

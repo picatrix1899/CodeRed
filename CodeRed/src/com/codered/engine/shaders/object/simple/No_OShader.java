@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class No_OShader extends SimpleObjectShader
 {
 
-	public No_OShader(IWindowContext context)
+	public No_OShader(WindowContext context)
 	{
 		super(context);
 	}

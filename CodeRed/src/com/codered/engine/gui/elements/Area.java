@@ -1,6 +1,6 @@
 package com.codered.engine.gui.elements;
 
-import com.codered.engine.window.Window;
+import com.codered.engine.window.WindowContext;
 
 public class Area
 {
@@ -8,6 +8,23 @@ public class Area
 	public float minY;
 	public float maxX;
 	public float maxY;
+	
+	protected WindowContext context;
+	
+	public Area(WindowContext context)
+	{
+		this.context = context;
+	}
+	
+	public Area(WindowContext context, float minX, float minY, float maxX, float maxY)
+	{
+		this.context = context;
+		
+		this.minX = minX;
+		this.minY = minY;
+		this.maxX = maxX;
+		this.maxY = maxY;
+	}
 	
 	public float getCenterX()
 	{
@@ -21,8 +38,8 @@ public class Area
 	
 	public boolean mouseIsInsideInclusive()
 	{
-		float mX = Window.active.getInputManager().getMouseX();
-		float mY = Window.active.getInputManager().getMouseY();
+		float mX = this.context.getInputManager().getMouseX();
+		float mY = this.context.getInputManager().getMouseY();
 
 		boolean bX = mX >= minX && mX <= maxX;
 		boolean bY = mY >= minY && mY <= maxY;
@@ -32,8 +49,8 @@ public class Area
 
 	public boolean mouseIsInsideExclusive()
 	{
-		float mX = Window.active.getInputManager().getMouseX();
-		float mY = Window.active.getInputManager().getMouseY();
+		float mX = this.context.getInputManager().getMouseX();
+		float mY = this.context.getInputManager().getMouseY();
 
 		boolean bX = mX > minX && mX < maxX;
 		boolean bY = mY > minY && mY < maxY;

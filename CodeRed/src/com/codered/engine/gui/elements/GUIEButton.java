@@ -2,12 +2,10 @@ package com.codered.engine.gui.elements;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.resource.ResourceManager;
-import com.codered.engine.window.Window;
 
 public class GUIEButton extends GUIElement
 {
-	protected Area main = new Area();
+	protected Area main;
 	
 	public int background;
 	public String text;
@@ -16,6 +14,7 @@ public class GUIEButton extends GUIElement
 	{
 		super(id, parent);
 		
+		this.main = new Area(this.context);
 		this.main.minX = posX;
 		this.main.minY = posY;
 		this.main.maxX = sizeX;
@@ -26,16 +25,14 @@ public class GUIEButton extends GUIElement
 
 	public void render()
 	{
-
 		drawTexturedRect(background, this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
-		drawText(this.text, this.main.minX, this.main.minY, this.main.maxX, this.main.maxY, ResourceManager.getFont("lucida"));
 	}
 
 	public void update()
 	{
 		if(main.mouseIsInsideInclusive())
 		{
-			if(Window.active.getInputManager().isButtonPressed(0))
+			if(this.context.getInputManager().isButtonPressed(0))
 			{
 				this.parent.response(this);
 			}

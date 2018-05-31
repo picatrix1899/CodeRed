@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.codered.engine.shader.ShaderProgram;
 import com.codered.engine.shader.UniformMatrix4x4;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.dmap.dmaps.DMap2;
@@ -15,7 +15,7 @@ public class Colored_OShader extends ShaderProgram
 
 	public UniformMatrix4x4 u_T_view;
 	
-	public Colored_OShader(IWindowContext context)
+	public Colored_OShader(WindowContext context)
 	{
 		super(context);
 	}

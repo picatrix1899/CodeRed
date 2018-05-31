@@ -2,14 +2,14 @@ package com.codered.engine.shaders.postprocess.filter;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Invert_PPFilter extends PPFShader
 {
 
-	public Invert_PPFilter(IWindowContext context)
+	public Invert_PPFilter(WindowContext context)
 	{
 		super(context);
 	}

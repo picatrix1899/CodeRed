@@ -5,18 +5,18 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.utils.GLUtils;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 
 
 public class FBO extends Framebuffer
 {
-	public FBO(IWindowContext context)
+	public FBO(WindowContext context)
 	{
 		super(context);
 	}
 	
-	public FBO(IWindowContext context, int width, int height)
+	public FBO(WindowContext context, int width, int height)
 	{
 		super(context, width, height);
 	}

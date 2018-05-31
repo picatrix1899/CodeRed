@@ -1,12 +1,12 @@
 package com.codered.engine.shaders.gui;
 
 import com.codered.engine.shader.ShaderProgram;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public abstract class GUIShader extends ShaderProgram
 {
 
-	public GUIShader(IWindowContext context)
+	public GUIShader(WindowContext context)
 	{
 		super(context);
 	}

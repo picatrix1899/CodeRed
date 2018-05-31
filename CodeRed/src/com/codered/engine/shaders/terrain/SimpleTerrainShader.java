@@ -2,14 +2,14 @@ package com.codered.engine.shaders.terrain;
 
 import com.codered.engine.entities.Camera;
 import com.codered.engine.shader.ShaderProgram;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.math.matrix.Matrix4f;
 
 public abstract class SimpleTerrainShader extends ShaderProgram
 {
 	
-	public SimpleTerrainShader(IWindowContext context)
+	public SimpleTerrainShader(WindowContext context)
 	{
 		super(context);
 	}

@@ -3,7 +3,7 @@ package com.codered.engine.shaders.object;
 import com.codered.engine.shader.ShaderProgram;
 import com.codered.engine.shader.UniformCamera;
 import com.codered.engine.shader.UniformMatrix4x4;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public abstract class SimpleObjectShader extends ShaderProgram
 {
@@ -12,7 +12,7 @@ public abstract class SimpleObjectShader extends ShaderProgram
 	public UniformMatrix4x4 u_T_model;
 	public UniformMatrix4x4 u_T_projection;
 	
-	public SimpleObjectShader(IWindowContext context)
+	public SimpleObjectShader(WindowContext context)
 	{
 		super(context);
 		

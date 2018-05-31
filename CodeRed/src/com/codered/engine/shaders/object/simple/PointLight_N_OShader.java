@@ -5,7 +5,7 @@ import java.util.List;
 import com.codered.engine.shader.UniformMaterial;
 import com.codered.engine.shader.UniformPointLight;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
@@ -15,7 +15,7 @@ public class PointLight_N_OShader extends SimpleObjectShader
 	public UniformMaterial u_material;
 	public UniformPointLight u_pointLight;
 	
-	public PointLight_N_OShader(IWindowContext context)
+	public PointLight_N_OShader(WindowContext context)
 	{
 		super(context);
 		

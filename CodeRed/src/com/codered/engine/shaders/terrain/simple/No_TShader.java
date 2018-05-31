@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class No_TShader extends SimpleTerrainShader
 {
 
-	public No_TShader(IWindowContext context)
+	public No_TShader(WindowContext context)
 	{
 		super(context);
 	}

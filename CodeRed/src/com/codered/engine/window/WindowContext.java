@@ -4,64 +4,43 @@ import com.codered.engine.input.Input;
 import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shader.ShaderList;
 import com.codered.engine.shader.ShaderParts;
+import com.codered.engine.shader.ShaderProgram;
 
-import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.api.Vec2f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
 
-public class WindowContext implements IWindowContext
+public interface WindowContext
 {
-	private Window window;
+	Window getWindow();
 
-	private int width = 1600;
-	private int height = 1000;
-	private String title = "Window";
+	ResourceManager getResourceManager();
 	
-	private ResourceManager resourceManager;
+	String getTitle();
 	
-	private ShaderParts shaderParts;
+	int getWidth();
 	
-	private Input input;
+	int getHeight();
 	
-	private ShaderList objectShaders;
+	Vec2fBase getSize();
 	
-	public WindowContext(Window window)
-	{
-		this.window = window;
-		this.resourceManager = new ResourceManager(this);
-		this.shaderParts = new ShaderParts();
-		this.input = new Input(this);
-		this.objectShaders = new ShaderList();
-	}
-
-	public void update(double delta)
-	{
-		this.input.update(delta);
-	}
+	void getSize(Vec2f v);
 	
-	public void release()
-	{
-		this.shaderParts.builtIn().clear();
-		this.shaderParts.custom().clear();
-		this.resourceManager.clear();
-	}
+	ShaderParts getShaderParts();
 	
-	public void setWidth(int width) { this.width = width; }
-	public void setHeight(int height) { this.height = height; }
-	public void setTitle(String title) { this.title = title; }
-	public void setWindow(Window w) { this.window = w; }
+	Input getInputManager();
 	
-	public String getTitle() { return this.title; }
-	public int getWidth() { return this.width; }
-	public int getHeight() { return this.height; }
-	public Vec2fBase getSize() { return new Vector2f(this.width, this.height); }
-	public void getSize(Vec2f v) { v.set(this.width, this.height); }
-	public ResourceManager getResourceManager() { return this.resourceManager; }
-	public Window getWindow() { return this.window; }
-	public ShaderParts getShaderParts() { return this.shaderParts; }
-
-	public Input getInputManager() { return this.input; }
-
-	public ShaderList getObjectShaders() { return this.objectShaders; }
+	ShaderList getShaders();
 	
+	
+	/*
+	 * #####################
+	 * #  DIRECT-ACCESSES  #
+	 * #####################
+	 */
+	
+	default long getWindowId() { return getWindow().getWindowId(); }
+	
+	default <A extends ShaderProgram> A getShader(Class<A> clazz) { return getShaders().getShader(clazz); }
+	
+	default void addShader(Class<? extends ShaderProgram> clazz) { getShaders().addShader(clazz); }
 }

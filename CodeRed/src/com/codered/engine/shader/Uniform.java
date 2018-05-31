@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
 import com.codered.engine.managing.Texture;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -24,13 +24,13 @@ public abstract class Uniform
 	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
 	protected String name;
-	protected IWindowContext context;
+	protected WindowContext context;
 	
 	protected ShaderProgram shader;
 	
 	private HashMap<String,Integer> uniforms = Maps.newHashMap();
 	
-	public Uniform(String name, IWindowContext context, ShaderProgram shader)
+	public Uniform(String name, WindowContext context, ShaderProgram shader)
 	{
 		this.name = name;
 		this.context = context;

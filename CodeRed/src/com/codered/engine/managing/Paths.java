@@ -14,5 +14,4 @@ public class Paths
 	public static final String e_lambdafont			= ".λfont";
 	public static final String e_png				= ".png";
 	public static final String e_obj				= ".obj";
-	
 }

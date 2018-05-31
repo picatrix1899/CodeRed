@@ -1,7 +1,7 @@
 package com.codered.engine.shader;
 
 import com.codered.engine.managing.Material;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 public class UniformMaterial extends Uniform
 {
@@ -10,7 +10,7 @@ public class UniformMaterial extends Uniform
 	
 	private Material material;
 
-	public UniformMaterial(String name, int startIndex, IWindowContext context, ShaderProgram shader)
+	public UniformMaterial(String name, int startIndex, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
 		this.startIndex = startIndex;

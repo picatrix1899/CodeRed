@@ -7,13 +7,15 @@ import java.util.function.Consumer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-import com.codered.engine.window.WindowManager;
+import com.codered.engine.window.WindowImpl;
 
 import cmn.utilslib.essentials.Auto;
 
 public abstract class EngineBootstrap
 {
 	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
+
+	private WindowImpl window;
 	
 	public void boot()
 	{
@@ -33,7 +35,14 @@ public abstract class EngineBootstrap
 	
 	public void start()
 	{
-		WindowManager.start();
+		Thread t = (Thread) this.window.getTickRoutine();
+
+		t.start();
+	}
+	
+	protected void setWindow(WindowImpl window)
+	{
+		this.window = window;
 	}
 	
 	public void setArguments(String[] args) { this.argInterpreter.interpret(args); }

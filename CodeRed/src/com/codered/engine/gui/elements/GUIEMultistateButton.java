@@ -74,7 +74,7 @@ public class GUIEMultistateButton extends GUIElement
 			this.backgroundColor.set(255, 255, 0);
 		}
 		
-		if(Window.active.getInputManager().isButtonPressed(0))
+		if(this.context.getInputManager().isButtonPressed(0))
 		{
 			if(mouseIsInsideInclusive(posX, posY, posX + sizeX, posY + sizeY))
 			{

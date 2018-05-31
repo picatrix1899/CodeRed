@@ -9,8 +9,9 @@ import com.codered.engine.resource.ResourcePath.ResourceDestination;
 import com.codered.engine.shader.MalformedShaderException;
 import com.codered.engine.shader.ShaderPartList;
 import com.codered.engine.utils.ShaderPartUtils;
-import com.codered.engine.window.IWindowContext;
-import com.codered.engine.window.Window;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
+import com.codered.engine.window.WindowImpl;
 
 public class BuiltInShaders
 {
@@ -20,7 +21,7 @@ public class BuiltInShaders
 		{
 			ResourcePath path = new ResourcePath();
 			path.dest(ResourceDestination.EMBEDED);
-			path.src(Window.class);
+			path.src(WindowImpl.class);
 			
 			path.base("/resources/shaders/object/simple/");
 			registerDefaultEmbededShader(path, "o_ambientLight");
@@ -57,8 +58,8 @@ public class BuiltInShaders
 //			registerDefaultEmbededShader(path, "ppf_radialBlur");
 			
 			path.base("/resources/shaders/gui/");
-//			registerDefaultEmbededShader(path, "gui_color");
-//			registerDefaultEmbededShader(path, "gui_no");
+			registerDefaultEmbededShader(path, "gui_color");
+			registerDefaultEmbededShader(path, "gui_no");
 //			registerDefaultEmbededShader(path, "gui_texture");
 //			
 		}
@@ -68,8 +69,10 @@ public class BuiltInShaders
 		}
 	}
 	
-	public static void init(IWindowContext context)
+	public static void init()
 	{
+		WindowContext context = WindowContextHelper.getCurrentContext();
+		
 		try
 		{
 			loadDefaultEmbededShader(context, "o_ambientLight");
@@ -103,8 +106,8 @@ public class BuiltInShaders
 //			loadDefaultEmbededShader(context, "ppf_no");
 //			loadDefaultEmbededShader(context, "ppf_radialBlur");
 			
-//			loadDefaultEmbededShader(context, "gui_color");
-//			loadDefaultEmbededShader(context, "gui_no");
+			loadDefaultEmbededShader(context, "gui_color");
+			loadDefaultEmbededShader(context, "gui_no");
 //			loadDefaultEmbededShader(context, "gui_texture");
 			
 		}
@@ -114,7 +117,7 @@ public class BuiltInShaders
 		}
 	}
 	
-	private static void loadDefaultEmbededShader(IWindowContext context, String vfs) throws MalformedShaderException 
+	private static void loadDefaultEmbededShader(WindowContext context, String vfs) throws MalformedShaderException 
 	{
 		ShaderPartList sh = context.getShaderParts().builtIn();
 		

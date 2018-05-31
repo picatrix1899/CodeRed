@@ -2,14 +2,14 @@ package com.codered.engine.shaders.gui;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Color_GUIShader extends GUIShader
 {
 	
-	public Color_GUIShader(IWindowContext context)
+	public Color_GUIShader(WindowContext context)
 	{
 		super(context);
 	}

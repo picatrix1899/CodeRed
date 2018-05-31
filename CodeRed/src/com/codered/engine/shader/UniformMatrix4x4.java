@@ -1,6 +1,6 @@
 package com.codered.engine.shader;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.math.matrix.Matrix4f;
 
@@ -9,7 +9,7 @@ public class UniformMatrix4x4 extends Uniform
 
 	private Matrix4f matrix;
 	
-	public UniformMatrix4x4(String name, IWindowContext context, ShaderProgram shader)
+	public UniformMatrix4x4(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
 	}

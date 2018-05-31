@@ -2,13 +2,13 @@ package com.codered.engine.shaders.gui;
 
 import java.util.List;
 
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class Texture_GUIShader extends GUIShader
 {
-	public Texture_GUIShader(IWindowContext context)
+	public Texture_GUIShader(WindowContext context)
 	{
 		super(context);
 	}

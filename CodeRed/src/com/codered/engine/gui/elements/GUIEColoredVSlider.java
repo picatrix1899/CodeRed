@@ -2,7 +2,6 @@ package com.codered.engine.gui.elements;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.window.Window;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.Func;
@@ -112,22 +111,22 @@ public class GUIEColoredVSlider extends GUIElement
 			this.sliderColor.set(0, 0, 0);
 		}
 		
-		if(Window.active.getInputManager().isButtonPressed(0))
+		if(this.context.getInputManager().isButtonPressed(0))
 		{
 			if(mouseIsInsideInclusive(sMinX, sMinY, sMaxX, sMaxY))
 			{
-				Window.active.getInputManager().setMouseGrabbed(false);
+				this.context.getInputManager().setMouseGrabbed(false);
 				this.drag = true;
-				this.mouseOffX =  Window.active.getInputManager().getMouseX() - this.sliderPosX;
-				this.mouseOffY =  this.sliderPosY - Window.active.getInputManager().getMouseY();
+				this.mouseOffX =  this.context.getInputManager().getMouseX() - this.sliderPosX;
+				this.mouseOffY =  this.sliderPosY - this.context.getInputManager().getMouseY();
 			}			
 		}
 	
-		if(Window.active.getInputManager().isButtonHelt(0))
+		if(this.context.getInputManager().isButtonHelt(0))
 		{
 			if(this.drag)
 			{
-				this.sliderPosY -= Window.active.getInputManager().getDY();
+				this.sliderPosY -= this.context.getInputManager().getDY();
 				float max = this.sizeY - this.sliderOffY1 - this.sliderSizeY - this.sliderOffY2;
 				
 				this.sliderPosY = Maths.clamp(this.sliderPosY, 0, max);
@@ -143,12 +142,12 @@ public class GUIEColoredVSlider extends GUIElement
 			}
 		}
 		
-		if(Window.active.getInputManager().isButtonReleased(0))
+		if(this.context.getInputManager().isButtonReleased(0))
 		{
 			if(this.drag)
 			{
-				setMousePos((int)(this.sliderPosX + this.mouseOffX), (int)(com.codered.engine.window.active.HEIGHT - (this.sliderPosY - this.mouseOffY)));					
-				Window.active.getInputManager().setMouseGrabbed(false);
+				setMousePos((int)(this.sliderPosX + this.mouseOffX), (int)(this.context.getHeight() - (this.sliderPosY - this.mouseOffY)));					
+				this.context.getInputManager().setMouseGrabbed(false);
 
 				this.drag = false;
 			}

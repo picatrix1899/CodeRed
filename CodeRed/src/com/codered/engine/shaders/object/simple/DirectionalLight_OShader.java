@@ -6,7 +6,7 @@ import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.shader.UniformDirectionalLight;
 import com.codered.engine.shader.UniformMaterial;
 import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
@@ -16,7 +16,7 @@ public class DirectionalLight_OShader extends SimpleObjectShader
 	public UniformMaterial u_material;
 	public UniformDirectionalLight u_directionalLight;
 	
-	public DirectionalLight_OShader(IWindowContext context)
+	public DirectionalLight_OShader(WindowContext context)
 	{
 		super(context);
 		

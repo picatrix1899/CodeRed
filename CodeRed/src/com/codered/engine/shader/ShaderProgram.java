@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
 import com.codered.engine.managing.Texture;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -37,9 +37,9 @@ public abstract class ShaderProgram
 	
 	private HashMap<String,Object> inputs = Maps.newHashMap();
 	
-	protected IWindowContext context;
+	protected WindowContext context;
 	
-	public ShaderProgram(IWindowContext context)
+	public ShaderProgram(WindowContext context)
 	{
 		this.context = context;
 	}

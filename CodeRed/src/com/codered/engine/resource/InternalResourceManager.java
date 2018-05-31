@@ -9,6 +9,8 @@ import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
 import com.codered.engine.utils.TextureUtils;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
 
 public class InternalResourceManager
 {
@@ -20,11 +22,11 @@ public class InternalResourceManager
 	
 	private HashMap<String,LambdaFont> fonts = new HashMap<String,LambdaFont>();
 	
-	private ResourceManager master;
+	private WindowContext context;
 	
-	public InternalResourceManager(ResourceManager m)
+	public InternalResourceManager()
 	{
-		this.master = m;
+		this.context = WindowContextHelper.getCurrentContext();
 	}
 	
 	
@@ -54,16 +56,16 @@ public class InternalResourceManager
 			this.materials.put(name, material);	
 		
 		if(!this.textures.containsKey(material.getColorMap()))
-			this.textures.put(material.getColorMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getColorMap()), this.master.getWindowContext()));
+			this.textures.put(material.getColorMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getColorMap()), this.context));
 		
 		if(!this.textures.containsKey(material.getNormalMap()))
-			this.textures.put(material.getNormalMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getNormalMap()), this.master.getWindowContext()));
+			this.textures.put(material.getNormalMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getNormalMap()), this.context));
 		
 		if(!this.textures.containsKey(material.getGlowMap()))
-			this.textures.put(material.getGlowMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getGlowMap()), this.master.getWindowContext()));
+			this.textures.put(material.getGlowMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getGlowMap()), this.context));
 		
 		if(!this.textures.containsKey(material.getDisplacementMap()))
-			this.textures.put(material.getDisplacementMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getDisplacementMap()), this.master.getWindowContext()));
+			this.textures.put(material.getDisplacementMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getDisplacementMap()), this.context));
 	}
 	
 	public void regTexture(String name, Texture texture)

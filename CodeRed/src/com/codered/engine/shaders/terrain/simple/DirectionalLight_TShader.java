@@ -5,7 +5,7 @@ import java.util.List;
 import com.codered.engine.light.DirectionalLight;
 import com.codered.engine.managing.Material;
 import com.codered.engine.shaders.terrain.SimpleTerrainShader;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
@@ -13,7 +13,7 @@ import cmn.utilslib.dmap.dmaps.DMap2;
 public class DirectionalLight_TShader extends SimpleTerrainShader
 {
 
-	public DirectionalLight_TShader(IWindowContext context)
+	public DirectionalLight_TShader(WindowContext context)
 	{
 		super(context);
 	}

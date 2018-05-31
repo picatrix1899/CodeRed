@@ -12,7 +12,8 @@ import com.codered.engine.gui.GUIWindow;
 import com.codered.engine.input.Input.ButtonEventArgs;
 import com.codered.engine.input.Input.KeyEventArgs;
 import com.codered.engine.managing.World;
-import com.codered.engine.window.IWindowContext;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -40,11 +41,11 @@ public class Player extends BaseEntity
 	
 	private long selectedEntity = -1;
 	
-	private IWindowContext context;
+	private WindowContext context;
 	
-	public Player(IWindowContext context)
+	public Player()
 	{
-		this.context = context;
+		this.context = WindowContextHelper.getCurrentContext();
 		
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(3, 9, 3));
 		
