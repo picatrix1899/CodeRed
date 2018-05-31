@@ -2,7 +2,6 @@ package com.codered.engine.resource;
 
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.Texture;
-import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
@@ -26,13 +25,6 @@ public class ResourceManager
 		if(WORLD.containsMaterial(name)) return WORLD.getMaterial(name);
 		if(GUI.containsMaterial(name)) return GUI.getMaterial(name);
 		return STATIC.getMaterial(name);
-	}
-	
-	public LambdaFont getFont(String name)
-	{
-		if(WORLD.containsFont(name)) return WORLD.getFont(name);
-		if(GUI.containsFont(name)) return GUI.getFont(name);
-		return STATIC.getFont(name);
 	}
 
 	public Mesh getStaticMesh(String name)

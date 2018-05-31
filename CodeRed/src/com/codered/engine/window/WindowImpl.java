@@ -47,7 +47,6 @@ public class WindowImpl implements Window
 		
 		GLFW.glfwShowWindow(this.window);
 		
-		this.routine.preloadResources();
 		this.routine.init();
 	}
 	

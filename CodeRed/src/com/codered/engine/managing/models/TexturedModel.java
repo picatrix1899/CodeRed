@@ -23,6 +23,6 @@ public class TexturedModel
 	
 	public Mesh getModel() { return this.model; }
 
-	public Material getTexture() { return this.mat; }
+	public Material getMaterial() { return this.mat; }
 	
 }

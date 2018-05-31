@@ -32,7 +32,7 @@ public class Glow_OShader extends SimpleObjectShader
 	
 	private void loadMaterial0(Material m)
 	{
-		loadTexture("glowMap", 0, this.context.getResourceManager().getTexture(m.getGlowMap()));
+		loadTexture("glowMap", 0, m.getGlowMap());
 	}	
 	
 	private void loadGlow0(Glow glow)

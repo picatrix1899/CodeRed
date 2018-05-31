@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.managing.VAO;
-import com.codered.engine.managing.loader.LambdaFont;
 import com.codered.engine.shaders.gui.Color_GUIShader;
 import com.codered.engine.shaders.gui.No_GUIShader;
 import com.codered.engine.utils.GLUtils;

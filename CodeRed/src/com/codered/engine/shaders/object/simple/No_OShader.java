@@ -25,7 +25,7 @@ public class No_OShader extends SimpleObjectShader
 
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
+		loadTexture("textureMap", 0, mat.getAlbedoMap());
 	}
 	
 	public void use()

@@ -1,10 +1,15 @@
 package com.codered.engine.resource;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.codered.engine.managing.Material;
 import com.codered.engine.managing.Texture;
-import com.codered.engine.managing.loader.LambdaFont;
+import com.codered.engine.managing.loader.MaterialLoader;
+import com.codered.engine.managing.loader.TextureLoader;
+import com.codered.engine.managing.loader.data.MaterialData;
+import com.codered.engine.managing.loader.data.OBJFile;
+import com.codered.engine.managing.loader.data.TextureData;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
@@ -20,8 +25,6 @@ public class InternalResourceManager
 	private HashMap<String,RawModel> rawModels = new HashMap<String,RawModel>();
 	private HashMap<String,TexturedModel> texturedModels = new HashMap<String,TexturedModel>();
 	
-	private HashMap<String,LambdaFont> fonts = new HashMap<String,LambdaFont>();
-	
 	private WindowContext context;
 	
 	public InternalResourceManager()
@@ -32,8 +35,6 @@ public class InternalResourceManager
 	
 	public Material getMaterial(String name) { return this.materials.get(name); }
 	
-	public LambdaFont getFont(String name) { return this.fonts.get(name); }
-	 
 	public Mesh getStaticMesh(String name) { return this.staticMeshes.get(name); }
 	
 	public RawModel getRawModel(String name) { return this.rawModels.get(name); }
@@ -44,40 +45,56 @@ public class InternalResourceManager
 	
 	
 	public boolean containsMaterial(String name) { return this.materials.containsKey(name); }
-	public boolean containsFont(String name) { return this.fonts.containsKey(name); }
 	public boolean containsStaticMesh(String name) { return this.staticMeshes.containsKey(name); }
 	public boolean containsRawModel(String name) { return this.rawModels.containsKey(name); }
 	public boolean containsTexturedModel(String name) { return this.texturedModels.containsKey(name); }
 	public boolean containsTexture(String name) { return this.textures.containsKey(name); }
 	
-	public void regMaterial(String name, Material material)
+	public void regMaterial(String fileName)
 	{
-		if(!this.materials.containsKey(name))
-			this.materials.put(name, material);	
-		
-		if(!this.textures.containsKey(material.getColorMap()))
-			this.textures.put(material.getColorMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getColorMap()), this.context));
-		
-		if(!this.textures.containsKey(material.getNormalMap()))
-			this.textures.put(material.getNormalMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getNormalMap()), this.context));
-		
-		if(!this.textures.containsKey(material.getGlowMap()))
-			this.textures.put(material.getGlowMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getGlowMap()), this.context));
-		
-		if(!this.textures.containsKey(material.getDisplacementMap()))
-			this.textures.put(material.getDisplacementMap(), TextureUtils.genTexture(GlobalResourceManager.INSTANCE.getTexture(material.getDisplacementMap()), this.context));
+		if(!this.materials.containsKey(fileName))
+		{
+			MaterialData data = MaterialLoader.load(fileName);
+			
+			regTexture(data.getAlbedoMap());
+			regTexture(data.getNormalMap());
+			regTexture(data.getGlowMap());
+
+			Texture albedo = this.textures.get(data.getAlbedoMap());
+			Texture normal = this.textures.get(data.getNormalMap());
+			Texture glow = this.textures.get(data.getGlowMap());
+			
+			Material material = new Material(albedo, normal, glow, null, data.getSpecularPower(), data.getSpecularIntensity());
+			
+			this.materials.put(fileName, material);	
+		}
 	}
 	
-	public void regTexture(String name, Texture texture)
+	public void regTexture(String fileName)
 	{
-		if(!this.textures.containsKey(name))
-			this.textures.put(name, texture);			
+		if(fileName.isEmpty()) return;
+		
+		if(!this.textures.containsKey(fileName))
+		{
+			TextureData data = TextureLoader.loadTexture(fileName);
+			
+			Texture texture = TextureUtils.genTexture(data, this.context);
+			
+			this.textures.put(fileName, texture);
+		}
 	}
 	
-	public void regStaticMesh(String name, Mesh mesh)
+	public void regStaticMesh(String fileName)
 	{
-		if(!this.staticMeshes.containsKey(name))
-			this.staticMeshes.put(name, mesh);
+		if(!this.staticMeshes.containsKey(fileName))
+		{
+			OBJFile obj = new OBJFile();
+			obj.load(new File(fileName));
+			Mesh mesh = new Mesh().loadFromObj(obj);
+			
+			this.staticMeshes.put(fileName, mesh);
+		}
+
 	}
 	
 	public void regRawModel(String name, RawModel model)
@@ -86,16 +103,18 @@ public class InternalResourceManager
 			this.rawModels.put(name, model);
 	}
 	
-	public void regTexturedModel(String name, TexturedModel model)
+	public void regTexturedModel(String name, String fileNameModel, String fileNameMaterial)
 	{
 		if(!this.texturedModels.containsKey(name))
+		{
+			regStaticMesh(fileNameModel);
+			regMaterial(fileNameMaterial);
+			
+			TexturedModel model = new TexturedModel(this.staticMeshes.get(fileNameModel), this.materials.get(fileNameMaterial));
+			
 			this.texturedModels.put(name, model);
-	}
-	
-	public void regFont(String name, LambdaFont font)
-	{
-		if(!this.fonts.containsKey(name))
-			this.fonts.put(name, font);
+		}
+
 	}
 	
 	public void renew()
@@ -107,9 +126,6 @@ public class InternalResourceManager
 	{
 		for(Texture t : this.textures.values())
 			t.cleanup();
-		
-		for(LambdaFont f : this.fonts.values())
-			f.getTexture().cleanup();
 	}
 
 }

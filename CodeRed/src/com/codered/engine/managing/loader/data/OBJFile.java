@@ -18,7 +18,6 @@ import cmn.utilslib.math.vector.api.Vec3f;
 
 public class OBJFile
 {
-	
 	public ArrayList<Triangle3f> triangles = Auto.ArrayList();
 	public ArrayList<TriangleData> data = Auto.ArrayList();
 
@@ -29,10 +28,8 @@ public class OBJFile
 	
 	public void load(File file)
 	{
-		
 		try
 		{
-			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = "";
 			String[] parts;

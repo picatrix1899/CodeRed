@@ -39,8 +39,8 @@ public class DirectionalLight_N_TShader extends SimpleTerrainShader
 	
 	private void loadMaterial0(Material mat)
 	{
-		loadTexture("textureMap", 0, this.context.getResourceManager().getTexture(mat.getColorMap()));
-		loadTexture("normalMap", 1, this.context.getResourceManager().getTexture(mat.getNormalMap()));
+		loadTexture("textureMap", 0, mat.getAlbedoMap());
+		loadTexture("normalMap", 1, mat.getNormalMap());
 		
 		loadFloat("specularPower", mat.getSpecularPower());
 		loadFloat("specularIntensity", mat.getSpecularIntensity());

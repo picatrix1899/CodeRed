@@ -6,16 +6,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.loader.data.TextureData;
 
 public class TextureLoader
 {
 	public static TextureData loadTexture(String fileName)
 	{
-		
-		File img = new File(Paths.p_materials + fileName + Paths.e_png);
-
+		return loadTexture(new File(fileName));
+	}
+	
+	public static TextureData loadTexture(File img)
+	{
 		try
 		{
 			BufferedImage image = ImageIO.read(img);

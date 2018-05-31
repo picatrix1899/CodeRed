@@ -26,9 +26,9 @@ public class UniformMaterial extends Uniform
 
 	public void load()
 	{
-		loadTexture(this.name + ".albedoMap", this.startIndex + 0, this.context.getResourceManager().getTexture(material.getColorMap()));
+		loadTexture(this.name + ".albedoMap", this.startIndex + 0, this.material.getAlbedoMap());
 	
-		if(this.material.hasNormalMap()) loadTexture(this.name + ".normalMap", this.startIndex + 1, this.context.getResourceManager().getTexture(material.getNormalMap()));
+		if(this.material.hasNormalMap()) loadTexture(this.name + ".normalMap", this.startIndex + 1, this.material.getNormalMap());
 	
 		loadFloat(this.name + ".specularPower", this.material.getSpecularPower());
 		loadFloat(this.name + ".specularIntensity", this.material.getSpecularIntensity());

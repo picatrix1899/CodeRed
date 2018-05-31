@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.engine.managing.Paths;
+import com.codered.demo.Paths;
 import com.codered.engine.managing.Texture;
 import com.codered.engine.utils.GLUtils;
 

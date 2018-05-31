@@ -4,22 +4,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import com.codered.engine.managing.Material;
-import com.codered.engine.managing.Paths;
+import com.codered.engine.managing.loader.data.MaterialData;
 
 public class MaterialLoader
 {
-	public static Material load(String file)
+	public static MaterialData load(String fileName)
 	{
-
+		return load(new File(fileName));
+	}
+	
+	public static MaterialData load(File f)
+	{
 		try
 		{
-			File f = new File(Paths.p_materials + file + ".mat");
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 				
 			String line;
 			
-			String name = "";
 			String texture = "";
 			String normal = "";
 			String glow = "";
@@ -33,7 +34,7 @@ public class MaterialLoader
 			String dispMap;
 			String glowMap;
 			
-			Material m = null;
+			MaterialData m = null;
 			
 			
 			while((line = reader.readLine()) != null)
@@ -49,12 +50,6 @@ public class MaterialLoader
 				{
 					String[] s = line.split("=");
 					normal = s[1];
-				}
-				
-				if(line.startsWith("name="))
-				{
-					String[] s = line.split("=");
-					name = s[1];
 				}
 				
 				if(line.startsWith("glowMap="))
@@ -83,48 +78,44 @@ public class MaterialLoader
 				
 			}
 			
-			if(name != "")
+			if(texture != "")
 			{
-			
-				if(texture != "")
-				{
-					
-					colorMap = texture;
-				}
-				else
-				{
-					colorMap = "black";
-				}
 				
-				if(normal != "")
-				{
-					normalMap = normal;
-				}
-				else
-				{
-					normalMap = "black";
-				}
-				
-				if(displacement != "")
-				{
-					dispMap = displacement;
-				}
-				else
-				{
-					dispMap = "black";
-				}
-				
-				if(glow != "")
-				{
-					glowMap = glow;
-				}
-				else
-				{
-					glowMap = "black";
-				}
-				
-				m = new Material(name, colorMap, normalMap, glowMap, dispMap, power, intensity);
+				colorMap = texture;
 			}
+			else
+			{
+				colorMap = "black";
+			}
+			
+			if(normal != "")
+			{
+				normalMap = normal;
+			}
+			else
+			{
+				normalMap = "black";
+			}
+			
+			if(displacement != "")
+			{
+				dispMap = displacement;
+			}
+			else
+			{
+				dispMap = "black";
+			}
+			
+			if(glow != "")
+			{
+				glowMap = glow;
+			}
+			else
+			{
+				glowMap = "black";
+			}
+			
+			m = new MaterialData(colorMap, normalMap, glowMap, dispMap, power, intensity);
 		
 			reader.close();	
 			

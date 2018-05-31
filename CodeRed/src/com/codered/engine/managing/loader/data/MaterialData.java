@@ -1,16 +1,16 @@
-package com.codered.engine.managing;
+package com.codered.engine.managing.loader.data;
 
-public class Material
+public class MaterialData
 {
-	private Texture albedoMap;
-	private Texture normalMap;
-	private Texture glowMap;
-	private Texture dispMap;
+	private String albedoMap;
+	private String normalMap;
+	private String glowMap;
+	private String dispMap;
 	
 	private float specularIntensity;
 	private float specularPower;
 	
-	public Material(Texture albedoMap, Texture normalMap, Texture glowMap, Texture dispMap, float power, float intensity)
+	public MaterialData(String albedoMap, String normalMap, String glowMap, String dispMap, float power, float intensity)
 	{
 		this.albedoMap = albedoMap;
 		this.normalMap = normalMap;
@@ -21,34 +21,34 @@ public class Material
 		this.specularIntensity = intensity;
 	}
 	
-	public Texture getAlbedoMap()
+	public String getAlbedoMap()
 	{
 		return this.albedoMap;
 	}
 	
-	public Texture getNormalMap()
+	public String getNormalMap()
 	{
 		return this.normalMap;
 	}
 	
-	public Texture getGlowMap()
+	public String getGlowMap()
 	{
 		return this.glowMap;
 	}
 	
-	public Texture getDisplacementMap()
+	public String getDisplacementMap()
 	{
 		return this.dispMap;
 	}
 	
 	public boolean hasNormalMap()
 	{
-		return this.normalMap != null;
+		return this.normalMap != "";
 	}
 	
 	public boolean hasGlowMap()
 	{
-		return this.glowMap != null;
+		return this.glowMap != "";
 	}
 	
 	public float getSpecularPower()

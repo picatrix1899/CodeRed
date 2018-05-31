@@ -12,7 +12,7 @@ public class BMFontData
 	public int width;
 	public int height;
 	
-	public String file;
+	public TextureData file;
 	
 	public List<CharData> data = new ArrayList<CharData>();
 	

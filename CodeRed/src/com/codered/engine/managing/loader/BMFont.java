@@ -1,73 +1,83 @@
 package com.codered.engine.managing.loader;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import java.util.HashMap;
 
 import com.codered.engine.managing.Texture;
 import com.codered.engine.managing.loader.data.BMFontData;
-import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.TextureUtils;
+import com.codered.engine.utils.WindowContextHelper;
+import com.codered.engine.window.WindowContext;
 
 public class BMFont
 {
-
 	private BMFontData data;
 	
 	private Texture texture;
-	
-	private ByteBuffer im;	
 
+	private HashMap<Integer,CharData> chars = new HashMap<Integer,CharData>();
+	
 	public BMFont(BMFontData data) throws Exception
 	{
+		WindowContext context = WindowContextHelper.getCurrentContext();
+		
 		this.data = data;
 		
-		InputStream gz = new FileInputStream();
+		this.texture = TextureUtils.genTexture(data.file, context);
 		
-		DataInputStream stream = new DataInputStream(gz);
-		
-		this.width = stream.readInt();
-		this.height = stream.readInt();
-		
-		byte[] b = new byte[this.width * this.height * 4];
-		
-		stream.read(b);
-		
-		this.im = BufferUtils.createByteBuffer(b.length);
-		this.im.put(b);
-		this.im.flip();
-		
-		this.uvwa = new float[this.comp.length() * 4];
-		
-		int s = 0;
-		
-		for(int i = 0; i < this.comp.length(); i ++)
+		for(BMFontData.CharData charData : this.data.data)
 		{
+			int c = charData.c;
 			
-			s = i * 4;
+			CharData d = new CharData();
 			
-			this.uvwa[s + 0] = stream.readFloat();
-			this.uvwa[s + 1] = stream.readFloat();
-			this.uvwa[s + 2] = stream.readFloat();
-			this.uvwa[s + 3] = stream.readFloat();
+			d.x = charData.x;
+			d.y = charData.y;
+			d.width = charData.width;
+			d.height = charData.height;
+			d.xOff = charData.xOff;
+			d.yOff = charData.yOff;
+			d.xAdvance = charData.xAdvance;
 			
+			this.chars.put(c, d);
 		}
-		
-		loadTexture();
-		
-		stream.close();
 	}
 	
-	private void loadTexture()
+	public int width()
 	{
-		this.texture = Texture.createTexture(this.width, this.height, false);
-    
-		GLUtils.bindTexture2D(this.texture.getId());
+		return this.data.width;
+	}
+	
+	public int height()
+	{
+		return this.data.height;
+	}
+	
+	public CharData charData(String c)
+	{
+		int ch = c.charAt(0);
 		
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.im);
+		return this.chars.get(ch);
+	}
+	
+	public Texture getTexture()
+	{
+		return this.texture;
+	}
+	
+	
+	public int getTextureId()
+	{
+		return this.texture.getId();
+	}
+	
+	public static class CharData
+	{
+		public int x;
+		public int y;
+		public int width;
+		public int height;
+		public int xOff;
+		public int yOff;
+		public int xAdvance;
 	}
 }

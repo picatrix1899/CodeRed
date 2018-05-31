@@ -15,6 +15,4 @@ public abstract class WindowRoutine
 	public void render(double delta) { }
 	
 	public void release() { }
-	
-	public void preloadResources() { }
 }

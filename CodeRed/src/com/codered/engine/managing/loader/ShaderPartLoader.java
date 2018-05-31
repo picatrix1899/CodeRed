@@ -7,18 +7,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import com.codered.engine.managing.Paths;
 import com.codered.engine.managing.loader.data.ShaderPartData;
 import com.codered.engine.shader.ShaderPart;
 
 public class ShaderPartLoader
 {
-	public static ShaderPartData readShader(InputStream stream, Class<?> clazz)
+	public static ShaderPartData readShader(InputStream stream, String shaderDst, Class<?> clazz)
 	{
 		StringBuilder shaderSource = new StringBuilder();
 		
 		String line = "";
-		String type = "";
 		String dest = "";
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		
@@ -33,21 +31,19 @@ public class ShaderPartLoader
 				{
 					dest = line.substring("#include embeded base".length() + 2, line.length() - 1);
 					dest = "/resources/shaders/" + dest;
-					type = "embeded";
 					
 					url = ShaderPart.class.getResource(dest);
 
-					shaderSource.append(readShader(url.openStream(), clazz).getData());
+					shaderSource.append(readShader(url.openStream(), shaderDst, clazz).getData());
 				}
 				else if(line.startsWith("#include embeded "))
 				{
 					dest = line.substring("#include embeded".length() + 2, line.length() - 1);
 					dest = "/resources/shaders/" + dest;
-					type = "embeded";
 					
 					url = clazz.getResource(dest);
 					
-					shaderSource.append(readShader(url.openStream(), clazz));
+					shaderSource.append(readShader(url.openStream(), shaderDst, clazz));
 				}
 				else if(line.startsWith("#include "))
 				{
@@ -57,23 +53,20 @@ public class ShaderPartLoader
 					dest = dest.replaceAll("\\\\","\\\\").replaceAll("/", "\\\\");
 					if(dest.regionMatches(true, 1, ":\\\\", 0, ":\\\\".length()))
 					{
-						type = "fullpath";
 						url = new File(dest).toURI().toURL();
 					}
 					else if(dest.startsWith("http://") || dest.startsWith("https://"))
 					{
-						type = "url";
 						url = new URL(dest);
 					}
 					else
 					{
-						dest = Paths.p_shaders + dest;
+						dest = shaderDst + dest;
 						
-						type = "relative";
 						url = new File(dest).toURI().toURL();
 					}
 					
-					shaderSource.append(readShader(url.openStream(), clazz));
+					shaderSource.append(readShader(url.openStream(), shaderDst, clazz));
 				}
 				else
 				{
