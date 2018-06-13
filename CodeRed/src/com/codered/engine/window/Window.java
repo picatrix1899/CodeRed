@@ -2,6 +2,8 @@ package com.codered.engine.window;
 
 import org.lwjgl.opengl.GLCapabilities;
 
+import cmn.utilslib.events.EventHandler;
+
 public interface Window
 {
 	GLCapabilities getCapabilities();
@@ -15,4 +17,6 @@ public interface Window
 	WindowTickRoutine getTickRoutine();
 	
 	void release();
+	
+	void addResizeHandler(EventHandler<EventArgs> handler)
 }

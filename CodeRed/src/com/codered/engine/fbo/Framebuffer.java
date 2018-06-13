@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.utils.GL;
 import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;
 
 public abstract class Framebuffer
@@ -19,18 +20,18 @@ public abstract class Framebuffer
 	
 	protected WindowContext context;
 	
-	public Framebuffer(WindowContext context)
+	public Framebuffer()
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
-		this.context = context;
+		this.context = WindowContextHelper.getCurrentContext();
 		this.width = context.getWidth();
 		this.height = context.getHeight();
 	}
 	
-	public Framebuffer(WindowContext context, int width, int height)
+	public Framebuffer(int width, int height)
 	{
 		this.framebuffer = GL30.glGenFramebuffers();
-		this.context = context;
+		this.context = WindowContextHelper.getCurrentContext();
 		this.width = width;
 		this.height = height;
 	}
@@ -45,8 +46,21 @@ public abstract class Framebuffer
 	{
 		for(int i = 0; i < this.attachments.length; i++)
 			if(this.attachments[i] != null) this.attachments[i].resize(width, height);
+
+		GL30.glDeleteFramebuffers(this.framebuffer);
+		
+		this.framebuffer = GL30.glGenFramebuffers();
+		
+		GLUtils.bindFramebuffer(this);
+		
+		for(int i = 0; i < this.attachments.length; i++)
+			if(this.attachments[i] != null) 
+
 		
 		if(this.depth != null) this.depth.resize(width, height);
+		
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void clearDraws()
@@ -110,5 +124,13 @@ public abstract class Framebuffer
 		FBOAttachment att = t.getType() == FBOTarget.DST_COLOR ? this.attachments[t.getIndex()] : this.depth;
 
 		return att != null ? att.getId() : 0;
+	}
+	
+	public void cleanup()
+	{
+		GL30.glDeleteFramebuffers(this.framebuffer);
+		
+		for(FBOAttachment attachment : this.attachments)
+			if(attachment != null) attachment.cleanup();
 	}
 }

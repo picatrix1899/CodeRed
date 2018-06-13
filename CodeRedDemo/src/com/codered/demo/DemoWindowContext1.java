@@ -1,12 +1,20 @@
 package com.codered.demo;
 
+import java.nio.ByteBuffer;
+
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 import com.codered.demo.GlobalSettings.Keys;
 
 import com.codered.engine.BuiltInShaders;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.light.AmbientLight;
@@ -39,9 +47,11 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	private boolean directional = true;
 	
+	private FBO fbo;
+	
 	public void initWindowHints()
 	{
-		WindowHint.resizable(false);
+		WindowHint.resizable(true);
 		WindowHint.glVersion("4.2");
 		WindowHint.glProfile(GLProfile.CORE);
 		WindowHint.depthBits(24);
@@ -49,6 +59,14 @@ public class DemoWindowContext1 extends WindowRoutine
 		WindowHint.samples(16);
 	}
 
+	private void resizeWindow(int width, int height)
+	{
+		this.fbo.cleanup();
+		this.fbo = new FBO();
+		this.fbo.applyColorBufferAttachment(FBOTarget.COLOR0);
+		this.fbo.applyDepthBufferAttachment();
+	}
+	
 	public void init()
 	{
 		InputConfiguration config = new InputConfiguration();
@@ -77,6 +95,8 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.context.addShader(DirectionalLight_N_OShader.class);
 		this.context.addShader(DirectionalLight_OShader.class);
 		
+		this.context.getWindow().
+		
 		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
@@ -88,11 +108,21 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
+		
+		this.fbo = new FBO();
+		this.fbo.applyColorBufferAttachment(FBOTarget.COLOR0);
+		this.fbo.applyDepthBufferAttachment();
+
+		GL.glDrawBuffersFirst();
 	} 
 
 	public void render(double delta)
 	{
-		GLUtils.multisample(true);
+		GLUtils.bindFramebuffer(0);
+		
+		GL.clearCommon();
+		
+		GLUtils.bindFramebuffer(this.fbo);
 		
 		GL.clearCommon();
 		
@@ -114,7 +144,7 @@ public class DemoWindowContext1 extends WindowRoutine
 
 		GLUtils.depthTest(false);
 
-		GLUtils.multisample(false);
+		this.fbo.resolveAttachmentToScreen(FBOTarget.COLOR0);
 	}
 
 	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)

@@ -4,6 +4,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
+import cmn.utilslib.events.Event;
+import cmn.utilslib.events.EventArgs;
+
 public class WindowImpl implements Window
 {
 	private long window;
@@ -15,6 +18,8 @@ public class WindowImpl implements Window
 	private WindowTickRoutine tickRoutine;
 	
 	private WindowRoutine routine;
+	
+	public Event<ResizeEventArgs> Resize = new Event<ResizeEventArgs>();
 	
 	public WindowImpl(int width, int height, String title, WindowRoutine routine)
 	{
@@ -35,7 +40,7 @@ public class WindowImpl implements Window
 		this.context.init();
 		this.routine.initWindowHints();
 		
-		this.window = GLFW.glfwCreateWindow(this.context.getWidth(), this.context.getWidth(), this.context.getTitle(), 0, 0);
+		this.window = GLFW.glfwCreateWindow(this.context.getWidth(), this.context.getHeight(), this.context.getTitle(), 0, 0);
 		
 		if(window == 0)
 		{
@@ -46,6 +51,8 @@ public class WindowImpl implements Window
 		this.capabilities = GL.createCapabilities();
 		
 		GLFW.glfwShowWindow(this.window);
+		
+		GLFW.glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(w, h); });
 		
 		this.routine.init();
 	}
@@ -63,6 +70,14 @@ public class WindowImpl implements Window
 	public void setWindowShouldClose()
 	{
 		GLFW.glfwSetWindowShouldClose(this.window, true);
+	}
+	
+	public void onResize(int width, int height)
+	{
+		this.context.setWidth(width);
+		this.context.setHeight(height);
+		
+		this.Resize.raise(new ResizeEventArgs(width, height));
 	}
 	
 	public void update(double delta)
@@ -98,5 +113,26 @@ public class WindowImpl implements Window
 		GLFW.glfwDestroyWindow(this.window);
 		
 		this.tickRoutine.end();
+	}
+	
+	public class ResizeEventArgs implements EventArgs
+	{
+
+		public int width;
+		public int height;
+		
+		public ResizeEventArgs(int width, int height)
+		{
+			this.width = width;
+			this.height = height;
+		}
+		
+
+		@Override
+		public EventArgs cloneArgs()
+		{
+			return new ResizeEventArgs(this.width, this.height);
+		}
+		
 	}
 }
