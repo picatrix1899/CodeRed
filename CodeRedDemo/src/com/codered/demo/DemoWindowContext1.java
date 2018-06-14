@@ -47,8 +47,6 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	private boolean directional = true;
 	
-	private FBO fbo;
-	
 	public void initWindowHints()
 	{
 		WindowHint.resizable(true);
@@ -56,15 +54,11 @@ public class DemoWindowContext1 extends WindowRoutine
 		WindowHint.glProfile(GLProfile.CORE);
 		WindowHint.depthBits(24);
 		WindowHint.doubleBuffering(true);
-		WindowHint.samples(16);
 	}
 
 	private void resizeWindow(int width, int height)
 	{
-		this.fbo.cleanup();
-		this.fbo = new FBO();
-		this.fbo.applyColorBufferAttachment(FBOTarget.COLOR0);
-		this.fbo.applyDepthBufferAttachment();
+		
 	}
 	
 	public void init()
@@ -95,7 +89,7 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.context.addShader(DirectionalLight_N_OShader.class);
 		this.context.addShader(DirectionalLight_OShader.class);
 		
-		this.context.getWindow().
+		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
 		
 		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
 		
@@ -108,24 +102,11 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
-		
-		this.fbo = new FBO();
-		this.fbo.applyColorBufferAttachment(FBOTarget.COLOR0);
-		this.fbo.applyDepthBufferAttachment();
-
-		GL.glDrawBuffersFirst();
 	} 
 
 	public void render(double delta)
 	{
-		GLUtils.bindFramebuffer(0);
-		
 		GL.clearCommon();
-		
-		GLUtils.bindFramebuffer(this.fbo);
-		
-		GL.clearCommon();
-		
 		GLUtils.depthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
@@ -143,8 +124,6 @@ public class DemoWindowContext1 extends WindowRoutine
 		}
 
 		GLUtils.depthTest(false);
-
-		this.fbo.resolveAttachmentToScreen(FBOTarget.COLOR0);
 	}
 
 	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)

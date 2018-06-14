@@ -2,10 +2,11 @@ package com.codered.engine.window;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
 import cmn.utilslib.events.Event;
-import cmn.utilslib.events.EventArgs;
+import cmn.utilslib.events.EventHandler;
 
 public class WindowImpl implements Window
 {
@@ -77,6 +78,8 @@ public class WindowImpl implements Window
 		this.context.setWidth(width);
 		this.context.setHeight(height);
 		
+		GL11.glViewport(0, 0, width, height);
+		
 		this.Resize.raise(new ResizeEventArgs(width, height));
 	}
 	
@@ -114,25 +117,10 @@ public class WindowImpl implements Window
 		
 		this.tickRoutine.end();
 	}
-	
-	public class ResizeEventArgs implements EventArgs
+
+	@Override
+	public void addResizeHandler(EventHandler<ResizeEventArgs> handler)
 	{
-
-		public int width;
-		public int height;
-		
-		public ResizeEventArgs(int width, int height)
-		{
-			this.width = width;
-			this.height = height;
-		}
-		
-
-		@Override
-		public EventArgs cloneArgs()
-		{
-			return new ResizeEventArgs(this.width, this.height);
-		}
-		
+		this.Resize.addHandler(handler);
 	}
 }
