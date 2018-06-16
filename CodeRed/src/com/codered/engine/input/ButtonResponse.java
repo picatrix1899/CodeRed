@@ -19,7 +19,7 @@ public class ButtonResponse
 		return this.buttons.contains(button);
 	}
 	
-	public boolean buttonPresent(Key button)
+	public boolean buttonPresent(MouseButton button)
 	{
 		return this.buttons.contains(button.getId());
 	}

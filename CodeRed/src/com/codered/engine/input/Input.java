@@ -57,39 +57,6 @@ public class Input
 		this.center = new Vector2f(this.context.getWidth() / 2.0, this.context.getHeight() / 2.0);
 	}
 	
-	public boolean isButtonPressed(int button)
-	{
-		
-		if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public  boolean isButtonReleased(int button)
-	{
-		if(lastButtonDown.get(button) == true && isButtonDown.get(button) == false)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public  boolean isButtonHelt(int button)
-	{
-		if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
-		{
-			return true;
-		}
-		else
-		{
-			return isButtonPressed(button);
-		}	
-	}
-	
 	public void setConfiguration(InputConfiguration config)
 	{
 		this.pendingConfiguration = config;

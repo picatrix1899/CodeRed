@@ -78,7 +78,7 @@ public class Player extends BaseEntity
 	
 	private void buttonPress(ButtonEventArgs args)
 	{
-		if(this.context.getInputManager().isButtonHelt(Keys.b_moveCam))
+		if(args.response.buttonPresent(Keys.b_moveCam))
 		{
 			updateOrientation();
 		}
@@ -103,7 +103,7 @@ public class Player extends BaseEntity
 		{
 			if(this.selectedEntity != -1)
 			{
-				Session.get().getWorld().removeStaticEntity(this.selectedEntity);
+				//Session.get().getWorld().removeStaticEntity(this.selectedEntity);
 				
 				this.selectedEntity = -1;
 			}

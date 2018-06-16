@@ -15,9 +15,19 @@ public class InputConfiguration
 		registeredKeys.add(key);
 	}
 	
+	public void registerKey(Key key)
+	{
+		registeredKeys.add(key.getId());
+	}
+	
 	public void registerButton(int button)
 	{
 		registeredButtons.add(button);
+	}
+	
+	public void registerButton(MouseButton button)
+	{
+		registeredButtons.add(button.getId());
 	}
 	
 	public void unregisterKey(int key)
@@ -25,9 +35,19 @@ public class InputConfiguration
 		registeredKeys.remove(key);
 	}
 	
+	public void unregisterKey(Key key)
+	{
+		registeredKeys.remove(key.getId());
+	}
+	
 	public void unregisterButton(int button)
 	{
 		registeredButtons.remove(button);
+	}
+	
+	public void unregisterButton(MouseButton button)
+	{
+		registeredButtons.remove(button.getId());
 	}
 	
 	public ArrayList<Integer> getRegisteredKeys()

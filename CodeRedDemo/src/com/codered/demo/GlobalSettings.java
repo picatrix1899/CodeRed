@@ -1,6 +1,7 @@
 package com.codered.demo;
 
 import com.codered.engine.input.Key;
+import com.codered.engine.input.MouseButton;
 
 public class GlobalSettings
 {
@@ -23,18 +24,18 @@ public class GlobalSettings
 	
 	public static class Keys
 	{
-		public static int k_forward		= Key.W.getId();
-		public static int k_back		= Key.S.getId();
-		public static int k_left		= Key.A.getId();
-		public static int k_right		= Key.D.getId();
-		public static int k_up			= Key.SPACE.getId();
-		public static int k_exit		= Key.ESCAPE.getId();
-		public static int k_turnLeft	= Key.Q.getId();
-		public static int k_turnRight	= Key.E.getId();
-		public static int k_delete		= Key.DELETE.getId();
+		public static Key k_forward		= Key.W;
+		public static Key k_back		= Key.S;
+		public static Key k_left		= Key.A;
+		public static Key k_right		= Key.D;
+		public static Key k_up			= Key.SPACE;
+		public static Key k_exit		= Key.ESCAPE;
+		public static Key k_turnLeft	= Key.Q;
+		public static Key k_turnRight	= Key.E;
+		public static Key k_delete		= Key.DELETE;
 		
-		public static int b_moveCam		= 2;
-		public static int b_fire		= 0;
+		public static MouseButton b_moveCam		= MouseButton.MIDDLE;
+		public static MouseButton b_fire		= MouseButton.LEFT;
 	}
 	
 }
