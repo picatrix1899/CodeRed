@@ -4,9 +4,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.utils.GLUtils;
-
-
+import com.codered.engine.CodeRed;
+import com.codered.engine.utils.BindingUtils;
 
 public class FBO extends Framebuffer
 {
@@ -20,11 +19,38 @@ public class FBO extends Framebuffer
 		super(width, height);
 	}
 	
+	public void resize(int width, int height)
+	{
+		super.resize(width, height);
+		
+		if(CodeRed.RECREATE_FBOS_ON_RESIZE)
+		{
+			BindingUtils.bindFramebuffer(this.id);
+			
+			for(int i = 0; i < this.attachments.length; i++)
+			{
+				FBOAttachment att = this.attachments[i];
+				
+				if(att != null)
+					if(att.isBuffer())
+						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
+					else
+						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
+			}
+			
+			if(this.depth != null)
+				if(this.depth.isBuffer())
+					GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, this.depth.getId());
+				else
+					GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL14.GL_DEPTH_COMPONENT24, GL11.GL_TEXTURE_2D, this.depth.getId(), 0);
+		}
+	}
+	
 	public void applyColorTextureAttachment(FBOTarget t, boolean hdr)
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false);
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
 		
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
 		
 		this.attachments[t.getIndex()] = att;
@@ -32,7 +58,7 @@ public class FBO extends Framebuffer
 
 	public void applyColorTextureAttachment(FBOTarget t, FBOAttachment attachment)
 	{
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL11.GL_TEXTURE_2D, attachment.getId(), 0);
 		
 		this.attachments[t.getIndex()] = attachment;
@@ -40,9 +66,9 @@ public class FBO extends Framebuffer
 	
 	public void applyDepthTextureAttachment()
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, false, true, false);
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, false, true, false, false);
 		
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, att.getId(), 0);
 	
 		this.depth = att;
@@ -50,17 +76,35 @@ public class FBO extends Framebuffer
 	
 	public void applyDepthTextureAttachment(FBOAttachment attachment)
 	{
-		GLUtils.bindFramebuffer(this.framebuffer);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL14.GL_DEPTH_COMPONENT24, GL11.GL_TEXTURE_2D, attachment.getId(), 0);
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, attachment.getId(), 0);
+	
+		this.depth = attachment;
+	}
+	
+	public void applyDepthStencilTextureAttachment()
+	{
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, false, true, true, false);
+		
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL11.GL_TEXTURE_2D, att.getId(), 0);
+	
+		this.depth = att;
+	}
+	
+	public void applyDepthStencilTextureAttachment(FBOAttachment attachment)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL11.GL_TEXTURE_2D, attachment.getId(), 0);
 	
 		this.depth = attachment;
 	}
 	
 	public void applyDepthBufferAttachment()
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, true, false);
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, true, false, false);
 		
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
 		
 		this.depth = att;
@@ -68,17 +112,36 @@ public class FBO extends Framebuffer
 	
 	public void applyDepthBufferAttachment(FBOAttachment attachment)
 	{
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, attachment.getId());
+		
+		this.depth = attachment;
+	}
+	
+	public void applyDepthStencilBufferAttachment()
+	{
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, true, true, false);
+		
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
+		
+		this.depth = att;
+	}
+	
+	public void applyDepthStencilBufferAttachment(FBOAttachment attachment)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, attachment.getId());
 		
 		this.depth = attachment;
 	}
 	
 	public void applyColorBufferAttachment(FBOTarget t)
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, false, false);
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, false, false, false);
 		
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, att.getId());
 		
 		this.attachments[t.getIndex()] = att;
@@ -86,7 +149,7 @@ public class FBO extends Framebuffer
 	
 	public void applyColorBufferAttachment(FBOTarget t, FBOAttachment attachment)
 	{
-		GLUtils.bindFramebuffer(this.framebuffer);
+		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
 		
 		this.attachments[t.getIndex()] = attachment;

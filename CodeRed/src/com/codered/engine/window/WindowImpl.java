@@ -5,6 +5,10 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
+import com.codered.engine.CodeRed;
+import com.codered.engine.utils.BindingUtils;
+import com.codered.engine.utils.GLUtils;
+
 import cmn.utilslib.events.Event;
 import cmn.utilslib.events.EventHandler;
 
@@ -101,6 +105,12 @@ public class WindowImpl implements Window
 	
 	public void render(double delta)
 	{
+		if(CodeRed.AUTORESET_DEFAULT_FBO)
+		{
+			BindingUtils.bindDefaultFramebuffer();
+			GLUtils.clearAll();
+		}
+		
 		this.routine.render(delta);
 	}
 	

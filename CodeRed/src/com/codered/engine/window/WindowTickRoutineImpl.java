@@ -8,9 +8,9 @@ public class WindowTickRoutineImpl extends Thread implements WindowTickRoutine
 	private boolean isRunning;
 	private Time time;
 	
-	private WindowContext context;
+	private WindowContextImpl context;
 	
-	public WindowTickRoutineImpl(WindowContext context)
+	public WindowTickRoutineImpl(WindowContextImpl context)
 	{
 		this.isRunning = false;
 		this.time = new Time();

@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.BindingUtils;
 
 public class Texture
 {
@@ -31,7 +31,7 @@ public class Texture
 	{
 		int id = GL11.glGenTextures();
 		
-		GLUtils.bindTexture2D(id);
+		BindingUtils.bindTexture2D(id);
 		
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, width, height, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 		
@@ -48,7 +48,7 @@ public class Texture
 	{
 		int id = GL11.glGenTextures();
 		
-		GLUtils.bindTexture2D(id);
+		BindingUtils.bindTexture2D(id);
 		
 		if(hdr)
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0,  GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);

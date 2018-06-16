@@ -7,8 +7,10 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
+import com.codered.engine.CodeRed;
+
 public abstract class FBOAttachment
-{
+{	
 	protected int id;
 	
 	protected int samples;
@@ -16,12 +18,13 @@ public abstract class FBOAttachment
 	protected int width;
 	protected int height;
 	
-	public FBOAttachment(int id, int width, int height)
+	public FBOAttachment(int id, int width, int height, int samples)
 	{
 		this.id = id;
 		
 		this.width = width;
 		this.height = height;
+		this.samples = samples;
 	}
 	public int getId() { return this.id; }
 	
@@ -37,251 +40,80 @@ public abstract class FBOAttachment
 	public abstract boolean isDepth();
 	public abstract boolean isMultisampled();
 	public abstract boolean isExternal();
+	public abstract boolean isStencil();
 	
-	public static FBOAttachment createNewWithValidation(int width, int height, int samples, boolean isBuffer, boolean isHDR,
-			boolean isDepth, boolean isExternal)
+	private static int create(int width, int height, int samples, boolean isBuffer, boolean isHDR, boolean isDepth, boolean isStencil)
 	{
-		if(isDepth && isHDR) throw new RuntimeException();
+		int id = isBuffer ? GL30.glGenRenderbuffers() : GL11.glGenTextures();
+		
+		edit(id, width, height, samples, isBuffer, isHDR, isDepth, isStencil);
+		
+		return id;
+	}
 	
+	private static void edit(int id, int width, int height, int samples, boolean isBuffer,boolean isHDR, boolean isDepth, boolean isStencil)
+	{
+		int internalformat = isDepth ? isStencil ? GL30.GL_DEPTH24_STENCIL8 : GL14.GL_DEPTH_COMPONENT24 : isHDR ? GL11.GL_RGBA16 : GL11.GL_RGBA8;
+		
 		if(isBuffer)
 		{
-			int buffer = GL30.glGenRenderbuffers();
-			GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, buffer);
-
+			GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, id);
+			
 			if(samples > 1)
-			{
-				if(isDepth)
-				{
-					GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, GL14.GL_DEPTH_COMPONENT24, width, height);
-					
-					return new FBOAttachment(buffer, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL30.glDeleteRenderbuffers(this.id);
-							
-							this.id = GL30.glGenRenderbuffers();
-							
-							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, GL14.GL_DEPTH_COMPONENT24, this.width, this.height);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-				else
-				{
-					GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, isHDR ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height);
-					
-					return new FBOAttachment(buffer, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL30.glDeleteRenderbuffers(this.id);
-							
-							this.id = GL30.glGenRenderbuffers();
-							
-							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height);	
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-			}
+				GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, internalformat, width, height);
 			else
-			{
-				if(isDepth)
-				{
-					GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
-					
-					return new FBOAttachment(buffer, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL30.glDeleteRenderbuffers(this.id);
-							
-							this.id = GL30.glGenRenderbuffers();
-							
-							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, this.width, this.height);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-				else
-				{
-					GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, isHDR ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height);
-					
-					return new FBOAttachment(buffer, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL30.glDeleteRenderbuffers(this.id);
-							
-							this.id = GL30.glGenRenderbuffers();
-							
-							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-			}
+				GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, internalformat, width, height);
 		}
 		else
 		{
-			int texture = GL11.glGenTextures();
+			GL11.glBindTexture(samples > 1 ? GL32.GL_TEXTURE_2D_MULTISAMPLE : GL11.GL_TEXTURE_2D, id);	
 			
 			if(samples > 1)
-			{
-				GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
-				
-				if(isDepth)
-				{
-					GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, GL14.GL_DEPTH_COMPONENT24, width, height, false);	
-					
-					return new FBOAttachment(texture, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							
-							GL11.glDeleteTextures(this.id);
-							
-							this.id = GL11.glGenTextures();
-							
-							GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.id);
-							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, GL14.GL_DEPTH_COMPONENT24, this.width, this.height, false);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-				else
-				{
-					GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, isHDR ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height, false);	
-					
-					return new FBOAttachment(texture, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL11.glDeleteTextures(this.id);
-							
-							this.id = GL11.glGenTextures();
-							
-							GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.id);
-							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height, false);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-			}
+				GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, samples, internalformat, width, height, false);	
 			else
-			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-				
-				if(isDepth)
-				{
-					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-					
-					return new FBOAttachment(texture, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL11.glDeleteTextures(this.id);
-							
-							this.id = GL11.glGenTextures();
-							
-							GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.id);
-							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-				else
-				{
-					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, isHDR ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-					
-					return new FBOAttachment(texture, width, height)
-					{
-						public void resize(int width, int height)
-						{
-							this.width = width;
-							this.height = height;
-							
-							GL11.glDeleteTextures(this.id);
-							
-							this.id = GL11.glGenTextures();
-							
-							GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.id);
-							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-						}
-
-						public boolean isBuffer() { return isBuffer; }
-						public boolean isHDR() { return isHDR; }
-						public boolean isDepth() { return isDepth; }
-						public boolean isMultisampled() { return samples > 1; }
-						public boolean isExternal() { return isExternal; }
-					};
-				}
-			}
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalformat, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 		}
 	}
 	
-	public void cleanup()
+	public static FBOAttachment createNewWithValidation(int width, int height, int samples, boolean isBuffer, boolean isHDR, boolean isDepth, boolean isStencil, boolean isExternal)
+	{
+		if(isDepth && isHDR) throw new RuntimeException();
+	
+		int id = create(width, height, samples, isBuffer, isHDR, isDepth, isStencil);
+		
+		return new FBOAttachment(id, width, height, samples) {
+			
+			public void resize(int width, int height)
+			{
+				this.width = width;
+				this.height = height;
+				
+				if(CodeRed.RECREATE_FBOS_ON_RESIZE)
+				{
+					if(isBuffer)
+						GL30.glDeleteRenderbuffers(this.id);
+					else
+						GL11.glDeleteTextures(this.id);
+			
+					this.id = create(this.width, this.height, this.samples, isBuffer, isHDR, isDepth, isStencil);
+				}
+				else
+				{
+					edit(this.id, this.width, this.height, this.samples, isBuffer, isHDR, isDepth, isStencil);
+				}
+
+			}
+
+			public boolean isBuffer() { return isBuffer; }
+			public boolean isHDR() { return isHDR; }
+			public boolean isDepth() { return isDepth; }
+			public boolean isMultisampled() { return samples > 1; }
+			public boolean isExternal() { return isExternal; }
+			public boolean isStencil() { return isStencil; }
+		};
+	}
+	
+	public void release()
 	{
 		if(isBuffer())
 			GL30.glDeleteRenderbuffers(this.id);

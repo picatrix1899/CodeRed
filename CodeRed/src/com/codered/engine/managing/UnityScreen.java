@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.managing.models.RawModel;
-import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.BindingUtils;
 
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.api.Vec2f;
@@ -26,7 +26,7 @@ public class UnityScreen
 	
 	public static void draw()
 	{
-		GLUtils.bindVAO(quad.getVAO(), 0);
+		BindingUtils.bindVAO(quad.getVAO(), 0);
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 	}

@@ -1,12 +1,13 @@
 package com.codered.engine.utils;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.managing.VAO;
-import com.codered.engine.fbo.Framebuffer;
+import cmn.utilslib.essentials.ListUtils;
 
 public class GLUtils
 {
@@ -36,42 +37,61 @@ public class GLUtils
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 	
-	public static void bindTexture2D(int texture)
+	public static void glDrawBuffers(int... buffers)
 	{
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		GL20.glDrawBuffers(buffers);
 	}
 	
-	public static void bindFramebuffer(Framebuffer fbo)
-	{		
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo.getFramebuffer());
-		
-		GL.glDrawBuffersAll();
+	public static void glDrawBuffers(List<Integer> buffers)
+	{
+		GL20.glDrawBuffers(ListUtils.toIntArray(buffers));
 	}
 	
-	public static void bindFramebuffer(int framebuffer)
+	public static void glDrawBuffersFirst()
 	{
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
-		
-		GL.glDrawBuffersAll();
+		GL20.glDrawBuffers(GL30.GL_COLOR_ATTACHMENT0);
 	}
 	
-	public static void bindVAO(VAO vao, int... attribs)
+	public static void glDrawBuffersAll()
 	{
-		GL30.glBindVertexArray(vao.getID());
-		
-		for(int i : attribs)
-		{
-			GL20.glEnableVertexAttribArray(i);
-		}
+		GL20.glDrawBuffers(new int[] {GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1, GL30.GL_COLOR_ATTACHMENT2, GL30.GL_COLOR_ATTACHMENT3,
+				GL30.GL_COLOR_ATTACHMENT4, GL30.GL_COLOR_ATTACHMENT5, GL30.GL_COLOR_ATTACHMENT6, GL30.GL_COLOR_ATTACHMENT7});
 	}
 	
-	public static void bindVAO(int vao, int...attribs)
+	public static void clear(boolean colorBuffer, boolean depthBuffer, boolean stencilBuffer)
 	{
-		GL30.glBindVertexArray(vao);
+		int mask = 0;
 		
-		for(int i : attribs)
-		{
-			GL20.glEnableVertexAttribArray(i);
-		}
+		mask |= (colorBuffer ? GL11.GL_COLOR_BUFFER_BIT : 0);
+		mask |= (depthBuffer ? GL11.GL_DEPTH_BUFFER_BIT : 0);
+		mask |= (stencilBuffer ? GL11.GL_STENCIL_BUFFER_BIT : 0);
+		
+		if(mask != 0) GL11.glClear(mask);
+	}
+	
+	public static void clear(boolean colorBuffer, boolean depthBuffer)
+	{
+		int mask = 0;
+		
+		mask |= (colorBuffer ? GL11.GL_COLOR_BUFFER_BIT : 0);
+		mask |= (depthBuffer ? GL11.GL_DEPTH_BUFFER_BIT : 0);
+		
+		if(mask != 0) GL11.glClear(mask);
+	}
+	
+	public static void clearColor() { GL11.glClear(GL11.GL_COLOR_BUFFER_BIT); }
+	
+	public static void clearDepth() { GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT); }
+	
+	public static void clearStencil() { GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); }
+	
+	public static void clearCommon() { GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); }
+	
+	public static void clearAll() { GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); }
+
+	public static void depthFunc(EvalFunc func)
+	{
+		GL11.glDepthFunc(func.getFunction());
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 }

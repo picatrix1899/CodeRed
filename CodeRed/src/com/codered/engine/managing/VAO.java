@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.BindingUtils;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.BufferUtils;
@@ -54,7 +54,7 @@ public class VAO
 	
 	public void storeData(int attrib, int blocksize, float[] data, int stride, int pointer, int drawFlag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		int vboID = 0;
 
@@ -77,7 +77,7 @@ public class VAO
 	
 	public void storeData(int attrib, int blocksize, int[] data, int stride, int pointer, int drawFlag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		int vboID = 0;
 
@@ -100,7 +100,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vec2fBase[] data, int stride, int pointer, int drawFlag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		int vboID = 0;
 
@@ -123,7 +123,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vec3fBase[] data, int stride, int pointer, int drawFlag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		int vboID = 0;
 
@@ -146,7 +146,7 @@ public class VAO
 	
 	public void storeData(int attrib, Vector4f[] data, int stride, int pointer, int drawFlag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		int vboID = 0;
 
@@ -169,7 +169,7 @@ public class VAO
 	
 	public void storeIndices(int[] indices, int drawflag)
 	{
-		GLUtils.bindVAO(this);
+		BindingUtils.bindVAO(this);
 		
 		if(this.indicesVBO == 0) this.indicesVBO = GL15.glGenBuffers();
 
