@@ -2,7 +2,11 @@ package com.codered.engine.window;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
+
+import cmn.utilslib.events.Event;
+import cmn.utilslib.events.EventHandler;
 
 public class WindowImpl implements Window
 {
@@ -15,6 +19,8 @@ public class WindowImpl implements Window
 	private WindowTickRoutine tickRoutine;
 	
 	private WindowRoutine routine;
+	
+	public Event<ResizeEventArgs> Resize = new Event<ResizeEventArgs>();
 	
 	public WindowImpl(int width, int height, String title, WindowRoutine routine)
 	{
@@ -35,7 +41,7 @@ public class WindowImpl implements Window
 		this.context.init();
 		this.routine.initWindowHints();
 		
-		this.window = GLFW.glfwCreateWindow(this.context.getWidth(), this.context.getWidth(), this.context.getTitle(), 0, 0);
+		this.window = GLFW.glfwCreateWindow(this.context.getWidth(), this.context.getHeight(), this.context.getTitle(), 0, 0);
 		
 		if(window == 0)
 		{
@@ -46,6 +52,8 @@ public class WindowImpl implements Window
 		this.capabilities = GL.createCapabilities();
 		
 		GLFW.glfwShowWindow(this.window);
+		
+		GLFW.glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(w, h); });
 		
 		this.routine.init();
 	}
@@ -63,6 +71,16 @@ public class WindowImpl implements Window
 	public void setWindowShouldClose()
 	{
 		GLFW.glfwSetWindowShouldClose(this.window, true);
+	}
+	
+	public void onResize(int width, int height)
+	{
+		this.context.setWidth(width);
+		this.context.setHeight(height);
+		
+		GL11.glViewport(0, 0, width, height);
+		
+		this.Resize.raise(new ResizeEventArgs(width, height));
 	}
 	
 	public void update(double delta)
@@ -98,5 +116,11 @@ public class WindowImpl implements Window
 		GLFW.glfwDestroyWindow(this.window);
 		
 		this.tickRoutine.end();
+	}
+
+	@Override
+	public void addResizeHandler(EventHandler<ResizeEventArgs> handler)
+	{
+		this.Resize.addHandler(handler);
 	}
 }

@@ -1,12 +1,20 @@
 package com.codered.demo;
 
+import java.nio.ByteBuffer;
+
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 import com.codered.demo.GlobalSettings.Keys;
 
 import com.codered.engine.BuiltInShaders;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
+import com.codered.engine.fbo.FBO;
+import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.light.AmbientLight;
@@ -41,14 +49,18 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	public void initWindowHints()
 	{
-		WindowHint.resizable(false);
+		WindowHint.resizable(true);
 		WindowHint.glVersion("4.2");
 		WindowHint.glProfile(GLProfile.CORE);
 		WindowHint.depthBits(24);
 		WindowHint.doubleBuffering(true);
-		WindowHint.samples(16);
 	}
 
+	private void resizeWindow(int width, int height)
+	{
+		
+	}
+	
 	public void init()
 	{
 		InputConfiguration config = new InputConfiguration();
@@ -77,6 +89,8 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.context.addShader(DirectionalLight_N_OShader.class);
 		this.context.addShader(DirectionalLight_OShader.class);
 		
+		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
+		
 		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
@@ -92,10 +106,7 @@ public class DemoWindowContext1 extends WindowRoutine
 
 	public void render(double delta)
 	{
-		GLUtils.multisample(true);
-		
 		GL.clearCommon();
-		
 		GLUtils.depthTest(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		
@@ -113,8 +124,6 @@ public class DemoWindowContext1 extends WindowRoutine
 		}
 
 		GLUtils.depthTest(false);
-
-		GLUtils.multisample(false);
 	}
 
 	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)

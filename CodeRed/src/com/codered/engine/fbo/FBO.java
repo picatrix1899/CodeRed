@@ -5,20 +5,19 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.engine.utils.GLUtils;
-import com.codered.engine.window.WindowContext;
 
 
 
 public class FBO extends Framebuffer
 {
-	public FBO(WindowContext context)
+	public FBO()
 	{
-		super(context);
+		super();
 	}
 	
-	public FBO(WindowContext context, int width, int height)
+	public FBO(int width, int height)
 	{
-		super(context, width, height);
+		super(width, height);
 	}
 	
 	public void applyColorTextureAttachment(FBOTarget t, boolean hdr)
@@ -77,10 +76,10 @@ public class FBO extends Framebuffer
 	
 	public void applyColorBufferAttachment(FBOTarget t)
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, true, false);
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, false, false);
 		
 		GLUtils.bindFramebuffer(this.framebuffer);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, att.getId());
 		
 		this.attachments[t.getIndex()] = att;
 	}
@@ -88,7 +87,7 @@ public class FBO extends Framebuffer
 	public void applyColorBufferAttachment(FBOTarget t, FBOAttachment attachment)
 	{
 		GLUtils.bindFramebuffer(this.framebuffer);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, attachment.getId());
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
 		
 		this.attachments[t.getIndex()] = attachment;
 	}

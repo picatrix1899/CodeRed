@@ -61,8 +61,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL30.glDeleteRenderbuffers(this.id);
+							
+							this.id = GL30.glGenRenderbuffers();
+							
 							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, GL14.GL_DEPTH_COMPONENT24, width, height);
+							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, GL14.GL_DEPTH_COMPONENT24, this.width, this.height);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -83,8 +87,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL30.glDeleteRenderbuffers(this.id);
+							
+							this.id = GL30.glGenRenderbuffers();
+							
 							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height);	
+							GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height);	
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -108,8 +116,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL30.glDeleteRenderbuffers(this.id);
+							
+							this.id = GL30.glGenRenderbuffers();
+							
 							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
+							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, this.width, this.height);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -130,8 +142,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL30.glDeleteRenderbuffers(this.id);
+							
+							this.id = GL30.glGenRenderbuffers();
+							
 							GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, this.id);
-							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height);
+							GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -162,8 +178,13 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							
+							GL11.glDeleteTextures(this.id);
+							
+							this.id = GL11.glGenTextures();
+							
 							GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.id);
-							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, GL14.GL_DEPTH_COMPONENT24, width, height, false);
+							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, GL14.GL_DEPTH_COMPONENT24, this.width, this.height, false);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -184,8 +205,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL11.glDeleteTextures(this.id);
+							
+							this.id = GL11.glGenTextures();
+							
 							GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.id);
-							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height, false);
+							GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, this.samples, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height, false);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -211,8 +236,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL11.glDeleteTextures(this.id);
+							
+							this.id = GL11.glGenTextures();
+							
 							GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.id);
-							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -233,8 +262,12 @@ public abstract class FBOAttachment
 							this.width = width;
 							this.height = height;
 							
+							GL11.glDeleteTextures(this.id);
+							
+							this.id = GL11.glGenTextures();
+							
 							GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.id);
-							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+							GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, isHDR() ? GL11.GL_RGBA16 : GL11.GL_RGBA8, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 						}
 
 						public boolean isBuffer() { return isBuffer; }
@@ -246,5 +279,13 @@ public abstract class FBOAttachment
 				}
 			}
 		}
+	}
+	
+	public void cleanup()
+	{
+		if(isBuffer())
+			GL30.glDeleteRenderbuffers(this.id);
+		else
+			GL11.glDeleteTextures(this.id);
 	}
 }

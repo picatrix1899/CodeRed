@@ -25,6 +25,7 @@ import cmn.utilslib.math.geometry.Point3f;
 import cmn.utilslib.math.geometry.RayOBBResolver;
 import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec3f;
+import cmn.utilslib.math.vector.pools.Vector3fPool;
 
 
 
@@ -96,8 +97,8 @@ public class Player extends BaseEntity
 	
 	private void updateMovement(KeyEventArgs args)
 	{
-		Vec3f dir = Vector3f.getInstance();
-		Vec3f vel = Vector3f.getInstance();
+		Vec3f dir = Vector3fPool.get();
+		Vec3f vel = Vector3fPool.get();
 
 		if(args.response.keyPresent(Keys.k_delete))
 		{
@@ -154,8 +155,8 @@ public class Player extends BaseEntity
 		
 		this.transform.moveBy(vel);
 		
-		Vector3f.storeInstance((Vector3f) dir);
-		Vector3f.storeInstance((Vector3f) vel);
+		Vector3fPool.store((Vector3f) dir);
+		Vector3fPool.store((Vector3f) vel);
 	}
 	
 	public Camera getCamera() { return this.camera; }
@@ -172,9 +173,9 @@ public class Player extends BaseEntity
 	
 	private Vec3f checkCollisionStatic(Vec3f vel)
 	{
-		Vector3f sum = Vector3f.getInstance();
-		Vector3f partial = Vector3f.getInstance();
-		Vector3f tempPos = Vector3f.getInstance();
+		Vector3f sum = Vector3fPool.get();
+		Vector3f partial = Vector3fPool.get();
+		Vector3f tempPos = Vector3fPool.get();
 		
 //		World w = Session.get().getWorld();
 //		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
@@ -223,18 +224,18 @@ public class Player extends BaseEntity
 //
 //		}
 		
-		Vector3f.storeInstance(sum);
-		Vector3f.storeInstance(partial);
-		Vector3f.storeInstance(tempPos);
+		Vector3fPool.store(sum);
+		Vector3fPool.store(partial);
+		Vector3fPool.store(tempPos);
 		
 		return vel;		
 	}
 	
 	public Vec3f checkCollisionDynamic(Vec3f vel)
 	{
-	Vector3f sum = Vector3f.getInstance();
-	Vector3f partial = Vector3f.getInstance();
-	Vector3f tempPos = Vector3f.getInstance();
+	Vector3f sum = Vector3fPool.get();
+	Vector3f partial = Vector3fPool.get();
+	Vector3f tempPos = Vector3fPool.get();
 	
 //	World w = Session.get().getWorld();
 //	List<StaticEntity> statents = Auto.ArrayList(w.getDynamicEntities());
@@ -284,9 +285,9 @@ public class Player extends BaseEntity
 //
 //	}
 	
-	Vector3f.storeInstance(sum);
-	Vector3f.storeInstance(partial);
-	Vector3f.storeInstance(tempPos);
+	Vector3fPool.store(sum);
+	Vector3fPool.store(partial);
+	Vector3fPool.store(tempPos);
 	
 	return vel;	
 	}
