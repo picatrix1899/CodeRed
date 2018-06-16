@@ -12,17 +12,21 @@ public class Brightness_PPFilter extends PPFShader
 	public Brightness_PPFilter(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
-		addUniform("frame");
+		addUniform("textureMap");
 	}
 	
 	public void use()
 	{
 		start();
-		loadTextureId("frame", 0, getInput("frame"));
+		loadTextureId("textureMap", 0, getInput("textureMap"));
 	}
 
 	public void attachShaderParts()

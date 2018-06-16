@@ -7,16 +7,31 @@ import com.codered.demo.GlobalSettings.Keys;
 import com.codered.engine.BuiltInShaders;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
+import com.codered.engine.fbo.FBO;
 import com.codered.engine.fbo.FBOTarget;
 import com.codered.engine.fbo.MSFBO;
 import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.light.AmbientLight;
 import com.codered.engine.light.DirectionalLight;
+import com.codered.engine.ppf.PPF_BlurH;
+import com.codered.engine.ppf.PPF_BlurV;
+import com.codered.engine.ppf.PPF_Brightness;
+import com.codered.engine.ppf.PPF_Contrast;
+import com.codered.engine.ppf.PPF_HDR;
+import com.codered.engine.ppf.PPF_No;
+import com.codered.engine.rendering.ppf.PPF_ContrastMS;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.object.simple.AmbientLight_OShader;
 import com.codered.engine.shaders.object.simple.DirectionalLight_N_OShader;
 import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
+import com.codered.engine.shaders.postprocess.filter.BlurH_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.BlurV_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.Brightness_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.ContrastMS_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.Contrast_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.HDR_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.No_PPFilter;
 import com.codered.engine.utils.BindingUtils;
 import com.codered.engine.utils.EvalFunc;
 import com.codered.engine.utils.GLUtils;
@@ -42,7 +57,7 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	private boolean directional = true;
 	
-	private MSFBO fbo;
+	private FBO fbo;
 	
 	public void initWindowHints()
 	{
@@ -86,6 +101,21 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.context.addShader(AmbientLight_OShader.class);
 		this.context.addShader(DirectionalLight_N_OShader.class);
 		this.context.addShader(DirectionalLight_OShader.class);
+		this.context.addShader(BlurH_PPFilter.class);
+		this.context.addShader(BlurV_PPFilter.class);
+		this.context.addShader(Brightness_PPFilter.class);
+		this.context.addShader(Contrast_PPFilter.class);
+		this.context.addShader(HDR_PPFilter.class);
+		this.context.addShader(No_PPFilter.class);
+		this.context.addShader(ContrastMS_PPFilter.class);
+		
+		this.context.addPPF(PPF_BlurH.class);
+		this.context.addPPF(PPF_BlurV.class);
+		this.context.addPPF(PPF_Brightness.class);
+		this.context.addPPF(PPF_Contrast.class);
+		this.context.addPPF(PPF_HDR.class);
+		this.context.addPPF(PPF_No.class);
+		this.context.addPPF(PPF_ContrastMS.class);
 		
 		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
 		
@@ -99,11 +129,14 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		
-		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
+		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 1.0f, -1.0f, 0);
 		
-		this.fbo = new MSFBO(16);
-		this.fbo.applyColorTextureAttachment(FBOTarget.COLOR0, false);
-		this.fbo.applyDepthStencilTextureAttachment();
+		this.fbo = new FBO();
+		this.fbo.applyColorTextureAttachment(0, true);
+		this.fbo.applyColorTextureAttachment(1, true);
+		this.fbo.applyDepthBufferAttachment();
+		
+		GLUtils.multisample(true);
 	} 
 
 	public void render(double delta)
@@ -119,17 +152,21 @@ public class DemoWindowContext1 extends WindowRoutine
 		{
 			GLUtils.blend(true);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			
 			renderObject(this.entity, this.player.getCamera(), this.context.getShader(DirectionalLight_N_OShader.class));
 			
-
 			GLUtils.blend(false);
 		}
-
-		GLUtils.depthTest(false);
 		
-		this.fbo.resolveAttachmentToScreen(FBOTarget.COLOR0);
+		this.context.getPPF(PPF_Contrast.class).setContrast(2);
+		this.context.getPPF(PPF_Contrast.class).doPostProcess(this.fbo, FBOTarget.COLOR0, this.fbo, FBOTarget.COLOR0);
+		
+		this.context.getPPF(PPF_HDR.class).setExposure(2);
+		this.context.getPPF(PPF_HDR.class).doPostProcess(this.fbo, FBOTarget.COLOR0, this.fbo, FBOTarget.COLOR0);
+		
+		this.fbo.resolveAttachmentToScreen(0);
 	}
-
+	
 	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
 	{
 		oShader.u_camera.set(c);

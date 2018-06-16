@@ -12,18 +12,22 @@ public class BlurH_PPFilter extends PPFShader
 	public BlurH_PPFilter(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
-		addUniform("frame");
+		addUniform("textureMap");
 		addUniform("targetWidth");
 	}
 	
 	public void use()
 	{
 		start();
-		loadTextureId("frame", 0, getInput("frame"));
+		loadTextureId("textureMap", 0, getInput("textureMap"));
 		loadFloat("targetWidth", getInput("targetWidth"));
 	}
 

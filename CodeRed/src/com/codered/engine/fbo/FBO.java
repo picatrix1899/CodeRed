@@ -56,12 +56,30 @@ public class FBO extends Framebuffer
 		this.attachments[t.getIndex()] = att;
 	}
 
+	public void applyColorTextureAttachment(int t, boolean hdr)
+	{
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
+		
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
+		
+		this.attachments[t] = att;
+	}
+	
 	public void applyColorTextureAttachment(FBOTarget t, FBOAttachment attachment)
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL11.GL_TEXTURE_2D, attachment.getId(), 0);
 		
 		this.attachments[t.getIndex()] = attachment;
+	}
+	
+	public void applyColorTextureAttachment(int t, FBOAttachment attachment)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL11.GL_TEXTURE_2D, attachment.getId(), 0);
+		
+		this.attachments[t] = attachment;
 	}
 	
 	public void applyDepthTextureAttachment()
@@ -147,11 +165,29 @@ public class FBO extends Framebuffer
 		this.attachments[t.getIndex()] = att;
 	}
 	
+	public void applyColorBufferAttachment(int t)
+	{
+		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, false, false, false);
+		
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL30.GL_RENDERBUFFER, att.getId());
+		
+		this.attachments[t] = att;
+	}
+	
 	public void applyColorBufferAttachment(FBOTarget t, FBOAttachment attachment)
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
 		
 		this.attachments[t.getIndex()] = attachment;
+	}
+	
+	public void applyColorBufferAttachment(int t, FBOAttachment attachment)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
+		
+		this.attachments[t] = attachment;
 	}
 }

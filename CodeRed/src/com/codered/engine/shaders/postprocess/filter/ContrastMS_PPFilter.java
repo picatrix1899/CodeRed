@@ -12,18 +12,22 @@ public class ContrastMS_PPFilter extends PPFShader
 	public ContrastMS_PPFilter(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
-		addUniform("frame");
+		addUniform("textureMap");
 		addUniform("contrast");
 	}
 	
 	public void use()
 	{
 		start();
-		loadTextureMSId("frame", 0, getInput("frame"));
+		loadTextureMSId("textureMap", 0, getInput("textureMap"));
 		loadFloat("contrast", getInput("contrast"));
 	}
 

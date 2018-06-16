@@ -76,11 +76,30 @@ public abstract class Framebuffer
 		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, dstFBO.width, dstFBO.height, GL11.GL_COLOR_BUFFER_BIT | (depth ? GL11.GL_DEPTH_BUFFER_BIT : 0), GL11.GL_NEAREST);
 	}
 	
+	public void blitAttachment(Framebuffer dstFBO, int tSrc, int tDst, boolean depth)
+	{
+		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.id);
+		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, dstFBO.id);
+		GL11.glReadBuffer(FBOTarget.getByIndex(tSrc).getTarget());
+		GL11.glDrawBuffer(FBOTarget.getByIndex(tDst).getTarget());
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, dstFBO.width, dstFBO.height, GL11.GL_COLOR_BUFFER_BIT | (depth ? GL11.GL_DEPTH_BUFFER_BIT : 0), GL11.GL_NEAREST);
+	}
+	
 	public void resolveAttachmentToScreen(FBOTarget t)
 	{
 		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.id);
 		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
 		GL11.glReadBuffer(t.getTarget());
+		GL11.glDrawBuffer(GL11.GL_BACK);
+		
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWidth(), this.context.getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+	}
+	
+	public void resolveAttachmentToScreen(int t)
+	{
+		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.id);
+		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
+		GL11.glReadBuffer(FBOTarget.getByIndex(t).getTarget());
 		GL11.glDrawBuffer(GL11.GL_BACK);
 		
 		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWidth(), this.context.getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
@@ -112,14 +131,40 @@ public abstract class Framebuffer
 		GLUtils.glDrawBuffersAll();
 	}
 	
+	public void clearAttachment(int t)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		GL11.glDrawBuffer(FBOTarget.getByIndex(t).getTarget());
+		GL11.glClearColor(0,0,0,1);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		
+		GLUtils.glDrawBuffersAll();
+	}
+	
 	public FBOAttachment getAttachment(FBOTarget t)
 	{
 		return t.getType() == FBOTarget.DST_COLOR ? this.attachments[t.getIndex()] : this.depth;
 	}
 	
+	public FBOAttachment getAttachment(int t)
+	{
+		FBOTarget target = FBOTarget.getByIndex(t);
+		
+		return target.getType() == FBOTarget.DST_COLOR ? this.attachments[target.getIndex()] : this.depth;
+	}
+	
 	public int getAttachmentId(FBOTarget t)
 	{
 		FBOAttachment att = t.getType() == FBOTarget.DST_COLOR ? this.attachments[t.getIndex()] : this.depth;
+
+		return att != null ? att.getId() : 0;
+	}
+	
+	public int getAttachmentId(int t)
+	{
+		FBOTarget target = FBOTarget.getByIndex(t);
+		
+		FBOAttachment att = target.getType() == FBOTarget.DST_COLOR ? this.attachments[target.getIndex()] : this.depth;
 
 		return att != null ? att.getId() : 0;
 	}

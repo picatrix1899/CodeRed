@@ -32,4 +32,21 @@ public enum FBOTarget
 	public int getIndex() { return this.index; }
 	public int getType() { return this.type; }
 	public int getTarget() { return this.target; }
+	
+	
+	public static FBOTarget getByIndex(int id)
+	{
+		if(id < -1 || id > 7) return null;
+		
+		if(id >= 0)
+		{
+			return values()[id];
+		}
+		else
+		{
+			if(id == -1) return FBOTarget.DEPTH;
+		}
+		
+		return null;
+	}
 }

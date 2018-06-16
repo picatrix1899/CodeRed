@@ -11,20 +11,19 @@ import cmn.utilslib.math.vector.api.Vec2f;
 
 public class UnityScreen
 {
-	public static final Vec2f[] CORNERS = new Vector2f[] { new Vector2f(-1, 1), new Vector2f(-1, -1), new Vector2f(1, 1), new Vector2f(1, -1) };
-	public static final Vec2f CENTER = Vec2f.ZERO.clone();
+	public final RawModel quad;
 	
-	public static final RawModel quad;
-	
-	static
+	public UnityScreen()
 	{
+		Vec2f[] CORNERS = new Vector2f[] { new Vector2f(-1, 1), new Vector2f(-1, -1), new Vector2f(1, 1), new Vector2f(1, -1) };
+		
 		VAO vao = new VAO();
 		vao.storeData(0, CORNERS, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeIndices(new int[] {0, 1, 2, 3}, GL15.GL_STATIC_DRAW);
 		quad = new RawModel(vao, 4);
-		
 	}
 	
-	public static void draw()
+	public void draw()
 	{
 		BindingUtils.bindVAO(quad.getVAO(), 0);
 		

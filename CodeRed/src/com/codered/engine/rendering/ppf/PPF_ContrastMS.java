@@ -1,26 +1,29 @@
 package com.codered.engine.rendering.ppf;
 
-import com.codered.engine.managing.PPF;
+import com.codered.engine.shaders.postprocess.filter.ContrastMS_PPFilter;
+import com.codered.engine.utils.BindingUtils;
 import com.codered.engine.utils.GLUtils;
-import com.codered.engine.window.Window;
-import com.codered.engine.fbo.FBO;
+import com.codered.engine.window.WindowContext;
 import com.codered.engine.fbo.FBOTarget;
+import com.codered.engine.fbo.Framebuffer;
 import com.codered.engine.fbo.MSFBO;
+import com.codered.engine.ppf.PPF;
 
 public class PPF_ContrastMS extends PPF
 {
+	public PPF_ContrastMS(WindowContext context)
+	{
+		super(context);
+		
+		this.msfbo = new MSFBO(4);
+		this.msfbo.applyColorTextureAttachment(FBOTarget.COLOR0, true);
+		this.context.getWindow().addResizeHandler((src, ref) -> { this.msfbo.resize(src.width, src.height); });
+	}
 
-	public static final PPF_ContrastMS instance = new PPF_ContrastMS();
-	
 	private float contrast;
 	
-	private static MSFBO msfbo = new MSFBO(com.codered.engine.window.active.WIDTH, com.codered.engine.window.active.HEIGHT, 4);
-	
-	static
-	{
-		msfbo.applyColorTextureAttachment(FBOTarget.COLOR0, true);
-		msfbo.applyDepthTextureAttachment();
-	}
+	private MSFBO msfbo;
+
 	
 	public PPF_ContrastMS setContrast(float f)
 	{
@@ -28,24 +31,27 @@ public class PPF_ContrastMS extends PPF
 		return this;
 	}
 	
-	public void doPostProcess(MSFBO srcFbo, FBOTarget t, MSFBO dstFbo, FBOTarget tRes)
+	public void doPostProcess(MSFBO srcFbo, int t, MSFBO dstFbo, int tRes)
 	{
-		GLUtils.bindFramebuffer(msfbo);
-		msfbo.clearAllAttachments();
+		doPostProcess(srcFbo, FBOTarget.getByIndex(t), dstFbo, FBOTarget.getByIndex(tRes));
+	}
+	
+	public void doPostProcess(MSFBO srcFbo, FBOTarget t, Framebuffer dstFbo, FBOTarget tRes)
+	{
+		BindingUtils.bindFramebuffer(this.msfbo);
+		GLUtils.clearColor();
 		
-		Window.active.getContext().ppfShaders.ContrastMS.setInput("frame", srcFbo.getAttachmentId(t));
-		Window.active.getContext().ppfShaders.ContrastMS.setInput("contrast", contrast);
-		Window.active.getContext().ppfShaders.ContrastMS.use();	
+		ContrastMS_PPFilter ppf = this.context.getShader(ContrastMS_PPFilter.class);
+		
+		ppf.setInput("textureMap", srcFbo.getAttachmentId(t));
+		ppf.setInput("contrast", contrast);
+		ppf.use();	
 		{
-		drawQuad();
+			this.screen.draw();
 		}
-		Window.active.getContext().ppfShaders.ContrastMS.stop();
+		ppf.stop();
 
-		msfbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, false);
+		this.msfbo.blitAttachment(dstFbo, FBOTarget.COLOR0, tRes, false);
 	}
-
-	public void doPostProcess(FBO srcFbo, FBOTarget t, FBO dstFbo, FBOTarget tRes, boolean blend)
-	{
-	}
-
+	
 }

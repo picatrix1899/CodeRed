@@ -1,6 +1,7 @@
 package com.codered.engine.window;
 
 import com.codered.engine.input.Input;
+import com.codered.engine.ppf.PPF;
 import com.codered.engine.resource.ResourceManager;
 import com.codered.engine.shader.ShaderList;
 import com.codered.engine.shader.ShaderParts;
@@ -43,4 +44,7 @@ public interface WindowContext
 	default <A extends ShaderProgram> A getShader(Class<A> clazz) { return getShaders().getShader(clazz); }
 	
 	default void addShader(Class<? extends ShaderProgram> clazz) { getShaders().addShader(clazz); }
+	
+	<T extends PPF> T getPPF(Class<T> clazz);
+	void addPPF(Class<? extends PPF> clazz);
 }

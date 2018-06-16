@@ -43,19 +43,27 @@ public class BuiltInShaders
 			path.base("/resources/shaders/ppf/");
 	//		loadDefaultEmbededShader(path, "ppf_blend");
 	//		
-	//		GlobalResourceManager.INSTANCE.regShaderPart("fs_ppf_blur", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path.file("ppf_blur").extension(".fs")).openStream(), path.src()));
-	//		GlobalResourceManager.INSTANCE.regShaderPart("vs_ppf_blurHorizontal", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path.file("ppf_blurHorizontal").extension(".vs")).openStream(), path.src()));
-	//		GlobalResourceManager.INSTANCE.regShaderPart("vs_ppf_blurVertical", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path.file("ppf_blurVertical").extension(".vs")).openStream(), path.src()));
-	
-	//		loadDefaultEmbededShader(path, "ppf_brightness");
-	//		loadDefaultEmbededShader(path, "ppf_contrast");
-	//		loadDefaultEmbededShader(path, "ppf_contrastMS");
+			
+			ShaderPartList sh = context.getShaderParts().builtIn();
+			
+			path.file("ppf_blurHorizontal").extension(".vs");
+			sh.loadVertexShader("ppf_blurHorizontal", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path).openStream(), "/resources/shaders/", path.src()));
+			
+			path.file("ppf_blurVertical").extension(".vs");
+			sh.loadVertexShader("ppf_blurVertical", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path).openStream(), "/resources/shaders/", path.src()));
+			
+			path.file("ppf_blur").extension(".fs");
+			sh.loadFragmentShader("ppf_blur", ShaderPartLoader.readShader(ShaderPartUtils.toUrl(path).openStream(), "/resources/shaders/", path.src()));
+
+			loadDefaultEmbededShader(context, path, "ppf_brightness");
+			loadDefaultEmbededShader(context, path, "ppf_contrast");
+			loadDefaultEmbededShader(context, path, "ppf_contrastMS");
 	//		loadDefaultEmbededShader(path, "ppf_depthMap");
 	//		loadDefaultEmbededShader(path, "ppf_depthTest");
 	//		loadDefaultEmbededShader(path, "ppf_depthTestMS");
-	//		loadDefaultEmbededShader(path, "ppf_hdr");
+			loadDefaultEmbededShader(context, path, "ppf_hdr");
 	//		loadDefaultEmbededShader(path, "ppf_invert");
-	//		loadDefaultEmbededShader(path, "ppf_no");
+			loadDefaultEmbededShader(context, path, "ppf_no");
 	//		loadDefaultEmbededShader(path, "ppf_radialBlur");
 			
 			path.base("/resources/shaders/gui/");
