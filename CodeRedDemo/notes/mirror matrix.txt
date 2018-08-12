@@ -1,0 +1,7 @@
+		Vector3f lin = new Vector3f(0,1,0).normalize();
+
+		this.mirror = new Matrix4f();
+		this.mirror.m0.set(1- 2 * (lin.x * lin.x), -2 * lin.x * lin.y, -2 * lin.x * lin.z, 0);
+		this.mirror.m1.set(-2 * lin.x * lin.y, 1 - 2 * (lin.y * lin.y), -2 * lin.y * lin.z, 0);
+		this.mirror.m2.set(-2 * lin.x * lin.z, -2 * lin.y * lin.z, 1 - 2 * (lin.z * lin.z), 0);
+		this.mirror.m3.set(0,0,0,1);

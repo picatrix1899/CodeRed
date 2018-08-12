@@ -4,7 +4,7 @@ in vec2 pass_texCoords;
 
 layout(location=0) out vec4 out_Color;
 
-uniform sampler2D frame;
+uniform sampler2D textureMap;
 
 uniform float amplitude; // 0.5
 uniform int cycles; // 20
@@ -15,12 +15,12 @@ void main()
 
 	vec2 tex = pass_texCoords - 0.5f;
 	
-	vec4 v = texture(frame, 0.5f + tex);
+	vec4 v = texture(textureMap, 0.5f + tex);
 
 	for(int i = 0; i < cycles; i++)
 	{
 		tex *= delta;
-		v += texture(frame, 0.5f + tex)*exp(-i * amplitude);
+		v += texture(textureMap, 0.5f + tex)*exp(-i * amplitude);
 	}
 	out_Color =  v;
 }

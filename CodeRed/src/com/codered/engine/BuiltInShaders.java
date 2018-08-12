@@ -2,11 +2,32 @@ package com.codered.engine;
 
 import java.io.IOException;
 
-import com.codered.engine.managing.loader.ShaderPartLoader;
+import com.codered.engine.ppf.PPF_BlurH;
+import com.codered.engine.ppf.PPF_BlurV;
+import com.codered.engine.ppf.PPF_Brightness;
+import com.codered.engine.ppf.PPF_Contrast;
+import com.codered.engine.ppf.PPF_HDR;
+import com.codered.engine.ppf.PPF_No;
+import com.codered.engine.ppf.PPF_RadialBlur;
+import com.codered.engine.rendering.ppf.PPF_ContrastMS;
 import com.codered.engine.resource.ResourcePath;
 import com.codered.engine.resource.ResourcePath.ResourceDestination;
 import com.codered.engine.shader.MalformedShaderException;
 import com.codered.engine.shader.ShaderPartList;
+import com.codered.engine.shader.ShaderPartLoader;
+import com.codered.engine.shaders.gui.Font_GUIShader;
+import com.codered.engine.shaders.gui.No_GUIShader;
+import com.codered.engine.shaders.object.simple.AmbientLight_OShader;
+import com.codered.engine.shaders.object.simple.DirectionalLight_N_OShader;
+import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
+import com.codered.engine.shaders.postprocess.filter.BlurH_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.BlurV_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.Brightness_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.ContrastMS_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.Contrast_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.HDR_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.No_PPFilter;
+import com.codered.engine.shaders.postprocess.filter.RadialBlur_PPFilter;
 import com.codered.engine.utils.ShaderPartUtils;
 import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;
@@ -64,12 +85,36 @@ public class BuiltInShaders
 			loadDefaultEmbededShader(context, path, "ppf_hdr");
 	//		loadDefaultEmbededShader(path, "ppf_invert");
 			loadDefaultEmbededShader(context, path, "ppf_no");
-	//		loadDefaultEmbededShader(path, "ppf_radialBlur");
+			loadDefaultEmbededShader(context, path, "ppf_radialBlur");
 			
 			path.base("/resources/shaders/gui/");
 			loadDefaultEmbededShader(context, path, "gui_color");
 			loadDefaultEmbededShader(context, path, "gui_no");
+			loadDefaultEmbededShader(context, path, "gui_font");
 	//		loadDefaultEmbededShadercontext, (path, "gui_texture");
+			
+			context.addShader(AmbientLight_OShader.class);
+			context.addShader(DirectionalLight_N_OShader.class);
+			context.addShader(DirectionalLight_OShader.class);
+			context.addShader(BlurH_PPFilter.class);
+			context.addShader(BlurV_PPFilter.class);
+			context.addShader(Brightness_PPFilter.class);
+			context.addShader(Contrast_PPFilter.class);
+			context.addShader(HDR_PPFilter.class);
+			context.addShader(No_PPFilter.class);
+			context.addShader(ContrastMS_PPFilter.class);
+			context.addShader(RadialBlur_PPFilter.class);
+			context.addShader(No_GUIShader.class);
+			context.addShader(Font_GUIShader.class);
+			
+			context.addPPF(PPF_BlurH.class);
+			context.addPPF(PPF_BlurV.class);
+			context.addPPF(PPF_Brightness.class);
+			context.addPPF(PPF_Contrast.class);
+			context.addPPF(PPF_HDR.class);
+			context.addPPF(PPF_No.class);
+			context.addPPF(PPF_ContrastMS.class);
+			context.addPPF(PPF_RadialBlur.class);
 		}
 		catch(MalformedShaderException | IOException e)
 		{

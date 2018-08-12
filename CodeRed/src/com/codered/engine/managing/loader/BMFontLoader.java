@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.codered.engine.managing.loader.data.BMFontData;
-import com.codered.engine.managing.loader.data.TextureData;
-import com.codered.engine.managing.loader.data.BMFontData.CharData;
+import com.codered.engine.shader.BMFontData;
+import com.codered.engine.shader.BMFontData.CharData;
+import com.codered.engine.texture.TextureData;
 
 public class BMFontLoader
 {

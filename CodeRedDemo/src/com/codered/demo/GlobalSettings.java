@@ -1,5 +1,6 @@
 package com.codered.demo;
 
+import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.input.MouseButton;
 
@@ -37,5 +38,7 @@ public class GlobalSettings
 		public static MouseButton b_moveCam		= MouseButton.MIDDLE;
 		public static MouseButton b_fire		= MouseButton.LEFT;
 	}
+	
+	public static InputConfiguration ingameInput;
 	
 }

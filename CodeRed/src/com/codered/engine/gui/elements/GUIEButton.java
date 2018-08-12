@@ -28,15 +28,16 @@ public class GUIEButton extends GUIElement
 		drawTexturedRect(background, this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
 	}
 
-	public void update()
+	public void onClick()
 	{
 		if(main.mouseIsInsideInclusive())
 		{
-			if(this.context.getInputManager().isButtonPressed(0))
-			{
 				this.parent.response(this);
-			}
 		}
+	}
+
+	public void update()
+	{
 	}
 
 }

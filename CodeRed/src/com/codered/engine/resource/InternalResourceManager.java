@@ -3,16 +3,17 @@ package com.codered.engine.resource;
 import java.io.File;
 import java.util.HashMap;
 
-import com.codered.engine.managing.Material;
-import com.codered.engine.managing.Texture;
-import com.codered.engine.managing.loader.MaterialLoader;
-import com.codered.engine.managing.loader.TextureLoader;
-import com.codered.engine.managing.loader.data.MaterialData;
+import com.codered.engine.fontMeshCreator.FontType;
 import com.codered.engine.managing.loader.data.OBJFile;
-import com.codered.engine.managing.loader.data.TextureData;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
+import com.codered.engine.material.Material;
+import com.codered.engine.material.MaterialLoader;
+import com.codered.engine.ppf.MaterialData;
+import com.codered.engine.texture.Texture;
+import com.codered.engine.texture.TextureData;
+import com.codered.engine.texture.TextureLoader;
 import com.codered.engine.utils.TextureUtils;
 import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;
@@ -24,6 +25,7 @@ public class InternalResourceManager
 	private HashMap<String,Mesh> staticMeshes = new HashMap<String,Mesh>();
 	private HashMap<String,RawModel> rawModels = new HashMap<String,RawModel>();
 	private HashMap<String,TexturedModel> texturedModels = new HashMap<String,TexturedModel>();
+	private HashMap<String,FontType> fonts = new HashMap<String,FontType>();
 	
 	private WindowContext context;
 	
@@ -33,7 +35,12 @@ public class InternalResourceManager
 	}
 	
 	
-	public Material getMaterial(String name) { return this.materials.get(name); }
+	public Material getMaterial(String name)
+	{
+		if (!this.materials.containsKey(name)) throw new ResourceNotLoadedError("Material", name, 2);
+		
+		return this.materials.get(name);
+	}
 	
 	public Mesh getStaticMesh(String name) { return this.staticMeshes.get(name); }
 	
@@ -41,14 +48,26 @@ public class InternalResourceManager
 	
 	public TexturedModel getTexturedModel(String name) { return this.texturedModels.get(name); }
 	
-	public Texture getTexture(String name) { return this.textures.get(name); }
+	public Texture getTexture(String name)
+	{
+		if (!this.textures.containsKey(name)) throw new ResourceNotLoadedError("Texture", name, 2);
+		
+		return this.textures.get(name);
+	}
 	
+	public FontType getFont(String name)
+	{
+		if(!this.fonts.containsKey(name)) throw new ResourceNotLoadedError("Font", name, 2);
+		
+		return this.fonts.get(name);
+	}
 	
 	public boolean containsMaterial(String name) { return this.materials.containsKey(name); }
 	public boolean containsStaticMesh(String name) { return this.staticMeshes.containsKey(name); }
 	public boolean containsRawModel(String name) { return this.rawModels.containsKey(name); }
 	public boolean containsTexturedModel(String name) { return this.texturedModels.containsKey(name); }
 	public boolean containsTexture(String name) { return this.textures.containsKey(name); }
+	public boolean containsFont(String name) { return this.fonts.containsKey(name); }
 	
 	public void regMaterial(String fileName)
 	{
@@ -67,6 +86,22 @@ public class InternalResourceManager
 			Material material = new Material(albedo, normal, glow, null, data.getSpecularPower(), data.getSpecularIntensity());
 			
 			this.materials.put(fileName, material);	
+		}
+	}
+	
+	public void regFont(String filename)
+	{
+		if(filename.isEmpty()) return;
+		
+		if(!this.fonts.containsKey(filename))
+		{
+			TextureData data = TextureLoader.loadTexture(filename + ".png");
+			
+			Texture texture = TextureUtils.genTexture(data, this.context);
+			
+			FontType font = new FontType(texture, new File(filename + ".fnt"));
+			
+			this.fonts.put(filename, font);
 		}
 	}
 	

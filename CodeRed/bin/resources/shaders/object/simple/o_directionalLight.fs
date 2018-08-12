@@ -29,5 +29,5 @@ void main(void)
 	dLight += calcSpecularReflection(directionalLight.base, directionalLight.direction, pass_camera.position, pass_worldPos, pass_normal, material.specularIntensity, material.specularPower, atten);
 
 	out_Color = textureColor * dLight;
-	out_Color = mix(vec4(skyColor,1.0), out_Color, pass_vis);
+//	out_Color = mix(vec4(skyColor,1.0), out_Color, pass_vis);
 }

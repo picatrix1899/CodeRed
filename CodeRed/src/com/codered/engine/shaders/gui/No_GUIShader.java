@@ -11,6 +11,10 @@ public class No_GUIShader extends GUIShader
 	public No_GUIShader(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+		
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()

@@ -1,9 +1,7 @@
 package com.codered.engine.terrain;
 
-import com.codered.engine.managing.Material;
 import com.codered.engine.managing.models.RawModel;
-import com.codered.engine.rendering.DefaultTerrainRenderer;
-import com.codered.engine.rendering.TerrainRenderer;
+import com.codered.engine.material.Material;
 
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector3f;
@@ -26,11 +24,6 @@ public class Terrain
 		this.material = material;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-	}
-
-	public TerrainRenderer getRenderer()
-	{
-		return DefaultTerrainRenderer.instance;
 	}
 	
 	public float getX()

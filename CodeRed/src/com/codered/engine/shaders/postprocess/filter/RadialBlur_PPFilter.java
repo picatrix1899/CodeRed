@@ -12,11 +12,15 @@ public class RadialBlur_PPFilter extends PPFShader
 	public RadialBlur_PPFilter(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
-		addUniform("frame");
+		addUniform("textureMap");
 		addUniform("delta");
 		addUniform("amplitude");
 		addUniform("cycles");
@@ -25,7 +29,7 @@ public class RadialBlur_PPFilter extends PPFShader
 	public void use()
 	{
 		start();
-		loadTextureId("frame", 0, getInput("frame"));
+		loadTextureId("textureMap", 0, getInput("textureMap"));
 		loadInt("cycles", getInput("cycles"));
 		loadFloat("delta", getInput("delta"));
 		loadFloat("amplitude", getInput("amplitude"));

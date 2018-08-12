@@ -1,6 +1,6 @@
 package com.codered.engine.managing.models;
 
-import com.codered.engine.managing.Material;
+import com.codered.engine.material.Material;
 
 import cmn.utilslib.math.geometry.ConcaveTriangleMesh3f;
 

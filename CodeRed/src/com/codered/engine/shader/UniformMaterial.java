@@ -1,6 +1,6 @@
 package com.codered.engine.shader;
 
-import com.codered.engine.managing.Material;
+import com.codered.engine.material.Material;
 import com.codered.engine.window.WindowContext;
 
 public class UniformMaterial extends Uniform

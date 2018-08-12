@@ -15,5 +15,5 @@ void main(void)
 	vec4 totalLight = calcAmbientLight(ambientLight);
 
 	out_Color = texture(textureMap, pass_texCoords) * totalLight;
-	out_Color = mix(vec4(skyColor,1.0), out_Color, pass_vis);
+	//out_Color = mix(vec4(skyColor,1.0), out_Color, pass_vis);
 }

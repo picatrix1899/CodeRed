@@ -1,10 +1,11 @@
 package com.codered.engine.resource;
 
-import com.codered.engine.managing.Material;
-import com.codered.engine.managing.Texture;
+import com.codered.engine.fontMeshCreator.FontType;
 import com.codered.engine.managing.models.Mesh;
 import com.codered.engine.managing.models.RawModel;
 import com.codered.engine.managing.models.TexturedModel;
+import com.codered.engine.material.Material;
+import com.codered.engine.texture.Texture;
 
 public class ResourceManager
 {
@@ -18,6 +19,13 @@ public class ResourceManager
 		STATIC.renew();
 		WORLD.renew();
 		GUI.renew();
+	}
+	
+	public FontType getFont(String name)
+	{
+		if(WORLD.containsFont(name)) return WORLD.getFont(name);
+		if(GUI.containsFont(name)) return GUI.getFont(name);
+		return STATIC.getFont(name);
 	}
 	
 	public Material getMaterial(String name)

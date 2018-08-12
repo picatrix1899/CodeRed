@@ -1,8 +1,5 @@
 package com.codered.engine.entities;
 
-import com.codered.engine.rendering.DefaultEntityRenderer;
-import com.codered.engine.rendering.EntityRenderer;
-
 import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.Transform;
 import cmn.utilslib.math.vector.Vector3f;
@@ -21,11 +18,6 @@ public abstract class BaseEntity
 	public long id;
 	
 	public boolean highlighted;
-	
-	public EntityRenderer getRenderer()
-	{
-		return DefaultEntityRenderer.instance;
-	}
 	
 	public BaseEntity setParent(BaseEntity entity)
 	{

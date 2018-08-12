@@ -65,14 +65,15 @@ public enum Key
 	HOME(GLFW.GLFW_KEY_HOME),
 	END(GLFW.GLFW_KEY_END),
 	PAGE_UP(GLFW.GLFW_KEY_PAGE_UP),
-	PAGE_DOWN(GLFW.GLFW_KEY_PAGE_DOWN)
-	
+	PAGE_DOWN(GLFW.GLFW_KEY_PAGE_DOWN),
+	TAB(GLFW.GLFW_KEY_TAB)
 	;
 	
 	private final int id;
 	
 	private Key(int id)
 	{
+		
 		this.id = id;
 	}
 	

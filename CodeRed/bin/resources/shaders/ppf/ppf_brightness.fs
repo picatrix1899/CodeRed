@@ -13,16 +13,16 @@ void main()
 	//float brightness = 1.0f;
 	float brightness = dot(color.rgb, vec3(0.2126,0.7152, 0.0722));
 	
-	if(brightness > 1.0f)
+	if(brightness > 0.78f)
 	{
-		out_Color = color;
+		out_Color = vec4(brightness, brightness, brightness, 1.0);
 	}
 	else
 	{
 		out_Color = vec4(0.0,0.0,0.0,1.0);
 	}
 
-	float depth = color.r;
+/*	float depth = color.r;
 
 	float z = depth * 2.0 - 1.0;
 
@@ -34,6 +34,8 @@ void main()
 	r /= far;
 
 	out_Color = vec4(vec3(r), 1.0f);
+	
+	*/
 	
 	//float brightness = (color.r * 0.2126) + (color.g * 0.7152) + (color.b * 0.0722);
 	//out_Color = color * brightness;

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
-import com.codered.engine.managing.Texture;
+import com.codered.engine.texture.Texture;
 import com.codered.engine.window.WindowContext;
 import com.google.common.collect.Maps;
 

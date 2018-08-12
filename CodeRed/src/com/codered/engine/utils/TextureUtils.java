@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.managing.Texture;
-import com.codered.engine.managing.loader.data.TextureData;
+import com.codered.engine.texture.Texture;
+import com.codered.engine.texture.TextureData;
 import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.essentials.BufferUtils;

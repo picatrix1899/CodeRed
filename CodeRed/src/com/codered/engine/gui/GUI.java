@@ -6,13 +6,12 @@ import org.lwjgl.opengl.GL15;
 import com.codered.engine.managing.VAO;
 import com.codered.engine.shaders.gui.Color_GUIShader;
 import com.codered.engine.shaders.gui.No_GUIShader;
-import com.codered.engine.utils.GLUtils;
+import com.codered.engine.utils.BindingUtils;
 import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.Vector4f;
 import cmn.utilslib.math.vector.api.Vec2f;
 
 public abstract class GUI
@@ -27,8 +26,8 @@ public abstract class GUI
 	
 	public GUI()
 	{
-		vao = new VAO();
-		WindowContextHelper.getCurrentContext();
+		this.vao = new VAO();
+		this.context = WindowContextHelper.getCurrentContext();
 	}
 	
 	protected void setMousePos(float x, float y)
@@ -40,29 +39,31 @@ public abstract class GUI
 	{
 		Vector2f[] vertices = new Vector2f[4];
 		
-		vertices[0] = new Vector2f(posX + sizeX, posY);		
+		vertices[0] = new Vector2f(posX, posY + sizeY);
 		vertices[1] = new Vector2f(posX, posY);
-		vertices[2] = new Vector2f(posX + sizeX, posY +sizeY);		
-		vertices[3] = new Vector2f(posX, posY + sizeY);
+		vertices[2] = new Vector2f(posX + sizeX, posY);		
+		vertices[3] = new Vector2f(posX + sizeX, posY +sizeY);		
+		
 		
 		Vector2f[] uvs = new Vector2f[] {
 		
-		new Vector2f(1,0),				
-		new Vector2f(0,0),		
-		new Vector2f(1,1),		
+		new Vector2f(0,0),				
 		new Vector2f(0,1),		
+		new Vector2f(1,1),		
+		new Vector2f(1,0),		
 
 		};
 
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
+		vao.storeIndices(new int[] {0, 1, 2, 2, 3, 0}, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0, 1);
+		BindingUtils.bindVAO(vao, 0, 1, 2, 3);
 		
 		this.context.getShader(No_GUIShader.class).loadTextureMap(t);
 		this.context.getShader(No_GUIShader.class).use();
 		
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
 		
 		this.context.getShader(No_GUIShader.class).stop();
 	}
@@ -79,7 +80,7 @@ public abstract class GUI
 		
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
 		
 		this.context.getShader(Color_GUIShader.class).setInput("color", c);
 		this.context.getShader(Color_GUIShader.class).use();
@@ -101,7 +102,7 @@ public abstract class GUI
 		
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
 		
 		this.context.getShader(Color_GUIShader.class).setInput("color", c);
 		this.context.getShader(Color_GUIShader.class).use();
@@ -123,7 +124,7 @@ public abstract class GUI
 
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
 		
 		this.context.getShader(Color_GUIShader.class).setInput("color", c);
 		this.context.getShader(Color_GUIShader.class).use();
@@ -133,61 +134,61 @@ public abstract class GUI
 		this.context.getShader(Color_GUIShader.class).stop();
 	}
 	
-	protected void drawText(String text, float posX, float posY, float sizeX, float sizeY, LambdaFont f)
-	{
-		char[] c = text.toCharArray();
-
-		float inc = sizeX / text.length();
-		
-		float p = 0.0f;
-		
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		
-		for(char c1 : c)
-		{
-
-			if((c1 + "").equals(" "))
-			{
-				p+=inc;
-				continue;
-			}
-			
-			Vector4f v = f.getUVs(c1 + "");
-			
-			Vector2f[] vertices = new Vector2f[4];
-			
-			vertices[0] = new Vector2f(posX + p + inc, posY);
-			vertices[1] = new Vector2f(posX + p, posY);
-			vertices[2] = new Vector2f(posX + p + inc, posY + sizeY);
-			vertices[3] = new Vector2f(posX + p, posY + sizeY);	
-			
-			Vector2f[] uvs = new Vector2f[] {
-			new Vector2f(v.z, v.y),
-			new Vector2f(v.x, v.y),	
-			new Vector2f(v.z, v.a),
-			new Vector2f(v.x, v.a),
-			};
-
-
-			
-			vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
-			vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
-			
-			GLUtils.bindVAO(vao, 0, 1);
-			
-			this.context.getShader(No_GUIShader.class).loadTextureMap(f.getTexture().getId());
-			this.context.getShader(No_GUIShader.class).use();
-			
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-			
-			this.context.getShader(No_GUIShader.class).stop();
-			
-			p += inc;
-		}
-		
-		GL11.glDisable(GL11.GL_BLEND);
-	}
+//	protected void drawText(String text, float posX, float posY, float sizeX, float sizeY, LambdaFont f)
+//	{
+//		char[] c = text.toCharArray();
+//
+//		float inc = sizeX / text.length();
+//		
+//		float p = 0.0f;
+//		
+//		GL11.glEnable(GL11.GL_BLEND);
+//		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//		
+//		for(char c1 : c)
+//		{
+//
+//			if((c1 + "").equals(" "))
+//			{
+//				p+=inc;
+//				continue;
+//			}
+//			
+//			Vector4f v = f.getUVs(c1 + "");
+//			
+//			Vector2f[] vertices = new Vector2f[4];
+//			
+//			vertices[0] = new Vector2f(posX + p + inc, posY);
+//			vertices[1] = new Vector2f(posX + p, posY);
+//			vertices[2] = new Vector2f(posX + p + inc, posY + sizeY);
+//			vertices[3] = new Vector2f(posX + p, posY + sizeY);	
+//			
+//			Vector2f[] uvs = new Vector2f[] {
+//			new Vector2f(v.z, v.y),
+//			new Vector2f(v.x, v.y),	
+//			new Vector2f(v.z, v.a),
+//			new Vector2f(v.x, v.a),
+//			};
+//
+//
+//			
+//			vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
+//			vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
+//			
+//			BindingUtils.bindVAO(vao, 0, 1);
+//			
+//			this.context.getShader(No_GUIShader.class).loadTextureMap(f.getTexture().getId());
+//			this.context.getShader(No_GUIShader.class).use();
+//			
+//			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+//			
+//			this.context.getShader(No_GUIShader.class).stop();
+//			
+//			p += inc;
+//		}
+//		
+//		GL11.glDisable(GL11.GL_BLEND);
+//	}
 	
 	public boolean mouseIsInsideInclusive(float minX, float minY, float maxX, float maxY)
 	{

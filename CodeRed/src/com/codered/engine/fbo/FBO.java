@@ -56,6 +56,20 @@ public class FBO extends Framebuffer
 		this.attachments[t.getIndex()] = att;
 	}
 
+	public void applyColorTextureAttachments(boolean hdr, FBOTarget... targets)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		
+		for(FBOTarget t : targets)
+		{
+			FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
+			
+			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
+			
+			this.attachments[t.getIndex()] = att;
+		}
+	}
+	
 	public void applyColorTextureAttachment(int t, boolean hdr)
 	{
 		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
@@ -64,6 +78,20 @@ public class FBO extends Framebuffer
 		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
 		
 		this.attachments[t] = att;
+	}
+	
+	public void applyColorTextureAttachments(boolean hdr, int... targets)
+	{
+		BindingUtils.bindFramebuffer(this.id);
+		
+		for(int t : targets)
+		{
+			FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
+			
+			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
+			
+			this.attachments[t] = att;
+		}
 	}
 	
 	public void applyColorTextureAttachment(FBOTarget t, FBOAttachment attachment)

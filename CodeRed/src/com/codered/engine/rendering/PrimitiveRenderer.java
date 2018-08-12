@@ -3,8 +3,8 @@ package com.codered.engine.rendering;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.engine.managing.Material;
 import com.codered.engine.managing.VAO;
+import com.codered.engine.material.Material;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.utils.GLUtils;
 import com.codered.engine.window.Window;

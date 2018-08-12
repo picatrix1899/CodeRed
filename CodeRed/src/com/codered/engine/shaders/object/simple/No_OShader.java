@@ -2,7 +2,7 @@ package com.codered.engine.shaders.object.simple;
 
 import java.util.List;
 
-import com.codered.engine.managing.Material;
+import com.codered.engine.material.Material;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.window.WindowContext;
 

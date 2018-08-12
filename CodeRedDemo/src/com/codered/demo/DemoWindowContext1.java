@@ -1,5 +1,7 @@
 package com.codered.demo;
 
+import java.io.File;
+
 import org.lwjgl.opengl.GL11;
 
 import com.codered.demo.GlobalSettings.Keys;
@@ -8,30 +10,17 @@ import com.codered.engine.BuiltInShaders;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.fbo.FBO;
-import com.codered.engine.fbo.FBOTarget;
-import com.codered.engine.fbo.MSFBO;
+import com.codered.engine.fontMeshCreator.FontType;
+import com.codered.engine.fontMeshCreator.GUIText;
+import com.codered.engine.fontRendering.TextMaster;
 import com.codered.engine.input.InputConfiguration;
 import com.codered.engine.input.Key;
 import com.codered.engine.light.AmbientLight;
 import com.codered.engine.light.DirectionalLight;
-import com.codered.engine.ppf.PPF_BlurH;
-import com.codered.engine.ppf.PPF_BlurV;
-import com.codered.engine.ppf.PPF_Brightness;
-import com.codered.engine.ppf.PPF_Contrast;
-import com.codered.engine.ppf.PPF_HDR;
-import com.codered.engine.ppf.PPF_No;
-import com.codered.engine.rendering.ppf.PPF_ContrastMS;
+import com.codered.engine.primitives.TexturedQuad;
 import com.codered.engine.shaders.object.SimpleObjectShader;
 import com.codered.engine.shaders.object.simple.AmbientLight_OShader;
-import com.codered.engine.shaders.object.simple.DirectionalLight_N_OShader;
 import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
-import com.codered.engine.shaders.postprocess.filter.BlurH_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.BlurV_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.Brightness_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.ContrastMS_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.Contrast_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.HDR_PPFilter;
-import com.codered.engine.shaders.postprocess.filter.No_PPFilter;
 import com.codered.engine.utils.BindingUtils;
 import com.codered.engine.utils.EvalFunc;
 import com.codered.engine.utils.GLUtils;
@@ -42,7 +31,9 @@ import com.codered.engine.window.WindowRoutine;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
+import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
+import cmn.utilslib.math.vector.api.Vec3f;
 
 public class DemoWindowContext1 extends WindowRoutine
 {
@@ -58,6 +49,12 @@ public class DemoWindowContext1 extends WindowRoutine
 	private boolean directional = true;
 	
 	private FBO fbo;
+	
+	public boolean showInventory = false;
+	
+	private GuiInventory inventory;
+	
+	private GUIText text;
 	
 	public void initWindowHints()
 	{
@@ -76,7 +73,8 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	public void init()
 	{
-		InputConfiguration config = new InputConfiguration();
+		GlobalSettings.ingameInput = new InputConfiguration();
+		InputConfiguration config = GlobalSettings.ingameInput;
 		config.registerKey(Keys.k_forward);
 		config.registerKey(Keys.k_back);
 		config.registerKey(Keys.k_left);
@@ -87,35 +85,20 @@ public class DemoWindowContext1 extends WindowRoutine
 		config.registerKey(Keys.k_turnRight);
 		config.registerKey(Keys.k_delete);
 		config.registerKey(Key.Q);
+		config.registerKey(Key.TAB);
 		
 		config.registerButton(Keys.b_moveCam);
 		config.registerButton(Keys.b_fire);
 		
-		this.context.getInputManager().setConfiguration(config);
+		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.ESCAPE)) this.context.getWindow().setWindowShouldClose(); });
+		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.Q)) this.directional = !this.directional; });
+		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.TAB)) {this.showInventory = true; this.inventory.open();} });
 		
-		this.context.getInputManager().keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.ESCAPE)) this.context.getWindow().setWindowShouldClose(); });
-		this.context.getInputManager().keyStroke.addHandler((a,b) -> {if(a.response.keyPresent(Key.Q)) this.directional = !this.directional; }); 
+		this.context.getInputManager().setConfiguration(config);
+
 		
 		BuiltInShaders.init();
 		
-		this.context.addShader(AmbientLight_OShader.class);
-		this.context.addShader(DirectionalLight_N_OShader.class);
-		this.context.addShader(DirectionalLight_OShader.class);
-		this.context.addShader(BlurH_PPFilter.class);
-		this.context.addShader(BlurV_PPFilter.class);
-		this.context.addShader(Brightness_PPFilter.class);
-		this.context.addShader(Contrast_PPFilter.class);
-		this.context.addShader(HDR_PPFilter.class);
-		this.context.addShader(No_PPFilter.class);
-		this.context.addShader(ContrastMS_PPFilter.class);
-		
-		this.context.addPPF(PPF_BlurH.class);
-		this.context.addPPF(PPF_BlurV.class);
-		this.context.addPPF(PPF_Brightness.class);
-		this.context.addPPF(PPF_Contrast.class);
-		this.context.addPPF(PPF_HDR.class);
-		this.context.addPPF(PPF_No.class);
-		this.context.addPPF(PPF_ContrastMS.class);
 		
 		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
 		
@@ -123,48 +106,77 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
 		
-		this.entity = new StaticEntity(this.context.getResourceManager().getTexturedModel("crate"), new Vector3f(0,0,-40), -45, 45, 0);
+		this.context.getResourceManager().GUI.regTexture("res/materials/gray_rsquare.png");
+		this.context.getResourceManager().GUI.regTexture("res/materials/inventory-background.png");
+		
+		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
+		
+		this.entity = new StaticEntity(this.context.getResourceManager().getTexturedModel("crate"), new Vector3f(0,5,-40), -45, 45, 0);
 		
 		this.player = new Player();
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
-		
-		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 1.0f, -1.0f, 0);
+		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
 		
 		this.fbo = new FBO();
-		this.fbo.applyColorTextureAttachment(0, true);
-		this.fbo.applyColorTextureAttachment(1, true);
-		this.fbo.applyDepthBufferAttachment();
+		this.fbo.applyColorTextureAttachments(true, 0, 1);
+		this.fbo.applyDepthStencilBufferAttachment();
 		
 		GLUtils.multisample(true);
+		
+		this.text = new GUIText("This Is a Sample Text",3, this.context.getResourceManager().getFont("res/fonts/arial"), new Vector2f(0,0), 1f, false);
+		
+		TextMaster.init();
+		TextMaster.loadText(this.text);
+		
+		this.inventory = new GuiInventory(this);
 	} 
-
+	
 	public void render(double delta)
 	{
 		BindingUtils.bindFramebuffer(this.fbo);
 		GLUtils.clearAll();
 		
+		if(this.showInventory)
+		{
+			renderWorld(delta);
+
+			GLUtils.blend(true);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			renderInventory(delta);
+
+			GLUtils.blend(false);
+			
+			TextMaster.render();
+		}
+		else
+		{
+			renderWorld(delta);
+		}
+		
+		this.fbo.resolveAttachmentToScreen(0);
+	}
+	
+	private void renderInventory(double delta)
+	{
+		this.inventory.render();
+	}
+	
+	private void renderWorld(double delta)
+	{
 		GLUtils.depthFunc(EvalFunc.LEQUAL);
 		
 		renderObject(this.entity, this.player.getCamera(), this.context.getShader(AmbientLight_OShader.class));			
-		
+	
 		if(this.directional)
 		{
 			GLUtils.blend(true);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 			
-			renderObject(this.entity, this.player.getCamera(), this.context.getShader(DirectionalLight_N_OShader.class));
+			renderObject(this.entity, this.player.getCamera(), this.context.getShader(DirectionalLight_OShader.class));
 			
 			GLUtils.blend(false);
 		}
-		
-		this.context.getPPF(PPF_Contrast.class).setContrast(2);
-		this.context.getPPF(PPF_Contrast.class).doPostProcess(this.fbo, FBOTarget.COLOR0, this.fbo, FBOTarget.COLOR0);
-		
-		this.context.getPPF(PPF_HDR.class).setExposure(2);
-		this.context.getPPF(PPF_HDR.class).doPostProcess(this.fbo, FBOTarget.COLOR0, this.fbo, FBOTarget.COLOR0);
-		
-		this.fbo.resolveAttachmentToScreen(0);
 	}
 	
 	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
@@ -186,7 +198,7 @@ public class DemoWindowContext1 extends WindowRoutine
 		}
 		oShader.stop();	
 	}
-
+	
 	public void release()
 	{
 		super.release();

@@ -9,9 +9,9 @@ import com.codered.engine.entities.BaseEntity;
 import com.codered.engine.entities.Camera;
 import com.codered.engine.entities.StaticEntity;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.input.Input.ButtonEventArgs;
-import com.codered.engine.input.Input.KeyEventArgs;
-import com.codered.engine.managing.World;
+import com.codered.engine.input.InputConfiguration;
+import com.codered.engine.input.InputConfiguration.ButtonEventArgs;
+import com.codered.engine.input.InputConfiguration.KeyEventArgs;
 import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;
 
@@ -63,10 +63,12 @@ public class Player extends BaseEntity
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
 		
-		this.context.getInputManager().keyPress.addHandler((a, b) -> updateMovement(a));
-		this.context.getInputManager().buttonStroke.addHandler((a, b) -> buttonStroke(a));
-		this.context.getInputManager().buttonRelease.addHandler((a, b) -> buttonRelease(a));
-		this.context.getInputManager().buttonPress.addHandler((a, b) -> buttonPress(a));
+		InputConfiguration config = GlobalSettings.ingameInput;
+		
+		config.keyPress.addHandler((src, dyn) -> updateMovement(src));
+		config.buttonStroke.addHandler((src, dyn) -> buttonStroke(src));
+		config.buttonRelease.addHandler((src, dyn) -> buttonRelease(src));
+		config.buttonPress.addHandler((src, dyn) -> buttonPress(src));
 	}
 	
 	private void buttonStroke(ButtonEventArgs args)
@@ -100,7 +102,7 @@ public class Player extends BaseEntity
 		Vec3f dir = Vector3fPool.get();
 		Vec3f vel = Vector3fPool.get();
 
-		if(args.response.keyPresent(Keys.k_delete))
+		if(args.keyPresent(Keys.k_delete))
 		{
 			if(this.selectedEntity != -1)
 			{
@@ -110,22 +112,22 @@ public class Player extends BaseEntity
 			}
 		}
 		
-		if(args.response.keyPresent(Keys.k_forward))
+		if(args.keyPresent(Keys.k_forward))
 		{
 			dir.sub(this.camera.getYaw().getForwardf().normalize());
 		}
 		
-		if(args.response.keyPresent(Keys.k_right))
+		if(args.keyPresent(Keys.k_right))
 		{
 			dir.sub(this.camera.getYaw().getRightf().normalize());
 		}
 		
-		if(args.response.keyPresent(Keys.k_left))
+		if(args.keyPresent(Keys.k_left))
 		{
 			dir.sub(this.camera.getYaw().getLeftf().normalize());
 		}
 		
-		if(args.response.keyPresent(Keys.k_back))
+		if(args.keyPresent(Keys.k_back))
 		{
 			dir.sub(this.camera.getYaw().getBackf().normalize());
 		}

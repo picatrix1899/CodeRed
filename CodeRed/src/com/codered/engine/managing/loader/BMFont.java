@@ -2,8 +2,8 @@ package com.codered.engine.managing.loader;
 
 import java.util.HashMap;
 
-import com.codered.engine.managing.Texture;
-import com.codered.engine.managing.loader.data.BMFontData;
+import com.codered.engine.shader.BMFontData;
+import com.codered.engine.texture.Texture;
 import com.codered.engine.utils.TextureUtils;
 import com.codered.engine.utils.WindowContextHelper;
 import com.codered.engine.window.WindowContext;

@@ -2,8 +2,8 @@ package com.codered.engine.gui.elements;
 
 import com.codered.engine.gui.GUIElement;
 import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.managing.Texture;
 import com.codered.engine.resource.ResourceManager;
+import com.codered.engine.texture.Texture;
 import com.codered.engine.window.Window;
 
 public class GUIEImage extends GUIElement

@@ -19,6 +19,7 @@ public abstract class GUIShader extends ShaderProgram
 	public void use()
 	{
 		start();
-		loadVector2("screenSpace", getInput("screenSpace"));
+
+		loadVector2("screenSpace", this.context.getSize());
 	}
 }
