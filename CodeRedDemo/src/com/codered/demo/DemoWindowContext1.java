@@ -1,44 +1,38 @@
 package com.codered.demo;
 
-import java.io.File;
+
+import java.util.Iterator;
 
 import org.lwjgl.opengl.GL11;
 
+import com.codered.BuiltInShaders;
+import com.codered.StaticEntityList;
+import com.codered.StaticEntityTree;
 import com.codered.demo.GlobalSettings.Keys;
-
-import com.codered.engine.BuiltInShaders;
-import com.codered.engine.entities.Camera;
-import com.codered.engine.entities.StaticEntity;
-import com.codered.engine.fbo.FBO;
-import com.codered.engine.fontMeshCreator.FontType;
-import com.codered.engine.fontMeshCreator.GUIText;
-import com.codered.engine.fontRendering.TextMaster;
-import com.codered.engine.input.InputConfiguration;
-import com.codered.engine.input.Key;
-import com.codered.engine.light.AmbientLight;
-import com.codered.engine.light.DirectionalLight;
-import com.codered.engine.primitives.TexturedQuad;
-import com.codered.engine.shaders.object.SimpleObjectShader;
-import com.codered.engine.shaders.object.simple.AmbientLight_OShader;
-import com.codered.engine.shaders.object.simple.DirectionalLight_OShader;
-import com.codered.engine.utils.BindingUtils;
-import com.codered.engine.utils.EvalFunc;
-import com.codered.engine.utils.GLUtils;
-import com.codered.engine.utils.MathUtils;
-import com.codered.engine.utils.WindowHint;
-import com.codered.engine.utils.WindowHint.GLProfile;
-import com.codered.engine.window.WindowRoutine;
+import com.codered.entities.StaticEntity;
+import com.codered.fbo.FBO;
+import com.codered.input.InputConfiguration;
+import com.codered.input.Key;
+import com.codered.light.AmbientLight;
+import com.codered.light.DirectionalLight;
+import com.codered.shaders.object.simple.AmbientLight_OShader;
+import com.codered.shaders.object.simple.DirectionalLight_OShader;
+import com.codered.shaders.object.simple.TexturedObjectShader;
+import com.codered.utils.BindingUtils;
+import com.codered.utils.EvalFunc;
+import com.codered.utils.GLUtils;
+import com.codered.utils.MathUtils;
+import com.codered.utils.RenderHelper;
+import com.codered.utils.WindowHint;
+import com.codered.utils.WindowHint.GLProfile;
+import com.codered.window.WindowRoutine;
 
 import cmn.utilslib.color.colors.LDRColor3;
 import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 public class DemoWindowContext1 extends WindowRoutine
 {
-	private StaticEntity entity;
-	
 	private Matrix4f projection;
 	
 	private AmbientLight ambient;
@@ -54,7 +48,7 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	private GuiInventory inventory;
 	
-	private GUIText text;
+	private StaticEntityTree world;
 	
 	public void initWindowHints()
 	{
@@ -96,10 +90,8 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.context.getInputManager().setConfiguration(config);
 
-		
 		BuiltInShaders.init();
-		
-		
+
 		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
 		
 		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
@@ -111,7 +103,10 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
 		
-		this.entity = new StaticEntity(this.context.getResourceManager().getTexturedModel("crate"), new Vector3f(0,5,-40), -45, 45, 0);
+		this.world = new StaticEntityList();
+		
+		this.world.add(new StaticEntity("crate", new Vector3f(0,0,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vector3f(0,10,-40), 0, 0, 0));
 		
 		this.player = new Player();
 		
@@ -123,11 +118,6 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.fbo.applyDepthStencilBufferAttachment();
 		
 		GLUtils.multisample(true);
-		
-		this.text = new GUIText("This Is a Sample Text",3, this.context.getResourceManager().getFont("res/fonts/arial"), new Vector2f(0,0), 1f, false);
-		
-		TextMaster.init();
-		TextMaster.loadText(this.text);
 		
 		this.inventory = new GuiInventory(this);
 	} 
@@ -146,8 +136,6 @@ public class DemoWindowContext1 extends WindowRoutine
 			renderInventory(delta);
 
 			GLUtils.blend(false);
-			
-			TextMaster.render();
 		}
 		else
 		{
@@ -166,37 +154,40 @@ public class DemoWindowContext1 extends WindowRoutine
 	{
 		GLUtils.depthFunc(EvalFunc.LEQUAL);
 		
-		renderObject(this.entity, this.player.getCamera(), this.context.getShader(AmbientLight_OShader.class));			
-	
+		TexturedObjectShader shader = this.context.getShader(AmbientLight_OShader.class);
+		shader.setInput("ambientLight", this.ambient);
+		
+		Iterator<StaticEntity> it = this.world.iterator();
+		
+		while(it.hasNext())
+		{
+			StaticEntity entity = it.next();
+			
+			RenderHelper.renderStaticEntity(entity, this.player.getCamera(), shader, this.projection);
+		}
+		
+		it = this.world.iterator();
+		
 		if(this.directional)
 		{
+		
+
 			GLUtils.blend(true);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-			
-			renderObject(this.entity, this.player.getCamera(), this.context.getShader(DirectionalLight_OShader.class));
+				
+			while(it.hasNext())
+			{
+				StaticEntity entity = it.next();
+
+				shader = this.context.getShader(DirectionalLight_OShader.class);
+				shader.setInput("directionalLight", this.directionalLight);
+				RenderHelper.renderStaticEntity(entity, this.player.getCamera(), shader, this.projection);
+				
+			}
 			
 			GLUtils.blend(false);
 		}
-	}
-	
-	private void renderObject(StaticEntity e, Camera c, SimpleObjectShader oShader)
-	{
-		oShader.u_camera.set(c);
-		oShader.u_T_model.set(e.getTransformationMatrix());
-		oShader.u_T_projection.set(this.projection);
-		
-		oShader.setInput("material", e.getModel().getMaterial());
-		
-		oShader.setInput("directionalLight", this.directionalLight);
-		oShader.setInput("ambientLight", this.ambient);
-		
-		oShader.use();			
-		{	
-			BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
-			
-			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-		}
-		oShader.stop();	
+
 	}
 	
 	public void release()

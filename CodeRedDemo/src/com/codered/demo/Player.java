@@ -5,15 +5,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.codered.demo.GlobalSettings.Keys;
-import com.codered.engine.entities.BaseEntity;
-import com.codered.engine.entities.Camera;
-import com.codered.engine.entities.StaticEntity;
-import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.input.InputConfiguration;
-import com.codered.engine.input.InputConfiguration.ButtonEventArgs;
-import com.codered.engine.input.InputConfiguration.KeyEventArgs;
-import com.codered.engine.utils.WindowContextHelper;
-import com.codered.engine.window.WindowContext;
+import com.codered.entities.BaseEntity;
+import com.codered.entities.Camera;
+import com.codered.entities.StaticEntity;
+import com.codered.gui.GUIWindow;
+import com.codered.input.InputConfiguration;
+import com.codered.input.InputConfiguration.ButtonEventArgs;
+import com.codered.input.InputConfiguration.KeyEventArgs;
+import com.codered.utils.WindowContextHelper;
+import com.codered.window.WindowContext;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
@@ -330,7 +330,6 @@ public class Player extends BaseEntity
 		
 		if(ent != null)
 		{
-			ent.highlighted = true;
 			this.selectedEntity = ent.id;
 		}
 		else

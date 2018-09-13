@@ -1,7 +1,7 @@
 package com.codered.demo;
 
-import com.codered.engine.EngineBootstrap;
-import com.codered.engine.window.WindowImpl;
+import com.codered.EngineBootstrap;
+import com.codered.window.WindowImpl;
 
 public class DemoBootstrap extends EngineBootstrap
 {

@@ -3,7 +3,7 @@ package com.codered.demo;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.engine.utils.DebugInfo;
+import com.codered.utils.DebugInfo;
 
 public class DemoWindowDebug extends DemoWindowContext1
 {

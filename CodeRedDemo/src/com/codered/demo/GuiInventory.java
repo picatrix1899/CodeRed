@@ -1,10 +1,10 @@
 package com.codered.demo;
 
-import com.codered.engine.gui.GUIElement;
-import com.codered.engine.gui.GUIWindow;
-import com.codered.engine.gui.elements.GUIEButton;
-import com.codered.engine.input.InputConfiguration;
-import com.codered.engine.input.Key;
+import com.codered.gui.GUIElement;
+import com.codered.gui.GUIWindow;
+import com.codered.gui.elements.GUIEButton;
+import com.codered.input.InputConfiguration;
+import com.codered.input.Key;
 
 public class GuiInventory extends GUIWindow
 {
@@ -17,6 +17,7 @@ public class GuiInventory extends GUIWindow
 	
 	public GuiInventory(DemoWindowContext1 parent)
 	{
+		super();
 		this.main = parent;
 		inventoryInput = new InputConfiguration();
 		inventoryInput.registerKey(Key.TAB);
@@ -24,15 +25,15 @@ public class GuiInventory extends GUIWindow
 		inventoryInput.keyStroke.addHandler((src, dyn) -> { if(src.keyPresent(Key.TAB)) close(); });
 		inventoryInput.buttonStroke.addHandler((src, dyn) -> { this.button.onClick(); });
 		
-		this.button = new GUIEButton(1, this, 0, 0, 200, 100, "", this.context.getResourceManager().getTexture("res/materials/gray_rsquare.png").getId());
+		this.button = new GUIEButton(1, this, 0, 0, 60, 22, "res/materials/gray_rsquare.png");
+		this.button.setText("Back", 20, "res/fonts/arial", true, true);
 		
 		addElement(this.button);
 	}
 	
 	public void render()
-	
 	{
-		drawTexturedRect(this.context.getResourceManager().getTexture("res/materials/inventory-background.png").getId(), 0, 0, this.context.getWidth(), this.context.getHeight());
+		drawTexturedRect("res/materials/inventory-background.png", 0, 0, this.context.getWidth(), this.context.getHeight());
 		
 		super.render();
 	}
