@@ -4,11 +4,11 @@ import java.util.Iterator;
 
 import com.codered.entities.StaticEntity;
 
-import cmn.utilslib.math.btree.AABB3fBTree;
-import cmn.utilslib.math.btree.AABB3fBTreeBuilder;
-import cmn.utilslib.math.btree.AABB3fBTreeWalker;
+import cmn.utilslib.trees.btree.AABB3fBTree;
+import cmn.utilslib.trees.btree.AABB3fBTreeBuilder;
+import cmn.utilslib.trees.btree.AABB3fBTreeWalker;
 
-public class StaticEntityTreeImpl implements StaticEntityTree
+public class StaticEntityTreeImpl
 {
 
 	private AABB3fBTree<StaticEntity> tree = new AABB3fBTree<StaticEntity>();
