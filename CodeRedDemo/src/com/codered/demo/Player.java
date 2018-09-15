@@ -1,5 +1,6 @@
 package com.codered.demo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -52,7 +53,7 @@ public class Player extends BaseEntity
 		this.context = WindowContextHelper.getCurrentContext();
 		
 		this.world = world;
-		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(3, 9, 3));
+		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(4, 9, 4));
 		
 		this.transform.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
 		//Transform t = Session.get().getWorld().getStaticEntity(0).getTransform();
@@ -110,8 +111,6 @@ public class Player extends BaseEntity
 		{
 			if(this.selectedEntity != -1)
 			{
-				//Session.get().getWorld().removeStaticEntity(this.selectedEntity);
-				
 				this.selectedEntity = -1;
 			}
 		}
@@ -136,16 +135,6 @@ public class Player extends BaseEntity
 			dir.sub(this.camera.getYaw().getBackf().normalize());
 		}
 		
-//		if(args.response.keyPresent(Keys.k_turnLeft))
-//		{
-//			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * Time.getDelta() * 1000.0f);
-//		}
-//		
-//		if(args.response.keyPresent(Keys.k_turnRight))
-//		{
-//			this.transform.rotate(Vec3f.aY, GlobalSettings.camSpeed_yaw * -Time.getDelta() * 1000.0f);
-//		}
-		
 		if(dir.length() == 0) { return; }
 		
 		dir.normalize();
@@ -157,7 +146,6 @@ public class Player extends BaseEntity
 		vel.set(dir).mul(acceleration);
 		
 		vel = checkCollisionStatic(vel);
-		vel = checkCollisionDynamic(vel);
 		
 		this.transform.moveBy(vel);
 		
@@ -197,19 +185,26 @@ public class Player extends BaseEntity
 		
 		sweptAABB = this.aabb2.transform(translation);
 		
-		StaticEntity entity = this.world.walker.walk(sweptAABB);
-				
-		entityOBB = entity.getModel().getPhysicalMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+		ArrayList<StaticEntity> entities = this.world.walker.walk(sweptAABB);
 		
-		tempOBB = sweptAABB.getOBBf();
-
-		if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+		for(StaticEntity entity : entities)
 		{
+			entityOBB = entity.getModel().getPhysicalMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
 			
-			partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+			translation = Matrix4f.translation(tempPos);
 			
-			sum.add(partial);
-			tempPos.add(partial);
+			sweptAABB = this.aabb2.transform(translation);
+			
+			tempOBB = sweptAABB.getOBBf();
+
+			if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+			{
+				
+				partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+				
+				sum.add(partial);
+				tempPos.add(partial);
+			}
 		}
 		
 		vel.add(sum);
@@ -219,67 +214,6 @@ public class Player extends BaseEntity
 		Vector3fPool.store(tempPos);
 		
 		return vel;		
-	}
-	
-	public Vec3f checkCollisionDynamic(Vec3f vel)
-	{
-	Vector3f sum = Vector3fPool.get();
-	Vector3f partial = Vector3fPool.get();
-	Vector3f tempPos = Vector3fPool.get();
-	
-//	World w = Session.get().getWorld();
-//	List<StaticEntity> statents = Auto.ArrayList(w.getDynamicEntities());
-	
-	Matrix4f translation;
-	
-	tempPos.set(this.transform.getTransformedPos()).add(vel);
-
-	OBB3f tempOBB;
-	
-	OBB3f entityOBB;
-	
-//	if(statents != null)
-//	{
-//		
-//		Collections.sort(statents, new Comparator<StaticEntity>()
-//		{
-//
-//			public int compare(StaticEntity o1, StaticEntity o2)
-//			{
-//				return Double.compare(Vector3f.TEMP.set(o1.getPos()).sub(tempPos).length(), Vector3f.TEMP0.set(o2.getPos()).sub(tempPos).length());
-//			}
-//			
-//		});
-//		
-//		for(StaticEntity e : statents)
-//		{
-//			
-//			entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
-//			
-//			translation = Matrix4f.translation(tempPos);
-//			
-//			tempOBB = this.aabb2.transform(translation).getOBBf();
-//
-//				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-//				{
-//					
-//					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-//					
-//					sum.add(partial);
-//					tempPos.add(partial);
-//				}
-//
-//		}
-//		
-//		vel.add(sum);
-//
-//	}
-	
-	Vector3fPool.store(sum);
-	Vector3fPool.store(partial);
-	Vector3fPool.store(tempPos);
-	
-	return vel;	
 	}
 	
 	private void updateOrientation()
