@@ -6,8 +6,7 @@ import java.util.Iterator;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
-import com.codered.StaticEntityList;
-import com.codered.StaticEntityTree;
+import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
 import com.codered.entities.StaticEntity;
 import com.codered.fbo.FBO;
@@ -48,7 +47,7 @@ public class DemoWindowContext1 extends WindowRoutine
 	
 	private GuiInventory inventory;
 	
-	private StaticEntityTree world;
+	private StaticEntityTreeImpl world;
 	
 	public void initWindowHints()
 	{
@@ -103,12 +102,14 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
 		
-		this.world = new StaticEntityList();
+		this.world = new StaticEntityTreeImpl();
 		
 		this.world.add(new StaticEntity("crate", new Vector3f(0,0,-40), 0, 0, 0));
 		this.world.add(new StaticEntity("crate", new Vector3f(0,10,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vector3f(10,0,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vector3f(10,10,-40), 0, 0, 0));
 		
-		this.player = new Player();
+		this.player = new Player(this.world);
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
@@ -159,6 +160,9 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		Iterator<StaticEntity> it = this.world.iterator();
 		
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
+		
 		while(it.hasNext())
 		{
 			StaticEntity entity = it.next();
@@ -188,6 +192,8 @@ public class DemoWindowContext1 extends WindowRoutine
 			GLUtils.blend(false);
 		}
 
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		
 	}
 	
 	public void release()
