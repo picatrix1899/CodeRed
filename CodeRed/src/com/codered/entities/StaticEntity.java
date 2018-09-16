@@ -7,7 +7,6 @@ import com.codered.utils.WindowContextHelper;
 
 import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 public class StaticEntity extends BaseEntity
 {
@@ -53,7 +52,7 @@ public class StaticEntity extends BaseEntity
 	public Matrix4f getTransformationMatrix()
 	{
 		
-		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3f.ONE);
+		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vector3f.ONE);
 		
 		Matrix4f modelTransformation = baseTransformation.mul(this.model.getModel().getMatrix());
 		Matrix4f ownTransformation = modelTransformation.mul(Matrix4f.scaling(getTransform().getScale()));;
@@ -77,7 +76,7 @@ public class StaticEntity extends BaseEntity
 	public Matrix4f Test()
 	{
 	
-		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3f.ONE);
+		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vector3f.ONE);
 	
 		Matrix4f ownTransformation = baseTransformation.mul(Matrix4f.scaling(getTransform().getScale()));;
 		if(this.transform.getParent() != null)

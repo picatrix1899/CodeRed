@@ -1,4 +1,4 @@
-package com.codered.ppf;
+package com.codered.managing.loader.data;
 
 public class MaterialData
 {

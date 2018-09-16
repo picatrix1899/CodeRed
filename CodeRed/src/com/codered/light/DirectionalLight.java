@@ -10,7 +10,7 @@ import cmn.utilslib.math.vector.api.Vec3f;
 public class DirectionalLight
 {
 	public BaseLight base;
-	public Vec3f direction = new Vector3f();
+	public Vector3f direction = new Vector3f();
 	
 	public DirectionalLight(IColor3Base color, float intensity, Vec3f direction)
 	{

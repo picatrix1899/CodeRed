@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.HashMap;
 
 import com.codered.font.FontType;
+import com.codered.managing.loader.data.MaterialData;
 import com.codered.managing.loader.data.OBJFile;
 import com.codered.managing.models.Mesh;
 import com.codered.managing.models.RawModel;
 import com.codered.managing.models.TexturedModel;
 import com.codered.material.Material;
 import com.codered.material.MaterialLoader;
-import com.codered.ppf.MaterialData;
 import com.codered.texture.Texture;
 import com.codered.texture.TextureData;
 import com.codered.texture.TextureLoader;

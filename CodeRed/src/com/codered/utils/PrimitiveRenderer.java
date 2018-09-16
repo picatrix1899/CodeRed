@@ -1,4 +1,4 @@
-package com.codered.rendering;
+package com.codered.utils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -6,13 +6,13 @@ import org.lwjgl.opengl.GL15;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
 import com.codered.shaders.object.SimpleObjectShader;
-import com.codered.utils.GLUtils;
-import com.codered.window.Window;
+import com.codered.shaders.object.simple.Colored_OShader;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.vector.Vector2f;
+import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec3fBase;
 import cmn.utilslib.math.vector.api.Vec2fBase;
 import cmn.utilslib.math.vector.api.Vec3f;
@@ -41,16 +41,16 @@ public class PrimitiveRenderer
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
+		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		shader.setInput("color", c);
 		
-		Window.active.getContext().soShaders.Colored.setInput("color", c);
-		
-		Window.active.getContext().soShaders.Colored.use();
+		shader.use();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawElements(GL11.GL_POINTS, indices.length, GL11.GL_UNSIGNED_INT, 0);
 		
-		Window.active.getContext().soShaders.Colored.stop();
+		shader.stop();
 	}
 	
 	public static void drawLine(Vec3fBase p1, Vec3fBase p2, IColor3Base c)
@@ -63,20 +63,22 @@ public class PrimitiveRenderer
 		
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
 		
-		Window.active.getContext().soShaders.Colored.setInput("color",c);
-		Window.active.getContext().soShaders.Colored.use();
+		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		shader.setInput("color", c);
+		
+		shader.use();
 		
 		GL11.glLineWidth(3);
 		GL11.glDrawArrays(GL11.GL_LINES,  0, 2);
 		
-		Window.active.getContext().soShaders.Colored.stop();
+		shader.stop();
 	}
 	
-	public static void drawTexturedQuad(Vec3fBase p0, Vec3fBase p1, Vec3fBase p2, Vec3fBase p3, Material m, SimpleObjectShader shader)
+	public static void drawTexturedQuad(Vec3f p0, Vec3f p1, Vec3f p2, Vec3f p3, Material m, SimpleObjectShader shader)
 	{
-		Matrix4f model = Matrix4f.modelMatrix(Vec3f.ZERO, new Quaternion(), Vec3f.ONE);
+		Matrix4f model = Matrix4f.modelMatrix(Vector3f.ZERO, new Quaternion(), Vector3f.ONE);
 		
 		shader.setInput("T_model", model);
 		
@@ -106,7 +108,7 @@ public class PrimitiveRenderer
 		vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0, 1);
+		BindingUtils.bindVAO(vao, 0, 1);
 		
 		shader.setInput("material", m);
 		
@@ -235,15 +237,16 @@ public class PrimitiveRenderer
 		vao.storeData(0, vertices, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
-		GLUtils.bindVAO(vao, 0);
+		BindingUtils.bindVAO(vao, 0);
 		
-		Window.active.getContext().soShaders.Colored.setInput("color",c);
+		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		shader.setInput("color", c);
 		
-		Window.active.getContext().soShaders.Colored.use();
+		shader.use();
 		
 		GL11.glLineWidth(10);
 		GL11.glDrawElements(GL11.GL_LINES, indices.length, GL11.GL_UNSIGNED_INT, 0);
 		
-		Window.active.getContext().soShaders.Colored.stop();
+		shader.stop();
 	}
 }

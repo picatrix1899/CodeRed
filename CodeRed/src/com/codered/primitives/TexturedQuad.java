@@ -10,7 +10,6 @@ import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec3f;
-import cmn.utilslib.math.vector.api.Vec3fBase;
 
 public class TexturedQuad
 {
@@ -23,7 +22,7 @@ public class TexturedQuad
 	
 	private VAO vao;
 	
-	public TexturedQuad(Vec3fBase newX, Vec3fBase newZ, Material mat)
+	public TexturedQuad(Vec3f newX, Vec3f newZ, Material mat)
 	{
 		this.newX.set(newX);
 		this.newZ.set(newZ);
@@ -35,7 +34,7 @@ public class TexturedQuad
 		v[2] = new Vector3f().add(newX);
 		v[3] = new Vector3f().add(newX).add(newZ);
 		
-		Vector3f normal = (Vector3f)newX.crossN(newZ).normalize().negate();
+		Vector3f normal = ((Vector3f)newX.crossN(newZ)).normalize().negate();
 		Vector3f tangent = calculateTangents();
 		
 		this.vao = new VAO();
@@ -73,7 +72,7 @@ public class TexturedQuad
 	public Matrix4f getTransformationMatrix()
 	{
 		
-		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3f.ONE);
+		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vector3f.ONE);
 		
 		Matrix4f ownTransformation = baseTransformation.mul(Matrix4f.scaling(getTransform().getScale()));;
 		if(this.transform.getParent() != null)

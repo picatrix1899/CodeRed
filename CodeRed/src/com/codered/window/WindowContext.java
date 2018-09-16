@@ -7,8 +7,8 @@ import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
 import com.codered.shader.ShaderProgram;
 
+import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.api.Vec2f;
-import cmn.utilslib.math.vector.api.Vec2fBase;
 
 public interface WindowContext
 {
@@ -22,9 +22,9 @@ public interface WindowContext
 	
 	int getHeight();
 	
-	Vec2fBase getSize();
+	Vec2f getSize();
 	
-	void getSize(Vec2f v);
+	void getSize(Vector2f v);
 	
 	ShaderParts getShaderParts();
 	

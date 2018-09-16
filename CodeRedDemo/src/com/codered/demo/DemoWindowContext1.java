@@ -93,7 +93,7 @@ public class DemoWindowContext1 extends WindowRoutine
 
 		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
 		
-		this.projection = MathUtils.createProjectionMatrix(this.context.getSize(), 60, 45, 0.1f, 1000);
+		this.projection = MathUtils.createProjectionMatrix2(this.context.getSize(), 60, 70, 0.1f, 1000);
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
 		

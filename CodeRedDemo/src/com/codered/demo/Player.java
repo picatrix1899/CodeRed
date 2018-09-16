@@ -1,9 +1,7 @@
 package com.codered.demo;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+
 
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
@@ -17,17 +15,14 @@ import com.codered.input.InputConfiguration.KeyEventArgs;
 import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
-import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.geometry.AABB3f;
 import cmn.utilslib.math.geometry.OBB3f;
 import cmn.utilslib.math.geometry.OBBOBBResolver;
 import cmn.utilslib.math.geometry.Point3f;
-import cmn.utilslib.math.geometry.RayOBBResolver;
 import cmn.utilslib.math.vector.Vector3f;
 import cmn.utilslib.math.vector.api.Vec3f;
-import cmn.utilslib.math.vector.pools.Vector3fPool;
 
 
 
@@ -55,7 +50,7 @@ public class Player extends BaseEntity
 		this.world = world;
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(4, 9, 4));
 		
-		this.transform.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
+		this.transform.setPos(new Vector3f(0.0f, 0.0f, 0.0f));
 		//Transform t = Session.get().getWorld().getStaticEntity(0).getTransform();
 		
 		//t.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
@@ -104,8 +99,8 @@ public class Player extends BaseEntity
 	
 	private void updateMovement(KeyEventArgs args)
 	{
-		Vec3f dir = Vector3fPool.get();
-		Vec3f vel = Vector3fPool.get();
+		Vector3f dir = new Vector3f();
+		Vector3f vel = new Vector3f();
 
 		if(args.keyPresent(Keys.k_delete))
 		{
@@ -148,9 +143,6 @@ public class Player extends BaseEntity
 		vel = checkCollisionStatic(vel);
 		
 		this.transform.moveBy(vel);
-		
-		Vector3fPool.store((Vector3f) dir);
-		Vector3fPool.store((Vector3f) vel);
 	}
 	
 	public Camera getCamera() { return this.camera; }
@@ -165,11 +157,11 @@ public class Player extends BaseEntity
 		return this.aabb2.transform(translation);
 	}
 	
-	private Vec3f checkCollisionStatic(Vec3f vel)
+	private Vector3f checkCollisionStatic(Vector3f vel)
 	{
-		Vector3f sum = Vector3fPool.get();
-		Vector3f partial = Vector3fPool.get();
-		Vector3f tempPos = Vector3fPool.get();
+		Vector3f sum = new Vector3f();
+		Vector3f partial = new Vector3f();
+		Vector3f tempPos = new Vector3f();
 
 		Matrix4f translation;
 		
@@ -209,10 +201,6 @@ public class Player extends BaseEntity
 		
 		vel.add(sum);
 		
-		Vector3fPool.store(sum);
-		Vector3fPool.store(partial);
-		Vector3fPool.store(tempPos);
-		
 		return vel;		
 	}
 	
@@ -249,15 +237,7 @@ public class Player extends BaseEntity
 //			
 //			e.highlighted = false;
 //		}
-		
-		if(ent != null)
-		{
-			this.selectedEntity = ent.id;
-		}
-		else
-		{
-			this.selectedEntity = -1;
-		}
+
 	}
 	
 	public Vector3f getPos() { return this.transform.getPos(); }

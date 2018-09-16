@@ -15,9 +15,7 @@ import cmn.utilslib.essentials.ListUtils;
 import cmn.utilslib.math.geometry.Point3f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec2f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
-import cmn.utilslib.math.vector.api.Vec3f;
 import cmn.utilslib.math.vector.api.Vec3fBase;
 
 public class TerrainLoader
@@ -141,20 +139,20 @@ public class TerrainLoader
 	
 	private void calculateTangents(Triangle t)
 	{
-		Vec3f deltaPos1 = t.getVertexB().pos.vectorFromf(t.getVertexA().pos, new Vector3f());
-		Vec3f deltaPos2 = t.getVertexC().pos.vectorFromf(t.getVertexA().pos, new Vector3f());
+		Vector3f deltaPos1 = t.getVertexB().pos.vectorFromf(t.getVertexA().pos, new Vector3f());
+		Vector3f deltaPos2 = t.getVertexC().pos.vectorFromf(t.getVertexA().pos, new Vector3f());
 		
-		Vec2f uv0 = t.getVertexA().uv;
-		Vec2f uv1 = t.getVertexB().uv;
-		Vec2f uv2 = t.getVertexC().uv;
+		Vector2f uv0 = t.getVertexA().uv;
+		Vector2f uv1 = t.getVertexB().uv;
+		Vector2f uv2 = t.getVertexC().uv;
 		
-		Vec2f deltaUv1 = uv1.subN(uv0);
-		Vec2f deltaUv2 = uv2.subN(uv0);
+		Vector2f deltaUv1 = uv1.subN(uv0);
+		Vector2f deltaUv2 = uv2.subN(uv0);
 
 		float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
 		deltaPos1.mul(deltaUv2.getY());
 		deltaPos2.mul(deltaUv1.getY());
-		Vec3f tangent = deltaPos1.subN(deltaPos2);
+		Vector3f tangent = deltaPos1.subN(deltaPos2);
 		tangent.mul(r);
 		
 		t.getVertexA().tangent.add(tangent);

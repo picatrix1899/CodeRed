@@ -122,7 +122,7 @@ public class Mesh
 	
 	public Matrix4f getMatrix()
 	{
-		return Matrix4f.modelMatrix(Vector3f.TEMP.set(0.0f,  yc,  0.0f), new Quaternion(), Vector3f.TEMP2.set(downscale));
+		return Matrix4f.modelMatrix(new Vector3f(0.0f,  yc,  0.0f), new Quaternion(), new Vector3f(downscale));
 	}
 	
 	public float getYCorrection()

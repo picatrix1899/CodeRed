@@ -13,8 +13,6 @@ import cmn.utilslib.math.geometry.Point3f;
 import cmn.utilslib.math.geometry.Triangle3f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec2f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 public class OBJFile
 {
@@ -123,20 +121,20 @@ public class OBJFile
 	
 	private void calculateTangents(Vertex a, Vertex b, Vertex c)
 	{
-		Vec3f deltaPos1 = a.pos.vectorTof(b.pos, new Vector3f());
-		Vec3f deltaPos2 = a.pos.vectorTof(c.pos, new Vector3f());
+		Vector3f deltaPos1 = a.pos.vectorTof(b.pos, new Vector3f());
+		Vector3f deltaPos2 = a.pos.vectorTof(c.pos, new Vector3f());
 		
-		Vec2f uv0 = a.uv;
-		Vec2f uv1 = b.uv;
-		Vec2f uv2 = c.uv;
+		Vector2f uv0 = a.uv;
+		Vector2f uv1 = b.uv;
+		Vector2f uv2 = c.uv;
 		
-		Vec2f deltaUv1 = uv1.subN(uv0);
-		Vec2f deltaUv2 = uv2.subN(uv0);
+		Vector2f deltaUv1 = uv1.subN(uv0);
+		Vector2f deltaUv2 = uv2.subN(uv0);
 
 		float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
 		deltaPos1.mul(deltaUv2.getY());
 		deltaPos2.mul(deltaUv1.getY());
-		Vec3f tangent = deltaPos1.subN(deltaPos2);
+		Vector3f tangent = deltaPos1.subN(deltaPos2);
 		tangent.mul(r);
 		
 		a.tangent.add(tangent);

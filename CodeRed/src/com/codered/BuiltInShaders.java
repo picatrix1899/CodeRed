@@ -6,10 +6,11 @@ import com.codered.ppf.PPF_BlurH;
 import com.codered.ppf.PPF_BlurV;
 import com.codered.ppf.PPF_Brightness;
 import com.codered.ppf.PPF_Contrast;
+import com.codered.ppf.PPF_DepthMap;
 import com.codered.ppf.PPF_HDR;
+import com.codered.ppf.PPF_Invert;
 import com.codered.ppf.PPF_No;
 import com.codered.ppf.PPF_RadialBlur;
-import com.codered.rendering.ppf.PPF_ContrastMS;
 import com.codered.resource.ResourcePath;
 import com.codered.resource.ResourcePath.ResourceDestination;
 import com.codered.shader.MalformedShaderException;
@@ -25,7 +26,9 @@ import com.codered.shaders.postprocess.filter.BlurV_PPFilter;
 import com.codered.shaders.postprocess.filter.Brightness_PPFilter;
 import com.codered.shaders.postprocess.filter.ContrastMS_PPFilter;
 import com.codered.shaders.postprocess.filter.Contrast_PPFilter;
+import com.codered.shaders.postprocess.filter.DepthMap_PPFilter;
 import com.codered.shaders.postprocess.filter.HDR_PPFilter;
+import com.codered.shaders.postprocess.filter.Invert_PPFilter;
 import com.codered.shaders.postprocess.filter.No_PPFilter;
 import com.codered.shaders.postprocess.filter.RadialBlur_PPFilter;
 import com.codered.utils.ShaderPartUtils;
@@ -79,11 +82,9 @@ public class BuiltInShaders
 			loadDefaultEmbededShader(context, path, "ppf_brightness");
 			loadDefaultEmbededShader(context, path, "ppf_contrast");
 			loadDefaultEmbededShader(context, path, "ppf_contrastMS");
-	//		loadDefaultEmbededShader(path, "ppf_depthMap");
-	//		loadDefaultEmbededShader(path, "ppf_depthTest");
-	//		loadDefaultEmbededShader(path, "ppf_depthTestMS");
+			loadDefaultEmbededShader(context, path, "ppf_depthMap");
 			loadDefaultEmbededShader(context, path, "ppf_hdr");
-	//		loadDefaultEmbededShader(path, "ppf_invert");
+			loadDefaultEmbededShader(context, path, "ppf_invert");
 			loadDefaultEmbededShader(context, path, "ppf_no");
 			loadDefaultEmbededShader(context, path, "ppf_radialBlur");
 			
@@ -91,7 +92,6 @@ public class BuiltInShaders
 			loadDefaultEmbededShader(context, path, "gui_color");
 			loadDefaultEmbededShader(context, path, "gui_no");
 			loadDefaultEmbededShader(context, path, "gui_font");
-	//		loadDefaultEmbededShadercontext, (path, "gui_texture");
 			
 			context.addShader(AmbientLight_OShader.class);
 			context.addShader(DirectionalLight_N_OShader.class);
@@ -104,6 +104,8 @@ public class BuiltInShaders
 			context.addShader(No_PPFilter.class);
 			context.addShader(ContrastMS_PPFilter.class);
 			context.addShader(RadialBlur_PPFilter.class);
+			context.addShader(DepthMap_PPFilter.class);
+			context.addShader(Invert_PPFilter.class);
 			context.addShader(No_GUIShader.class);
 			context.addShader(Font_GUIShader.class);
 			
@@ -113,8 +115,9 @@ public class BuiltInShaders
 			context.addPPF(PPF_Contrast.class);
 			context.addPPF(PPF_HDR.class);
 			context.addPPF(PPF_No.class);
-			context.addPPF(PPF_ContrastMS.class);
 			context.addPPF(PPF_RadialBlur.class);
+			context.addPPF(PPF_DepthMap.class);
+			context.addPPF(PPF_Invert.class);
 		}
 		catch(MalformedShaderException | IOException e)
 		{

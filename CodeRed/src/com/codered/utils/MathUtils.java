@@ -39,4 +39,27 @@ public class MathUtils
 		
 		return projectionMatrix;
 	}
+	
+	public static Matrix4f createProjectionMatrix2(Vec2fBase size, float fovX, float fovY, float near, float far)
+	{
+		Matrix4f projectionMatrix = Matrix4f.identity();
+		
+		float aspectRatio = size.getX() / size.getY();
+		float y_scale = (float) ((1f / Math.tan(Math.toRadians(fovY / 2f))));
+		float x_scale = y_scale / aspectRatio;
+		float range = far - near;
+		
+		projectionMatrix = new Matrix4f();
+		
+		projectionMatrix.m0.x = x_scale;
+		projectionMatrix.m1.y = y_scale;
+		projectionMatrix.m2.z = -((far + near) / range);
+		projectionMatrix.m3.a = 0;
+		
+		projectionMatrix.m3.z = -1;
+		projectionMatrix.m2.a = -((2 * near * far) / range);
+
+		
+		return projectionMatrix;
+	}
 }

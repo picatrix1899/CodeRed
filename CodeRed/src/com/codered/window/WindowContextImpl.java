@@ -12,7 +12,6 @@ import com.codered.shader.ShaderParts;
 
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.api.Vec2f;
-import cmn.utilslib.math.vector.api.Vec2fBase;
 
 public class WindowContextImpl implements WindowContext
 {
@@ -66,8 +65,8 @@ public class WindowContextImpl implements WindowContext
 	public String getTitle() { return this.title; }
 	public int getWidth() { return this.width; }
 	public int getHeight() { return this.height; }
-	public Vec2fBase getSize() { return new Vector2f(this.width, this.height); }
-	public void getSize(Vec2f v) { v.set(this.width, this.height); }
+	public Vec2f getSize() { return new Vector2f(this.width, this.height); }
+	public void getSize(Vector2f v) { v.set(this.width, this.height); }
 	public ResourceManager getResourceManager() { return this.resourceManager; }
 	public Window getWindow() { return this.window; }
 	public ShaderParts getShaderParts() { return this.shaderParts; }
