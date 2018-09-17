@@ -18,10 +18,15 @@ public class Colored_OShader extends ShaderProgram
 	public Colored_OShader(WindowContext context)
 	{
 		super(context);
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
+		
 		addUniform("T_model");
 		addUniform("T_view");
 		addUniform("T_projection");

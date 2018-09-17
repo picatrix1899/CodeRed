@@ -34,7 +34,7 @@ public class TexturedQuad
 		v[2] = new Vector3f().add(newX);
 		v[3] = new Vector3f().add(newX).add(newZ);
 		
-		Vector3f normal = ((Vector3f)newX.crossN(newZ)).normalize().negate();
+		Vector3f normal = ((Vector3f)newX.crossN(newZ)).normalize();
 		Vector3f tangent = calculateTangents();
 		
 		this.vao = new VAO();

@@ -2,30 +2,26 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
-import com.codered.material.Material;
-import com.codered.shaders.object.SimpleObjectShader;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
-public class No_OShader extends SimpleObjectShader
+public class No_OShader extends TexturedObjectShader
 {
 
 	public No_OShader(WindowContext context)
 	{
 		super(context);
+		
+		
+		compile();
+
+		getAllUniformLocations();
 	}
 
 	protected void getAllUniformLocations()
 	{
 		super.getAllUniformLocations();
-		
-		addUniform("textureMap");
-	}
-
-	private void loadMaterial0(Material mat)
-	{
-		loadTexture("textureMap", 0, mat.getAlbedoMap());
 	}
 	
 	public void use()
@@ -33,8 +29,6 @@ public class No_OShader extends SimpleObjectShader
 		start();
 		
 		super.use();
-		
-		loadMaterial0(getInput("material"));
 	}
 
 	public void attachShaderParts()

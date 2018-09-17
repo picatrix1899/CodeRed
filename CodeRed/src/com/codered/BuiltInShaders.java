@@ -19,8 +19,10 @@ import com.codered.shader.ShaderPartLoader;
 import com.codered.shaders.gui.Font_GUIShader;
 import com.codered.shaders.gui.No_GUIShader;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
+import com.codered.shaders.object.simple.Colored_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_N_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
+import com.codered.shaders.object.simple.No_OShader;
 import com.codered.shaders.postprocess.filter.BlurH_PPFilter;
 import com.codered.shaders.postprocess.filter.BlurV_PPFilter;
 import com.codered.shaders.postprocess.filter.Brightness_PPFilter;
@@ -50,11 +52,11 @@ public class BuiltInShaders
 			
 			path.base("/resources/shaders/object/simple/");
 			loadDefaultEmbededShader(context, path, "o_ambientLight");
-	//		loadDefaultEmbededShader(context, path, "o_colored");
+			loadDefaultEmbededShader(context, path, "o_colored");
 			loadDefaultEmbededShader(context, path, "o_directionalLight");
 			loadDefaultEmbededShader(context, path, "o_directionalLight_N");
 	//		loadDefaultEmbededShader(context, path, "o_glow");
-	//		loadDefaultEmbededShader(context, path, "o_no");
+			loadDefaultEmbededShader(context, path, "o_no");
 	//		loadDefaultEmbededShader(context, path, "o_pointLight_N");
 			
 			path.base("/resources/shaders/terrain/simple/");
@@ -94,6 +96,8 @@ public class BuiltInShaders
 			loadDefaultEmbededShader(context, path, "gui_font");
 			
 			context.addShader(AmbientLight_OShader.class);
+			context.addShader(No_OShader.class);
+			context.addShader(Colored_OShader.class);
 			context.addShader(DirectionalLight_N_OShader.class);
 			context.addShader(DirectionalLight_OShader.class);
 			context.addShader(BlurH_PPFilter.class);
