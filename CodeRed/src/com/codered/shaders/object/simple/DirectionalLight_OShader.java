@@ -17,7 +17,7 @@ public class DirectionalLight_OShader extends TexturedObjectShader
 	{
 		super(context);
 		
-		this.u_directionalLight = new UniformDirectionalLight("directionalLight", context, this);
+		this.u_directionalLight = new UniformDirectionalLight("directionalLight");
 		
 		compile();
 		

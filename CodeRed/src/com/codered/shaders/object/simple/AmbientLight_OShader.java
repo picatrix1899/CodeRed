@@ -20,8 +20,8 @@ public class AmbientLight_OShader extends TexturedObjectShader
 	{
 		super(context);
 		
-		this.u_ambientLight = new UniformAmbientLight("ambientLight", context, this);
-		this.u_skyColor = new UniformVector3("skyColor", context, this);
+		this.u_ambientLight = new UniformAmbientLight("ambientLight");
+		this.u_skyColor = new UniformVector3("skyColor");
 		
 		compile();
 

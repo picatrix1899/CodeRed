@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
 import com.codered.texture.Texture;
-import com.codered.window.WindowContext;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -21,17 +20,12 @@ import cmn.utilslib.math.vector.api.Vec4fBase;
 public abstract class Uniform
 {
 	protected String name;
-	protected WindowContext context;
-	
-	protected ShaderProgram shader;
 	
 	private HashMap<String,Integer> uniforms = Maps.newHashMap();
 	
-	public Uniform(String name, WindowContext context, ShaderProgram shader)
+	public Uniform(String name)
 	{
 		this.name = name;
-		this.context = context;
-		this.shader = shader;
 	}
 	
 	public void getUniformLocations(ShaderProgram shader)

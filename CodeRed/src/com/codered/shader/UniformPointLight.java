@@ -1,16 +1,15 @@
 package com.codered.shader;
 
 import com.codered.light.PointLight;
-import com.codered.window.WindowContext;
 
 public class UniformPointLight extends Uniform
 {
 
 	private PointLight light;
 	
-	public UniformPointLight(String name, WindowContext context, ShaderProgram shader)
+	public UniformPointLight(String name)
 	{
-		super(name, context, shader);
+		super(name);
 		
 		addUniform(this.name + ".base.color");
 		addUniform(this.name + ".base.intensity");

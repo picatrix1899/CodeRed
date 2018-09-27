@@ -1,15 +1,14 @@
 package com.codered.shader;
 
 import com.codered.light.AmbientLight;
-import com.codered.window.WindowContext;
 
 public class UniformAmbientLight extends Uniform
 {
 	private AmbientLight ambient;
 	
-	public UniformAmbientLight(String name, WindowContext context, ShaderProgram shader)
+	public UniformAmbientLight(String name)
 	{
-		super(name, context, shader);
+		super(name);
 		
 		addUniform(this.name + ".base.color");
 		addUniform(this.name + ".base.intensity");

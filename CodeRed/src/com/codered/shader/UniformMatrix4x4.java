@@ -1,7 +1,5 @@
 package com.codered.shader;
 
-import com.codered.window.WindowContext;
-
 import cmn.utilslib.math.matrix.Matrix4f;
 
 public class UniformMatrix4x4 extends Uniform
@@ -9,9 +7,9 @@ public class UniformMatrix4x4 extends Uniform
 
 	private Matrix4f matrix;
 	
-	public UniformMatrix4x4(String name, WindowContext context, ShaderProgram shader)
+	public UniformMatrix4x4(String name)
 	{
-		super(name, context, shader);
+		super(name);
 		
 		addUniform(this.name);	
 	}

@@ -1,7 +1,6 @@
 package com.codered.shader;
 
 import com.codered.material.Material;
-import com.codered.window.WindowContext;
 
 public class UniformMaterial extends Uniform
 {
@@ -10,9 +9,9 @@ public class UniformMaterial extends Uniform
 	
 	private Material material;
 
-	public UniformMaterial(String name, int startIndex, WindowContext context, ShaderProgram shader)
+	public UniformMaterial(String name, int startIndex)
 	{
-		super(name, context, shader);
+		super(name);
 		this.startIndex = startIndex;
 		
 		addUniform(this.name + ".albedoMap");

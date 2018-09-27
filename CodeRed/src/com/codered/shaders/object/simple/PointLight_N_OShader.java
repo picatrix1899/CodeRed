@@ -19,8 +19,8 @@ public class PointLight_N_OShader extends SimpleObjectShader
 	{
 		super(context);
 		
-		this.u_material = new UniformMaterial("material", 0, context, this);
-		this.u_pointLight = new UniformPointLight("light", context, this);
+		this.u_material = new UniformMaterial("material", 0);
+		this.u_pointLight = new UniformPointLight("light");
 		
 		compile();
 	
