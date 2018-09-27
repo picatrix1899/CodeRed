@@ -21,11 +21,4 @@ public abstract class SimpleObjectShader extends ShaderProgram
 		addUniform(u_T_projection);
 	}
 
-	
-	public void use()
-	{	
-		this.u_camera.load();
-		this.u_T_model.load();
-		this.u_T_projection.load();
-	}
 }

@@ -7,7 +7,6 @@ import com.codered.shader.UniformVector3;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
-import cmn.utilslib.math.vector.Vector3f;
 
 
 public class AmbientLight_OShader extends TexturedObjectShader
@@ -27,21 +26,6 @@ public class AmbientLight_OShader extends TexturedObjectShader
 
 		getAllUniformLocations();
 	}
-	
-	public void use()
-	{
-		start();
-		
-		super.use();
-		
-		this.u_skyColor.set(Vector3f.ZERO);
-		
-		this.u_material.load();
-		this.u_ambientLight.load();
-		this.u_skyColor.load();
-	}
-
-
 
 	public void attachShaderParts()
 	{

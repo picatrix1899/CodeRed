@@ -5,8 +5,6 @@ import cmn.utilslib.math.matrix.Matrix4f;
 public class UniformMatrix4x4 extends Uniform
 {
 
-	private Matrix4f matrix;
-	
 	public UniformMatrix4x4(String name)
 	{
 		super(name);
@@ -14,14 +12,8 @@ public class UniformMatrix4x4 extends Uniform
 		addUniform("");	
 	}
 
-
-	public void load()
-	{
-		loadMatrix("", this.matrix);
-	}
-
 	public void set(Matrix4f matrix)
 	{
-		this.matrix = matrix;
+		loadMatrix("", matrix);
 	}
 }

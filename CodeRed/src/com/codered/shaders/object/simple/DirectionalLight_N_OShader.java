@@ -3,38 +3,24 @@ package com.codered.shaders.object.simple;
 import java.util.List;
 
 import com.codered.shader.UniformDirectionalLight;
-import com.codered.shader.UniformMaterial;
-import com.codered.shaders.object.SimpleObjectShader;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
-public class DirectionalLight_N_OShader extends SimpleObjectShader
+public class DirectionalLight_N_OShader extends TexturedObjectShader
 {
 
-	public UniformMaterial u_material = new UniformMaterial("material", 0);
 	public UniformDirectionalLight u_directionalLight  = new UniformDirectionalLight("directionalLight");
 	
 	public DirectionalLight_N_OShader(WindowContext context)
 	{
 		super(context);
 		
-		addUniform(u_material);
 		addUniform(u_directionalLight);
 		
 		compile();
 		
 		getAllUniformLocations();
-	}
-	
-	public void use()
-	{
-		start();
-		
-		super.use();
-		
-		this.u_material.load();
-		this.u_directionalLight.load();
 	}
 
 	public void attachShaderParts()

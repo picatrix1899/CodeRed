@@ -8,10 +8,6 @@ import cmn.utilslib.math.vector.Vector3f;
 public class UniformCamera extends Uniform
 {
 
-	private Camera camera;
-	private Matrix4f view;
-	private Vector3f pos;
-	
 	public UniformCamera(String name)
 	{
 		super(name);
@@ -20,26 +16,15 @@ public class UniformCamera extends Uniform
 		addUniform("T_view");
 	}
 
-	public void load()
-	{
-		if(camera != null)
-		{
-			this.view = camera.getViewMatrix();
-			this.pos = camera.getTotalPos();
-		}
-		
-		loadVector3("position", this.pos);
-		loadMatrix("T_view", this.view);
-	}
-
 	public void set(Matrix4f view, Vector3f pos)
 	{
-		this.view = view;
-		this.pos = pos;
+		loadVector3("position", pos);
+		loadMatrix("T_view", view);
 	}
 	
 	public void set(Camera camera)
 	{
-		this.camera = camera;
+		loadVector3("position", camera.getTotalPos());
+		loadMatrix("T_view", camera.getViewMatrix());
 	}
 }

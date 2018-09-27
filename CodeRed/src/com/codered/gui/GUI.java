@@ -71,14 +71,17 @@ public abstract class GUI
 		vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
 		vao.storeIndices(new int[] {0, 1, 2, 2, 3, 0}, GL15.GL_STATIC_DRAW);
 		
+
+		
+		No_GUIShader shader = this.context.getShader(No_GUIShader.class);
+		shader.start();
+		shader.u_screenSpace.set(this.context.getSize());
+		shader.u_textureMap.set(t);
+		
 		BindingUtils.bindVAO(vao, 0, 1, 2, 3);
-		
-		this.context.getShader(No_GUIShader.class).loadTextureMap(t);
-		this.context.getShader(No_GUIShader.class).use();
-		
 		GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
 		
-		this.context.getShader(No_GUIShader.class).stop();
+		shader.stop();
 	}
 	
 	protected void drawLine(IColor3Base c, float width, Vector2f start, Vector2f... p)

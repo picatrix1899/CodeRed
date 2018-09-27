@@ -5,8 +5,6 @@ import com.codered.light.DirectionalLight;
 public class UniformDirectionalLight extends Uniform
 {
 
-	private DirectionalLight light;
-	
 	public UniformDirectionalLight(String name)
 	{
 		super(name);
@@ -16,16 +14,11 @@ public class UniformDirectionalLight extends Uniform
 		addUniform("direction");
 	}
 
-	public void load()
-	{
-		loadColor3("base.color", this.light.base.color);
-		loadFloat("base.intensity", this.light.base.intensity);
-		loadVector3("direction", this.light.direction);
-	}
-
 	public void set(DirectionalLight light)
 	{
-		this.light = light;
+		loadColor3("base.color", light.base.color);
+		loadFloat("base.intensity", light.base.intensity);
+		loadVector3("direction", light.direction);
 	}
 	
 }

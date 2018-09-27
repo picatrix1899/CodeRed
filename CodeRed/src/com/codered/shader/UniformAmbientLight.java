@@ -4,8 +4,7 @@ import com.codered.light.AmbientLight;
 
 public class UniformAmbientLight extends Uniform
 {
-	private AmbientLight ambient;
-	
+
 	public UniformAmbientLight(String name)
 	{
 		super(name);
@@ -14,14 +13,9 @@ public class UniformAmbientLight extends Uniform
 		addUniform("base.intensity");
 	}
 
-	public void load()
-	{
-		loadColor3("base.color", this.ambient.base.color);
-		loadFloat("base.intensity", this.ambient.base.intensity);
-	}
-
 	public void set(AmbientLight ambient)
 	{
-		this.ambient = ambient;
+		loadColor3("base.color", ambient.base.color);
+		loadFloat("base.intensity", ambient.base.intensity);
 	}
 }

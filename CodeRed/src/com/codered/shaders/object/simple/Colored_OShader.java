@@ -27,15 +27,6 @@ public class Colored_OShader extends SimpleObjectShader
 		getAllUniformLocations();
 	}
 
-	public void use()
-	{
-		start();
-		
-		super.use();
-		
-		u_color.load();
-	}
-
 	public void attachShaderParts()
 	{
 		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_colored"));

@@ -23,16 +23,6 @@ public class PointLight_N_OShader extends TexturedObjectShader
 		getAllUniformLocations();
 	}
 
-	public void use()
-	{
-		start();
-		
-		super.use();
-		
-		this.u_material.load();
-		this.u_pointLight.load();
-	}
-
 	public void attachShaderParts()
 	{
 		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_pointLight_N"));

@@ -5,8 +5,6 @@ import cmn.utilslib.color.colors.api.IColor3Base;
 public class UniformColor3 extends Uniform
 {
 
-	private IColor3Base color;
-	
 	public UniformColor3(String name)
 	{
 		super(name);
@@ -16,12 +14,12 @@ public class UniformColor3 extends Uniform
 
 	public void load()
 	{
-		loadColor3("", this.color);
+		
 	}
 
 	public void set(IColor3Base color)
 	{
-		this.color = color;
+		loadColor3("", color);
 	}
 	
 }

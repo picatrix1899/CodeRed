@@ -3,53 +3,31 @@ package com.codered.shaders.gui;
 import java.util.List;
 
 import com.codered.shader.ShaderProgram;
+import com.codered.shader.UniformTexture;
+import com.codered.shader.UniformVector2;
+import com.codered.shader.UniformVector3;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
-import cmn.utilslib.math.vector.api.Vec2fBase;
-import cmn.utilslib.math.vector.api.Vec3fBase;
 
 public class Font_GUIShader extends ShaderProgram
 {
 
+	public UniformTexture u_fontAtlas = new UniformTexture("fontAtlas", 0);
+	public UniformVector3 u_color = new UniformVector3("color");
+	public UniformVector2 u_screenSpace = new UniformVector2("screenSpace");
+	
 	public Font_GUIShader(WindowContext context)
 	{
 		super(context);
 		
+		addUniform(u_fontAtlas);
+		addUniform(u_color);
+		addUniform(u_screenSpace);
+		
 		compile();
 		
 		getAllUniformLocations();
-	}
-
-	protected void getAllUniformLocations()
-	{
-		addUniform("color");
-		addUniform("fontAtlas");
-		addUniform("screenSpace");
-	}
-	
-	public void loadColor(Vec3fBase color)
-	{
-		setInput("color", color);
-	}
-	
-	public void loadAtlas(int id)
-	{
-		setInput("fontAtlas", id);
-	}
-	
-	public void loadScreenSpace(Vec2fBase v)
-	{
-		setInput("screenSpace", v);
-	}
-	
-	public void use()
-	{
-		start();
-
-		loadVector3("color", getInput("color"));
-		loadTextureId("fontAtlas", 0, getInput("fontAtlas"));
-		loadVector2("screenSpace", getInput("screenSpace"));
 	}
 
 	public void attachShaderParts()

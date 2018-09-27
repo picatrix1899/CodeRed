@@ -1,18 +1,36 @@
 
 Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
+
+create_jar_barghos:
+         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\barghos-math.jar
+
+create_jar_utilslib:
+
+create_jar_codered:
+         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\CodeRed.jar
+
+create_jar_codereddemo:
 BUILD SUCCESSFUL
-Total time: 107 milliseconds
+Total time: 561 milliseconds
 
 Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
 
-build:
+create_jar_barghos:
+         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\barghos-math.jar
 
-init:
+create_jar_utilslib:
 
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
+create_jar_codered:
+         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\CodeRed.jar
+
+create_jar_codereddemo:
+BUILD SUCCESSFUL
+Total time: 551 milliseconds
+
+Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
 
 create_jar_barghos:
+         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\barghos-math.jar
 
 create_jar_utilslib:
 
@@ -22,223 +40,3 @@ create_jar_codereddemo:
          [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.jar
 BUILD SUCCESSFUL
 Total time: 515 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 471 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 482 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 472 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 516 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\${dir.jarfile}\lib\CodeRed.jar
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 583 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 490 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 476 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\${dir.jarfile}\lib\CodeRed.jar
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 585 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 478 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-create_jar_barghos:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\barghos-math.jar
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.jar
-BUILD SUCCESSFUL
-Total time: 472 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-build:
-
-init:
-
-build-project:
-        [echo] barghos-core: G:\picatrix1899_portable\workspace\barghos-core\build.xml
-
-create_jar_barghos:
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-BUILD SUCCESSFUL
-Total time: 487 milliseconds
-
-Buildfile: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.xml
-
-create_jar_barghos:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\lib\barghos-math.jar
-
-create_jar_utilslib:
-
-create_jar_codered:
-
-create_jar_codereddemo:
-         [jar] Building jar: G:\picatrix1899_portable\workspace\git\CodeRed3\CodeRedDemo\CodeRedDemo.jar
-BUILD SUCCESSFUL
-Total time: 486 milliseconds

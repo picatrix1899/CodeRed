@@ -6,8 +6,6 @@ public class UniformMaterial extends Uniform
 {
 
 	private int startIndex;
-	
-	private Material material;
 
 	public UniformMaterial(String name, int startIndex)
 	{
@@ -20,18 +18,13 @@ public class UniformMaterial extends Uniform
 		addUniform("specularIntensity");
 	}
 
-	public void load()
-	{
-		loadTexture("albedoMap", this.startIndex + 0, this.material.getAlbedoMap());
-	
-		if(this.material.hasNormalMap()) loadTexture("normalMap", this.startIndex + 1, this.material.getNormalMap());
-	
-		loadFloat("specularPower", this.material.getSpecularPower());
-		loadFloat("specularIntensity", this.material.getSpecularIntensity());
-	}
-	
 	public void set(Material material)
 	{
-		this.material = material;
+		loadTexture("albedoMap", this.startIndex + 0, material.getAlbedoMap());
+		
+		if(material.hasNormalMap()) loadTexture("normalMap", this.startIndex + 1, material.getNormalMap());
+	
+		loadFloat("specularPower", material.getSpecularPower());
+		loadFloat("specularIntensity", material.getSpecularIntensity());
 	}
 }

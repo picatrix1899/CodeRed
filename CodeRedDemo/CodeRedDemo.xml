@@ -39,7 +39,7 @@
     		<fileset dir="${proj.codered}/embeded" />
     	</copy>
 		
-		<jar destfile="${dir.jarfile}/lib/CodeRed.jar">
+		<jar destfile="${proj.codereddemo}/lib/CodeRed.jar">
         <manifest>
             <attribute name="Class-Path" value="lib/barghos-core.jar 
             	lib/barghos-math.jar 

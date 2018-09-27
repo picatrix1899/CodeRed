@@ -5,8 +5,6 @@ import com.codered.light.PointLight;
 public class UniformPointLight extends Uniform
 {
 
-	private PointLight light;
-	
 	public UniformPointLight(String name)
 	{
 		super(name);
@@ -19,7 +17,7 @@ public class UniformPointLight extends Uniform
 		addUniform("attenuation.exponent");
 	}
 
-	public void load()
+	public void set(PointLight light)
 	{
 		loadColor3("base.color", light.base.color);
 		loadFloat("base.intensity", light.base.intensity);
@@ -27,10 +25,5 @@ public class UniformPointLight extends Uniform
 		loadFloat("attenuation.constant",light.attenuation.constant);
 		loadFloat("attenuation.linear",light.attenuation.linear);
 		loadFloat("attenuation.exponent",light.attenuation.exponent);
-	}
-
-	public void set(PointLight light)
-	{
-		this.light = light;
 	}
 }

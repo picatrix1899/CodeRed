@@ -14,12 +14,5 @@ public abstract class TexturedObjectShader extends SimpleObjectShader
 		
 		addUniform(u_material);
 	}
-	
-	
-	public void use()
-	{
-		super.use();
-		
-		this.u_material.load();
-	}
+
 }

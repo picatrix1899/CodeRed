@@ -17,7 +17,6 @@ import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
-import com.codered.shaders.object.simple.TexturedObjectShader;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
@@ -160,21 +159,22 @@ public class DemoWindowContext1 extends WindowRoutine
 	private void renderWorldFromCamera(double delta, Camera cam)
 	{
 		GLUtils.depthFunc(EvalFunc.LEQUAL);
-		
-		AmbientLight_OShader shader1 = this.context.getShader(AmbientLight_OShader.class);
-		shader1.u_ambientLight.set(this.ambient);
-		
+
 		Iterator<StaticEntity> it = this.world.iterator();
 		
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 		
+		AmbientLight_OShader shader1 = this.context.getShader(AmbientLight_OShader.class);
+		shader1.start();
+		shader1.u_ambientLight.set(this.ambient);
+		
 		while(it.hasNext())
 		{
-			StaticEntity entity = it.next();
-			
-			RenderHelper.renderStaticEntity(entity, cam, shader1, this.projection);
+			RenderHelper.renderStaticEntity(it.next(), cam, shader1, this.projection);
 		}
+		
+		shader1.stop();
 		
 		it = this.world.iterator();
 		
@@ -186,15 +186,15 @@ public class DemoWindowContext1 extends WindowRoutine
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 				
 			DirectionalLight_OShader shader2 = this.context.getShader(DirectionalLight_OShader.class);
+			shader2.start();
 			shader2.u_directionalLight.set(this.directionalLight);
 			
 			while(it.hasNext())
 			{
-				StaticEntity entity = it.next();
-				
-				RenderHelper.renderStaticEntity(entity, cam, shader2, this.projection);
-				
+				RenderHelper.renderStaticEntity(it.next(), cam, shader2, this.projection);
 			}
+			
+			shader2.stop();
 			
 			GLUtils.blend(false);
 		}

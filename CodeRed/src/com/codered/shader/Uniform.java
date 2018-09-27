@@ -36,8 +36,6 @@ public abstract class Uniform
 		}
 	}
 	
-	public abstract void load();
-	
 	private String getUniformName(String uniform)
 	{
 		return uniform.isEmpty() ? this.name : this.name + "." + uniform; 

@@ -24,16 +24,18 @@ public class RenderHelper
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GLUtils.depthTest(false);
 		
-		Font_GUIShader shader = context.getShader(Font_GUIShader.class);
+
 		
-		shader.loadAtlas(text.font.getTexture().getId());
+		Font_GUIShader shader = context.getShader(Font_GUIShader.class);
+		shader.start();
+		shader.u_fontAtlas.set(text.font.getTexture());
+		shader.u_color.set(text.color);
+		shader.u_screenSpace.set(context.getSize());
 		
 		BindingUtils.bindVAO(vao, 0, 1);
 		
-		shader.loadColor(text.color);
-		shader.loadScreenSpace(context.getSize());
-		shader.use();
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vertexCount);
+		
 		shader.stop();
 
 		GLUtils.blend(false);
@@ -46,14 +48,10 @@ public class RenderHelper
 		oShader.u_T_model.set(e.getTransformationMatrix());
 		oShader.u_T_projection.set(projection);
 		oShader.u_material.set(e.getModel().getMaterial());
+
+		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 		
-		oShader.use();			
-		{	
-			BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
-			
-			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-		}
-		oShader.stop();	
+		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 	
 	public static void renderStaticEntity(StaticEntity e, Matrix4f c, Vector3f pos, TexturedObjectShader oShader, Matrix4f projection)
@@ -62,14 +60,10 @@ public class RenderHelper
 		oShader.u_T_model.set(e.getTransformationMatrix());
 		oShader.u_T_projection.set(projection);
 		oShader.u_material.set(e.getModel().getMaterial());
+
+		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 		
-		oShader.use();			
-		{	
-			BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
-			
-			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-		}
-		oShader.stop();	
+		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 	
 	public static void renderTexturedQuad(TexturedQuad e, Camera c, TexturedObjectShader oShader, Matrix4f projection)
@@ -78,13 +72,9 @@ public class RenderHelper
 		oShader.u_T_model.set(e.getTransformationMatrix());
 		oShader.u_T_projection.set(projection);
 		oShader.u_material.set(e.getMaterial());
+
+		BindingUtils.bindVAO(e.getVao(), 0, 1, 2, 3);
 		
-		oShader.use();			
-		{	
-			BindingUtils.bindVAO(e.getVao(), 0, 1, 2, 3);
-			
-			GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
-		}
-		oShader.stop();	
+		GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
 	}
 }

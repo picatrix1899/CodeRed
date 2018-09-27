@@ -5,8 +5,6 @@ import cmn.utilslib.math.vector.api.Vec3fBase;
 public class UniformVector3 extends Uniform
 {
 
-	private Vec3fBase vector;
-	
 	public UniformVector3(String name)
 	{
 		super(name);
@@ -14,14 +12,9 @@ public class UniformVector3 extends Uniform
 		addUniform("");
 	}
 
-	public void load()
-	{
-		loadVector3("", this.vector);
-	}
-
 	public void set(Vec3fBase vector)
 	{
-		this.vector = vector;
+		loadVector3("", vector);
 	}
 	
 }

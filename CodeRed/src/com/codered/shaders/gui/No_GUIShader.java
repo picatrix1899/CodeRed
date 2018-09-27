@@ -2,38 +2,25 @@ package com.codered.shaders.gui;
 
 import java.util.List;
 
+import com.codered.shader.UniformTexture;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
 public class No_GUIShader extends GUIShader
 {
+	
+	public UniformTexture u_textureMap = new UniformTexture("textureMap", 0);
+	
 	public No_GUIShader(WindowContext context)
 	{
 		super(context);
 		
+		addUniform(u_textureMap);
+		
 		compile();
 		
 		getAllUniformLocations();
-	}
-
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
-		
-		addUniform("textureMap");
-	}
-
-	public void loadTextureMap(int id)
-	{
-		setInput("textureMap", id);
-	}
-
-	public void use()
-	{
-		super.use();
-		
-		loadTextureId("textureMap", 0, getInput("textureMap"));
 	}
 
 	public void attachShaderParts()

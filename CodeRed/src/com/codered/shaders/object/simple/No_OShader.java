@@ -18,13 +18,6 @@ public class No_OShader extends TexturedObjectShader
 		getAllUniformLocations();
 	}
 
-	public void use()
-	{
-		start();
-		
-		super.use();
-	}
-
 	public void attachShaderParts()
 	{
 		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_no"));
