@@ -16,8 +16,8 @@ public class UniformCamera extends Uniform
 	{
 		super(name);
 		
-		addUniform(this.name + ".position");
-		addUniform(this.name + ".T_view");
+		addUniform("position");
+		addUniform("T_view");
 	}
 
 	public void load()
@@ -28,8 +28,8 @@ public class UniformCamera extends Uniform
 			this.pos = camera.getTotalPos();
 		}
 		
-		loadVector3(this.name + ".position", this.pos);
-		loadMatrix(this.name + ".T_view", this.view);
+		loadVector3("position", this.pos);
+		loadMatrix("T_view", this.view);
 	}
 
 	public void set(Matrix4f view, Vector3f pos)

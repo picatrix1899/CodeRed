@@ -10,14 +10,14 @@ public class UniformAmbientLight extends Uniform
 	{
 		super(name);
 		
-		addUniform(this.name + ".base.color");
-		addUniform(this.name + ".base.intensity");
+		addUniform("base.color");
+		addUniform("base.intensity");
 	}
 
 	public void load()
 	{
-		loadColor3(this.name + ".base.color", this.ambient.base.color);
-		loadFloat(this.name + ".base.intensity", this.ambient.base.intensity);
+		loadColor3("base.color", this.ambient.base.color);
+		loadFloat("base.intensity", this.ambient.base.intensity);
 	}
 
 	public void set(AmbientLight ambient)

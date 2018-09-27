@@ -11,16 +11,16 @@ public class UniformDirectionalLight extends Uniform
 	{
 		super(name);
 		
-		addUniform(this.name + ".base.color");
-		addUniform(this.name + ".base.intensity");
-		addUniform(this.name + ".direction");
+		addUniform("base.color");
+		addUniform("base.intensity");
+		addUniform("direction");
 	}
 
 	public void load()
 	{
-		loadColor3(this.name + ".base.color", this.light.base.color);
-		loadFloat(this.name + ".base.intensity", this.light.base.intensity);
-		loadVector3(this.name + ".direction", this.light.direction);
+		loadColor3("base.color", this.light.base.color);
+		loadFloat("base.intensity", this.light.base.intensity);
+		loadVector3("direction", this.light.direction);
 	}
 
 	public void set(DirectionalLight light)

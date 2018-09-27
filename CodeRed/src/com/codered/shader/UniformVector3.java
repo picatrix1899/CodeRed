@@ -11,12 +11,12 @@ public class UniformVector3 extends Uniform
 	{
 		super(name);
 		
-		addUniform(this.name);
+		addUniform("");
 	}
 
 	public void load()
 	{
-		loadVector3(this.name, this.vector);
+		loadVector3("", this.vector);
 	}
 
 	public void set(Vec3fBase vector)

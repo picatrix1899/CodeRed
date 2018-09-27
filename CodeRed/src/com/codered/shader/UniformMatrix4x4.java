@@ -11,13 +11,13 @@ public class UniformMatrix4x4 extends Uniform
 	{
 		super(name);
 		
-		addUniform(this.name);	
+		addUniform("");	
 	}
 
 
 	public void load()
 	{
-		loadMatrix(this.name, this.matrix);
+		loadMatrix("", this.matrix);
 	}
 
 	public void set(Matrix4f matrix)

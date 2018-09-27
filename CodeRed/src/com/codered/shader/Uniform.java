@@ -38,9 +38,14 @@ public abstract class Uniform
 	
 	public abstract void load();
 	
+	private String getUniformName(String uniform)
+	{
+		return uniform.isEmpty() ? this.name : this.name + "." + uniform; 
+	}
+	
 	protected void addUniform(String uniform)
 	{
-		this.uniforms.put(uniform, 0);
+		this.uniforms.put(getUniformName(uniform), 0);
 	}
 	
 	protected void loadTextureId(int location, int attrib, int texture)
@@ -111,27 +116,27 @@ public abstract class Uniform
 		GL20.glUniformMatrix4fv(location, false, BufferUtils.wrapFlippedFloatBuffer(val.getColMajor()));
 	}
 	
-	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(uniform), val); }
+	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadVector2(String uniform, Vec2fBase val) { loadVector2(this.uniforms.get(uniform),val); }
+	protected void loadVector2(String uniform, Vec2fBase val) { loadVector2(this.uniforms.get(getUniformName(uniform)),val); }
 	
-	protected void loadColor3(String uniform, IColor3Base val) { loadColor3(this.uniforms.get(uniform), val); }
+	protected void loadColor3(String uniform, IColor3Base val) { loadColor3(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadVector3(String uniform, Vec3fBase val) { loadVector3(this.uniforms.get(uniform), val); }
+	protected void loadVector3(String uniform, Vec3fBase val) { loadVector3(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadVector4(String uniform, Vec4fBase val) { loadVector4(this.uniforms.get(uniform), val); }
+	protected void loadVector4(String uniform, Vec4fBase val) { loadVector4(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadBoolean(String uniform, boolean val) { loadBoolean(this.uniforms.get(uniform), val); }
+	protected void loadBoolean(String uniform, boolean val) { loadBoolean(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadInt(String uniform, int val) { loadInt(this.uniforms.get(uniform), val); }
+	protected void loadInt(String uniform, int val) { loadInt(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadMatrix(String uniform, Matrix4f val) { loadMatrix(this.uniforms.get(uniform), val); }
+	protected void loadMatrix(String uniform, Matrix4f val) { loadMatrix(this.uniforms.get(getUniformName(uniform)), val); }
 	
-	protected void loadTextureId(String uniform, int attrib, int texture) { loadTextureId(this.uniforms.get(uniform), attrib, texture); }
+	protected void loadTextureId(String uniform, int attrib, int texture) { loadTextureId(this.uniforms.get(getUniformName(uniform)), attrib, texture); }
 	
-	protected void loadTexture(String uniform, int attrib, Texture texture) { loadTexture(this.uniforms.get(uniform), attrib, texture); }
+	protected void loadTexture(String uniform, int attrib, Texture texture) { loadTexture(this.uniforms.get(getUniformName(uniform)), attrib, texture); }
 	
-	protected void loadTextureMSId(String uniform, int attrib, int texture) { loadTextureMSId(this.uniforms.get(uniform), attrib, texture); }
+	protected void loadTextureMSId(String uniform, int attrib, int texture) { loadTextureMSId(this.uniforms.get(getUniformName(uniform)), attrib, texture); }
 	
-	protected void loadTextureMS(String uniform, int attrib, Texture texture) { loadTextureMS(this.uniforms.get(uniform), attrib, texture); }
+	protected void loadTextureMS(String uniform, int attrib, Texture texture) { loadTextureMS(this.uniforms.get(getUniformName(uniform)), attrib, texture); }
 }
