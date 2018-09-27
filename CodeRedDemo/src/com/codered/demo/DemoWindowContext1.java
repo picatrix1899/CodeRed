@@ -136,13 +136,6 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
 		
-
-		
-		this.viewportPos = new Vector3f(-15, 10, -100);
-		this.viewportRotation = new Quaternion();
-		this.viewportProjection =MathUtils.createProjectionMatrix2(new Vector2f(50, 50), 30, 30, 0.0001f, 1000f);
-		
-		
 		mirrorFBO = new FBO();
 		mirrorFBO.applyColorTextureAttachment(FBOTarget.COLOR0, false);
 		mirrorFBO.applyDepthBufferAttachment();
@@ -150,6 +143,16 @@ public class DemoWindowContext1 extends WindowRoutine
 		this.quad = new TexturedQuad(new Vector3f(50,0,0), new Vector3f(0,0,50), new Material(new Texture(mirrorFBO.getAttachment(0).getId(), 50, 50, false), null, null,null, 0, 0));
 		this.quad.getTransform().setPos(new Vector3f(-15,0,-70));
 		this.quad.getTransform().rotate(90, 0, 0);
+		
+		this.viewportPos = this.quad.getTransform().getPos().addN(25, 25, 0);
+		this.viewportRotation = Quaternion.getFromVector(new Vector3f(0,0, -1.000f));
+		this.viewportProjection =MathUtils.createProjectionMatrix2(new Vector2f(50, 50), 30, 30, 0.0001f, 1000f);
+		
+		System.out.println(this.player.getCamera().getTotalRot().getForwardf());
+		
+
+		
+
 		
 		this.fbo = new FBO();
 		this.fbo.applyColorTextureAttachments(true, 0, 1);
@@ -162,19 +165,27 @@ public class DemoWindowContext1 extends WindowRoutine
 		PrimitiveRenderer.create();
 	} 
 	
+	private void renderDot(Vector3f v, ILDRColor3Base color)
+	{
+		Colored_OShader shader = this.context.getShader(Colored_OShader.class);
+		shader.loadProjectionMatrix(this.projection);
+		shader.loadViewMatrix(this.player.getCamera().getViewMatrix());
+		PrimitiveRenderer.drawPoint(v, color, 20);
+	}
+	
 	public void render(double delta)
 	{
 		BindingUtils.bindFramebuffer(this.mirrorFBO);
 		GLUtils.clearAll();
 		
-		Vector3f forward = this.player.getCamera().getTotalRot().getForwardf().reflect(new Vector3f(0,0,-1));
+		Vector3f forward = this.viewportPos.subN(this.player.getCamera().getTotalPos()).reflect(new Vector3f(0,0,-1)).negate();
 		
 	 	double angle = Math.atan2(forward.x, forward.z); // Note: I expected atan2(z,x) but OP reported success with atan2(x,z) instead! Switch around if you see 90° off.
 		viewportRotation.x = 0;
 		viewportRotation.y = 1 * Math.sin( angle/2 );
 		viewportRotation.z = 0;
 		viewportRotation.w = Math.cos( angle/ 2);
-		//viewportRotation.rotate(new Vector3f(0,0,1), 180);
+		viewportRotation.rotate(new Vector3f(0,0,1), 180);
 		renderWorldFromCamera(delta, Matrix4f.viewMatrix(this.viewportPos, this.viewportRotation), this.viewportPos);
 		
 		
@@ -182,6 +193,9 @@ public class DemoWindowContext1 extends WindowRoutine
 		BindingUtils.bindFramebuffer(this.fbo);
 		GLUtils.clearAll();
 
+		renderDot(this.quad.getTransform().getPos(), LDRColor3.BLUE);
+		renderDot(this.quad.getTransform().getPos().addN(50,0,0), LDRColor3.BLUE);
+		
 		if(this.showInventory)
 		{
 			renderWorld(delta);

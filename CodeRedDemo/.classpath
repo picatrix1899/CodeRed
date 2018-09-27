@@ -12,6 +12,6 @@
 	<classpathentry kind="lib" path="lib/lwjgl-natives-windows.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-opengl.jar"/>
 	<classpathentry kind="lib" path="lib/guava-19.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CodeRed"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CodeRed3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

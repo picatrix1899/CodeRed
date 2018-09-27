@@ -57,6 +57,7 @@ public class Player extends BaseEntity
 		//t.setParent(getTransform());
 		
 		this.camera = new Camera(0.0f, 18.0f, 0.0f, 0.0d, 0.0d, 0.0d);
+		
 		this.camera.getTransform().setParent(getTransform());
 		
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);

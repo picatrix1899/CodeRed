@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
+import org.barghos.core.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -13,11 +13,11 @@ import org.lwjgl.opengl.GL32;
 
 import com.codered.texture.Texture;
 import com.codered.window.WindowContext;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
 import cmn.utilslib.dmap.dmaps.DMap2;
-import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
 import cmn.utilslib.math.vector.api.Vec3fBase;
@@ -29,9 +29,9 @@ public abstract class ShaderProgram
 	
 	protected int programID;
 	
-	private List<ShaderPart> geometryShaders = Auto.ArrayList();
-	private List<ShaderPart> vertexShaders = Auto.ArrayList();
-	private List<ShaderPart> fragmentShaders = Auto.ArrayList();
+	private List<ShaderPart> geometryShaders = Lists.newArrayList();
+	private List<ShaderPart> vertexShaders = Lists.newArrayList();
+	private List<ShaderPart> fragmentShaders = Lists.newArrayList();
 	
 	private HashMap<String,Integer> uniforms = Maps.newHashMap();
 	
@@ -70,7 +70,7 @@ public abstract class ShaderProgram
 		for(ShaderPart p  : this.fragmentShaders)
 			GL20.glAttachShader(programID, p.getId());
 
-		ArrayList<DMap2<Integer,String>> attribs = new ArrayList<DMap2<Integer,String>>();
+		ArrayList<DMap2<Integer,String>> attribs = Lists.newArrayList();
 		
 		getAttribs(attribs);
 		
@@ -155,6 +155,35 @@ public abstract class ShaderProgram
 	
 	
 	
+	
+	protected void loadTextureId(int location, int attrib, int texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		loadInt(location, attrib);
+	}
+	
+	protected void loadTexture(int location, int attrib, Texture texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getId());
+		loadInt(location, attrib);
+	}
+	
+	protected void loadTextureMSId(int location, int attrib, int texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
+		loadInt(location, attrib);
+	}
+	
+	protected void loadTextureMS(int location, int attrib, Texture texture)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
+		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture.getId());
+		loadInt(location, attrib);
+	}
+	
 	protected void loadFloat(int location, float val)
 	{
 		GL20.glUniform1f(location, val);
@@ -175,6 +204,11 @@ public abstract class ShaderProgram
 		GL20.glUniform3f(location, val.getX(), val.getY(), val.getZ());
 	}
 	
+	protected void loadVector4(int location, Vec4fBase val)
+	{
+		GL20.glUniform4f(location, val.getX(), val.getY(), val.getZ(), val.getA());
+	}
+	
 	protected void loadBoolean(int location, boolean val)
 	{
 		loadFloat(location, val ? 1 : 0);
@@ -187,86 +221,34 @@ public abstract class ShaderProgram
 	
 	protected void loadMatrix(int location, Matrix4f val)
 	{
-		matrixBuffer.put(val.getColMajor());
-		
-		matrixBuffer.flip();
+		matrixBuffer = BufferUtils.wrapFlippedFloatBuffer(val.getColMajor());
 		
 		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
 		
 		matrixBuffer = BufferUtils.createFloatBuffer(16);
 	}
 	
-	protected void loadFloat(String uniform, float val)
-	{
-		GL20.glUniform1f(this.uniforms.get(uniform), val);
-	}
+	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(uniform), val); }
 	
-	protected void loadVector2(String uniform, Vec2fBase val)
-	{
-		GL20.glUniform2f(this.uniforms.get(uniform),val.getX(), val.getY());
-	}
+	protected void loadVector2(String uniform, Vec2fBase val) { loadVector2(this.uniforms.get(uniform),val); }
 	
-	protected void loadColor3(String uniform, IColor3Base val)
-	{
-		GL20.glUniform3f(this.uniforms.get(uniform), val.getUnityR(), val.getUnityG(), val.getUnityB());
-	}
+	protected void loadColor3(String uniform, IColor3Base val) { loadColor3(this.uniforms.get(uniform), val); }
 	
-	protected void loadVector3(String uniform, Vec3fBase val)
-	{
-		GL20.glUniform3f(this.uniforms.get(uniform), val.getX(), val.getY(), val.getZ());
-	}
+	protected void loadVector3(String uniform, Vec3fBase val) { loadVector3(this.uniforms.get(uniform), val); }
 	
-	protected void loadVector4(String uniform, Vec4fBase val)
-	{
-		GL20.glUniform4f(this.uniforms.get(uniform), val.getX(), val.getY(), val.getZ(), val.getA());
-	}
+	protected void loadVector4(String uniform, Vec4fBase val) { loadVector4(this.uniforms.get(uniform), val); }
 	
-	protected void loadBoolean(String uniform, boolean val)
-	{
-		loadFloat(this.uniforms.get(uniform), val ? 1 : 0);
-	}
+	protected void loadBoolean(String uniform, boolean val) { loadBoolean(this.uniforms.get(uniform), val); }
 	
-	protected void loadInt(String uniform, int val)
-	{
-		GL20.glUniform1i(this.uniforms.get(uniform), val);
-	}
+	protected void loadInt(String uniform, int val) { loadInt(this.uniforms.get(uniform), val); }
 	
-	protected void loadMatrix(String uniform, Matrix4f val)
-	{
-		matrixBuffer.put(val.getColMajor());
-		
-		matrixBuffer.flip();
-		
-		GL20.glUniformMatrix4fv(this.uniforms.get(uniform), false, matrixBuffer);
-		
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
-	}
+	protected void loadMatrix(String uniform, Matrix4f val) { loadMatrix(this.uniforms.get(uniform), val); }
 	
-	protected void loadTextureId(String uniform, int attrib, int texture)
-	{
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-		loadInt(uniform, attrib);
-	}
+	protected void loadTextureId(String uniform, int attrib, int texture) { loadTextureId(this.uniforms.get(uniform), attrib, texture); }
 	
-	protected void loadTexture(String uniform, int attrib, Texture texture)
-	{
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getId());
-		loadInt(uniform, attrib);
-	}
+	protected void loadTexture(String uniform, int attrib, Texture texture) { loadTexture(this.uniforms.get(uniform), attrib, texture); }
 	
-	protected void loadTextureMSId(String uniform, int attrib, int texture)
-	{
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
-		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
-		loadInt(uniform, attrib);
-	}
+	protected void loadTextureMSId(String uniform, int attrib, int texture) { loadTextureMSId(this.uniforms.get(uniform), attrib, texture); }
 	
-	protected void loadTextureMS(String uniform, int attrib, Texture texture)
-	{
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
-		GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture.getId());
-		loadInt(uniform, attrib);
-	}
+	protected void loadTextureMS(String uniform, int attrib, Texture texture) { loadTextureMS(this.uniforms.get(uniform), attrib, texture); }
 }

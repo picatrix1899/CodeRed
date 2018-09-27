@@ -3,7 +3,6 @@ package com.codered.shader;
 import com.codered.entities.Camera;
 import com.codered.window.WindowContext;
 
-import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector3f;
 

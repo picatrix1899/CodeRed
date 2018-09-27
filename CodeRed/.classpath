@@ -22,5 +22,8 @@
 	<classpathentry kind="lib" path="lib/lwjgl-openal-natives-windows.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utilslib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/barghos-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/barghos-math"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/barghos-structs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
