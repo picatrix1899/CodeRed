@@ -12,37 +12,26 @@ import cmn.utilslib.dmap.dmaps.DMap2;
 public class DirectionalLight_N_OShader extends SimpleObjectShader
 {
 
-	public UniformMaterial u_material;
-	public UniformDirectionalLight u_directionalLight;
+	public UniformMaterial u_material = new UniformMaterial("material", 0);
+	public UniformDirectionalLight u_directionalLight  = new UniformDirectionalLight("directionalLight");
 	
 	public DirectionalLight_N_OShader(WindowContext context)
 	{
 		super(context);
 		
-		this.u_material = new UniformMaterial("material", 0);
-		this.u_directionalLight = new UniformDirectionalLight("directionalLight");
+		addUniform(u_material);
+		addUniform(u_directionalLight);
 		
 		compile();
 		
 		getAllUniformLocations();
 	}
-
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
-		
-		this.u_material.getUniformLocations(this);
-		this.u_directionalLight.getUniformLocations(this);
-	}
-
+	
 	public void use()
 	{
 		start();
 		
 		super.use();
-		
-		this.u_material.set(getInput("material"));
-		this.u_directionalLight.set(getInput("directionalLight"));
 		
 		this.u_material.load();
 		this.u_directionalLight.load();

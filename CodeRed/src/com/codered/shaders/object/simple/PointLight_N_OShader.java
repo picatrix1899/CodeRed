@@ -2,36 +2,25 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
-import com.codered.shader.UniformMaterial;
 import com.codered.shader.UniformPointLight;
-import com.codered.shaders.object.SimpleObjectShader;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
-public class PointLight_N_OShader extends SimpleObjectShader
+public class PointLight_N_OShader extends TexturedObjectShader
 {
 
-	public UniformMaterial u_material;
-	public UniformPointLight u_pointLight;
+	public UniformPointLight u_pointLight  = new UniformPointLight("light");
 	
 	public PointLight_N_OShader(WindowContext context)
 	{
 		super(context);
 		
-		this.u_material = new UniformMaterial("material", 0);
-		this.u_pointLight = new UniformPointLight("light");
+		addUniform(u_pointLight);
 		
 		compile();
 	
 		getAllUniformLocations();
-	}
-
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
-		
-		this.u_pointLight.getUniformLocations(this);
 	}
 
 	public void use()
@@ -39,9 +28,6 @@ public class PointLight_N_OShader extends SimpleObjectShader
 		start();
 		
 		super.use();
-		
-		this.u_material.set(getInput("material"));
-		this.u_pointLight.set(getInput("pointLight"));
 		
 		this.u_material.load();
 		this.u_pointLight.load();

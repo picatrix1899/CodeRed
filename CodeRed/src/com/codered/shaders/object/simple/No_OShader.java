@@ -13,17 +13,11 @@ public class No_OShader extends TexturedObjectShader
 	{
 		super(context);
 		
-		
 		compile();
 
 		getAllUniformLocations();
 	}
 
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
-	}
-	
 	public void use()
 	{
 		start();

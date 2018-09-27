@@ -6,13 +6,11 @@ import com.codered.window.WindowContext;
 
 public abstract class TexturedObjectShader extends SimpleObjectShader
 {
-	public UniformMaterial u_material;
+	public UniformMaterial u_material = new UniformMaterial("material", 0);
 	
 	public TexturedObjectShader(WindowContext context)
 	{
 		super(context);
-		
-		this.u_material = new UniformMaterial("material", 0);
 		
 		addUniform(u_material);
 	}

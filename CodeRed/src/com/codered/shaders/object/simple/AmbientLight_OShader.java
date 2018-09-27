@@ -13,15 +13,12 @@ import cmn.utilslib.math.vector.Vector3f;
 public class AmbientLight_OShader extends TexturedObjectShader
 {
 	
-	public UniformAmbientLight u_ambientLight;
-	public UniformVector3 u_skyColor;
+	public UniformAmbientLight u_ambientLight = new UniformAmbientLight("ambientLight");
+	public UniformVector3 u_skyColor = new UniformVector3("skyColor");
 	
 	public AmbientLight_OShader(WindowContext context)
 	{
 		super(context);
-		
-		this.u_ambientLight = new UniformAmbientLight("ambientLight");
-		this.u_skyColor = new UniformVector3("skyColor");
 		
 		addUniform(u_ambientLight);
 		addUniform(u_skyColor);
@@ -36,8 +33,7 @@ public class AmbientLight_OShader extends TexturedObjectShader
 		start();
 		
 		super.use();
-	
-		this.u_ambientLight.set(getInput("ambientLight"));
+		
 		this.u_skyColor.set(Vector3f.ZERO);
 		
 		this.u_material.load();
