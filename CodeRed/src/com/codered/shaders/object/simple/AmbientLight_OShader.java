@@ -32,8 +32,8 @@ public class AmbientLight_OShader extends TexturedObjectShader
 	{
 		super.getAllUniformLocations();
 
-		this.u_ambientLight.getUniformLocations();
-		this.u_skyColor.getUniformLocations();
+		this.u_ambientLight.getUniformLocations(this);
+		this.u_skyColor.getUniformLocations(this);
 	}
 	
 	public void use()

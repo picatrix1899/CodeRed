@@ -12,10 +12,7 @@ public class UniformVector3 extends Uniform
 	public UniformVector3(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name);
 	}
 

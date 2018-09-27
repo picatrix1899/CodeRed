@@ -14,10 +14,7 @@ public class UniformMaterial extends Uniform
 	{
 		super(name, context, shader);
 		this.startIndex = startIndex;
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name + ".albedoMap");
 		addUniform(this.name + ".normalMap");
 		addUniform(this.name + ".specularPower");

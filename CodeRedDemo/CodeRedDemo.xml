@@ -1,51 +1,101 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project CodeRedDemo with libraries in sub-folder">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
-    <!--define folder properties-->
+<project name="Create Runnable Jar for Project CodeRedDemo with libraries in sub-folder">
+	
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="K:/picatrix1899_portable/workspace"/>
-    <property name="dir.jarfile" value="${dir.buildfile}"/>
-    <target name="create_run_jar">
-		<jar destfile="${dir.jarfile}/CodeRedDemo.jar">
+    <property name="dir.workspace" value="G:/picatrix1899_portable/workspace"/>
+    <property name="proj.codered" value="${dir.workspace}/git/CodeRed3/CodeRed"/>
+	<property name="proj.codereddemo" value="${dir.workspace}/git/CodeRed3/CodeRedDemo"/>
+	<property name="proj.utilslib" value="${dir.workspace}/git/utilslib/utilslib"/>
+	<property name="proj.barghos-core" value="${dir.workspace}/barghos-core"/>
+	<property name="proj.barghos-math" value="${dir.workspace}/barghos-math"/>
+	<property name="proj.barghos-structs" value="${dir.workspace}/barghos-structs"/>
+
+	<target name="build">
+		<ant antfile="build.xml" dir="${proj.barghos-core}" inheritAll="false" target="build-project">
+		            <propertyset>
+		                <propertyref name="build.compiler"/>
+		            </propertyset>
+		        </ant>
+	</target>
+	
+	<target name="create_jar_barghos">
+		<jar destfile="${proj.codereddemo}/lib/barghos-core.jar">
+            <fileset dir="${proj.barghos-core}/bin"/>
+        </jar>
+		<jar destfile="${proj.codereddemo}/lib/barghos-math.jar">
+			<fileset dir="${proj.barghos-math}/bin"/>
+        </jar>
+		<jar destfile="${proj.codereddemo}/lib/barghos-structs.jar">
+			<fileset dir="${proj.barghos-structs}/bin"/>
+        </jar>
+	</target>
+	<target name="create_jar_utilslib">
+		<jar destfile="${proj.codereddemo}/lib/utilslib.jar">
+            <fileset dir="${proj.utilslib}/bin"/>
+        </jar>
+	</target>
+	<target name="create_jar_codered">
+    	<copy todir="${proj.codered}/bin/">
+    		<fileset dir="${proj.codered}/embeded" />
+    	</copy>
+		
+		<jar destfile="${dir.jarfile}/lib/CodeRed.jar">
+        <manifest>
+            <attribute name="Class-Path" value="lib/barghos-core.jar 
+            	lib/barghos-math.jar 
+            	lib/barghos-structs.jar 
+            	lib/utilslib.jar 
+            	lib/guava-19.0.jar 
+            	lib/jorbis-0.0.15.jar 
+            	lib/jogg-0.0.7.jar 
+            	lib/lwjgl-glfw-natives-windows.jar 
+            	lib/lwjgl-glfw.jar 
+            	lib/lwjgl-natives-windows.jar 
+            	lib/lwjgl-openal.jar 
+            	lib/lwjgl-opencl.jar 
+            	lib/lwjgl-opengl.jar 
+            	lib/lwjgl-openal-natives-windows.jar 
+            	lib/lwjgl.jar 
+            	lib/lwjgl-glfw.jar 
+            	lib/lwjgl.jar 
+            	lib/lwjgl-natives-windows.jar 
+            	lib/lwjgl-opengl.jar"/>
+        </manifest>
+        <fileset dir="${proj.codered}/bin"/>
+    </jar>
+	</target>
+    <target name="create_jar_codereddemo">
+    	<copy todir="${proj.codereddemo}/bin/">
+    		<fileset dir="${proj.codereddemo}/embeded" />
+    	</copy>
+    	
+		<jar destfile="${proj.codereddemo}/CodeRedDemo.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.picatrix1899.codered.demo.Main"/>
-                <attribute name="Class-Path" value="lib/utilslib.jar lib/CodeRed.jar lib/guava-19.0.jar lib/jorbis-0.0.15.jar lib/jogg-0.0.7.jar lib/lwjgl-glfw-natives-windows.jar lib/lwjgl-glfw.jar lib/lwjgl-natives-windows.jar lib/lwjgl-nuklear-natives-windows.jar lib/lwjgl-nuklear.jar lib/lwjgl-openal.jar lib/lwjgl-opencl.jar lib/lwjgl-opengl.jar lib/lwjgl-ovr.jar lib/lwjgl-ovr-natives-windows.jar lib/lwjgl-openal-natives-windows.jar lib/lwjgl.jar lib/lwjgl-glfw.jar lib/lwjgl.jar lib/lwjgl-natives-windows.jar lib/lwjgl-opengl.jar lib/guava-19.0.jar"/>
+                <attribute name="Class-Path" value="lib/barghos-core.jar 
+                	lib/barghos-math.jar 
+                	lib/barghos-structs.jar 
+                	lib/utilslib.jar 
+                	lib/CodeRed.jar 
+                	lib/guava-19.0.jar 
+                	lib/jorbis-0.0.15.jar 
+                	lib/jogg-0.0.7.jar 
+                	lib/lwjgl-glfw-natives-windows.jar 
+                	lib/lwjgl-glfw.jar 
+                	lib/lwjgl-natives-windows.jar 
+                	lib/lwjgl-openal.jar 
+                	lib/lwjgl-opencl.jar 
+                	lib/lwjgl-opengl.jar 
+                	lib/lwjgl-openal-natives-windows.jar 
+                	lib/lwjgl.jar 
+                	lib/lwjgl-glfw.jar 
+                	lib/lwjgl.jar 
+                	lib/lwjgl-natives-windows.jar 
+                	lib/lwjgl-opengl.jar"/>
             </manifest>
-            <fileset dir="${dir.workspace}/CodeRedDemo/bin"/>
+            <fileset dir="${proj.codereddemo}/bin"/>
         </jar>
-        <delete dir="${dir.jarfile}/lib"/>
-        <mkdir dir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/guava-19.0.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/jorbis-0.0.15.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/jogg-0.0.7.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-glfw-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-glfw.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-nuklear-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-nuklear.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-openal.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-opencl.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-opengl.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-ovr.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-ovr-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl-openal-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/git/CodRed3Engine/lib/lwjgl.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-glfw.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-natives-windows.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/CodeRedDemo/lib/lwjgl-opengl.jar" todir="${dir.jarfile}/lib"/>
-        <copy file="${dir.workspace}/CodeRedDemo/lib/guava-19.0.jar" todir="${dir.jarfile}/lib"/>
-		<jar destfile="${dir.jarfile}/lib/utilslib.jar">
-            <fileset dir="${dir.workspace}/git/utilslib/utilslib/bin"/>
-        </jar>
-		<jar destfile="${dir.jarfile}/lib/CodeRed.jar">
-            <manifest>
-                <attribute name="Class-Path" value="lib/utilslib.jar lib/guava-19.0.jar lib/jorbis-0.0.15.jar lib/jogg-0.0.7.jar lib/lwjgl-glfw-natives-windows.jar lib/lwjgl-glfw.jar lib/lwjgl-natives-windows.jar lib/lwjgl-nuklear-natives-windows.jar lib/lwjgl-nuklear.jar lib/lwjgl-openal.jar lib/lwjgl-opencl.jar lib/lwjgl-opengl.jar lib/lwjgl-ovr.jar lib/lwjgl-ovr-natives-windows.jar lib/lwjgl-openal-natives-windows.jar lib/lwjgl.jar lib/lwjgl-glfw.jar lib/lwjgl.jar lib/lwjgl-natives-windows.jar lib/lwjgl-opengl.jar lib/guava-19.0.jar"/>
-            </manifest>
-            <fileset dir="${dir.workspace}/git/CodRed3Engine/bin"/>
-        </jar>
-		
+
     </target>
 	
 </project>

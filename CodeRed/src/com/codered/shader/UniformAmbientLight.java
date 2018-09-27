@@ -10,10 +10,7 @@ public class UniformAmbientLight extends Uniform
 	public UniformAmbientLight(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name + ".base.color");
 		addUniform(this.name + ".base.intensity");
 	}

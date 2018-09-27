@@ -31,7 +31,7 @@ public class PointLight_N_OShader extends SimpleObjectShader
 	{
 		super.getAllUniformLocations();
 		
-		this.u_pointLight.getUniformLocations();
+		this.u_pointLight.getUniformLocations(this);
 	}
 
 	public void use()

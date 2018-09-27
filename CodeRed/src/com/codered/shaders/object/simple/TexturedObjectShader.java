@@ -19,7 +19,7 @@ public abstract class TexturedObjectShader extends SimpleObjectShader
 	{
 		super.getAllUniformLocations();
 		
-		this.u_material.getUniformLocations();
+		this.u_material.getUniformLocations(this);
 	}
 	
 	

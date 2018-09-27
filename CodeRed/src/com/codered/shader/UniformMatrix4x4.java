@@ -12,12 +12,10 @@ public class UniformMatrix4x4 extends Uniform
 	public UniformMatrix4x4(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name);	
 	}
+
 
 	public void load()
 	{

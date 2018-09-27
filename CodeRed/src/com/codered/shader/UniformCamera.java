@@ -16,10 +16,7 @@ public class UniformCamera extends Uniform
 	public UniformCamera(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name + ".position");
 		addUniform(this.name + ".T_view");
 	}

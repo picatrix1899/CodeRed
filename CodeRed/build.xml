@@ -6,12 +6,25 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="CodeRed">
     <property environment="env"/>
     <property name="CodeRedDemo.location" value="../CodeRedDemo"/>
+    <property name="barghos-core.location" value="../../../barghos-core"/>
+    <property name="barghos-math.location" value="../../../barghos-math"/>
+    <property name="barghos-structs.location" value="../../../barghos-structs"/>
     <property name="utilslib.location" value="../../utilslib/utilslib"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
     <path id="utilslib.classpath">
         <pathelement location="${utilslib.location}/bin"/>
+    </path>
+    <path id="barghos-core.classpath">
+        <pathelement location="${barghos-core.location}/bin"/>
+    </path>
+    <path id="barghos-math.classpath">
+        <pathelement location="${barghos-math.location}/bin"/>
+        <path refid="barghos-core.classpath"/>
+    </path>
+    <path id="barghos-structs.classpath">
+        <pathelement location="${barghos-structs.location}/bin"/>
     </path>
     <path id="CodeRed.classpath">
         <pathelement location="bin"/>
@@ -31,6 +44,9 @@
         <pathelement location="lib/lwjgl-openal-natives-windows.jar"/>
         <pathelement location="lib/lwjgl.jar"/>
         <path refid="utilslib.classpath"/>
+        <path refid="barghos-core.classpath"/>
+        <path refid="barghos-math.classpath"/>
+        <path refid="barghos-structs.classpath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -40,21 +56,33 @@
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="embeded">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
     </target>
     <target name="clean">
         <delete dir="bin"/>
     </target>
     <target depends="clean" name="cleanall">
+        <ant antfile="build.xml" dir="${barghos-core.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${barghos-math.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${barghos-structs.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="clean"/>
     </target>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects">
+        <ant antfile="build.xml" dir="${barghos-core.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${barghos-math.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${barghos-structs.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
         <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="build-project">
             <propertyset>
                 <propertyref name="build.compiler"/>
@@ -65,7 +93,6 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-        	<src path="embeded"/>
             <classpath refid="CodeRed.classpath"/>
         </javac>
     </target>
@@ -89,5 +116,15 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="ChainingExample">
+        <java classname="com.jcraft.jorbis.ChainingExample" failonerror="true" fork="yes">
+            <classpath refid="CodeRed.classpath"/>
+        </java>
+    </target>
+    <target name="New_configuration (2)">
+        <java classname="com.picatrix1899.codered.demo.Main" failonerror="true" fork="yes">
+            <classpath refid="CodeRed.classpath"/>
+        </java>
     </target>
 </project>

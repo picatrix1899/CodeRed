@@ -11,10 +11,7 @@ public class UniformDirectionalLight extends Uniform
 	public UniformDirectionalLight(String name, WindowContext context, ShaderProgram shader)
 	{
 		super(name, context, shader);
-	}
-
-	public void getUniformLocations()
-	{
+		
 		addUniform(this.name + ".base.color");
 		addUniform(this.name + ".base.intensity");
 		addUniform(this.name + ".direction");

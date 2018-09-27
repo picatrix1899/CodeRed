@@ -1,6 +1,5 @@
 package com.codered.shader;
 
-import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import org.barghos.core.BufferUtils;
@@ -21,8 +20,6 @@ import cmn.utilslib.math.vector.api.Vec4fBase;
 
 public abstract class Uniform
 {
-	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
-	
 	protected String name;
 	protected WindowContext context;
 	
@@ -37,13 +34,19 @@ public abstract class Uniform
 		this.shader = shader;
 	}
 	
-	public abstract void getUniformLocations();
+	public void getUniformLocations(ShaderProgram shader)
+	{
+		for(String uniform : this.uniforms.keySet())
+		{
+			this.uniforms.put(uniform, GL20.glGetUniformLocation(shader.programID, uniform));
+		}
+	}
 	
 	public abstract void load();
 	
 	protected void addUniform(String uniform)
 	{
-		this.uniforms.put(uniform, GL20.glGetUniformLocation(this.shader.programID, uniform));
+		this.uniforms.put(uniform, 0);
 	}
 	
 	protected void loadTextureId(int location, int attrib, int texture)
@@ -111,11 +114,7 @@ public abstract class Uniform
 	
 	protected void loadMatrix(int location, Matrix4f val)
 	{
-		matrixBuffer = BufferUtils.wrapFlippedFloatBuffer(val.getColMajor());
-		
-		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
-		
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		GL20.glUniformMatrix4fv(location, false, BufferUtils.wrapFlippedFloatBuffer(val.getColMajor()));
 	}
 	
 	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(uniform), val); }

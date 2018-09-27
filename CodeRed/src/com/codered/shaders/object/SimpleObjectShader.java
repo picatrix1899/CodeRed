@@ -23,9 +23,9 @@ public abstract class SimpleObjectShader extends ShaderProgram
 
 	protected void getAllUniformLocations()
 	{
-		this.u_T_model.getUniformLocations();
-		this.u_T_projection.getUniformLocations();
-		this.u_camera.getUniformLocations();
+		this.u_T_model.getUniformLocations(this);
+		this.u_T_projection.getUniformLocations(this);
+		this.u_camera.getUniformLocations(this);
 	}
 	
 	public void use()

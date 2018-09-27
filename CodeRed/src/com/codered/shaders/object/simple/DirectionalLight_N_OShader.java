@@ -31,8 +31,8 @@ public class DirectionalLight_N_OShader extends SimpleObjectShader
 	{
 		super.getAllUniformLocations();
 		
-		this.u_material.getUniformLocations();
-		this.u_directionalLight.getUniformLocations();
+		this.u_material.getUniformLocations(this);
+		this.u_directionalLight.getUniformLocations(this);
 	}
 
 	public void use()

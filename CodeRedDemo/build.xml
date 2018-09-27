@@ -3,28 +3,63 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="CodeRedDemo">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="CodeRedDemo">
     <property environment="env"/>
-    <property name="utilslib.location" value="../git/utilslib/utilslib"/>
-    <property name="CodeRed.location" value="../git/CodRed3Engine"/>
+    <property name="CodeRed.location" value="../CodeRed"/>
+    <property name="barghos-core.location" value="../../../barghos-core"/>
+    <property name="barghos-math.location" value="../../../barghos-math"/>
+    <property name="barghos-structs.location" value="../../../barghos-structs"/>
+    <property name="utilslib.location" value="../../utilslib/utilslib"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
-              	
     <path id="utilslib.classpath">
         <pathelement location="${utilslib.location}/bin"/>
     </path>
+    <path id="barghos-core.classpath">
+        <pathelement location="${barghos-core.location}/bin"/>
+    </path>
+    <path id="barghos-math.classpath">
+        <pathelement location="${barghos-math.location}/bin"/>
+        <path refid="barghos-core.classpath"/>
+    </path>
+    <path id="barghos-structs.classpath">
+        <pathelement location="${barghos-structs.location}/bin"/>
+    </path>
+    <path id="CodeRed.classpath">
+        <pathelement location="${CodeRed.location}/bin"/>
+        <pathelement location="${CodeRed.location}/lib/guava-19.0.jar"/>
+        <pathelement location="${CodeRed.location}/lib/jorbis-0.0.15.jar"/>
+        <pathelement location="${CodeRed.location}/lib/jogg-0.0.7.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-glfw-natives-windows.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-glfw.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-natives-windows.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-nuklear-natives-windows.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-nuklear.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-openal.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-opencl.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-opengl.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-ovr.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-ovr-natives-windows.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl-openal-natives-windows.jar"/>
+        <pathelement location="${CodeRed.location}/lib/lwjgl.jar"/>
+        <path refid="utilslib.classpath"/>
+        <path refid="barghos-core.classpath"/>
+        <path refid="barghos-math.classpath"/>
+        <path refid="barghos-structs.classpath"/>
+    </path>
     <path id="CodeRedDemo.classpath">
         <pathelement location="bin"/>
-        <path refid="CodeRed.classpath"/>
         <path refid="utilslib.classpath"/>
         <pathelement location="lib/lwjgl-glfw.jar"/>
         <pathelement location="lib/lwjgl.jar"/>
         <pathelement location="lib/lwjgl-natives-windows.jar"/>
         <pathelement location="lib/lwjgl-opengl.jar"/>
         <pathelement location="lib/guava-19.0.jar"/>
-    	<pathelement location="lib/CodeRed.jar"/>
+        <path refid="CodeRed.classpath"/>
+        <path refid="barghos-core.classpath"/>
+        <path refid="barghos-math.classpath"/>
+        <path refid="barghos-structs.classpath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -33,24 +68,41 @@
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
-        	<fileset dir="embeded"/>
         </copy>
     </target>
     <target name="clean">
         <delete dir="bin"/>
     </target>
     <target depends="clean" name="cleanall">
-        <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${CodeRed.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${barghos-core.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${barghos-math.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${barghos-structs.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="clean"/>
     </target>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects">
-        <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="build-project">
+        <ant antfile="build.xml" dir="${CodeRed.location}" inheritAll="false" target="build-project">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
         </ant>
-        <ant antfile="build.xml" dir="${CodeRed.location}" inheritAll="false" target="build-project">
+        <ant antfile="build.xml" dir="${barghos-core.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${barghos-math.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${barghos-structs.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${utilslib.location}" inheritAll="false" target="build-project">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
