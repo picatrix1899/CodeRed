@@ -19,18 +19,13 @@ public class DirectionalLight_OShader extends TexturedObjectShader
 		
 		this.u_directionalLight = new UniformDirectionalLight("directionalLight");
 		
+		addUniform(u_directionalLight);
+		
 		compile();
 		
 		getAllUniformLocations();
 	}
 
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
-		
-		this.u_directionalLight.getUniformLocations(this);		
-	}
-	
 	public void loadDirectionalLight(DirectionalLight light) { setInput("directionalLight", light); }
 	
 	public void use()

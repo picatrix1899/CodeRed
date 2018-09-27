@@ -1,6 +1,5 @@
 package com.codered.shader;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +24,6 @@ import cmn.utilslib.math.vector.api.Vec4fBase;
 
 public abstract class ShaderProgram
 {
-	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
-	
 	protected int programID;
 	
 	private List<ShaderPart> geometryShaders = Lists.newArrayList();
@@ -37,11 +34,18 @@ public abstract class ShaderProgram
 	
 	private HashMap<String,Object> inputs = Maps.newHashMap();
 	
+	private ArrayList<Uniform> newUniforms = Lists.newArrayList();
+	
 	protected WindowContext context;
 	
 	public ShaderProgram(WindowContext context)
 	{
 		this.context = context;
+	}
+	
+	public void addUniform(Uniform uniform)
+	{
+		this.newUniforms.add(uniform);
 	}
 	
 	public void setInput(String name, Object val)
@@ -151,7 +155,13 @@ public abstract class ShaderProgram
 	}
 	
 	
-	protected abstract void getAllUniformLocations();
+	protected void getAllUniformLocations()
+	{
+		for(Uniform uniform : this.newUniforms)
+		{
+			uniform.getUniformLocations(this);
+		}
+	}
 	
 	
 	
@@ -221,11 +231,7 @@ public abstract class ShaderProgram
 	
 	protected void loadMatrix(int location, Matrix4f val)
 	{
-		matrixBuffer = BufferUtils.wrapFlippedFloatBuffer(val.getColMajor());
-		
-		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
-		
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		GL20.glUniformMatrix4fv(location, false, BufferUtils.wrapFlippedFloatBuffer(val.getColMajor()));
 	}
 	
 	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(uniform), val); }

@@ -19,14 +19,12 @@ public abstract class SimpleObjectShader extends ShaderProgram
 		this.u_camera = new UniformCamera("camera");
 		this.u_T_model = new UniformMatrix4x4("T_model");
 		this.u_T_projection = new UniformMatrix4x4("T_projection");
+		
+		addUniform(u_camera);
+		addUniform(u_T_model);
+		addUniform(u_T_projection);
 	}
 
-	protected void getAllUniformLocations()
-	{
-		this.u_T_model.getUniformLocations(this);
-		this.u_T_projection.getUniformLocations(this);
-		this.u_camera.getUniformLocations(this);
-	}
 	
 	public void use()
 	{	
