@@ -1,18 +1,16 @@
 package com.codered.light;
 
-import cmn.utilslib.color.colors.HDRColor3;
-import cmn.utilslib.color.colors.LDRColor3;
-import cmn.utilslib.color.colors.api.IColor3Base;
-import cmn.utilslib.math.vector.PVector3f;
-import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
+import org.barghos.core.api.color.IColor3R;
+import org.barghos.core.color.HDRColor3;
+import org.barghos.core.color.LDRColor3;
+import org.barghos.math.vector.Vec3f;
 
 public class DirectionalLight
 {
 	public BaseLight base;
-	public Vector3f direction = new Vector3f();
+	public Vec3f direction = new Vec3f();
 	
-	public DirectionalLight(IColor3Base color, float intensity, Vec3f direction)
+	public DirectionalLight(IColor3R color, float intensity, Vec3f direction)
 	{
 		this.base = new BaseLight(color, intensity);
 		this.direction.set(direction);
@@ -25,7 +23,7 @@ public class DirectionalLight
 		else
 			this.base = new BaseLight(new LDRColor3(r, g, b), intensity);
 		
-		this.direction.set(PVector3f.gen(x, y, z));
+		this.direction.set(x, y, z);
 	}
 	
 	public DirectionalLight(float r, float g, float b, float intensity, float x, float y, float z)
@@ -35,6 +33,6 @@ public class DirectionalLight
 		else
 			this.base = new BaseLight(new LDRColor3(r, g, b), intensity);
 		
-		this.direction.set(PVector3f.gen(x, y, z));
+		this.direction.set(x, y, z);
 	}
 }

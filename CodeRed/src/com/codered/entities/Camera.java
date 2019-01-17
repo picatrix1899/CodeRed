@@ -1,11 +1,11 @@
 package com.codered.entities;
 
-import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.Quaternion;
-import cmn.utilslib.math.RotationType;
-import cmn.utilslib.math.Transform;
-import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.Vec3f;
+import org.barghos.math.vector.Vec3fAxis;
+
+import com.codered.Transform;
 
 public class Camera
 {
@@ -29,7 +29,7 @@ public class Camera
 	
 	public Camera()
 	{
-		this.transform = new Transform(RotationType.EULER);
+		this.transform = new Transform();
 	}
 	
 	public Camera(Vec3f pos, double pitch, double yaw, double roll)
@@ -44,7 +44,7 @@ public class Camera
 	public Camera(float posX, float posY, float posZ, double pitch, double yaw, double roll)
 	{
 		this();
-		setPos(new Vector3f(posX, posY, posZ));
+		setPos(new Vec3f(posX, posY, posZ));
 		rotatePitch(pitch);
 		rotateYaw(yaw);
 		rotateRoll(roll);
@@ -100,23 +100,23 @@ public class Camera
 	public float getMinRotRoll() { return this.minRotRoll; }
 	public float getMaxRotRoll() { return this.maxRotRoll; }
 	
-	public Quaternion getRelativeRot() { return this.transform.getRot(); }
-	public Quaternion getTotalRot() { return this.transform.getTransformedRot(); }
+	public Quat getRelativeRot() { return this.transform.getRot(); }
+	public Quat getTotalRot() { return this.transform.getTransformedRot(); }
 	
 	public float getPitchSpeed() { return this.speedPitch; }
 	public float getYawSpeed() { return this.speedYaw; }
 	public float getRollSpeed() { return this.speedRoll; }
 	
-	public Quaternion getPitch() { return this.transform.getRotation().getRotationPitch(); }
-	public Quaternion getYaw() { return this.transform.getRotation().getRotationYaw(); }
-	public Quaternion getRoll() { return this.transform.getRotation().getRotationRoll(); }
+	public Quat getPitch() { return this.transform.getRotation().getRotationPitch(); }
+	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
+	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
 	public Camera setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
 	public Camera moveBy(Vec3f velocity) { this.transform.moveBy(velocity); return this; }
-	public Vector3f getRelativePos() { return this.transform.getPos(); }
-	public Vector3f getTotalPos() { return this.transform.getTransformedPos(); }
+	public Vec3f getRelativePos() { return this.transform.getPos(); }
+	public Vec3f getTotalPos() { return this.transform.getTransformedPos(); }
 	
-	public Matrix4f getViewMatrix() { return Matrix4f.viewMatrix(getTotalPos(), getTotalRot()); }
+	public Mat4f getViewMatrix() { return Mat4f.viewMatrix(getTotalPos(), getTotalRot()); }
 	
 	
 	
@@ -131,18 +131,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount < this.maxRotPitch)
-					this.transform.rotate(Vector3f.aNX, this.speedPitch * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount > this.minRotPitch)
-					this.transform.rotate(Vector3f.aNX, this.speedPitch * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vector3f.aNX, this.speedPitch * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 		}
 
 		return this;
@@ -155,18 +155,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount < this.maxRotYaw)
-					this.transform.rotate(Vector3f.aY, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount > this.minRotYaw)
-					this.transform.rotate(Vector3f.aY, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vector3f.aY, this.speedYaw * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 		}
 
 		return this;
@@ -180,18 +180,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount < this.maxRotRoll)
-					this.transform.rotate(Vector3f.aZ, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount > this.minRotRoll)
-					this.transform.rotate(Vector3f.aZ, this.speedRoll * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vector3f.aZ, this.speedRoll * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
 		}
 
 		return this;

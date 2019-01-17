@@ -2,6 +2,10 @@ package com.codered.managing.models;
 
 import java.util.ArrayList;
 
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.Vec3f;
+
 import org.lwjgl.opengl.GL15;
 
 import com.codered.managing.VAO;
@@ -10,8 +14,6 @@ import com.codered.managing.loader.data.OBJFile;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.ListUtils;
-import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.geometry.Triangle3f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
@@ -120,9 +122,9 @@ public class Mesh
 		return this;
 	}
 	
-	public Matrix4f getMatrix()
+	public Mat4f getMatrix()
 	{
-		return Matrix4f.modelMatrix(new Vector3f(0.0f,  yc,  0.0f), new Quaternion(), new Vector3f(downscale));
+		return Mat4f.modelMatrix(new Vec3f(0.0f,  yc,  0.0f), new Quat(), new Vec3f(downscale));
 	}
 	
 	public float getYCorrection()

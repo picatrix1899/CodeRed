@@ -1,9 +1,9 @@
 package com.codered.entities;
 
-import cmn.utilslib.math.Quaternion;
-import cmn.utilslib.math.Transform;
-import cmn.utilslib.math.vector.Vector3f;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.Vec3f;
 
+import com.codered.Transform;
 
 public abstract class BaseEntity
 {
@@ -12,8 +12,8 @@ public abstract class BaseEntity
 	protected BaseEntity parent;
 	
 	public Transform getTransform() { return this.transform; }
-	public Vector3f getPos() { return this.transform.getPos(); }
-	public Quaternion getRot() { return this.transform.getRot(); }
+	public Vec3f getPos() { return this.transform.getPos(); }
+	public Quat getRot() { return this.transform.getRot(); }
 	
 	public long id;
 
@@ -30,10 +30,10 @@ public abstract class BaseEntity
 		return this.parent;
 	}
 	
-	public BaseEntity setPos(Vector3f pos) { this.transform.setPos(pos); return this; }
+	public BaseEntity setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
 	public BaseEntity rotatePitch(float rx)  { this.transform.rotate(rx, 0.0f, 0.0f); return this; }
 	public BaseEntity rotateYaw(float ry)  { this.transform.rotate(0.0f, ry, 0.0f); return this; }
 	public BaseEntity rotateZ(float rz)  { this.transform.rotate(0.0f, 0.0f, rz); return this; }
-	public BaseEntity rotate(Vector3f v, float angle) {this.transform.rotate(v, angle); return this;}
+	public BaseEntity rotate(Vec3f v, float angle) {this.transform.rotate(v, angle); return this;}
 	
 }

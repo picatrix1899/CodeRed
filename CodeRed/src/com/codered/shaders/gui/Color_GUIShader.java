@@ -2,6 +2,7 @@ package com.codered.shaders.gui;
 
 import java.util.List;
 
+import com.codered.shader.UniformVector3;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
@@ -9,27 +10,18 @@ import cmn.utilslib.dmap.dmaps.DMap2;
 public class Color_GUIShader extends GUIShader
 {
 	
+	public UniformVector3 u_color = new UniformVector3("color");
+	
 	public Color_GUIShader(WindowContext context)
 	{
 		super(context);
-	}
-
-
-	protected void getAllUniformLocations()
-	{
-		super.getAllUniformLocations();
 		
-		addUniform("color");
-	}
-
-
-	public void use()
-	{
-		super.use();
+		addUniform(u_color);
 		
-		loadColor3("color", getInput("color"));
+		compile();
+		
+		getAllUniformLocations();
 	}
-
 
 	public void attachShaderParts()
 	{

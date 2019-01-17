@@ -43,9 +43,9 @@ public class PrimitiveRenderer
 		
 		BindingUtils.bindVAO(vao, 0);
 		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
-		shader.setInput("color", c);
+		shader.u_color.set(c);
 		
-		shader.use();
+		shader.start();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawElements(GL11.GL_POINTS, indices.length, GL11.GL_UNSIGNED_INT, 0);
@@ -66,9 +66,9 @@ public class PrimitiveRenderer
 		BindingUtils.bindVAO(vao, 0);
 		
 		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
-		shader.setInput("color", c);
+		shader.u_color.set(c);
 		
-		shader.use();
+		shader.start();
 		
 		GL11.glLineWidth(3);
 		GL11.glDrawArrays(GL11.GL_LINES,  0, 2);
@@ -80,7 +80,7 @@ public class PrimitiveRenderer
 	{
 		Matrix4f model = Matrix4f.modelMatrix(Vector3f.ZERO, new Quaternion(), Vector3f.ONE);
 		
-		shader.setInput("T_model", model);
+		shader.u_T_model.set(model);
 		
 		Vec3fBase[] vertices = new Vec3fBase[4];
 		
@@ -110,9 +110,9 @@ public class PrimitiveRenderer
 		
 		BindingUtils.bindVAO(vao, 0, 1);
 		
-		shader.setInput("material", m);
+		//shader.setInput("material", m);
 		
-		shader.use();
+		shader.start();
 		
 		GL11.glDrawElements(GL11.GL_QUADS, indices.length, GL11.GL_UNSIGNED_INT, 0);
 		
@@ -240,9 +240,8 @@ public class PrimitiveRenderer
 		BindingUtils.bindVAO(vao, 0);
 		
 		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
-		shader.setInput("color", c);
-		
-		shader.use();
+		shader.u_color.set(c);
+		shader.start();
 		
 		GL11.glLineWidth(10);
 		GL11.glDrawElements(GL11.GL_LINES, indices.length, GL11.GL_UNSIGNED_INT, 0);

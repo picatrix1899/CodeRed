@@ -3,7 +3,9 @@ package com.codered.demo;
 
 import java.util.Iterator;
 
+import org.barghos.core.color.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Vec3f;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
@@ -26,9 +28,6 @@ import com.codered.utils.RenderHelper;
 import com.codered.utils.WindowHint;
 import com.codered.utils.WindowHint.GLProfile;
 import com.codered.window.WindowRoutine;
-
-import cmn.utilslib.color.colors.LDRColor3;
-import cmn.utilslib.math.vector.Vector3f;
 
 
 public class DemoWindowContext1 extends WindowRoutine
@@ -104,10 +103,10 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.world = new StaticEntityTreeImpl();
 		
-		this.world.add(new StaticEntity("crate", new Vector3f(0,0,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vector3f(0,10,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vector3f(10,0,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vector3f(10,10,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vec3f(0,0,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vec3f(0,10,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vec3f(10,0,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vec3f(10,10,-40), 0, 0, 0));
 		
 		this.player = new Player(this.world);
 		

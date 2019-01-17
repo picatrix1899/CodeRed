@@ -2,7 +2,12 @@ package com.codered.demo;
 
 import java.util.ArrayList;
 
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.Vec3f;
+import org.barghos.math.vector.Vec3fAxis;
 
+import com.codered.ConvUtils;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
 import com.codered.entities.BaseEntity;
@@ -15,14 +20,11 @@ import com.codered.input.InputConfiguration.KeyEventArgs;
 import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
-import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.Quaternion;
 import cmn.utilslib.math.geometry.AABB3f;
 import cmn.utilslib.math.geometry.OBB3f;
 import cmn.utilslib.math.geometry.OBBOBBResolver;
 import cmn.utilslib.math.geometry.Point3f;
 import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 
 
@@ -31,7 +33,7 @@ public class Player extends BaseEntity
 	
 	public AABB3f aabb2;
 
-	public Vec3f velocity = new Vector3f();
+	public Vec3f velocity = new Vec3f();
 	
 	public GUIWindow window;
 	
@@ -50,7 +52,7 @@ public class Player extends BaseEntity
 		this.world = world;
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(4, 9, 4));
 		
-		this.transform.setPos(new Vector3f(0.0f, 0.0f, 0.0f));
+		this.transform.setPos(new Vec3f(0.0f, 0.0f, 0.0f));
 		//Transform t = Session.get().getWorld().getStaticEntity(0).getTransform();
 		
 		//t.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
@@ -100,8 +102,8 @@ public class Player extends BaseEntity
 	
 	private void updateMovement(KeyEventArgs args)
 	{
-		Vector3f dir = new Vector3f();
-		Vector3f vel = new Vector3f();
+		Vec3f dir = new Vec3f();
+		Vec3f vel = new Vec3f();
 
 		if(args.keyPresent(Keys.k_delete))
 		{
@@ -113,33 +115,33 @@ public class Player extends BaseEntity
 		
 		if(args.keyPresent(Keys.k_forward))
 		{
-			dir.sub(this.camera.getYaw().getForwardf().normalize());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, null).normal(), dir);
 		}
 		
 		if(args.keyPresent(Keys.k_right))
 		{
-			dir.sub(this.camera.getYaw().getRightf().normalize());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, null).normal(), dir);
 		}
 		
 		if(args.keyPresent(Keys.k_left))
 		{
-			dir.sub(this.camera.getYaw().getLeftf().normalize());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, null).normal(), dir);
 		}
 		
 		if(args.keyPresent(Keys.k_back))
 		{
-			dir.sub(this.camera.getYaw().getBackf().normalize());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, null).normal(), dir);
 		}
 		
 		if(dir.length() == 0) { return; }
 		
-		dir.normalize();
+		dir.normal();
 		
 		float time = (float)args.delta;
 		
 		float acceleration = 20.0f * time;
 		
-		vel.set(dir).mul(acceleration);
+		dir.mul(acceleration, vel);
 		
 		vel = checkCollisionStatic(vel);
 		
@@ -148,25 +150,25 @@ public class Player extends BaseEntity
 	
 	public Camera getCamera() { return this.camera; }
 	
-	public Quaternion getPitch() { return this.transform.getRotation().getRotationPitch(); }
-	public Quaternion getYaw() { return this.transform.getRotation().getRotationYaw(); }
-	public Quaternion getRoll() { return this.transform.getRotation().getRotationRoll(); }
+	public Quat getPitch() { return this.transform.getRotation().getRotationPitch(); }
+	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
+	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
 	public AABB3f getTransformedAABB()
 	{
-		Matrix4f translation = Matrix4f.translation(this.transform.getTransformedPos());
-		return this.aabb2.transform(translation);
+		Mat4f translation = Mat4f.translation(this.transform.getTransformedPos());
+		return this.aabb2.transform(ConvUtils.matToMatrix(translation));
 	}
 	
-	private Vector3f checkCollisionStatic(Vector3f vel)
+	private Vec3f checkCollisionStatic(Vec3f vel)
 	{
-		Vector3f sum = new Vector3f();
-		Vector3f partial = new Vector3f();
-		Vector3f tempPos = new Vector3f();
+		Vec3f sum = new Vec3f();
+		Vec3f partial = new Vec3f();
+		Vec3f tempPos = new Vec3f();
 
-		Matrix4f translation;
+		Mat4f translation;
 		
-		tempPos.set(this.transform.getTransformedPos()).add(vel);
+		this.transform.getTransformedPos().add(vel, tempPos);
 
 		OBB3f tempOBB;
 		
@@ -174,33 +176,33 @@ public class Player extends BaseEntity
 		
 		AABB3f sweptAABB;
 		
-		translation = Matrix4f.translation(tempPos);
+		translation = Mat4f.translation(tempPos);
 		
-		sweptAABB = this.aabb2.transform(translation);
+		sweptAABB = this.aabb2.transform(ConvUtils.matToMatrix(translation));
 		
 		ArrayList<StaticEntity> entities = this.world.walker.walk(sweptAABB);
 		
 		for(StaticEntity entity : entities)
 		{
-			entityOBB = entity.getModel().getPhysicalMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+			entityOBB = entity.getModel().getPhysicalMesh().getOBBf(ConvUtils.matToMatrix(entity.getTransformationMatrix()), ConvUtils.matToMatrix(entity.getRotationMatrix()));
 			
-			translation = Matrix4f.translation(tempPos);
+			translation = Mat4f.translation(tempPos);
 			
-			sweptAABB = this.aabb2.transform(translation);
+			sweptAABB = this.aabb2.transform(ConvUtils.matToMatrix(translation));
 			
 			tempOBB = sweptAABB.getOBBf();
 
 			if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
 			{
 				
-				partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+				partial = ConvUtils.vector3fToVec3f(OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB));
 				
-				sum.add(partial);
-				tempPos.add(partial);
+				sum.add(partial, sum);
+				tempPos.add(partial, tempPos);
 			}
 		}
 		
-		vel.add(sum);
+		vel.add(sum, vel);
 		
 		return vel;		
 	}
@@ -215,8 +217,8 @@ public class Player extends BaseEntity
 //		
 //		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
 		
-		double minlength = Double.MAX_VALUE;
-		StaticEntity ent = null;
+//		double minlength = Double.MAX_VALUE;
+//		StaticEntity ent = null;
 		
 //		for(StaticEntity e : statents)
 //		{
@@ -241,8 +243,8 @@ public class Player extends BaseEntity
 
 	}
 	
-	public Vector3f getPos() { return this.transform.getPos(); }
+	public Vec3f getPos() { return this.transform.getPos(); }
 	
-	public Vector3f getEyePos() { return (Vector3f) this.transform.getPos().addN(0.0f, 18.0f, 0.0f); }
+	public Vec3f getEyePos() { return this.transform.getPos().add(0.0f, 18.0f, 0.0f, null); }
 
 }

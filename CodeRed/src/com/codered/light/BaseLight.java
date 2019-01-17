@@ -1,13 +1,13 @@
 package com.codered.light;
 
-import cmn.utilslib.color.colors.api.IColor3Base;
+import org.barghos.core.api.color.IColor3R;
 
 public class BaseLight
 {
-	public IColor3Base color;
+	public IColor3R color;
 	public float intensity;
 	
-	public BaseLight(IColor3Base color, float intensity)
+	public BaseLight(IColor3R color, float intensity)
 	{
 		this.color = color;
 		this.intensity = intensity;
