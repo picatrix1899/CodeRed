@@ -1,5 +1,7 @@
 package com.codered.shader;
 
+import org.barghos.core.api.color.IColor3R;
+
 import cmn.utilslib.color.colors.api.IColor3Base;
 
 public class UniformColor3 extends Uniform
@@ -22,4 +24,8 @@ public class UniformColor3 extends Uniform
 		loadColor3("", color);
 	}
 	
+	public void set(IColor3R color)
+	{
+		loadColor3("", color);
+	}
 }
