@@ -35,7 +35,7 @@ public class Input
 	{
 		this.context = WindowContextHelper.getCurrentContext();
 		
-		this.center = new Vector2f(this.context.getWidth() / 2.0, this.context.getHeight() / 2.0);
+		this.center = new Vector2f(this.context.getWindow().getWidth() / 2.0, this.context.getWindow().getHeight() / 2.0);
 	}
 	
 	public void setConfiguration(InputConfiguration config)
@@ -121,7 +121,7 @@ public class Input
 			this.grabX = x.get();
 			this.grabY = y.get();
 			
-			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.context.getWidth() / 2.0, this.context.getHeight() / 2.0);
+			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.context.getWindow().getWidth() / 2.0, this.context.getWindow().getHeight() / 2.0);
 
 			GLFW.glfwSetInputMode(this.context.getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 		}

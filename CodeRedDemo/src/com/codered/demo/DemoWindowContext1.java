@@ -3,6 +3,7 @@ package com.codered.demo;
 
 import java.util.Iterator;
 
+import org.barghos.math.matrix.Mat4f;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
@@ -20,7 +21,6 @@ import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
-import com.codered.utils.MathUtils;
 import com.codered.utils.PrimitiveRenderer;
 import com.codered.utils.RenderHelper;
 import com.codered.utils.WindowHint;
@@ -28,13 +28,12 @@ import com.codered.utils.WindowHint.GLProfile;
 import com.codered.window.WindowRoutine;
 
 import cmn.utilslib.color.colors.LDRColor3;
-import cmn.utilslib.math.matrix.Matrix4f;
 import cmn.utilslib.math.vector.Vector3f;
 
 
 public class DemoWindowContext1 extends WindowRoutine
 {
-	private Matrix4f projection;
+	private Mat4f projection;
 	
 	private AmbientLight ambient;
 	private DirectionalLight directionalLight;
@@ -93,10 +92,9 @@ public class DemoWindowContext1 extends WindowRoutine
 
 		BuiltInShaders.init();
 
-		this.context.getWindow().addResizeHandler((arg1, arg2) -> { resizeWindow(arg1.width, arg1.height); });
+		this.context.getWindow().Resize.addHandler((arg1) -> { resizeWindow(arg1.width, arg1.height); });
 		
-		this.projection = MathUtils.createProjectionMatrix2(this.context.getSize(), 60, 70, 0.1f, 1000);
-		
+		this.projection = Mat4f.perspective(this.context.getWindow().getSize(), 70, 0.1, 1000);
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
 		
 		this.context.getResourceManager().GUI.regTexture("res/materials/gray_rsquare.png");

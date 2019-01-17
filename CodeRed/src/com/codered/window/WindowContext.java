@@ -7,24 +7,11 @@ import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
 import com.codered.shader.ShaderProgram;
 
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.api.Vec2f;
-
 public interface WindowContext
 {
 	Window getWindow();
 
 	ResourceManager getResourceManager();
-	
-	String getTitle();
-	
-	int getWidth();
-	
-	int getHeight();
-	
-	Vec2f getSize();
-	
-	void getSize(Vector2f v);
 	
 	ShaderParts getShaderParts();
 	

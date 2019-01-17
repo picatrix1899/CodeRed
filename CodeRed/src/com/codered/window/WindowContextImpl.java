@@ -10,16 +10,9 @@ import com.codered.resource.ResourceManager;
 import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
 
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.api.Vec2f;
-
 public class WindowContextImpl implements WindowContext
 {
 	private Window window;
-
-	private int width = 1600;
-	private int height = 1000;
-	private String title = "Window";
 	
 	private ResourceManager resourceManager;
 	
@@ -56,17 +49,8 @@ public class WindowContextImpl implements WindowContext
 		this.resourceManager.clear();
 		VAO.clearAll();
 	}
+	public void setWindow(Window w) { this.window = w; }
 	
-	public void setWidth(int width) { this.width = width; }
-	public void setHeight(int height) { this.height = height; }
-	public void setTitle(String title) { this.title = title; }
-	public void setWindow(WindowImpl w) { this.window = w; }
-	
-	public String getTitle() { return this.title; }
-	public int getWidth() { return this.width; }
-	public int getHeight() { return this.height; }
-	public Vec2f getSize() { return new Vector2f(this.width, this.height); }
-	public void getSize(Vector2f v) { v.set(this.width, this.height); }
 	public ResourceManager getResourceManager() { return this.resourceManager; }
 	public Window getWindow() { return this.window; }
 	public ShaderParts getShaderParts() { return this.shaderParts; }

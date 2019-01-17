@@ -1,7 +1,7 @@
 package com.codered.demo;
 
 import com.codered.EngineBootstrap;
-import com.codered.window.WindowImpl;
+import com.codered.window.Window;
 
 public class DemoBootstrap extends EngineBootstrap
 {
@@ -9,7 +9,7 @@ public class DemoBootstrap extends EngineBootstrap
 	{
 		super.boot();
 		
-		setWindow(new WindowImpl(800, 600, "CoderRed 3", new DemoWindowDebug()));
+		setWindow(new Window(800, 600, "CoderRed 3", new DemoWindowDebug()));
 
 		start();
 	}

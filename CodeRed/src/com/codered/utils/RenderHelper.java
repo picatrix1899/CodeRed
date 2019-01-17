@@ -1,5 +1,6 @@
 package com.codered.utils;
 
+import org.barghos.math.matrix.Mat4f;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.entities.Camera;
@@ -30,7 +31,7 @@ public class RenderHelper
 		shader.start();
 		shader.u_fontAtlas.set(text.font.getTexture());
 		shader.u_color.set(text.color);
-		shader.u_screenSpace.set(context.getSize());
+		shader.u_screenSpace.set(context.getWindow().getSize());
 		
 		BindingUtils.bindVAO(vao, 0, 1);
 		
@@ -42,7 +43,7 @@ public class RenderHelper
 		GLUtils.depthTest(true);
 	}
 	
-	public static void renderStaticEntity(StaticEntity e, Camera c, TexturedObjectShader oShader, Matrix4f projection)
+	public static void renderStaticEntity(StaticEntity e, Camera c, TexturedObjectShader oShader, Mat4f projection)
 	{
 		oShader.u_camera.set(c);
 		oShader.u_T_model.set(e.getTransformationMatrix());
@@ -54,7 +55,7 @@ public class RenderHelper
 		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 	
-	public static void renderStaticEntity(StaticEntity e, Matrix4f c, Vector3f pos, TexturedObjectShader oShader, Matrix4f projection)
+	public static void renderStaticEntity(StaticEntity e, Matrix4f c, Vector3f pos, TexturedObjectShader oShader, Mat4f projection)
 	{
 		oShader.u_camera.set(c, pos);
 		oShader.u_T_model.set(e.getTransformationMatrix());
@@ -66,7 +67,7 @@ public class RenderHelper
 		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 	
-	public static void renderTexturedQuad(TexturedQuad e, Camera c, TexturedObjectShader oShader, Matrix4f projection)
+	public static void renderTexturedQuad(TexturedQuad e, Camera c, TexturedObjectShader oShader, Mat4f projection)
 	{
 		oShader.u_camera.set(c);
 		oShader.u_T_model.set(e.getTransformationMatrix());

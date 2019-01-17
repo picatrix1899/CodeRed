@@ -25,8 +25,8 @@ public abstract class Framebuffer
 	{
 		this.id = GL30.glGenFramebuffers();
 		this.context = WindowContextHelper.getCurrentContext();
-		this.width = context.getWidth();
-		this.height = context.getHeight();
+		this.width = context.getWindow().getWidth();
+		this.height = context.getWindow().getHeight();
 	}
 	
 	public Framebuffer(int width, int height)
@@ -92,7 +92,7 @@ public abstract class Framebuffer
 		GL11.glReadBuffer(t.getTarget());
 		GL11.glDrawBuffer(GL11.GL_BACK);
 		
-		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWidth(), this.context.getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
 	}
 	
 	public void resolveAttachmentToScreen(int t)
@@ -102,7 +102,7 @@ public abstract class Framebuffer
 		GL11.glReadBuffer(FBOTarget.getByIndex(t).getTarget());
 		GL11.glDrawBuffer(GL11.GL_BACK);
 		
-		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWidth(), this.context.getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight(), GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
 	}
 	
 	public void clearAllAttachments()

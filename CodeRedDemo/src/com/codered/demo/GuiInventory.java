@@ -33,7 +33,7 @@ public class GuiInventory extends GUIWindow
 	
 	public void render()
 	{
-		drawTexturedRect("res/materials/inventory-background.png", 0, 0, this.context.getWidth(), this.context.getHeight());
+		drawTexturedRect("res/materials/inventory-background.png", 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
 		super.render();
 	}
@@ -69,7 +69,7 @@ public class GuiInventory extends GUIWindow
 
 	public int getMaxX()
 	{
-		return this.context.getWidth();
+		return this.context.getWindow().getWidth();
 	}
 
 	public int getMinY()
@@ -79,7 +79,7 @@ public class GuiInventory extends GUIWindow
 
 	public int getMaxY()
 	{
-		return this.context.getHeight();
+		return this.context.getWindow().getHeight();
 	}
 
 }
