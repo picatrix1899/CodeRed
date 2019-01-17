@@ -4,7 +4,7 @@ import com.codered.utils.Time;
 
 public class WindowTickRoutineImpl extends Thread implements WindowTickRoutine 
 {
-	private WindowImpl window;
+	private Window window;
 	private boolean isRunning;
 	private Time time;
 	
@@ -86,7 +86,7 @@ public class WindowTickRoutineImpl extends Thread implements WindowTickRoutine
 		this.window.init();
 	}
 
-	public void setWindow(WindowImpl w)
+	public void setWindow(Window w)
 	{
 		this.window = w;
 	}

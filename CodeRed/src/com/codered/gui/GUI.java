@@ -37,7 +37,7 @@ public abstract class GUI
 	
 	protected void setMousePos(float x, float y)
 	{
-		this.context.getInputManager().setMousePos(x, this.context.getHeight() - y);
+		this.context.getInputManager().setMousePos(x, this.context.getWindow().getHeight() - y);
 	}
 	
 	protected void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
@@ -75,7 +75,7 @@ public abstract class GUI
 		
 		No_GUIShader shader = this.context.getShader(No_GUIShader.class);
 		shader.start();
-		shader.u_screenSpace.set(this.context.getSize());
+		shader.u_screenSpace.set(this.context.getWindow().getSize());
 		shader.u_textureMap.set(t);
 		
 		BindingUtils.bindVAO(vao, 0, 1, 2, 3);

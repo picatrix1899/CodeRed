@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-import com.codered.window.WindowImpl;
+import com.codered.window.Window;
 
 import cmn.utilslib.essentials.Auto;
 
@@ -15,7 +15,7 @@ public abstract class EngineBootstrap
 {
 	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
 
-	private WindowImpl window;
+	private Window window;
 	
 	public void boot()
 	{
@@ -40,7 +40,7 @@ public abstract class EngineBootstrap
 		t.start();
 	}
 	
-	protected void setWindow(WindowImpl window)
+	protected void setWindow(Window window)
 	{
 		this.window = window;
 	}

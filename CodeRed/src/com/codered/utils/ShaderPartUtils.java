@@ -19,19 +19,16 @@ public class ShaderPartUtils
 				case EMBEDED:
 				{
 					url = res.src().getResource(res.toString());
-					System.out.println(res.toString());
 					break;
 				}
 				case LOCAL:
 				{
 					url = new File(res.toString()).toURI().toURL();
-					System.out.println("LOCAL");
 					break;
 				}
 				case URL:
 				{
 					url = new URL(res.toString());
-					System.out.println("URL");
 					break;
 				}
 			}
