@@ -11,33 +11,49 @@ import com.codered.window.Window;
 
 import cmn.utilslib.essentials.Auto;
 
-public abstract class EngineBootstrap
+public class EngineBootstrap
 {
 	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
 
 	private Window window;
 	
+	private Engine engine;
+	
+	public EngineBootstrap(Engine engine)
+	{
+		this.engine = engine;
+	}
+	
 	public void boot()
+	{
+		init();
+		
+		start();
+	}
+	
+	protected void init()
 	{
 		initGLFW();
 		setErrorCallback();
 	}
-	
-	public void initGLFW()
+
+	protected void initGLFW()
 	{
 		GLFW.glfwInit();
 	}
 	
-	public void setErrorCallback()
+	protected void setErrorCallback()
 	{
 		GLFW.glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
 	}
 	
-	public void start()
+	protected void start()
 	{
-		Thread t = (Thread) this.window.getTickRoutine();
-
-		t.start();
+//		Thread t = (Thread) this.window.getTickRoutine();
+//
+//		t.start();
+		
+		this.engine.start();
 	}
 	
 	protected void setWindow(Window window)

@@ -1,32 +1,16 @@
 package com.codered.utils;
 
 import com.codered.window.WindowContext;
-import com.codered.window.WindowContextImpl;
-import com.codered.window.WindowTickRoutineImpl;
 
 public class WindowContextHelper
 {
 	public static WindowContext getCurrentContext()
 	{
-		Thread t = Thread.currentThread();
-		
-		if(t instanceof WindowTickRoutineImpl)
-		{
-			return ((WindowTickRoutineImpl) t).getWindowContext();
-		}
-		
-		return null;
+		return WindowContext.getInstance();
 	}
 	
-	public static WindowContextImpl getCurrentContextImpl()
+	public static WindowContext getCurrentContextImpl()
 	{
-		Thread t = Thread.currentThread();
-		
-		if(t instanceof WindowTickRoutineImpl)
-		{
-			return (WindowContextImpl)((WindowTickRoutineImpl) t).getWindowContext();
-		}
-		
-		return null;
+		return WindowContext.getInstance();
 	}
 }

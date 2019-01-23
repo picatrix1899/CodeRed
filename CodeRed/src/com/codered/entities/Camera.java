@@ -1,5 +1,6 @@
 package com.codered.entities;
 
+import org.barghos.core.api.tuple.ITup3fR;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
@@ -146,6 +147,25 @@ public class Camera
 		}
 
 		return this;
+	}
+	
+	public double getAngle(ITup3fR a, ITup3fR b)
+	{
+		double combinedLength = Vec3f.length(a) * Vec3f.length(b);
+		Vec3f cross = Vec3f.cross(a, b, null);
+
+		double sin = cross.length() / combinedLength;
+		double cos = Vec3f.dot(a, b) / combinedLength;
+		
+		Vec3f n = cross.normal(null);
+		
+		double sign = n.dot(cross);
+	
+		double out = Math.atan2(sin, cos);
+		
+		if(sign < 0) out = -out;
+		
+		return out;
 	}
 	
 	public Camera rotateYaw(double amount)

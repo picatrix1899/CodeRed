@@ -8,20 +8,8 @@ public class GUIEButton extends GUIElement
 {
 	protected Area main;
 	
-	public int background;
+	public String background;
 	public GUIText text;
-	
-	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, int background)
-	{
-		super(id, parent);
-		
-		this.main = new Area(this.context);
-		this.main.minX = posX;
-		this.main.minY = posY;
-		this.main.maxX = posX + sizeX;
-		this.main.maxY = posY + sizeY;
-		this.background = background;
-	}
 	
 	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, String background)
 	{
@@ -32,12 +20,12 @@ public class GUIEButton extends GUIElement
 		this.main.minY = posY;
 		this.main.maxX = posX + sizeX;
 		this.main.maxY = posY + sizeY;
-		this.background = this.context.getResourceManager().getTexture(background).getId();
+		this.background = background;
 	}
 
 	public void render()
 	{
-		drawTexturedRect(background, this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
+		drawTexturedRect(this.context.getResourceManager().getTexture(background).getId(), this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
 		if(text != null) drawText(text);
 	}
 

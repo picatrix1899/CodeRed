@@ -1,14 +1,18 @@
 package com.codered.demo;
 
-
 import java.util.Iterator;
 
 import org.barghos.core.color.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
+
+import org.resources.ResourceManager;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import com.codered.BuiltInShaders;
+import com.codered.Engine;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
 import com.codered.entities.Camera;
@@ -21,17 +25,25 @@ import com.codered.light.DirectionalLight;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.BindingUtils;
+import com.codered.utils.DebugInfo;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
 import com.codered.utils.PrimitiveRenderer;
 import com.codered.utils.RenderHelper;
 import com.codered.utils.WindowHint;
 import com.codered.utils.WindowHint.GLProfile;
-import com.codered.window.WindowRoutine;
+import com.codered.window.Window;
+import com.codered.window.WindowContext;
 
-
-public class DemoWindowContext1 extends WindowRoutine
+public class DemoGame extends Engine
 {
+	private static DemoGame instance;
+	
+	public static DemoGame getInstance() { return instance; }
+	
+	private Window w;
+	private WindowContext context;
+	
 	private Mat4f projection;
 	
 	private AmbientLight ambient;
@@ -48,8 +60,28 @@ public class DemoWindowContext1 extends WindowRoutine
 	private GuiInventory inventory;
 	
 	private StaticEntityTreeImpl world;
+	
+	public DemoGame()
+	{
+		instance = this;
+		
+		this.w = new Window(800, 600, "CoderRed 3");
+		this.w.setWindowHintCallback(() -> initWindowHints());
+		
+		this.context = new WindowContext(this.w);
+	}
 
-	public void initWindowHints()
+	private void printDebugInfo()
+	{
+		DebugInfo info = new DebugInfo();
+		info.add("OpenGL/LWJGL Version: ", GL11.glGetString(GL11.GL_VERSION));
+		info.add("Supported Color Attachments: ", "" + GL11.glGetInteger(GL30.GL_MAX_COLOR_ATTACHMENTS));
+		info.add("Supported Texture Size:", "" + GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE));
+		info.add("Supported TexArray Layers:", "" + GL11.glGetInteger(GL30.GL_MAX_ARRAY_TEXTURE_LAYERS));
+		info.print();
+	}
+	
+	private void initWindowHints()
 	{
 		WindowHint.resizable(true);
 		WindowHint.glVersion("4.2");
@@ -58,13 +90,36 @@ public class DemoWindowContext1 extends WindowRoutine
 		WindowHint.doubleBuffering(true);
 		WindowHint.samples(16);
 	}
-
+	
 	private void resizeWindow(int width, int height)
 	{
 		this.fbo.resize(width, height);
 	}
 	
 	public void init()
+	{
+		this.w.init();
+		this.w.Resize.addHandler((arg1) -> resizeWindow(arg1.width, arg1.height));
+		this.w.WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
+		
+		printDebugInfo();
+		
+		ResourceManager resources = ResourceManager.getInstance();
+		resources.start();
+		
+		this.context.init();
+		
+		BuiltInShaders.init();
+		PrimitiveRenderer.create();
+		
+		this.context.getResourceManager().GUI.regTexture("res/materials/gray_rsquare.png");
+		this.context.getResourceManager().GUI.regTexture("res/materials/inventory-background.png");
+		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
+		
+		initPhase2();
+	}
+
+	public void initPhase2()
 	{
 		GlobalSettings.ingameInput = new InputConfiguration();
 		InputConfiguration config = GlobalSettings.ingameInput;
@@ -83,23 +138,17 @@ public class DemoWindowContext1 extends WindowRoutine
 		config.registerButton(Keys.b_moveCam);
 		config.registerButton(Keys.b_fire);
 		
-		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.ESCAPE)) this.context.getWindow().setWindowShouldClose(); });
+		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.ESCAPE)) Engine.getInstance().stop(false); });
 		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.Q)) this.directional = !this.directional; });
 		config.keyStroke.addHandler((src, dyn) -> {if(src.keyPresent(Key.TAB)) {this.showInventory = true; this.inventory.open();} });
-		
+
 		this.context.getInputManager().setConfiguration(config);
 
-		BuiltInShaders.init();
 
-		this.context.getWindow().Resize.addHandler((arg1) -> { resizeWindow(arg1.width, arg1.height); });
-		
-		this.projection = Mat4f.perspective(this.context.getWindow().getSize(), 70, 0.1, 1000);
+
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
-		
-		this.context.getResourceManager().GUI.regTexture("res/materials/gray_rsquare.png");
-		this.context.getResourceManager().GUI.regTexture("res/materials/inventory-background.png");
-		
-		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
+
+		this.projection = Mat4f.perspective(this.context.getWindow().getSize(), 70, 0.1, 1000);
 		
 		this.world = new StaticEntityTreeImpl();
 		
@@ -120,25 +169,35 @@ public class DemoWindowContext1 extends WindowRoutine
 		GLUtils.multisample(true);
 		
 		this.inventory = new GuiInventory(this);
-		
-		PrimitiveRenderer.create();
-	} 
+	}
+	
+	public void update(double delta)
+	{
+		this.w.update(delta);
+		this.context.update(delta);
+	}
 
 	public void render(double delta)
 	{
+		this.w.render(delta);
 
 		BindingUtils.bindFramebuffer(this.fbo);
 		GLUtils.clearAll();
 
 		if(this.showInventory)
 		{
-			renderWorld(delta);
+			if(this.inventory.allowWorldProcessing())
+			{
+				renderWorld(delta);
 
-			GLUtils.blend(true);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			renderInventory(delta);
+				GLUtils.blend(true);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			}
 
-			GLUtils.blend(false);
+			this.inventory.render();
+			
+			if(this.inventory.allowWorldProcessing())
+				GLUtils.blend(false);
 		}
 		else
 		{
@@ -147,11 +206,7 @@ public class DemoWindowContext1 extends WindowRoutine
 		
 		this.fbo.resolveAttachmentToScreen(0);
 	}
-	
-	private void renderInventory(double delta)
-	{
-		this.inventory.render();
-	}
+
 
 	private void renderWorldFromCamera(double delta, Camera cam)
 	{
@@ -204,11 +259,15 @@ public class DemoWindowContext1 extends WindowRoutine
 		renderWorldFromCamera(delta, this.player.getCamera());
 	}
 	
-	public void release()
+	public void release(boolean forced)
 	{
-		super.release();
+		ResourceManager resources = ResourceManager.getInstance();
+		resources.stop();
 		
 		this.fbo.release();
+		
+		this.context.release();
+		this.w.release();
 	}
-	
+
 }

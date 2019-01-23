@@ -27,6 +27,7 @@ public class InternalResourceManager
 	private HashMap<String,TexturedModel> texturedModels = new HashMap<String,TexturedModel>();
 	private HashMap<String,FontType> fonts = new HashMap<String,FontType>();
 	
+	
 	private WindowContext context;
 	
 	public InternalResourceManager()
@@ -111,11 +112,26 @@ public class InternalResourceManager
 		
 		if(!this.textures.containsKey(fileName))
 		{
-			TextureData data = TextureLoader.loadTexture(fileName);
+			org.resources.ResourceManager resources = org.resources.ResourceManager.getInstance();
 			
-			Texture texture = TextureUtils.genTexture(data, this.context);
+			org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
+			path.path = fileName;
 			
-			this.textures.put(fileName, texture);
+			resources.registerTextureLookup(fileName, path);
+			
+			try
+			{
+				org.resources.textures.TextureData data = resources.getTexture(fileName);
+				
+				Texture t = TextureUtils.genTexture(data, context);
+				
+				this.textures.put(fileName, t);
+				
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
 		}
 	}
 	

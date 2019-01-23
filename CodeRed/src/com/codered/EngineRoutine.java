@@ -1,32 +1,38 @@
-package com.codered.window;
+package com.codered;
 
 import com.codered.utils.Time;
 
-public class WindowTickRoutineImpl extends Thread implements WindowTickRoutine 
+public class EngineRoutine
 {
-	private Window window;
+	private Engine engine;
 	private boolean isRunning;
 	private Time time;
 	
-	private WindowContextImpl context;
+	private boolean forcedShutdown = false;
 	
-	public WindowTickRoutineImpl(WindowContextImpl context)
+	public EngineRoutine(Engine engine)
 	{
 		this.isRunning = false;
 		this.time = new Time();
-		this.context = context;
-		this.setName("WindowTickRoutine");
-		this.setDaemon(false);
+		this.engine = engine;
 	}
 
-	public WindowContext getWindowContext()
+
+	public void start()
 	{
-		return this.context;
+		run();
+	}
+	
+	public void stop(boolean forced)
+	{
+		this.isRunning = false;
+		this.forcedShutdown = forced;
 	}
 	
 	public void run()
 	{
-		init();
+		this.engine.init();
+		
 		isRunning = true;
 		
 		final double frameTime = 1.0d / this.time.getFPSCap();
@@ -67,32 +73,18 @@ public class WindowTickRoutineImpl extends Thread implements WindowTickRoutine
 					frameCounter = 0;
 				}				
 				
-				this.window.update(this.time.getDelta());
+				this.engine.update(this.time.getDelta());
 				
 			}
 			
 			if(render)
 			{
-				this.window.render(this.time.getDelta());
+				this.engine.render(this.time.getDelta());
 				frames++;
 			}
 		}
 		
-		window.end();
+		this.engine.release(this.forcedShutdown);
 	}
 
-	public void init()
-	{
-		this.window.init();
-	}
-
-	public void setWindow(Window w)
-	{
-		this.window = w;
-	}
-
-	public void end()
-	{
-		this.isRunning = false;
-	}
 }

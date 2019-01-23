@@ -16,5 +16,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-math"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-structs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ResourceManager"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -13,9 +13,9 @@ public class GuiInventory extends GUIWindow
 	
 	public InputConfiguration inventoryInput;
 	
-	public DemoWindowContext1 main;
+	public DemoGame main;
 	
-	public GuiInventory(DemoWindowContext1 parent)
+	public GuiInventory(DemoGame parent)
 	{
 		super();
 		this.main = parent;
@@ -25,8 +25,8 @@ public class GuiInventory extends GUIWindow
 		inventoryInput.keyStroke.addHandler((src, dyn) -> { if(src.keyPresent(Key.TAB)) close(); });
 		inventoryInput.buttonStroke.addHandler((src, dyn) -> { this.button.onClick(); });
 		
-		this.button = new GUIEButton(1, this, 0, 0, 60, 22, "res/materials/gray_rsquare.png");
-		this.button.setText("Back", 20, "res/fonts/arial", true, true);
+		this.button = new GUIEButton(1, this, 0, 0, 60, 82, "res/materials/gray_rsquare.png");
+		this.button.setText("Back Test", 20, "res/fonts/arial", true, false);
 		
 		addElement(this.button);
 	}
