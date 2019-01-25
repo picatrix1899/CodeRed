@@ -63,6 +63,13 @@ public class ResourceManager
 		return STATIC.getTexture(name);
 	}
 
+	public void update(double delta)
+	{
+		WORLD.update(delta);
+		STATIC.update(delta);
+		GUI.update(delta);
+	}
+	
 	public void clear()
 	{
 		WORLD.clear();

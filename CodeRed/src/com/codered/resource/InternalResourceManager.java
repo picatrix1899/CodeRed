@@ -2,6 +2,10 @@ package com.codered.resource;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.resources.utils.ResourceResponse;
 
 import com.codered.font.FontType;
 import com.codered.managing.loader.data.MaterialData;
@@ -27,12 +31,16 @@ public class InternalResourceManager
 	private HashMap<String,TexturedModel> texturedModels = new HashMap<String,TexturedModel>();
 	private HashMap<String,FontType> fonts = new HashMap<String,FontType>();
 	
-	
 	private WindowContext context;
+	
+	private Set<ResourceResponse<TextureData>> readyTextures = new HashSet<ResourceResponse<TextureData>>();
+	
+	org.resources.ResourceManager resourceManager;
 	
 	public InternalResourceManager()
 	{
 		this.context = WindowContextHelper.getCurrentContext();
+		resourceManager = org.resources.ResourceManager.getInstance();
 	}
 	
 	
@@ -76,9 +84,9 @@ public class InternalResourceManager
 		{
 			MaterialData data = MaterialLoader.load(fileName);
 			
-			regTexture(data.getAlbedoMap());
-			regTexture(data.getNormalMap());
-			regTexture(data.getGlowMap());
+			loadTextureForced(data.getAlbedoMap());
+			loadTextureForced(data.getNormalMap());
+			loadTextureForced(data.getGlowMap());
 
 			Texture albedo = this.textures.get(data.getAlbedoMap());
 			Texture normal = this.textures.get(data.getNormalMap());
@@ -106,22 +114,48 @@ public class InternalResourceManager
 		}
 	}
 	
-	public void regTexture(String fileName)
+	public void loadTextureForced(String fileName)
 	{
 		if(fileName.isEmpty()) return;
 		
 		if(!this.textures.containsKey(fileName))
 		{
-			org.resources.ResourceManager resources = org.resources.ResourceManager.getInstance();
-			
 			org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
 			path.path = fileName;
 			
-			resources.registerTextureLookup(fileName, path);
+			resourceManager.registerTextureLookup(fileName, path);
 			
 			try
 			{
-				org.resources.textures.TextureData data = resources.getTexture(fileName);
+				org.resources.textures.TextureData data = resourceManager.getTexture(fileName);
+				
+				Texture t = TextureUtils.genTexture(data, context);
+				
+				this.textures.put(fileName, t);
+				
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	public void loadTexture(String fileName)
+	{
+		if(fileName.isEmpty()) return;
+		
+		if(!this.textures.containsKey(fileName))
+		{
+
+			org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
+			path.path = fileName;
+			
+			resourceManager.registerTextureLookup(fileName, path);
+			
+			try
+			{
+				org.resources.textures.TextureData data = resourceManager.loadTexture(fileName);
 				
 				Texture t = TextureUtils.genTexture(data, context);
 				
@@ -166,6 +200,11 @@ public class InternalResourceManager
 			this.texturedModels.put(name, model);
 		}
 
+	}
+	
+	public void update(double delta)
+	{
+		
 	}
 	
 	public void renew()

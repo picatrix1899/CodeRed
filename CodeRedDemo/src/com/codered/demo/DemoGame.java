@@ -17,14 +17,12 @@ import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
-import com.codered.fbo.FBO;
 import com.codered.input.InputConfiguration;
 import com.codered.input.Key;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
-import com.codered.utils.BindingUtils;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
@@ -52,8 +50,6 @@ public class DemoGame extends Engine
 	private Player player;
 	
 	private boolean directional = true;
-	
-	private FBO fbo;
 	
 	public boolean showInventory = false;
 	
@@ -91,15 +87,10 @@ public class DemoGame extends Engine
 		WindowHint.samples(16);
 	}
 	
-	private void resizeWindow(int width, int height)
-	{
-		this.fbo.resize(width, height);
-	}
-	
 	public void init()
 	{
 		this.w.init();
-		this.w.Resize.addHandler((arg1) -> resizeWindow(arg1.width, arg1.height));
+		
 		this.w.WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 		
 		printDebugInfo();
@@ -112,8 +103,8 @@ public class DemoGame extends Engine
 		BuiltInShaders.init();
 		PrimitiveRenderer.create();
 		
-		this.context.getResourceManager().GUI.regTexture("res/materials/gray_rsquare.png");
-		this.context.getResourceManager().GUI.regTexture("res/materials/inventory-background.png");
+		this.context.getResourceManager().GUI.loadTextureForced("res/materials/gray_rsquare.png");
+		this.context.getResourceManager().GUI.loadTextureForced("res/materials/inventory-background.png");
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
 		
 		initPhase2();
@@ -161,10 +152,6 @@ public class DemoGame extends Engine
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
-
-		this.fbo = new FBO();
-		this.fbo.applyColorTextureAttachments(true, 0, 1);
-		this.fbo.applyDepthStencilBufferAttachment();
 		
 		GLUtils.multisample(true);
 		
@@ -181,7 +168,6 @@ public class DemoGame extends Engine
 	{
 		this.w.render(delta);
 
-		BindingUtils.bindFramebuffer(this.fbo);
 		GLUtils.clearAll();
 
 		if(this.showInventory)
@@ -204,7 +190,6 @@ public class DemoGame extends Engine
 			renderWorld(delta);
 		}
 		
-		this.fbo.resolveAttachmentToScreen(0);
 	}
 
 
@@ -263,8 +248,6 @@ public class DemoGame extends Engine
 	{
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.stop();
-		
-		this.fbo.release();
 		
 		this.context.release();
 		this.w.release();
