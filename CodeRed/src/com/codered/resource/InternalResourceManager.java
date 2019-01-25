@@ -155,7 +155,7 @@ public class InternalResourceManager
 			
 			try
 			{
-				org.resources.textures.TextureData data = resourceManager.loadTexture(fileName);
+				org.resources.textures.TextureData data = resourceManager.loadTexture(fileName,	(response) -> {});
 				
 				Texture t = TextureUtils.genTexture(data, context);
 				
