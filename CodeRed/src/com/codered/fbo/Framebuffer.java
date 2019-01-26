@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.CodeRed;
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 import com.codered.window.WindowContext;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL15;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.managing.Triangle;
 import com.codered.managing.VAO;
 import com.codered.managing.Vertex;

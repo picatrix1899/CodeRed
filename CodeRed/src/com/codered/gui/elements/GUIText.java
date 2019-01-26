@@ -1,6 +1,6 @@
 package com.codered.gui.elements;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 
 import cmn.utilslib.math.vector.Vector3f;

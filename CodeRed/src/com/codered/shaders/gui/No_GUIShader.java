@@ -2,7 +2,7 @@ package com.codered.shaders.gui;
 
 import java.util.List;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.shader.UniformTexture;
 import com.codered.window.WindowContext;
 

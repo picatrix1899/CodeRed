@@ -2,7 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;

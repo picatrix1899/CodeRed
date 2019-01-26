@@ -2,7 +2,7 @@ package com.codered.primitives;
 
 import org.lwjgl.opengl.GL15;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
 

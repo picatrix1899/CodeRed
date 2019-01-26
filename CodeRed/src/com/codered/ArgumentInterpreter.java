@@ -4,57 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-
 import com.google.common.collect.Maps;
 
-public class EngineBootstrap
+public class ArgumentInterpreter
 {
-	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
-
-	private Engine engine;
-	
-	public EngineBootstrap(Engine engine)
-	{
-		this.engine = engine;
-	}
-	
-	public void boot()
-	{
-		init();
-		
-		start();
-	}
-	
-	protected void init()
-	{
-		initGLFW();
-		setErrorCallback();
-	}
-
-	protected void initGLFW()
-	{
-		GLFW.glfwInit();
-	}
-	
-	protected void setErrorCallback()
-	{
-		GLFW.glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
-	}
-	
-	protected void start()
-	{
-		this.engine.start();
-	}
-	
-	public void setArguments(String[] args) { this.argInterpreter.interpret(args); }
-	
-	public ArgumentInterpreter getArgInterpreter() { return this.argInterpreter; }
-	
-	public final class ArgumentInterpreter
-	{
-		
 		private HashMap<String, Argument> interpreter = Maps.newHashMap();
 		
 		public void addArgument(String args, Argument destination)
@@ -62,7 +15,7 @@ public class EngineBootstrap
 			this.interpreter.put(args.toLowerCase(), destination);
 		}
 		
-		protected void interpret(String[] args)
+		public void interpret(String[] args)
 		{
 			int index = 0;
 			
@@ -108,7 +61,5 @@ public class EngineBootstrap
 			}
 		}
 		
-
-	}
 	public interface Argument extends Consumer<String[]> { }
 }

@@ -3,7 +3,7 @@ package com.codered.utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
 import com.codered.shaders.object.SimpleObjectShader;

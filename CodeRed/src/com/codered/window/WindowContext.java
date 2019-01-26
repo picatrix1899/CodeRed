@@ -1,6 +1,6 @@
 package com.codered.window;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
 import com.codered.managing.VAOManager;
 import com.codered.resource.ResourceManager;

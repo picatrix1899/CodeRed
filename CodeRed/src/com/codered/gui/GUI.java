@@ -3,7 +3,7 @@ package com.codered.gui;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.font.TextMeshData;
 import com.codered.gui.elements.GUIText;

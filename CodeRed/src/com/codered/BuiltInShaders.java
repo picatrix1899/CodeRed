@@ -2,6 +2,7 @@ package com.codered;
 
 import java.io.IOException;
 
+import com.codered.engine.EngineRegistry;
 import com.codered.resource.ResourcePath;
 import com.codered.resource.ResourcePath.ResourceDestination;
 import com.codered.shader.MalformedShaderException;

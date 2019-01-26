@@ -5,7 +5,7 @@ import java.nio.DoubleBuffer;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.essentials.BufferUtils;

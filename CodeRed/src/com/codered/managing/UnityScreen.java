@@ -3,7 +3,7 @@ package com.codered.managing;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
 
 import cmn.utilslib.math.vector.Vector2f;

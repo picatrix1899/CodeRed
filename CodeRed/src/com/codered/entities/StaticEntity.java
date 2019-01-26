@@ -5,7 +5,7 @@ import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.managing.models.TexturedModel;
 
 public class StaticEntity extends BaseEntity

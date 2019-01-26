@@ -2,7 +2,7 @@ package com.codered.shaders.terrain.simple;
 
 import java.util.List;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.light.AmbientLight;
 import com.codered.material.Material;
 import com.codered.shaders.terrain.SimpleTerrainShader;

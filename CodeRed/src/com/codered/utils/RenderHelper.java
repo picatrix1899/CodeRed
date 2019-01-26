@@ -3,7 +3,7 @@ package com.codered.utils;
 import org.barghos.math.matrix.Mat4f;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.elements.GUIText;

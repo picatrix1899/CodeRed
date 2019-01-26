@@ -2,7 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.shader.UniformAmbientLight;
 import com.codered.shader.UniformVector3;
 import com.codered.window.WindowContext;

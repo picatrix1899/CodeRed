@@ -3,7 +3,7 @@ package com.codered.resource;
 import java.io.File;
 import java.util.HashMap;
 
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.managing.loader.data.MaterialData;
 import com.codered.managing.loader.data.OBJFile;
