@@ -2,6 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
@@ -20,8 +21,8 @@ public class No_OShader extends TexturedObjectShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_no"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_no"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("o_no"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("o_no"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

@@ -11,11 +11,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.CodeRed;
-import com.codered.IReleasable;
+import com.codered.EngineRegistry;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 
-public class Window implements IReleasable
+public class Window
 {
 	private long window;
 	
@@ -25,6 +25,8 @@ public class Window implements IReleasable
 	private String title = "";
 	
 	private Runnable initWindowHints;
+	
+	private boolean isReleased;
 	
 	public Event<ResizeEventArgs> Resize = new Event<ResizeEventArgs>();
 	public Event<NoArgs> WindowClose = new Event<NoArgs>();
@@ -61,7 +63,7 @@ public class Window implements IReleasable
 		
 		GLFW.glfwShowWindow(this.window);
 		
-		GLFW.glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(w, h); });
+		GLFW.glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
 	}
 	
 	public GLCapabilities getCapabilities()
@@ -79,13 +81,21 @@ public class Window implements IReleasable
 	public int getHeight() { return (int)this.size.y; }
 	public Vec2f getSize() { return new Vec2f(this.size); }
 
-	public void onResize(int width, int height)
+	public void onResize(long id, int width, int height)
 	{
-		this.size.set((double)width, (double)height);
-		
-		GL11.glViewport(0, 0, width, height);
-		
-		this.Resize.fire(new ResizeEventArgs(width, height));
+		if(id == this.window)
+		{
+			WindowContext oldContext = EngineRegistry.getWindowContext(GLFW.glfwGetCurrentContext());
+			WindowContext newContext = EngineRegistry.getWindowContext(this.window);
+			
+			newContext.makeContextCurrent();
+			this.size.set((double)width, (double)height);
+			
+			GL11.glViewport(0, 0, width, height);
+			
+			this.Resize.fire(new ResizeEventArgs(width, height));
+			oldContext.makeContextCurrent();
+		}
 	}
 	
 	public void update(double delta)
@@ -110,6 +120,12 @@ public class Window implements IReleasable
 	public void release()
 	{
 		GLFW.glfwDestroyWindow(this.window);
+		this.isReleased = true;
+	}
+	
+	public boolean isReleased()
+	{
+		return this.isReleased;
 	}
 	
 	public static class ResizeEventArgs implements EventArgs

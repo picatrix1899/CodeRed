@@ -2,6 +2,7 @@ package com.codered.primitives;
 
 import org.lwjgl.opengl.GL15;
 
+import com.codered.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
 
@@ -37,7 +38,7 @@ public class TexturedQuad
 		Vector3f normal = ((Vector3f)newX.crossN(newZ)).normalize();
 		Vector3f tangent = calculateTangents();
 		
-		this.vao = new VAO();
+		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		this.vao.storeData(0, v, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(1, new Vector2f[] { new Vector2f(0,0), new Vector2f(0,1), new Vector2f(1,1), new Vector2f(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(2, new Vector3f[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);

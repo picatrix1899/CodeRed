@@ -2,6 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.shader.UniformColor3;
 import com.codered.shaders.object.SimpleObjectShader;
 import com.codered.window.WindowContext;
@@ -29,8 +30,8 @@ public class Colored_OShader extends SimpleObjectShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_colored"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_colored"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("o_colored"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("o_colored"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

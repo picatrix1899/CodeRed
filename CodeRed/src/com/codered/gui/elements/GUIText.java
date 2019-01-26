@@ -1,7 +1,7 @@
 package com.codered.gui.elements;
 
+import com.codered.EngineRegistry;
 import com.codered.font.FontType;
-import com.codered.utils.WindowContextHelper;
 
 import cmn.utilslib.math.vector.Vector3f;
 
@@ -74,7 +74,7 @@ public class GUIText
 		this.textString = text;
 		this.posX = x;
 		this.posY = y;
-		this.font = WindowContextHelper.getCurrentContext().getResourceManager().getFont(font);
+		this.font = EngineRegistry.getCurrentWindowContext().getResourceManager().getFont(font);
 		this.width = width;
 		this.height = height;
 		this.centerTextHorizontal = centeredHorizontal;

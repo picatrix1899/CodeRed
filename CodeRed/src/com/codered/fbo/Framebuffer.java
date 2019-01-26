@@ -4,9 +4,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.CodeRed;
+import com.codered.EngineRegistry;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
 public abstract class Framebuffer
@@ -24,7 +24,7 @@ public abstract class Framebuffer
 	public Framebuffer()
 	{
 		this.id = GL30.glGenFramebuffers();
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = EngineRegistry.getCurrentWindowContext();
 		this.width = context.getWindow().getWidth();
 		this.height = context.getWindow().getHeight();
 	}
@@ -32,7 +32,7 @@ public abstract class Framebuffer
 	public Framebuffer(int width, int height)
 	{
 		this.id = GL30.glGenFramebuffers();
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = EngineRegistry.getCurrentWindowContext();
 		this.width = width;
 		this.height = height;
 	}

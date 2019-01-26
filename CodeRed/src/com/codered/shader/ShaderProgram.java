@@ -2,12 +2,13 @@ package com.codered.shader;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 
 import org.lwjgl.opengl.GL20;
 
 import com.codered.window.WindowContext;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
 
@@ -15,11 +16,11 @@ public abstract class ShaderProgram
 {
 	protected int programID;
 	
-	private List<ShaderPart> geometryShaders = Lists.newArrayList();
-	private List<ShaderPart> vertexShaders = Lists.newArrayList();
-	private List<ShaderPart> fragmentShaders = Lists.newArrayList();
+	private Set<ShaderPart> geometryShaders = Sets.newHashSet();
+	private Set<ShaderPart> vertexShaders = Sets.newHashSet();
+	private Set<ShaderPart> fragmentShaders = Sets.newHashSet();
 
-	private ArrayList<Uniform> newUniforms = Lists.newArrayList();
+	private Set<Uniform> newUniforms = Sets.newHashSet();
 	
 	protected WindowContext context;
 	

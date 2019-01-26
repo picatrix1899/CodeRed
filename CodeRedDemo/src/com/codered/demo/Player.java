@@ -8,6 +8,7 @@ import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
 
 import com.codered.ConvUtils;
+import com.codered.EngineRegistry;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
 import com.codered.entities.BaseEntity;
@@ -17,7 +18,6 @@ import com.codered.gui.GUIWindow;
 import com.codered.input.InputConfiguration;
 import com.codered.input.InputConfiguration.ButtonEventArgs;
 import com.codered.input.InputConfiguration.KeyEventArgs;
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.math.geometry.AABB3f;
@@ -47,7 +47,7 @@ public class Player extends BaseEntity
 	
 	public Player(StaticEntityTreeImpl world)
 	{
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = EngineRegistry.getCurrentWindowContext();
 		
 		this.world = world;
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(4, 9, 4));
@@ -68,10 +68,10 @@ public class Player extends BaseEntity
 		
 		InputConfiguration config = GlobalSettings.ingameInput;
 		
-		config.keyPress.addHandler((src, dyn) -> updateMovement(src));
-		config.buttonStroke.addHandler((src, dyn) -> buttonStroke(src));
-		config.buttonRelease.addHandler((src, dyn) -> buttonRelease(src));
-		config.buttonPress.addHandler((src, dyn) -> buttonPress(src));
+		config.keyPress.addHandler((src) -> updateMovement(src));
+		config.buttonStroke.addHandler((src) -> buttonStroke(src));
+		config.buttonRelease.addHandler((src) -> buttonRelease(src));
+		config.buttonPress.addHandler((src) -> buttonPress(src));
 	}
 	
 	private void buttonStroke(ButtonEventArgs args)

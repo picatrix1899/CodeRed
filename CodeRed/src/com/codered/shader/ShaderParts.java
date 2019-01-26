@@ -19,4 +19,10 @@ public class ShaderParts
 	{
 		return custom;
 	}
+	
+	public void release()
+	{
+		builtIn.clear();
+		custom.clear();
+	}
 }

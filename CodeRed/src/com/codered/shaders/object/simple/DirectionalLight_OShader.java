@@ -2,6 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.shader.UniformDirectionalLight;
 import com.codered.window.WindowContext;
 
@@ -25,8 +26,8 @@ public class DirectionalLight_OShader extends TexturedObjectShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_directionalLight"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_directionalLight"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("o_directionalLight"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("o_directionalLight"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

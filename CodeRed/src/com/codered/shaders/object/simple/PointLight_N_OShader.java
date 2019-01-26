@@ -2,6 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.shader.UniformPointLight;
 import com.codered.window.WindowContext;
 
@@ -25,8 +26,8 @@ public class PointLight_N_OShader extends TexturedObjectShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_pointLight_N"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_pointLight_N"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("o_pointLight_N"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("o_pointLight_N"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

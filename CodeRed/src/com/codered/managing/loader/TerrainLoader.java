@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL15;
 
+import com.codered.EngineRegistry;
 import com.codered.managing.Triangle;
 import com.codered.managing.VAO;
 import com.codered.managing.Vertex;
@@ -23,7 +24,7 @@ public class TerrainLoader
 
 	private RawModel loadToVAO(Vec3fBase[] positions, Vec2fBase[] texCoords, Vec3fBase[] normals, Vec3fBase[] tangents, int[] indices)
 	{
-		VAO vao = new VAO();
+		VAO vao = EngineRegistry.getVAOManager().getNewVAO();
 		
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		

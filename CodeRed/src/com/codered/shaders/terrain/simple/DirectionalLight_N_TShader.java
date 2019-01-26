@@ -2,6 +2,7 @@ package com.codered.shaders.terrain.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.light.DirectionalLight;
 import com.codered.material.Material;
 import com.codered.shaders.terrain.SimpleTerrainShader;
@@ -66,8 +67,8 @@ public class DirectionalLight_N_TShader extends SimpleTerrainShader
 	
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_directionalLight_N"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_directionalLight_N"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("t_directionalLight_N"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("t_directionalLight_N"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

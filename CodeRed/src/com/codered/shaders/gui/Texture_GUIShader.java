@@ -2,6 +2,7 @@ package com.codered.shaders.gui;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.dmap.dmaps.DMap2;
@@ -34,8 +35,8 @@ public class Texture_GUIShader extends GUIShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("gui_color"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("gui_color"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("gui_color"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("gui_color"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

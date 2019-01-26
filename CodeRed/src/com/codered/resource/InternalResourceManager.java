@@ -2,11 +2,8 @@ package com.codered.resource;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.resources.utils.ResourceResponse;
-
+import com.codered.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.managing.loader.data.MaterialData;
 import com.codered.managing.loader.data.OBJFile;
@@ -19,27 +16,25 @@ import com.codered.texture.Texture;
 import com.codered.texture.TextureData;
 import com.codered.texture.TextureLoader;
 import com.codered.utils.TextureUtils;
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
+import com.google.common.collect.Maps;
 
 public class InternalResourceManager
 {
-	private HashMap<String,Texture> textures = new HashMap<String,Texture>();
-	private HashMap<String,Material> materials = new HashMap<String,Material>();
-	private HashMap<String,Mesh> staticMeshes = new HashMap<String,Mesh>();
-	private HashMap<String,RawModel> rawModels = new HashMap<String,RawModel>();
-	private HashMap<String,TexturedModel> texturedModels = new HashMap<String,TexturedModel>();
-	private HashMap<String,FontType> fonts = new HashMap<String,FontType>();
+	private HashMap<String,Texture> textures = Maps.newHashMap();
+	private HashMap<String,Material> materials = Maps.newHashMap();
+	private HashMap<String,Mesh> staticMeshes = Maps.newHashMap();
+	private HashMap<String,RawModel> rawModels = Maps.newHashMap();
+	private HashMap<String,TexturedModel> texturedModels = Maps.newHashMap();
+	private HashMap<String,FontType> fonts = Maps.newHashMap();
 	
 	private WindowContext context;
-	
-	private Set<ResourceResponse<TextureData>> readyTextures = new HashSet<ResourceResponse<TextureData>>();
-	
+
 	org.resources.ResourceManager resourceManager;
 	
 	public InternalResourceManager()
 	{
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = EngineRegistry.getCurrentWindowContext();
 		resourceManager = org.resources.ResourceManager.getInstance();
 	}
 	
@@ -128,34 +123,6 @@ public class InternalResourceManager
 			try
 			{
 				org.resources.textures.TextureData data = resourceManager.getTexture(fileName);
-				
-				Texture t = TextureUtils.genTexture(data, context);
-				
-				this.textures.put(fileName, t);
-				
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
-		}
-	}
-	
-	public void loadTexture(String fileName)
-	{
-		if(fileName.isEmpty()) return;
-		
-		if(!this.textures.containsKey(fileName))
-		{
-
-			org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-			path.path = fileName;
-			
-			resourceManager.registerTextureLookup(fileName, path);
-			
-			try
-			{
-				org.resources.textures.TextureData data = resourceManager.loadTexture(fileName,	(response) -> {});
 				
 				Texture t = TextureUtils.genTexture(data, context);
 				

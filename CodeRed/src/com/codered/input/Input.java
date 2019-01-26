@@ -5,7 +5,7 @@ import java.nio.DoubleBuffer;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.codered.utils.WindowContextHelper;
+import com.codered.EngineRegistry;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.essentials.BufferUtils;
@@ -33,7 +33,7 @@ public class Input
 
 	public Input()
 	{
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = EngineRegistry.getCurrentWindowContext();
 		
 		this.center = new Vector2f(this.context.getWindow().getWidth() / 2.0, this.context.getWindow().getHeight() / 2.0);
 	}
@@ -46,7 +46,8 @@ public class Input
 
 	public void update(double delta)
 	{
-		this.configuration.update(delta, this.context);
+		if(this.configuration != null)
+			this.configuration.update(delta, this.context);
 		
 		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer y = BufferUtils.createDoubleBuffer(1);

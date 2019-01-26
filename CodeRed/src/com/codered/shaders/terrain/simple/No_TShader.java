@@ -2,6 +2,7 @@ package com.codered.shaders.terrain.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.material.Material;
 import com.codered.shaders.terrain.SimpleTerrainShader;
 import com.codered.window.WindowContext;
@@ -41,8 +42,8 @@ public class No_TShader extends SimpleTerrainShader
 	
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_no"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_no"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("t_no"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("t_no"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

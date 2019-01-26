@@ -8,6 +8,7 @@ import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL15;
 
+import com.codered.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.managing.loader.TriangleData;
 import com.codered.managing.loader.data.OBJFile;
@@ -184,7 +185,7 @@ public class Mesh
 	
 	private Mesh loadToVAO0(Vector3f[] positions,Vector2f[] texCoords,Vector3f[] normals, Vector3f[] tangents, int[] indices)
 	{
-		this.vao = new VAO();
+		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		
 		this.vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		

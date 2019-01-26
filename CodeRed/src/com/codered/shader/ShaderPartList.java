@@ -6,14 +6,13 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
 import com.codered.managing.loader.data.ShaderPartData;
-
-import cmn.utilslib.essentials.Auto;
+import com.google.common.collect.Maps;
 
 public class ShaderPartList
 {
-	private HashMap<String, ShaderPart> vertexShaders = Auto.HashMap();
-	private HashMap<String, ShaderPart> geometryShaders = Auto.HashMap();
-	private HashMap<String, ShaderPart> fragmentShaders = Auto.HashMap();
+	private HashMap<String, ShaderPart> vertexShaders = Maps.newHashMap();
+	private HashMap<String, ShaderPart> geometryShaders = Maps.newHashMap();
+	private HashMap<String, ShaderPart> fragmentShaders = Maps.newHashMap();
 	
 	
 	public void loadVertexShader(String name, ShaderPartData data) throws MalformedShaderException

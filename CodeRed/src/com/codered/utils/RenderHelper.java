@@ -3,6 +3,7 @@ package com.codered.utils;
 import org.barghos.math.matrix.Mat4f;
 import org.lwjgl.opengl.GL11;
 
+import com.codered.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.elements.GUIText;
@@ -19,7 +20,7 @@ public class RenderHelper
 {
 	public static void renderGuiTextDefault(GUIText text, VAO vao, int vertexCount)
 	{
-		WindowContext context = WindowContextHelper.getCurrentContext();
+		WindowContext context = EngineRegistry.getCurrentWindowContext();
 		
 		GLUtils.blend(true);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -27,7 +28,7 @@ public class RenderHelper
 		
 
 		
-		Font_GUIShader shader = context.getShader(Font_GUIShader.class);
+		Font_GUIShader shader = EngineRegistry.getShader(Font_GUIShader.class);
 		shader.start();
 		shader.u_fontAtlas.set(text.font.getTexture());
 		shader.u_color.set(text.color);

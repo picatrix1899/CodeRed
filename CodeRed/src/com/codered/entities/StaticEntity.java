@@ -5,8 +5,8 @@ import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
 
+import com.codered.EngineRegistry;
 import com.codered.managing.models.TexturedModel;
-import com.codered.utils.WindowContextHelper;
 
 public class StaticEntity extends BaseEntity
 {
@@ -25,7 +25,7 @@ public class StaticEntity extends BaseEntity
 
 	public StaticEntity(String model, Vec3f pos, float rx, float ry, float rz)
 	{
-		this.model = WindowContextHelper.getCurrentContext().getResourceManager().getTexturedModel(model);
+		this.model = EngineRegistry.getCurrentWindowContext().getResourceManager().getTexturedModel(model);
 		
 		setPos(pos);
 		setRotX(rx);

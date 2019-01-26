@@ -3,6 +3,7 @@ package com.codered.gui;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
+import com.codered.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.font.TextMeshData;
 import com.codered.gui.elements.GUIText;
@@ -11,7 +12,6 @@ import com.codered.shaders.gui.Color_GUIShader;
 import com.codered.shaders.gui.No_GUIShader;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.RenderHelper;
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.color.colors.api.IColor3Base;
@@ -31,8 +31,8 @@ public abstract class GUI
 	
 	public GUI()
 	{
-		this.vao = new VAO();
-		this.context = WindowContextHelper.getCurrentContext();
+		this.vao = EngineRegistry.getVAOManager().getNewVAO();
+		this.context = EngineRegistry.getCurrentWindowContext();
 	}
 	
 	protected void setMousePos(float x, float y)
@@ -73,7 +73,7 @@ public abstract class GUI
 		
 
 		
-		No_GUIShader shader = this.context.getShader(No_GUIShader.class);
+		No_GUIShader shader = EngineRegistry.getShader(No_GUIShader.class);
 		shader.start();
 		shader.u_screenSpace.set(this.context.getWindow().getSize());
 		shader.u_textureMap.set(t);
@@ -98,13 +98,13 @@ public abstract class GUI
 		
 		BindingUtils.bindVAO(vao, 0);
 		
-		this.context.getShader(Color_GUIShader.class).setInput("color", c);
-		this.context.getShader(Color_GUIShader.class).use();
+		EngineRegistry.getShader(Color_GUIShader.class).setInput("color", c);
+		EngineRegistry.getShader(Color_GUIShader.class).use();
 		
 		GL11.glLineWidth(width);
 		GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, vertices.length);
 		
-		this.context.getShader(Color_GUIShader.class).stop();
+		EngineRegistry.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawPoints(IColor3Base c, float size, Vector2f start, Vector2f... p)
@@ -120,13 +120,13 @@ public abstract class GUI
 		
 		BindingUtils.bindVAO(vao, 0);
 		
-		this.context.getShader(Color_GUIShader.class).setInput("color", c);
-		this.context.getShader(Color_GUIShader.class).use();
+		EngineRegistry.getShader(Color_GUIShader.class).setInput("color", c);
+		EngineRegistry.getShader(Color_GUIShader.class).use();
 		
 		GL11.glPointSize(size);
 		GL11.glDrawArrays(GL11.GL_POINTS, 0, vertices.length);
 		
-		this.context.getShader(Color_GUIShader.class).stop();
+		EngineRegistry.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawColoredRect(IColor3Base c, float posX, float posY, float sizeX, float sizeY)
@@ -142,12 +142,12 @@ public abstract class GUI
 		
 		BindingUtils.bindVAO(vao, 0);
 		
-		this.context.getShader(Color_GUIShader.class).setInput("color", c);
-		this.context.getShader(Color_GUIShader.class).use();
+		EngineRegistry.getShader(Color_GUIShader.class).setInput("color", c);
+		EngineRegistry.getShader(Color_GUIShader.class).use();
 		
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
-		this.context.getShader(Color_GUIShader.class).stop();
+		EngineRegistry.getShader(Color_GUIShader.class).stop();
 	}
 	
 	protected void drawText(String text, int fontsize, float x, float y, float width, float height, FontType font, boolean centeredHorizontal, boolean centeredVertical)

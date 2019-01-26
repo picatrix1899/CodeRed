@@ -7,16 +7,12 @@ import java.util.function.Consumer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-import com.codered.window.Window;
-
-import cmn.utilslib.essentials.Auto;
+import com.google.common.collect.Maps;
 
 public class EngineBootstrap
 {
 	private ArgumentInterpreter argInterpreter = new ArgumentInterpreter();
 
-	private Window window;
-	
 	private Engine engine;
 	
 	public EngineBootstrap(Engine engine)
@@ -49,16 +45,7 @@ public class EngineBootstrap
 	
 	protected void start()
 	{
-//		Thread t = (Thread) this.window.getTickRoutine();
-//
-//		t.start();
-		
 		this.engine.start();
-	}
-	
-	protected void setWindow(Window window)
-	{
-		this.window = window;
 	}
 	
 	public void setArguments(String[] args) { this.argInterpreter.interpret(args); }
@@ -68,7 +55,7 @@ public class EngineBootstrap
 	public final class ArgumentInterpreter
 	{
 		
-		private HashMap<String, Argument> interpreter = Auto.HashMap();
+		private HashMap<String, Argument> interpreter = Maps.newHashMap();
 		
 		public void addArgument(String args, Argument destination)
 		{

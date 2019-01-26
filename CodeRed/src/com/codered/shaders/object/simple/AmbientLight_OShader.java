@@ -2,6 +2,7 @@ package com.codered.shaders.object.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.shader.UniformAmbientLight;
 import com.codered.shader.UniformVector3;
 import com.codered.window.WindowContext;
@@ -29,8 +30,8 @@ public class AmbientLight_OShader extends TexturedObjectShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("o_ambientLight"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("o_ambientLight"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("o_ambientLight"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("o_ambientLight"));
 	}
 
 

@@ -1,66 +1,90 @@
 package com.codered.window;
 
+import com.codered.EngineRegistry;
 import com.codered.input.Input;
-import com.codered.managing.VAO;
+import com.codered.managing.VAOManager;
 import com.codered.resource.ResourceManager;
 import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
-import com.codered.shader.ShaderProgram;
 
 public class WindowContext
 {
-	private Window window;
+	private String name;
 	
+	private Window window;
+	private WindowRoutine routine;
+
 	private ResourceManager resourceManager;
 	
-	private ShaderParts shaderParts;
-	
 	private Input input;
-	
-	private ShaderList shaders;
-	
-	private static WindowContext instance;
-	
-	public static WindowContext getInstance()
+
+	public WindowContext(String name, Window window, WindowRoutine routine)
 	{
-		return instance;
-	}
-	
-	public WindowContext(Window window)
-	{
-		instance = this;
 		this.window = window;
+		this.routine = routine;
+		this.name = name;
+		this.routine.setContext(this);
 	}
 
 	public void init()
 	{
+		makeContextCurrent();
+		this.window.init();
+		
+		EngineRegistry.registerWindowContext(name, getWindowId(), this);
+		EngineRegistry.registerShaderList(name, getWindowId(), new ShaderList(this));
+		EngineRegistry.registerShaderParts(name, getWindowId(), new ShaderParts());
+		EngineRegistry.registerVAOManager(name, getWindowId(), new VAOManager());
 		this.resourceManager = new ResourceManager();
-		this.shaderParts = new ShaderParts();
 		this.input = new Input();
-		this.shaders = new ShaderList();
+		this.routine.init();
 	}
 	
 	public void update(double delta)
 	{
+		makeContextCurrent();
+		this.window.update(delta);
+		
+		if(this.window.isReleased()) return;
+		
 		this.input.update(delta);
+		this.routine.update(delta);
+	}
+	
+	public void render(double delta)
+	{
+		makeContextCurrent();
+		this.window.render(delta);
+		this.routine.render(delta);
 	}
 	
 	public void release()
 	{
-		this.shaderParts.builtIn().clear();
-		this.shaderParts.custom().clear();
+		makeContextCurrent();
+		this.routine.release();
+		
+		EngineRegistry.getShaderParts().release();
 		this.resourceManager.clear();
-		VAO.clearAll();
+		EngineRegistry.getVAOManager().release();
+		
+		this.window.release();
+		
+		EngineRegistry.releaseCurrentContext();
 	}
-	public void setWindow(Window w) { this.window = w; }
+	
+	public void makeContextCurrent()
+	{
+		this.window.makeContextCurrent();
+		EngineRegistry.setCurrentWindowContext(this);
+	}
 	
 	public ResourceManager getResourceManager() { return this.resourceManager; }
+	
 	public Window getWindow() { return this.window; }
-	public ShaderParts getShaderParts() { return this.shaderParts; }
 
 	public Input getInputManager() { return this.input; }
 
-	public ShaderList getShaders() { return this.shaders; }
+	public String getName() { return this.name; }
 	
 	/*
 	 * #####################
@@ -68,9 +92,5 @@ public class WindowContext
 	 * #####################
 	 */
 	
-	public long getWindowId() { return getWindow().getWindowId(); }
-	
-	public <A extends ShaderProgram> A getShader(Class<A> clazz) { return getShaders().getShader(clazz); }
-	
-	public void addShader(Class<? extends ShaderProgram> clazz) { getShaders().addShader(clazz); }
+	public long getWindowId() { return this.window.getWindowId(); }
 }

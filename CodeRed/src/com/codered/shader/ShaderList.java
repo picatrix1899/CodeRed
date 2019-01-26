@@ -3,19 +3,19 @@ package com.codered.shader;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
+import com.google.common.collect.Maps;
 
 public class ShaderList
 {
-	private HashMap<Class<? extends ShaderProgram>, ShaderProgram> shaders = new HashMap<Class<? extends ShaderProgram>, ShaderProgram>();
+	private HashMap<Class<? extends ShaderProgram>, ShaderProgram> shaders = Maps.newHashMap();
 
 	
 	private WindowContext context;
 	
-	public ShaderList()
+	public ShaderList(WindowContext context)
 	{
-		this.context = WindowContextHelper.getCurrentContext();
+		this.context = context;
 	}
 	
 	public void addShader(Class<? extends ShaderProgram> clazz)

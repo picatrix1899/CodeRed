@@ -2,7 +2,6 @@ package com.codered.managing;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
@@ -20,9 +19,6 @@ import cmn.utilslib.math.vector.api.Vec3fBase;
 
 public class VAO
 {
-	
-	public static ArrayList<VAO> vaos = Auto.ArrayList();
-	
 	private int id;
 	
 	private HashMap<Integer,Integer> vbos = Auto.HashMap();
@@ -32,23 +28,11 @@ public class VAO
 	public VAO()
 	{
 		this.id = GL30.glGenVertexArrays();
-		
-		vaos.add(this);
 	}
 	
 	public int getID()
 	{
 		return this.id;
-	}
-	
-	public static void clearAll()
-	{
-		for(VAO vao : vaos)
-		{
-			vao.clear();
-		}
-		
-		vaos.clear();
 	}
 	
 	
@@ -199,15 +183,11 @@ public class VAO
 		indicesVBO = 0;
 		
 		GL30.glDeleteVertexArrays(this.id);
-		
-		vaos.remove(this);
-		
+
 		this.id = GL30.glGenVertexArrays();
-		
-		vaos.add(this);
 	}
 	
-	public void clear()
+	public void release()
 	{
 		BindingUtils.bindVAO(this);
 		

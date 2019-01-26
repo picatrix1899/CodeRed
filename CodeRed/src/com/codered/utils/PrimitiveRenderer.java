@@ -3,6 +3,7 @@ package com.codered.utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
+import com.codered.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
 import com.codered.shaders.object.SimpleObjectShader;
@@ -23,7 +24,7 @@ public class PrimitiveRenderer
 	
 	public static void create()
 	{
-		vao = new VAO();
+		vao = EngineRegistry.getVAOManager().getNewVAO();
 	}
 	
 	public static void drawPoint(Vec3fBase point, IColor3Base c, float size)
@@ -42,7 +43,7 @@ public class PrimitiveRenderer
 		vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
 		
 		BindingUtils.bindVAO(vao, 0);
-		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		Colored_OShader shader = EngineRegistry.getShader(Colored_OShader.class);
 		shader.u_color.set(c);
 		
 		shader.start();
@@ -65,7 +66,7 @@ public class PrimitiveRenderer
 		
 		BindingUtils.bindVAO(vao, 0);
 		
-		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		Colored_OShader shader = EngineRegistry.getShader(Colored_OShader.class);
 		shader.u_color.set(c);
 		
 		shader.start();
@@ -239,7 +240,7 @@ public class PrimitiveRenderer
 		
 		BindingUtils.bindVAO(vao, 0);
 		
-		Colored_OShader shader = WindowContextHelper.getCurrentContext().getShader(Colored_OShader.class);
+		Colored_OShader shader = EngineRegistry.getShader(Colored_OShader.class);
 		shader.u_color.set(c);
 		shader.start();
 		

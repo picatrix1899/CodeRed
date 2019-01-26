@@ -2,6 +2,7 @@ package com.codered.shaders.terrain.simple;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.light.AmbientLight;
 import com.codered.material.Material;
 import com.codered.shaders.terrain.SimpleTerrainShader;
@@ -54,8 +55,8 @@ public class AmbientLight_TShader extends SimpleTerrainShader
 	
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("t_ambientLight"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("t_ambientLight"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("t_ambientLight"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("t_ambientLight"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

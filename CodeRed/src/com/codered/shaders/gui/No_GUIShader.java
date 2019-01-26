@@ -2,6 +2,7 @@ package com.codered.shaders.gui;
 
 import java.util.List;
 
+import com.codered.EngineRegistry;
 import com.codered.shader.UniformTexture;
 import com.codered.window.WindowContext;
 
@@ -25,8 +26,8 @@ public class No_GUIShader extends GUIShader
 
 	public void attachShaderParts()
 	{
-		attachVertexShader(this.context.getShaderParts().builtIn().getVertexShader("gui_no"));
-		attachFragmentShader(this.context.getShaderParts().builtIn().getFragmentShader("gui_no"));
+		attachVertexShader(EngineRegistry.getShaderParts().builtIn().getVertexShader("gui_no"));
+		attachFragmentShader(EngineRegistry.getShaderParts().builtIn().getFragmentShader("gui_no"));
 	}
 
 	public void getAttribs(List<DMap2<Integer,String>> attribs)

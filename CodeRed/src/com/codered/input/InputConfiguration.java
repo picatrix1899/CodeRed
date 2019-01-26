@@ -3,21 +3,22 @@ package com.codered.input;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Stack;
 
+import org.barghos.core.event.Event;
+import org.barghos.core.event.EventArgs;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.window.WindowContext;
-
-import cmn.utilslib.events.Event;
-import cmn.utilslib.events.EventArgs;
+import com.google.common.collect.Sets;
 
 
 public class InputConfiguration
 {
-	private ArrayList<Integer> registeredKeys = new ArrayList<Integer>();
-	private ArrayList<Integer> registeredButtons = new ArrayList<Integer>();
-
+	private Set<Integer> registeredKeys = Sets.newHashSet();
+	private Set<Integer> registeredButtons = Sets.newHashSet();
+	
 	private Stack<InputConfiguration> dubConfigurations = new Stack<InputConfiguration>();
 	
 	public Event<KeyEventArgs> keyStroke = new Event<KeyEventArgs>();
@@ -111,12 +112,12 @@ public class InputConfiguration
 		this.lastButtonDown.remove(button.getId());
 	}
 	
-	public ArrayList<Integer> getRegisteredKeys()
+	public Set<Integer> getRegisteredKeys()
 	{
 		return this.registeredKeys;
 	}
 	
-	public ArrayList<Integer> getRegisteredButtons()
+	public Set<Integer> getRegisteredButtons()
 	{
 		return this.registeredButtons;
 	}
@@ -135,13 +136,13 @@ public class InputConfiguration
 	
 	private void updateInternal(double delta, WindowContext context)
 	{
-		ArrayList<Integer> keyStrokes = new ArrayList<Integer>();
-		ArrayList<Integer> keyHolds = new ArrayList<Integer>();
-		ArrayList<Integer> keyReleases = new ArrayList<Integer>();
+		Set<Integer> keyStrokes = Sets.newHashSet();
+		Set<Integer> keyHolds = Sets.newHashSet();
+		Set<Integer> keyReleases = Sets.newHashSet();
 		
-		ArrayList<Integer> buttonStrokes = new ArrayList<Integer>();
-		ArrayList<Integer> buttonHolds = new ArrayList<Integer>();
-		ArrayList<Integer> buttonReleases = new ArrayList<Integer>();
+		Set<Integer> buttonStrokes = Sets.newHashSet();
+		Set<Integer> buttonHolds = Sets.newHashSet();
+		Set<Integer> buttonReleases = Sets.newHashSet();
 		
 		for(int key : this.registeredKeys)
 		{
@@ -220,12 +221,12 @@ public class InputConfiguration
 		}
 		else
 		{
-			if(!keyStrokes.isEmpty()) this.keyStroke.raise(new KeyEventArgs(keyStrokes, delta));
-			if(!keyHolds.isEmpty()) this.keyPress.raise(new KeyEventArgs(keyHolds, delta));
-			if(!keyReleases.isEmpty()) this.keyRelease.raise(new KeyEventArgs(keyReleases, delta));
-			if(!buttonStrokes.isEmpty()) this.buttonStroke.raise(new ButtonEventArgs(new ButtonResponse(buttonStrokes), delta));
-			if(!buttonHolds.isEmpty()) this.buttonPress.raise(new ButtonEventArgs(new ButtonResponse(buttonHolds), delta));
-			if(!buttonReleases.isEmpty()) this.buttonRelease.raise(new ButtonEventArgs(new ButtonResponse(buttonReleases), delta));
+			if(!keyStrokes.isEmpty()) this.keyStroke.fire(new KeyEventArgs(keyStrokes, delta));
+			if(!keyHolds.isEmpty()) this.keyPress.fire(new KeyEventArgs(keyHolds, delta));
+			if(!keyReleases.isEmpty()) this.keyRelease.fire(new KeyEventArgs(keyReleases, delta));
+			if(!buttonStrokes.isEmpty()) this.buttonStroke.fire(new ButtonEventArgs(new ButtonResponse(buttonStrokes), delta));
+			if(!buttonHolds.isEmpty()) this.buttonPress.fire(new ButtonEventArgs(new ButtonResponse(buttonHolds), delta));
+			if(!buttonReleases.isEmpty()) this.buttonRelease.fire(new ButtonEventArgs(new ButtonResponse(buttonReleases), delta));
 		}
 	}
 	
@@ -250,11 +251,6 @@ public class InputConfiguration
 			this.keys.addAll(keys);
 			this.delta = delta;
 		}
-		
-		public EventArgs cloneArgs()
-		{
-			return new KeyEventArgs(this.keys, this.delta);
-		}
 	}
 	
 	public class ButtonEventArgs implements EventArgs
@@ -266,11 +262,6 @@ public class InputConfiguration
 		{
 			this.response = response;
 			this.delta = delta;
-		}
-		
-		public EventArgs cloneArgs()
-		{
-			return new ButtonEventArgs(this.response.clone(), this.delta);
 		}
 	}
 }

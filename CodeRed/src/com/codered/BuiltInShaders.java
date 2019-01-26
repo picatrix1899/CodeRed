@@ -15,7 +15,6 @@ import com.codered.shaders.object.simple.DirectionalLight_N_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.shaders.object.simple.No_OShader;
 import com.codered.utils.ShaderPartUtils;
-import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 import com.codered.window.Window;
 
@@ -23,8 +22,7 @@ public class BuiltInShaders
 {
 	public static void init()
 	{
-		WindowContext context = WindowContextHelper.getCurrentContext();
-		
+		WindowContext context = EngineRegistry.getCurrentWindowContext();
 		try
 		{
 			ResourcePath path = new ResourcePath();
@@ -51,13 +49,13 @@ public class BuiltInShaders
 			loadDefaultEmbededShader(context, path, "gui_no");
 			loadDefaultEmbededShader(context, path, "gui_font");
 			
-			context.addShader(AmbientLight_OShader.class);
-			context.addShader(No_OShader.class);
-			context.addShader(Colored_OShader.class);
-			context.addShader(DirectionalLight_N_OShader.class);
-			context.addShader(DirectionalLight_OShader.class);
-			context.addShader(No_GUIShader.class);
-			context.addShader(Font_GUIShader.class);
+			EngineRegistry.registerShader(AmbientLight_OShader.class);
+			EngineRegistry.registerShader(No_OShader.class);
+			EngineRegistry.registerShader(Colored_OShader.class);
+			EngineRegistry.registerShader(DirectionalLight_N_OShader.class);
+			EngineRegistry.registerShader(DirectionalLight_OShader.class);
+			EngineRegistry.registerShader(No_GUIShader.class);
+			EngineRegistry.registerShader(Font_GUIShader.class);
 		}
 		catch(MalformedShaderException | IOException e)
 		{
@@ -69,7 +67,7 @@ public class BuiltInShaders
 	{
 		res.file(vfs);
 		
-		ShaderPartList sh = context.getShaderParts().builtIn();
+		ShaderPartList sh = EngineRegistry.getShaderParts().builtIn();
 
 		res.extension(".vs");
 		
