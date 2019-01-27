@@ -42,7 +42,7 @@ public abstract class GUI
 	
 	protected void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
 	{
-		drawTexturedRect(this.context.getResourceManager().getTexture(t).getId(), posX, posY, sizeX, sizeY);
+		drawTexturedRect(this.context.getDRM().getTexture(t).getId(), posX, posY, sizeX, sizeY);
 	}
 	
 	protected void drawTexturedRect(int t, float posX, float posY, float sizeX, float sizeY)
@@ -59,10 +59,11 @@ public abstract class GUI
 		
 		Vector2f[] uvs = new Vector2f[] {
 		
+		new Vector2f(0,1),	
 		new Vector2f(0,0),				
-		new Vector2f(0,1),		
+		new Vector2f(1,0),	
 		new Vector2f(1,1),		
-		new Vector2f(1,0),		
+	
 
 		};
 

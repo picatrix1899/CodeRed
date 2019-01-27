@@ -1,0 +1,6 @@
+{
+  "albedoMap": "res/materials/crate.png",
+  "normalMap": "res/materials/crate_normal.png",
+  "specularPower": 1.0,
+  "specularIntensity": 0.2
+}

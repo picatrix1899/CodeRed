@@ -6,11 +6,12 @@ import org.barghos.math.vector.Vec3f;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
-import com.codered.EngineRegistry;
+import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
+import com.codered.resource.ResourceBlock;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.EvalFunc;
@@ -30,13 +31,25 @@ public class Routine2 extends WindowRoutine
 	
 	private StaticEntity display;
 	
+	private boolean initializing;
+	
 	public void init()
 	{
 		BuiltInShaders.init();
 		PrimitiveRenderer.create();
 		
-		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
+		ResourceBlock block = new ResourceBlock(true);
+		block.addStaticMesh("res/models/crate.obj");
+		block.addMaterial("res/materials/crate.json");
+		this.context.getDRM().loadResourceBlock(block);
+		
+		this.initializing = true;
+	}
 
+	private void initPhase1()
+	{
+		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
+		
 		this.projection = Mat4f.perspective(this.context.getWindow().getSize(), 70, 0.1, 1000);
 
 		this.display = new StaticEntity("crate", new Vec3f(0,0,-40), 0, 0, 0);
@@ -51,10 +64,20 @@ public class Routine2 extends WindowRoutine
 
 	public void update(double delta)
 	{
+		if(this.initializing)
+		{
+			if(!this.context.getDRM().isOccupied())
+			{
+				initPhase1();
+				this.initializing = false;
+			}
+		}
 	}
 
 	public void render(double delta)
 	{
+		if(this.initializing)
+			return;
 		renderWorldFromCamera(delta, camera);
 	}
 

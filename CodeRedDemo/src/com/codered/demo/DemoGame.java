@@ -5,7 +5,7 @@ import org.resources.ResourceManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.Engine;
+import com.codered.engine.Engine;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.WindowHint;
 import com.codered.utils.WindowHint.GLProfile;
@@ -21,8 +21,9 @@ public class DemoGame extends Engine
 	private WindowContext context1;
 	private WindowContext context2;
 	
+	public boolean showInventory = false;
 	public boolean directional = true;
-	
+
 	public DemoGame()
 	{
 		instance = this;
@@ -72,6 +73,8 @@ public class DemoGame extends Engine
 		
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.start();
+		
+
 	}
 	
 	public void update(double delta)

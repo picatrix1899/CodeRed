@@ -8,9 +8,9 @@ import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
 
 import com.codered.ConvUtils;
-import com.codered.EngineRegistry;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
+import com.codered.engine.EngineRegistry;
 import com.codered.entities.BaseEntity;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.managing.loader.data.MaterialData;
-import com.codered.managing.loader.data.OBJFile;
 import com.codered.managing.models.Mesh;
 import com.codered.managing.models.RawModel;
 import com.codered.managing.models.TexturedModel;
@@ -115,38 +114,12 @@ public class InternalResourceManager
 		
 		if(!this.textures.containsKey(fileName))
 		{
-			org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-			path.path = fileName;
+			ResourceBlock block = new ResourceBlock(false);
+			block.addTexture(fileName);
 			
-			resourceManager.registerTextureLookup(fileName, path);
-			
-			try
-			{
-				org.resources.textures.TextureData data = resourceManager.getTexture(fileName);
-				
-				Texture t = TextureUtils.genTexture(data, context);
-				
-				this.textures.put(fileName, t);
-				
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
+			this.context.getDRM().loadResourceBlockForced(block);
+			this.textures.put(fileName, this.context.getDRM().getTexture(fileName));
 		}
-	}
-	
-	public void regStaticMesh(String fileName)
-	{
-		if(!this.staticMeshes.containsKey(fileName))
-		{
-			OBJFile obj = new OBJFile();
-			obj.load(new File(fileName));
-			Mesh mesh = new Mesh().loadFromObj(obj);
-			
-			this.staticMeshes.put(fileName, mesh);
-		}
-
 	}
 	
 	public void regRawModel(String name, RawModel model)
@@ -159,10 +132,10 @@ public class InternalResourceManager
 	{
 		if(!this.texturedModels.containsKey(name))
 		{
-			regStaticMesh(fileNameModel);
-			regMaterial(fileNameMaterial);
+			//regStaticMesh(fileNameModel);
+			//regMaterial(fileNameMaterial);
 			
-			TexturedModel model = new TexturedModel(this.staticMeshes.get(fileNameModel), this.materials.get(fileNameMaterial));
+			TexturedModel model = new TexturedModel(fileNameModel, fileNameMaterial);
 			
 			this.texturedModels.put(name, model);
 		}

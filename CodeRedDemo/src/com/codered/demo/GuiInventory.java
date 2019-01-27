@@ -45,7 +45,7 @@ public class GuiInventory extends GUIWindow
 	
 	public void close()
 	{
-		this.main.showInventory = false;
+		DemoGame.getInstance().showInventory = false;
 		GlobalSettings.ingameInput.popDubConfiguration();
 	}
 	

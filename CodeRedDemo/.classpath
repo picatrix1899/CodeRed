@@ -11,11 +11,16 @@
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-natives-windows.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-opengl.jar"/>
-	<classpathentry kind="lib" path="lib/guava-19.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CodeRed"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-math"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-structs"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ResourceManager"/>
+	<classpathentry kind="lib" path="lib/json-20180813.jar"/>
+	<classpathentry kind="lib" path="lib/guava-27.0.1-jre.jar" sourcepath="lib/guava-27.0.1-jre-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/CodeRedDemo/lib/guava-27.0.1-jre-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

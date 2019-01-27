@@ -9,8 +9,6 @@ import cmn.utilslib.math.Maths;
 
 public class GUIEColoredHSlider extends GUIElement
 {
-
-
 	private float posX;
 	private float posY;
 	private float sizeX;

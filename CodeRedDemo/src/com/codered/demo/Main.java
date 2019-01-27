@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import com.codered.EngineBootstrap;
+import com.codered.engine.EngineBootstrap;
 
 public class Main
 {

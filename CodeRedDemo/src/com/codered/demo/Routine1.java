@@ -5,20 +5,20 @@ import java.util.Iterator;
 import org.barghos.core.color.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
-
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
-import com.codered.Engine;
-import com.codered.EngineRegistry;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.demo.GlobalSettings.Keys;
+import com.codered.engine.Engine;
+import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.input.InputConfiguration;
 import com.codered.input.Key;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
+import com.codered.resource.ResourceBlock;
 import com.codered.shaders.object.simple.AmbientLight_OShader;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.EvalFunc;
@@ -29,33 +29,34 @@ import com.codered.window.WindowRoutine;
 
 public class Routine1 extends WindowRoutine
 {
-
 	private Mat4f projection;
-	
-	private AmbientLight ambient;
-	private DirectionalLight directionalLight;
 	
 	private Player player;
 
-	public boolean showInventory = false;
-	
 	private GuiInventory inventory;
 	
-	private StaticEntityTreeImpl world;
+	private GuiLoadingScreen loadingScreen;
+	
+	public StaticEntityTreeImpl world;
+	
+	public AmbientLight ambient;
+	public DirectionalLight directionalLight;
+	
+	private boolean initializing;
+	
 	public void init()
 	{
 		BuiltInShaders.init();
 		PrimitiveRenderer.create();
-		
-		this.context.getResourceManager().GUI.loadTextureForced("res/materials/gray_rsquare.png");
-		this.context.getResourceManager().GUI.loadTextureForced("res/materials/inventory-background.png");
-		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
-		
-		initPhase2();
-	}
 
-	public void initPhase2()
-	{
+		ResourceBlock block1 = new ResourceBlock(true);
+		block1.addTexture("res/materials/loadingscreen.png");
+		this.context.getDRM().loadResourceBlockForced(block1);
+		
+		loadingScreen = new GuiLoadingScreen();
+		
+		this.initializing = true;
+		
 		GlobalSettings.ingameInput = new InputConfiguration();
 		InputConfiguration config = GlobalSettings.ingameInput;
 		config.registerKey(Keys.k_forward);
@@ -75,13 +76,25 @@ public class Routine1 extends WindowRoutine
 		
 		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.ESCAPE)) Engine.getInstance().stop(false); });
 		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.Q)) DemoGame.getInstance().directional = !DemoGame.getInstance().directional; });
-		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.TAB)) {this.showInventory = true; this.inventory.open();} });
+		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.TAB)) {DemoGame.getInstance().showInventory = true; this.inventory.open();} });
 
 		this.context.getInputManager().setConfiguration(config);
+		
+		ResourceBlock block2 = new ResourceBlock(true);
+		block2.addTexture("res/materials/gray_rsquare.png");
+		block2.addTexture("res/materials/inventory-background.png");
+		block2.addStaticMesh("res/models/crate.obj");
+		block2.addMaterial("res/materials/crate.json");
+		this.context.getDRM().loadResourceBlock(block2);
+		
+		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
+	}
 
-		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.mat");
-
-		this.projection = Mat4f.perspective(this.context.getWindow().getSize(), 70, 0.1, 1000);
+	public void initPhase1()
+	{
+		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
+		
+		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 50, 0.1, 1000);
 		
 		this.world = new StaticEntityTreeImpl();
 		
@@ -90,10 +103,10 @@ public class Routine1 extends WindowRoutine
 		this.world.add(new StaticEntity("crate", new Vec3f(10,0,-40), 0, 0, 0));
 		this.world.add(new StaticEntity("crate", new Vec3f(10,10,-40), 0, 0, 0));
 		
-		this.player = new Player(this.world);
-		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
+		
+		this.player = new Player(this.world);
 		
 		GLUtils.multisample(true);
 		
@@ -102,14 +115,27 @@ public class Routine1 extends WindowRoutine
 	
 	public void update(double delta)
 	{
-		
+		if(this.initializing)
+		{
+			if(!this.context.getDRM().isOccupied())
+			{
+				initPhase1();
+				this.initializing = false;
+			}
+		}
 	}
 
 	public void render(double delta)
 	{
 		GLUtils.clearAll();
 
-		if(this.showInventory)
+		if(this.initializing)
+		{
+			this.loadingScreen.render();
+			return;
+		}
+		
+		if(DemoGame.getInstance().showInventory)
 		{
 			if(this.inventory.allowWorldProcessing())
 			{

@@ -7,11 +7,11 @@ import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL15;
+import org.resources.objects.ObjectData;
+import org.resources.objects.TriangleData;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
-import com.codered.managing.loader.TriangleData;
-import com.codered.managing.loader.data.OBJFile;
 
 import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.ListUtils;
@@ -133,7 +133,7 @@ public class Mesh
 		return this.yc;
 	}
 	
-	public Mesh loadFromObj(OBJFile obj)
+	public Mesh loadFromObj(ObjectData obj)
 	{
 		this.indices = obj.indices;
 		this.triangles = obj.triangles;

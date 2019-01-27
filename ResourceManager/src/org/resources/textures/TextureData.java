@@ -13,7 +13,7 @@ public class TextureData
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	public byte[] data()
 	{
 		return this.data;
