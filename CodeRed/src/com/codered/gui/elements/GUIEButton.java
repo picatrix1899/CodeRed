@@ -25,7 +25,7 @@ public class GUIEButton extends GUIElement
 
 	public void render()
 	{
-		drawTexturedRect(this.context.getResourceManager().getTexture(background).getId(), this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
+		drawTexturedRect(background, this.main.minX, this.main.minY, this.main.maxX, this.main.maxY);
 		if(text != null) drawText(text);
 	}
 

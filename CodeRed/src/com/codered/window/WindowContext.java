@@ -3,6 +3,7 @@ package com.codered.window;
 import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
 import com.codered.managing.VAOManager;
+import com.codered.resource.DRM;
 import com.codered.resource.ResourceManager;
 import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
@@ -15,6 +16,7 @@ public class WindowContext
 	private WindowRoutine routine;
 
 	private ResourceManager resourceManager;
+	private DRM drm;
 	
 	private Input input;
 
@@ -36,6 +38,7 @@ public class WindowContext
 		EngineRegistry.registerShaderParts(name, getWindowId(), new ShaderParts());
 		EngineRegistry.registerVAOManager(name, getWindowId(), new VAOManager());
 		this.resourceManager = new ResourceManager();
+		this.drm = new DRM(this);
 		this.input = new Input();
 		this.routine.init();
 	}
@@ -48,6 +51,7 @@ public class WindowContext
 		if(this.window.isReleased()) return;
 		
 		this.input.update(delta);
+		this.drm.update(delta);
 		this.routine.update(delta);
 	}
 	
@@ -79,6 +83,8 @@ public class WindowContext
 	}
 	
 	public ResourceManager getResourceManager() { return this.resourceManager; }
+	
+	public DRM getDRM() { return this.drm; }
 	
 	public Window getWindow() { return this.window; }
 

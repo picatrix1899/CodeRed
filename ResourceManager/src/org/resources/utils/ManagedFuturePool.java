@@ -29,7 +29,11 @@ public class ManagedFuturePool<T>
 	
 	public ManagedFuturePool()
 	{
-		this.threadPool = Executors.newCachedThreadPool();
+		this.threadPool = Executors.newFixedThreadPool(10, (p) -> {
+			Thread t = new Thread(p);
+			t.setDaemon(true);
+			return t;
+			});
 		this.compService = new ExecutorCompletionService<T>(this.threadPool);
 		this.routine = new Thread(() -> run());
 		this.routine.setDaemon(true);
@@ -47,6 +51,11 @@ public class ManagedFuturePool<T>
 		cancel();
 		
 		this.threadPool.shutdownNow();
+	}
+	
+	public int pendingFutures()
+	{
+		return this.pendingFutures;
 	}
 	
 	public void run()

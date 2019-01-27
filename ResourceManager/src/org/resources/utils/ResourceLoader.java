@@ -23,6 +23,11 @@ public abstract class ResourceLoader<T>
 		this.pool = new ManagedFuturePool<Void>("ResourceManager - Unknown Loader");
 	}
 	
+	public int pendingFutures()
+	{
+		return this.pool.pendingFutures();
+	}
+	
 	public void startPool()
 	{
 		this.pool.start();
@@ -48,14 +53,22 @@ public abstract class ResourceLoader<T>
 			
 			Exception exception = null;
 			T data = null;
+			
+			InputStream stream = null;
 			try
 			{
-				data = loadResource(StreamUtility.getStreamForResource(path));
+				stream = StreamUtility.getStreamForResource(path);
+				
+				data = loadResource(stream);
 			}
 			catch(Exception e)
 			{
 				exception = e;
 			} 
+			finally
+			{
+				if(stream != null) stream.close();
+			}
 			
 			ResourceResponse<T> response = new ResourceResponse<T>();
 			response.id = id;
