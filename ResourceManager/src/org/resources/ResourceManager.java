@@ -56,17 +56,23 @@ public class ResourceManager
 	{
 		isRunning = true;
 		this.textureLoader.startPool();
+		this.staticMeshLoader.startPool();
+		this.materialLoader.startPool();
 	}
 	
 	public void stop()
 	{
 		isRunning = false;
 		this.textureLoader.stopPool();
+		this.staticMeshLoader.stopPool();
+		this.materialLoader.stopPool();
 	}
 	
 	public void cancel()
 	{
 		this.textureLoader.cancelPool();
+		this.staticMeshLoader.cancelPool();
+		this.materialLoader.cancelPool();
 	}
 	
 	public void registerTextureLookup(String id, ResourcePath path)

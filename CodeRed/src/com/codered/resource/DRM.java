@@ -7,6 +7,7 @@ import org.resources.materials.MaterialData;
 
 import com.codered.managing.models.Mesh;
 import com.codered.material.Material;
+import com.codered.sh.ShaderPart;
 import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
 import com.codered.window.WindowContext;
@@ -189,6 +190,11 @@ public class DRM
 		return this.materials.get(id);
 	}
 	
+	
+	public ShaderPart getShaderPart(String id)
+	{
+		return null;
+	}
 	
 	public boolean isCritical()
 	{
