@@ -1,6 +1,7 @@
 package com.codered.engine;
 
-import org.lwjgl.glfw.GLFW;
+import static org.lwjgl.glfw.GLFW.*;
+
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import com.codered.ArgumentInterpreter;
@@ -21,6 +22,8 @@ public class EngineBootstrap
 		init();
 		
 		start();
+		
+		release();
 	}
 	
 	protected void init()
@@ -31,17 +34,22 @@ public class EngineBootstrap
 
 	protected void initGLFW()
 	{
-		GLFW.glfwInit();
+		glfwInit();
 	}
 	
 	protected void setErrorCallback()
 	{
-		GLFW.glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
+		glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
 	}
 	
 	protected void start()
 	{
 		this.engine.start();
+	}
+	
+	protected void release()
+	{
+		glfwTerminate();
 	}
 	
 	public void setArguments(String[] args) { this.argInterpreter.interpret(args); }

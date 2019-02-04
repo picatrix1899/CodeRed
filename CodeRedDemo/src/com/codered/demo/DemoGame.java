@@ -28,11 +28,11 @@ public class DemoGame extends Engine
 	{
 		instance = this;
 
-		Window w1 = new Window(800, 600, "CoderRed 3 Main");
+		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
 		w1.setWindowHintCallback(() -> initWindowHints());
 		this.context1 = new WindowContext("main", w1, new Routine1());
 
-		Window w2 = new Window(800, 600, "CoderRed 3 Extension");
+		Window w2 = new Window(800, 600, "CoderRed 3 Extension", 0);
 		w2.setWindowHintCallback(() -> initWindowHints());
 		this.context2 = new WindowContext("ext", w2, new Routine2());
 	}

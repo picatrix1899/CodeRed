@@ -5,7 +5,8 @@ import org.barghos.core.event.EventArgs;
 import org.barghos.core.event.NoArgs;
 import org.barghos.math.vector.Vec2f;
 
-import org.lwjgl.glfw.GLFW;
+import static org.lwjgl.glfw.GLFW.*;
+
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
@@ -18,6 +19,7 @@ import com.codered.utils.GLUtils;
 public class Window
 {
 	private long window;
+	private long parentWindow;
 	
 	private GLCapabilities capabilities;
 
@@ -28,18 +30,21 @@ public class Window
 	
 	private boolean isReleased;
 	
+
+	
 	public Event<ResizeEventArgs> Resize = new Event<ResizeEventArgs>();
 	public Event<NoArgs> WindowClose = new Event<NoArgs>();
 	
-	public Window(int width, int height, String title)
+	public Window(int width, int height, String title, long parentWindow)
 	{
 		this.title = title;
 		this.size.set((double)width, (double)height);
+		this.parentWindow = parentWindow;
 	}
 	
 	public void makeContextCurrent()
 	{
-		GLFW.glfwMakeContextCurrent(this.window);
+		glfwMakeContextCurrent(this.window);
 	}
 	
 	public void setWindowHintCallback(Runnable callback)
@@ -51,7 +56,7 @@ public class Window
 	{
 		this.initWindowHints.run();
 		
-		this.window = GLFW.glfwCreateWindow((int)this.size.x, (int)this.size.y, this.title, 0, 0);
+		this.window = glfwCreateWindow((int)this.size.x, (int)this.size.y, this.title, 0, this.parentWindow);
 
 		if(window == 0)
 		{
@@ -61,9 +66,9 @@ public class Window
 		makeContextCurrent();
 		this.capabilities = GL.createCapabilities();
 		
-		GLFW.glfwShowWindow(this.window);
+		glfwShowWindow(this.window);
 		
-		GLFW.glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
+		glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
 	}
 	
 	public GLCapabilities getCapabilities()
@@ -85,7 +90,7 @@ public class Window
 	{
 		if(id == this.window)
 		{
-			WindowContext oldContext = EngineRegistry.getWindowContext(GLFW.glfwGetCurrentContext());
+			WindowContext oldContext = EngineRegistry.getWindowContext(glfwGetCurrentContext());
 			WindowContext newContext = EngineRegistry.getWindowContext(this.window);
 			
 			newContext.makeContextCurrent();
@@ -100,15 +105,15 @@ public class Window
 	
 	public void update(double delta)
 	{
-		GLFW.glfwPollEvents();
+		glfwPollEvents();
 
-		if(GLFW.glfwWindowShouldClose(this.window))
+		if(glfwWindowShouldClose(this.window))
 			WindowClose.fire(NoArgs.getInstance());
 	}
 	
 	public void render(double delta)
 	{
-		GLFW.glfwSwapBuffers(this.window);
+		glfwSwapBuffers(this.window);
 		
 		if(CodeRed.AUTORESET_DEFAULT_FBO)
 		{
@@ -119,7 +124,7 @@ public class Window
 
 	public void release()
 	{
-		GLFW.glfwDestroyWindow(this.window);
+		glfwDestroyWindow(this.window);
 		this.isReleased = true;
 	}
 	
