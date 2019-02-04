@@ -42,4 +42,9 @@ public class ShaderPart
 	{
 		return this.name;
 	}
+	
+	public void release()
+	{
+		GL20.glDeleteShader(this.id);
+	}
 }

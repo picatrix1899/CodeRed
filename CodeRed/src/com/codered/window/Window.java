@@ -57,7 +57,7 @@ public class Window
 		this.initWindowHints.run();
 		
 		this.window = glfwCreateWindow((int)this.size.x, (int)this.size.y, this.title, 0, this.parentWindow);
-
+		
 		if(window == 0)
 		{
 			System.exit(-1);

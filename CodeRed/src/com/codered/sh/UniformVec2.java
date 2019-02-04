@@ -7,7 +7,7 @@ public class UniformVec2 extends Uniform
 {
 	private Vec2f value = new Vec2f();
 	
-	public UniformVec2(String name)
+	public UniformVec2(String name, Object... data)
 	{
 		super(name);
 		addUniform("");

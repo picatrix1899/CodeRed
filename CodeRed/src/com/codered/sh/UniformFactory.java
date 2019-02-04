@@ -31,29 +31,45 @@ public class UniformFactory
 		extendedUniformTypes.putAll(types);
 	}
 	
-	public Uniform createUniform(String name, String type) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException
+	public Uniform createUniform(String name, String type, Object... data) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException
 	{
 		switch (type)
 		{
 			case "vec2":
 			{
-				return new UniformVec2(name);
+				return new UniformVec2(name, data);
 			}
 			case "vec3":
 			{
-				return new UniformVec3(name);
+				return new UniformVec3(name, data);
 			}
 			case "vec4":
 			{
-				return new UniformVec4(name);
+				return new UniformVec4(name, data);
+			}
+			case "mat4":
+			{
+				return new UniformMat4(name, data);
+			}
+			case "sampler2D":
+			case"sampler2d":
+			{
+				return new UniformTexture2D(name, data);
+			}
+			case "int":
+			{
+				return new UniformInt(name, data);
+			}
+			case "float":
+			{
+				return new UniformFloat(name, data);
 			}
 			default:
 			{
 				if(this.extendedUniformTypes.containsKey(type))
 				{
 					Class<? extends Uniform> c = this.extendedUniformTypes.get(type);
-					Constructor<? extends Uniform> ctor = c.getConstructor(String.class);
-					
+					Constructor<? extends Uniform> ctor = c.getConstructor(String.class, Object[].class);
 					try
 					{
 						return ctor.newInstance(name);
