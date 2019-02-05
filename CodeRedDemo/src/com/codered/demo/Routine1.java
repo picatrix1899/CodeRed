@@ -1,11 +1,15 @@
 package com.codered.demo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.barghos.core.color.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import com.codered.BuiltInShaders;
 import com.codered.StaticEntityTreeImpl;
@@ -18,8 +22,12 @@ import com.codered.input.InputConfiguration;
 import com.codered.input.Key;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
+import com.codered.managing.loader.data.ShaderPartData;
 import com.codered.resource.ResourceBlock;
-import com.codered.shaders.object.simple.AmbientLight_OShader;
+import com.codered.sh.AmbientLightShader;
+import com.codered.sh.ShaderPart;
+import com.codered.sh.ShaderPartLoader;
+import com.codered.sh.ShaderProgram;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
@@ -44,9 +52,40 @@ public class Routine1 extends WindowRoutine
 	
 	private boolean initializing;
 	
+	public ShaderProgram ambientShader;
+	public ShaderPart vs;
+	public ShaderPart fs;
+	public ShaderPart fs2;
+	
 	public void init()
 	{
 		BuiltInShaders.init();
+		try
+		{
+			ShaderPartData vsd = ShaderPartLoader.readShader(new File("res/shaders/o_ambientLight2.vs").toURI().toURL().openStream());
+			ShaderPartData fsd = ShaderPartLoader.readShader(new File("res/shaders/o_ambientLight2.fs").toURI().toURL().openStream());
+			ShaderPartData fs2d = ShaderPartLoader.readShader(new File("res/shaders/test.fs").toURI().toURL().openStream());
+			
+			vs = new ShaderPart("o_ambientLight2.vs", GL20.GL_VERTEX_SHADER, vsd.getData());
+			fs = new ShaderPart("o_ambientLight2.fs", GL20.GL_FRAGMENT_SHADER, fsd.getData());
+			fs2 = new ShaderPart("test.fs", GL20.GL_FRAGMENT_SHADER, fs2d.getData());
+			
+			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(vs.getName(), vs);
+			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(fs.getName(), fs);
+			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(fs2.getName(), fs2);
+			
+			ambientShader = new AmbientLightShader();
+			ambientShader.addShaderPart(vs.getName());
+			ambientShader.addShaderPart(fs.getName());
+			ambientShader.addShaderPart(fs2.getName());
+			ambientShader.compile();
+			
+			
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
 		PrimitiveRenderer.create();
 
 		ResourceBlock block1 = new ResourceBlock(true);
@@ -166,17 +205,16 @@ public class Routine1 extends WindowRoutine
 		
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
-		
-		AmbientLight_OShader shader1 = EngineRegistry.getShader(AmbientLight_OShader.class);
-		shader1.start();
-		shader1.u_ambientLight.set(this.ambient);
+
+		ambientShader.start();
+		ambientShader.setUniformValue("ambientLight.base.color", this.ambient.base.color);
+		ambientShader.setUniformValue("ambientLight.base.intensity", this.ambient.base.intensity);
 		
 		while(it.hasNext())
 		{
-			RenderHelper.renderStaticEntity(it.next(), cam, shader1, this.projection);
+			RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection);
 		}
-		
-		shader1.stop();
+		ambientShader.stop();
 		
 		it = this.world.iterator();
 		

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.resources.materials.MaterialData;
 import org.resources.objects.ObjectData;
+import org.resources.shaderparts.ShaderPartData;
 import org.resources.textures.TextureData;
 
 import com.google.common.collect.Sets;
@@ -22,6 +23,9 @@ public class IRM
 	
 	private Set<String> availableMaterial = Sets.newConcurrentHashSet();
 	private Set<String> pendingMaterial = Sets.newConcurrentHashSet();
+
+	private Set<String> availableShaderParts = Sets.newConcurrentHashSet();
+	private Set<String> pendingShaderParts = Sets.newConcurrentHashSet();
 	
 	public static IRM getInstance()
 	{
@@ -39,7 +43,7 @@ public class IRM
 		if(this.availableTextures.contains(id)) return;
 		if(this.pendingTextures.contains(id)) return;
 		
-		this.resourceManager.registerTextureLookup(id, path);
+		this.resourceManager.textures().registerTextureLookup(id, path);
 		
 		this.pendingTextures.add(id);
 		
@@ -160,5 +164,47 @@ public class IRM
 	public MaterialData getMaterial(String id) throws Exception
 	{
 		return this.resourceManager.getMaterial(id);
+	}
+	
+	public void loadShaderPartForced(String id, org.resources.utils.ResourcePath path) throws Exception
+	{
+		if(this.availableShaderParts.contains(id)) return;
+		if(this.pendingShaderParts.contains(id)) return;
+		
+		this.resourceManager.registerShaderPartLookup(id, path);
+		
+		this.pendingShaderParts.add(id);
+		
+		this.resourceManager.loadShaderPartForced(id);
+		this.pendingShaderParts.remove(id);
+		this.availableShaderParts.add(id);
+	}
+	
+	public void loadShaderPart(String id, org.resources.utils.ResourcePath path) throws Exception
+	{
+		if(this.availableShaderParts.contains(id)) return;
+		if(this.pendingShaderParts.contains(id)) return;
+		
+		this.resourceManager.registerShaderPartLookup(id, path);
+		
+		this.pendingShaderParts.add(id);
+		
+		this.resourceManager.loadShaderPart(id, (p) -> {
+			if(p.resourceError == null)
+			{
+				this.pendingShaderParts.remove(id);
+				this.availableShaderParts.add(id);
+			}
+		});
+	}
+	
+	public boolean isShaderPartAvailable(String id)
+	{
+		return this.availableTextures.contains(id);
+	}
+	
+	public ShaderPartData getShaderPart(String id) throws Exception
+	{
+		return this.resourceManager.getShaderPart(id);
 	}
 }

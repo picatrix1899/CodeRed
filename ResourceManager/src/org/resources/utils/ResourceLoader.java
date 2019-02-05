@@ -1,17 +1,19 @@
 package org.resources.utils;
 
 import java.io.InputStream;
-import java.util.HashSet;
+import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.resources.errors.ResourceErrorThrownException;
 import org.resources.errors.ResourcePendingException;
 
+import com.google.common.collect.Sets;
+
 public abstract class ResourceLoader<T>
 {
 	private ManagedFuturePool<Void> pool;
-	private Set<String> pendingIds = new HashSet<String>();
+	private Set<String> pendingIds = Sets.newHashSet();
 
 	public ResourceLoader(String threadname)
 	{
@@ -43,7 +45,7 @@ public abstract class ResourceLoader<T>
 		this.pool.cancel();
 	}
 	
-	public void loadResource(String id, ResourcePath path, LoaderCallback<T> callback) throws Exception
+	public void loadResource(String id, URL url, LoaderCallback<T> callback) throws Exception
 	{
 		if(this.pendingIds.contains(id)) throw new ResourcePendingException(id);
 		
@@ -54,21 +56,17 @@ public abstract class ResourceLoader<T>
 			Exception exception = null;
 			T data = null;
 			
-			InputStream stream = null;
 			try
 			{
-				stream = StreamUtility.getStreamForResource(path);
-				
-				data = loadResource(stream);
+				try(InputStream stream = url.openStream())
+				{
+					data = loadResource(stream);
+				}
 			}
 			catch(Exception e)
 			{
 				exception = e;
 			} 
-			finally
-			{
-				if(stream != null) stream.close();
-			}
 			
 			ResourceResponse<T> response = new ResourceResponse<T>();
 			response.id = id;
@@ -86,11 +84,14 @@ public abstract class ResourceLoader<T>
 		this.pool.submit(c);
 	}
 	
-	public T directLoadResource(String id, ResourcePath path) throws Exception
+	public T directLoadResource(String id, URL url) throws Exception
 	{
 		if(this.pendingIds.contains(id)) throw new ResourcePendingException(id);
 		
-		return this.loadResource(StreamUtility.getStreamForResource(path));
+		try(InputStream stream = url.openStream())
+		{
+			return this.loadResource(stream);
+		}
 	}
 	
 	protected abstract T loadResource(InputStream stream) throws Exception;

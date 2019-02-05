@@ -9,6 +9,7 @@ import com.codered.entities.StaticEntity;
 import com.codered.gui.elements.GUIText;
 import com.codered.managing.VAO;
 import com.codered.primitives.TexturedQuad;
+import com.codered.sh.Shader;
 import com.codered.shaders.gui.Font_GUIShader;
 import com.codered.shaders.object.simple.TexturedObjectShader;
 import com.codered.window.WindowContext;
@@ -51,6 +52,20 @@ public class RenderHelper
 		oShader.u_T_projection.set(projection);
 		oShader.u_material.set(e.getModel().getMaterial());
 
+		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
+		
+		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+	}
+	
+	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection)
+	{
+		oShader.setUniformValue("T_model", e.getTransformationMatrix());
+		oShader.setUniformValue("T_projection", projection);
+		oShader.setUniformValue("T_view", c.getViewMatrix());
+		oShader.setUniformValue("albedoMap", e.getModel().getMaterial().getAlbedoMap().getId());
+
+		oShader.load();
+		
 		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 		
 		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);

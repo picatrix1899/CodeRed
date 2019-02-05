@@ -171,9 +171,9 @@ public abstract class Uniform
 		
 		matrixBuffer.flip();
 		
-		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
 		
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		
+		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
 	}
 	
 	protected void loadFloat(String uniform, float val) { loadFloat(this.uniforms.get(getUniformName(uniform)), val); }

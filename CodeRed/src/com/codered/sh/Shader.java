@@ -14,6 +14,7 @@ public interface Shader
 	
 	void start();
 	void stop();
+	void load();
 	
 	void release();
 }

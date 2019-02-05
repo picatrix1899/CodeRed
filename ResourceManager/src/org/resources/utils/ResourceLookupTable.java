@@ -1,18 +1,19 @@
 package org.resources.utils;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ResourceLookupTable
 {
-	private Map<String,ResourcePath> paths = new HashMap<String,ResourcePath>();
+	private Map<String,URL> paths = new HashMap<String,URL>();
 	
-	public void put(String id, ResourcePath path)
+	public void put(String id, URL url)
 	{
-		this.paths.put(id, path);
+		this.paths.put(id, url);
 	}
 	
-	public ResourcePath get(String id)
+	public URL get(String id)
 	{
 		return this.paths.get(id);
 	}

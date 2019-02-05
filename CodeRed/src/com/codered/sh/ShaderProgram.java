@@ -10,13 +10,14 @@ import com.codered.engine.EngineRegistry;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class ShaderProgram implements Shader
+public abstract class ShaderProgram implements Shader
 {
 	private int id;
 
 	private Set<String> fixedShaderParts = Sets.newHashSet();
 	private Map<String,ShaderVariant> variants = Maps.newHashMap();
 	private Map<String,Uniform> uniforms = Maps.newHashMap();
+	private Map<String,Integer> attribs = Maps.newHashMap();
 	
 	private ShaderVariant activeVariant;
 	
@@ -34,6 +35,8 @@ public class ShaderProgram implements Shader
 	
 	public void compile()
 	{
+		System.out.println("compile Shader: " + this.id);
+		
 		attachFixedShaderParts();
 
 		recompile();
@@ -41,11 +44,18 @@ public class ShaderProgram implements Shader
 	
 	public void recompile()
 	{
-		loadUniformLocations();
+
+		for(String name : this.attribs.keySet())
+		{
+			GL20.glBindAttribLocation(this.id, this.attribs.get(name), name);
+			System.out.println("Bind Attrib: " + name + " " + this.attribs.get(name));
+		}
 		
 		GL20.glLinkProgram(this.id);
 		
 		GL20.glValidateProgram(this.id);
+		
+		loadUniformLocations();
 	}
 	
 	public void addVariant(String name, ShaderVariant variant)
@@ -65,7 +75,7 @@ public class ShaderProgram implements Shader
 	
 	public void addAttribute(int attrib, String name)
 	{
-		GL20.glBindAttribLocation(this.id, attrib, name);
+		this.attribs.put(name, attrib);
 	}
 	
 	public void applyVariant(String name)
@@ -113,6 +123,12 @@ public class ShaderProgram implements Shader
 		this.isRunning = false;
 	}
 
+	public void load()
+	{
+		for(Uniform u : this.uniforms.values())
+			u.load();
+	}
+	
 	public void addShaderPart(String part)
 	{
 		this.fixedShaderParts.add(part);
@@ -124,6 +140,7 @@ public class ShaderProgram implements Shader
 		{
 			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getShaderPart(p);
 			GL20.glAttachShader(this.id, part.getId());
+			System.out.println("attach Part: " + p + " " + part.getId());
 		}
 	}
 	
@@ -139,11 +156,12 @@ public class ShaderProgram implements Shader
 	
 	private void detachVariantShaderParts()
 	{
-		for(String p : this.activeVariant.getShaderParts())
-		{
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getShaderPart(p);
-			GL20.glDetachShader(this.id, part.getId());
-		}
+		if(this.activeVariant != null)
+			for(String p : this.activeVariant.getShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
 
 	}
 	
@@ -157,6 +175,7 @@ public class ShaderProgram implements Shader
 		for(Uniform u : this.uniforms.values())
 		{
 			u.loadUniformLocations(this.id);
+			System.out.println("loaded Uniform: " + u);
 		}
 	}
 	

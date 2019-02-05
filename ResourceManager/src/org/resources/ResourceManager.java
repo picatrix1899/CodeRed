@@ -5,6 +5,8 @@ import org.resources.materials.MaterialData;
 import org.resources.materials.MaterialLoader;
 import org.resources.objects.ObjectData;
 import org.resources.objects.ObjectLoader;
+import org.resources.shaderparts.ShaderPartData;
+import org.resources.shaderparts.ShaderPartLoader;
 import org.resources.textures.TextureData;
 import org.resources.textures.TextureLoader;
 import org.resources.utils.LoaderCallback;
@@ -26,6 +28,15 @@ public class ResourceManager
 	private MaterialLoader materialLoader;
 	private ResourceStorage<MaterialData> materialStorage;
 	
+	private ResourceLookupTable shaderPartLookup;
+	private ShaderPartLoader shaderPartLoader;
+	private ResourceStorage<ShaderPartData> shaderPartStorage;
+	
+	private ResourceManagerPart<TextureData> textures;
+	private ResourceManagerPart<ObjectData> staticMeshs;
+	private ResourceManagerPart<MaterialData> materials;
+	private ResourceManagerPart<ShaderPartData> shaderParts;
+	
 	private static ResourceManager instance;
 	
 	public boolean isRunning = false;
@@ -39,6 +50,11 @@ public class ResourceManager
 	
 	private ResourceManager()
 	{
+		this.textures = new ResourceManagerPart<TextureData>("Texture", new TextureLoader());
+		this.staticMeshs = new ResourceManagerPart<ObjectData>("Static Mesh", new ObjectLoader());
+		this.materials = new ResourceManagerPart<MaterialData>("Material", new MaterialLoader());
+		this.shaderParts = new ResourceManagerPart<ShaderPartData>("Shader Part", new ShaderPartLoader());
+		
 		this.textureLookup = new ResourceLookupTable();
 		this.textureLoader = new TextureLoader();
 		this.textureStorage = new ResourceStorage<TextureData>();
@@ -50,30 +66,57 @@ public class ResourceManager
 		this.materialLookup = new ResourceLookupTable();
 		this.materialLoader = new MaterialLoader();
 		this.materialStorage = new ResourceStorage<MaterialData>();
+		
+		this.shaderPartLookup = new ResourceLookupTable();
+		this.shaderPartLoader = new ShaderPartLoader();
+		this.shaderPartStorage = new ResourceStorage<ShaderPartData>();
 	}
 	
 	public void start()
 	{
 		isRunning = true;
+		this.textures.start();
+		this.staticMeshs.start();
+		this.materials.start();
+		this.shaderParts.start();
+		
 		this.textureLoader.startPool();
 		this.staticMeshLoader.startPool();
 		this.materialLoader.startPool();
+		this.shaderPartLoader.startPool();
 	}
 	
 	public void stop()
 	{
 		isRunning = false;
+		this.textures.stop();
+		this.staticMeshs.stop();
+		this.materials.stop();
+		this.shaderParts.stop();
+		
 		this.textureLoader.stopPool();
 		this.staticMeshLoader.stopPool();
 		this.materialLoader.stopPool();
+		this.shaderPartLoader.stopPool();
 	}
 	
 	public void cancel()
 	{
+		this.textures.cancel();
+		this.staticMeshs.cancel();
+		this.materials.cancel();
+		this.shaderParts.cancel();
+		
 		this.textureLoader.cancelPool();
 		this.staticMeshLoader.cancelPool();
 		this.materialLoader.cancelPool();
+		this.shaderPartLoader.cancelPool();
 	}
+	
+	public ResourceManagerPart<TextureData> textures() { return this.textures; }
+	public ResourceManagerPart<ObjectData> staticMeshs() { return this.staticMeshs; }
+	public ResourceManagerPart<MaterialData> materials() { return this.materials; }
+	public ResourceManagerPart<ShaderPartData> shaderParts() { return this.shaderParts; }
 	
 	public void registerTextureLookup(String id, ResourcePath path)
 	{
@@ -91,6 +134,12 @@ public class ResourceManager
 	{
 		if(!this.materialLookup.contains(id))
 			this.materialLookup.put(id, path);
+	}
+	
+	public void registerShaderPartLookup(String id, ResourcePath path)
+	{
+		if(!this.shaderPartLookup.contains(id))
+			this.shaderPartLookup.put(id, path);
 	}
 	
 	public TextureData getTexture(String id) throws Exception
@@ -199,6 +248,40 @@ public class ResourceManager
 	}
 	
 	
+	public ShaderPartData getShaderPart(String id) throws Exception
+	{
+		if(!this.shaderPartLookup.contains(id)) throw new MissingResourceLookupException("Shader Part", id);
+		return this.shaderPartStorage.get(id);
+	}
+	
+	public void loadShaderPartForced(String id) throws Exception
+	{
+		if(!this.shaderPartLookup.contains(id)) throw new MissingResourceLookupException("Shader Part", id);
+		if(this.shaderPartStorage.contains(id)) return;
+		
+		try
+		{
+			ShaderPartData data = this.shaderPartLoader.directLoadResource(id, this.shaderPartLookup.get(id));
+			
+			this.shaderPartStorage.add(id, data);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadShaderPart(String id, LoaderCallback<ShaderPartData> callback) throws Exception
+	{
+		if(!this.shaderPartLookup.contains(id)) throw new MissingResourceLookupException("Shader Part", id);
+		if(this.shaderPartStorage.contains(id)) return;
+
+		this.shaderPartLoader.loadResource(id, this.shaderPartLookup.get(id), (response) ->
+		{
+			if(response.resourceError == null) this.shaderPartStorage.add(id, response.resourceData);
+			callback.callback(response);
+		});
+	}
+	
 	
 	public void unloadTexture(String id) throws Exception
 	{
@@ -216,5 +299,11 @@ public class ResourceManager
 	{
 		if(!this.materialLookup.contains(id)) throw new MissingResourceLookupException("Static Mesh", id);
 		this.materialStorage.unload(id);
+	}
+	
+	public void unloadShaderPart(String id) throws Exception
+	{
+		if(!this.shaderPartLookup.contains(id)) throw new MissingResourceLookupException("Shader Part", id);
+		this.shaderPartStorage.unload(id);
 	}
 }

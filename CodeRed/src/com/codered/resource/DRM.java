@@ -1,5 +1,6 @@
 package com.codered.resource;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,14 +21,17 @@ public class DRM
 	private IRM irm;
 	private ResourceBlock currentBlock;
 	private WindowContext context;
+	private org.resources.ResourceManager rm;
 	
 	private Map<String, Texture> textures = Maps.newHashMap();
 	private Map<String, Mesh> staticMeshes = Maps.newHashMap();
 	private Map<String, Material> materials = Maps.newHashMap();
+	private Map<String, ShaderPart> shaderParts = Maps.newHashMap();
 	
 	public DRM(WindowContext context)
 	{
 		this.irm = IRM.getInstance();
+		this.rm = org.resources.ResourceManager.getInstance();
 		this.context = context;
 	}
 	
@@ -37,25 +41,22 @@ public class DRM
 		{		
 			for(String id : block.getPendingTextures())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadTextureForced(id, path);
+				this.rm.textures().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.textures().loadForced(id);
 				generateTexture(id);
 			}
 			
 			for(String id : block.getPendingStaticMeshes())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadStaticMeshForced(id, path);
+				this.rm.staticMeshs().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.staticMeshs().loadForced(id);
 				generateStaticMesh(id);
 			}
 			
 			for(String id : block.getPendingMaterials())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadMaterialForced(id, path);
+				this.rm.materials().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.materials().loadForced(id);
 				generateMaterial(id);
 			}
 			
@@ -107,7 +108,7 @@ public class DRM
 	{
 		try
 		{
-			this.textures.put(id, TextureUtils.genTexture(this.irm.getTexture(id), context));
+			this.textures.put(id, TextureUtils.genTexture(this.rm.textures().get(id), context));
 		}
 		catch (Exception e)
 		{
@@ -124,7 +125,7 @@ public class DRM
 	{
 		try
 		{
-			this.staticMeshes.put(id, new Mesh().loadFromObj(this.irm.getStaticMesh(id)));
+			this.staticMeshes.put(id, new Mesh().loadFromObj(this.rm.staticMeshs().get(id)));
 		}
 		catch (Exception e)
 		{
@@ -149,23 +150,20 @@ public class DRM
 				if(data.getAlbedoMap() != "")
 				{
 					this.currentBlock.addTexture(data.getAlbedoMap());
-					org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-					path.path = data.getAlbedoMap();
-					this.irm.loadTexture(data.getAlbedoMap(), path);
+					this.rm.textures().registerLookup(data.getAlbedoMap(), new File(data.getAlbedoMap()).toURI().toURL());
+					this.rm.textures().load(data.getAlbedoMap(), (d) -> {});
 				}
 				if(data.getNormalMap() != "")
 				{
 					this.currentBlock.addTexture(data.getNormalMap());
-					org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-					path.path = data.getNormalMap();
-					this.irm.loadTexture(data.getNormalMap(), path);
+					this.rm.textures().registerLookup(data.getAlbedoMap(), new File(data.getAlbedoMap()).toURI().toURL());
+					this.rm.textures().load(data.getAlbedoMap(), (d) -> {});
 				}
 				if(data.getDisplacementMap() != "")
 				{
 					this.currentBlock.addTexture(data.getDisplacementMap());
-					org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-					path.path = data.getDisplacementMap();
-					this.irm.loadTexture(data.getDisplacementMap(), path);
+					this.rm.textures().registerLookup(data.getAlbedoMap(), new File(data.getAlbedoMap()).toURI().toURL());
+					this.rm.textures().load(data.getAlbedoMap(), (d) -> {});
 				}
 			}
 			else
@@ -190,10 +188,27 @@ public class DRM
 		return this.materials.get(id);
 	}
 	
+	private void generateShaderPart(String id)
+	{
+		try
+		{
+			this.shaderParts.put(id, new ShaderPart(name, type, data);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void addShaderPart(String id, ShaderPart part)
+	{
+		this.shaderParts.put(id, part);
+	}
+	
 	
 	public ShaderPart getShaderPart(String id)
 	{
-		return null;
+		return this.shaderParts.get(id);
 	}
 	
 	public boolean isCritical()
@@ -213,7 +228,7 @@ public class DRM
 			Set<String> removedPendingTextures = Sets.newHashSet();
 			for(String id : this.currentBlock.getPendingTextures())
 			{
-				if(this.irm.isTextureAvailable(id))
+				if(this.rm.textures().isAvailable(id))
 				{
 					generateTexture(id);
 					removedPendingTextures.add(id);
@@ -225,7 +240,7 @@ public class DRM
 			Set<String> removedPendingStaticMeshes = Sets.newHashSet();
 			for(String id : this.currentBlock.getPendingStaticMeshes())
 			{
-				if(this.irm.isStaticMeshAvailable(id))
+				if(this.rm.staticMeshs().isAvailable(id))
 				{
 					generateStaticMesh(id);
 					removedPendingStaticMeshes.add(id);
@@ -237,7 +252,7 @@ public class DRM
 			Set<String> removedPendingMaterials = Sets.newHashSet();
 			for(String id : this.currentBlock.getPendingMaterials())
 			{
-				if(this.irm.isMaterialAvailable(id))
+				if(this.rm.materials().isAvailable(id))
 				{
 					generateMaterial(id);
 					removedPendingMaterials.add(id);

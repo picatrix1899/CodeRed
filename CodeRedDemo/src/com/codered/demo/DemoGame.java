@@ -23,7 +23,7 @@ public class DemoGame extends Engine
 	
 	public boolean showInventory = false;
 	public boolean directional = true;
-
+	
 	public DemoGame()
 	{
 		instance = this;
@@ -50,7 +50,7 @@ public class DemoGame extends Engine
 	private void initWindowHints()
 	{
 		WindowHint.resizable(true);
-		WindowHint.glVersion("4.2");
+		WindowHint.glVersion("4.5");
 		WindowHint.glProfile(GLProfile.CORE);
 		WindowHint.depthBits(24);
 		WindowHint.doubleBuffering(true);

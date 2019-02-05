@@ -13,7 +13,7 @@ in vec3 tangent;
 
 uniform mat4 T_model;
 uniform mat4 T_projection;
-uniform Camera camera;
+uniform mat4 T_view;
 
 out vec2 pass_texCoords;
 out float pass_vis;
@@ -23,7 +23,7 @@ const float gradient = 8;
 
 void main(void)
 {
-	vec4 posRelativeToCam = camera.T_view * T_model * vec4(vertexPos, 1.0);
+	vec4 posRelativeToCam = T_view * T_model * vec4(vertexPos, 1.0);
 	gl_Position = T_projection * posRelativeToCam;
 	
 	pass_texCoords = texCoords;
