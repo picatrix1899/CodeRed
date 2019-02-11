@@ -29,7 +29,6 @@ public abstract class Uniform
 	public void addUniform(String id)
 	{
 		this.uniforms.put(getUniformName(id), 0);
-		System.out.println("added Uniform: " + getUniformName(id));
 	}
 	
 	public void loadUniformLocations(int shaderProgrammId)
@@ -37,7 +36,6 @@ public abstract class Uniform
 		for(String uniform : this.uniforms.keySet())
 		{
 			this.uniforms.put(uniform, GL20.glGetUniformLocation(shaderProgrammId, uniform));
-			System.out.println("loaded Uniform: " + uniform + " " + GL20.glGetUniformLocation(shaderProgrammId, uniform));
 		}
 
 	}

@@ -29,6 +29,8 @@ public abstract class GUI
 	public abstract void render();
 	public abstract void update();
 	
+	
+	
 	public GUI()
 	{
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();

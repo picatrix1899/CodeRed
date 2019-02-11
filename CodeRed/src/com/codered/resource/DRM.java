@@ -4,10 +4,15 @@ import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.GL40;
+
 import org.resources.materials.MaterialData;
 
 import com.codered.managing.models.Mesh;
 import com.codered.material.Material;
+import com.codered.sh.Shader;
 import com.codered.sh.ShaderPart;
 import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
@@ -18,7 +23,6 @@ import com.google.common.collect.Sets;
 
 public class DRM
 {
-	private IRM irm;
 	private ResourceBlock currentBlock;
 	private WindowContext context;
 	private org.resources.ResourceManager rm;
@@ -26,11 +30,15 @@ public class DRM
 	private Map<String, Texture> textures = Maps.newHashMap();
 	private Map<String, Mesh> staticMeshes = Maps.newHashMap();
 	private Map<String, Material> materials = Maps.newHashMap();
-	private Map<String, ShaderPart> shaderParts = Maps.newHashMap();
+	private Map<String, ShaderPart> vertexShaderParts = Maps.newHashMap();
+	private Map<String, ShaderPart> fragmentShaderParts = Maps.newHashMap();
+	private Map<String, ShaderPart> geometryShaderParts = Maps.newHashMap();
+	private Map<String, ShaderPart> tessellationControlShaderParts = Maps.newHashMap();
+	private Map<String, ShaderPart> tessellationEvaluationShaderParts = Maps.newHashMap();
+	private Map<String, Shader> shaders = Maps.newHashMap();
 	
 	public DRM(WindowContext context)
 	{
-		this.irm = IRM.getInstance();
 		this.rm = org.resources.ResourceManager.getInstance();
 		this.context = context;
 	}
@@ -60,9 +68,49 @@ public class DRM
 				generateMaterial(id);
 			}
 			
+			for(String id : block.getPendingVertexShaderParts())
+			{
+				this.rm.vertexShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.vertexShaderParts().loadForced(id);
+				generateVertexShaderPart(id);
+			}
+			
+			for(String id : block.getPendingFragmentShaderParts())
+			{
+				this.rm.fragmentShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.fragmentShaderParts().loadForced(id);
+				generateFragmentShaderPart(id);
+			}
+			
+			for(String id : block.getPendingGeometryShaderParts())
+			{
+				this.rm.geometryShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.geometryShaderParts().loadForced(id);
+				generateGeometryShaderPart(id);
+			}
+			
+			for(String id : block.getPendingTessellationControlShaderParts())
+			{
+				this.rm.tessellationControlShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.tessellationControlShaderParts().loadForced(id);
+				generateTessellationControlShaderPart(id);
+			}
+			
+			for(String id : block.getPendingTessellationEvaluationShaderParts())
+			{
+				this.rm.tessellationEvaluationShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.tessellationEvaluationShaderParts().loadForced(id);
+				generateTessellationEvaluationShaderPart(id);
+			}
+			
 			block.getPendingTextures().clear();
 			block.getPendingStaticMeshes().clear();
 			block.getPendingMaterials().clear();
+			block.getPendingVertexShaderParts().clear();
+			block.getPendingFragmentShaderParts().clear();
+			block.getPendingGeometryShaderParts().clear();
+			block.getPendingTessellationControlShaderParts().clear();
+			block.getPendingTessellationEvaluationShaderParts().clear();
 		}
 		catch (Exception e)
 		{
@@ -78,23 +126,50 @@ public class DRM
 		{		
 			for(String id : this.currentBlock.getPendingTextures())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadTexture(id, path);
+				this.rm.textures().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.textures().load(id, (v) -> {});
 			}
 			
 			for(String id : this.currentBlock.getPendingStaticMeshes())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadStaticMesh(id, path);
+				this.rm.staticMeshs().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.staticMeshs().load(id, (v) -> {});
 			}
 			
 			for(String id : this.currentBlock.getPendingMaterials())
 			{
-				org.resources.utils.ResourcePath path = new org.resources.utils.ResourcePath();
-				path.path = id;
-				this.irm.loadMaterial(id, path);
+				this.rm.materials().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.materials().load(id, (v) -> {});
+			}
+			
+			for(String id : this.currentBlock.getPendingVertexShaderParts())
+			{
+				this.rm.vertexShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.vertexShaderParts().load(id, (v) -> {});
+			}
+			
+			for(String id : this.currentBlock.getPendingFragmentShaderParts())
+			{
+				this.rm.fragmentShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.fragmentShaderParts().load(id, (v) -> {});
+			}
+			
+			for(String id : this.currentBlock.getPendingGeometryShaderParts())
+			{
+				this.rm.geometryShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.geometryShaderParts().load(id, (v) -> {});
+			}
+			
+			for(String id : this.currentBlock.getPendingTessellationControlShaderParts())
+			{
+				this.rm.tessellationControlShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.tessellationControlShaderParts().load(id, (v) -> {});
+			}
+			
+			for(String id : this.currentBlock.getPendingTessellationEvaluationShaderParts())
+			{
+				this.rm.tessellationEvaluationShaderParts().registerLookup(id, new File(id).toURI().toURL());
+				this.rm.tessellationEvaluationShaderParts().load(id, (v) -> {});
 			}
 		}
 		catch (Exception e)
@@ -143,7 +218,7 @@ public class DRM
 	{
 		try
 		{
-			MaterialData data = this.irm.getMaterial(id);
+			MaterialData data = this.rm.materials().get(id);
 			
 			if(this.currentBlock != null)
 			{
@@ -156,14 +231,14 @@ public class DRM
 				if(data.getNormalMap() != "")
 				{
 					this.currentBlock.addTexture(data.getNormalMap());
-					this.rm.textures().registerLookup(data.getAlbedoMap(), new File(data.getAlbedoMap()).toURI().toURL());
-					this.rm.textures().load(data.getAlbedoMap(), (d) -> {});
+					this.rm.textures().registerLookup(data.getNormalMap(), new File(data.getNormalMap()).toURI().toURL());
+					this.rm.textures().load(data.getNormalMap(), (d) -> {});
 				}
 				if(data.getDisplacementMap() != "")
 				{
 					this.currentBlock.addTexture(data.getDisplacementMap());
-					this.rm.textures().registerLookup(data.getAlbedoMap(), new File(data.getAlbedoMap()).toURI().toURL());
-					this.rm.textures().load(data.getAlbedoMap(), (d) -> {});
+					this.rm.textures().registerLookup(data.getDisplacementMap(), new File(data.getDisplacementMap()).toURI().toURL());
+					this.rm.textures().load(data.getDisplacementMap(), (d) -> {});
 				}
 			}
 			else
@@ -188,11 +263,11 @@ public class DRM
 		return this.materials.get(id);
 	}
 	
-	private void generateShaderPart(String id)
+	private void generateVertexShaderPart(String id)
 	{
 		try
 		{
-			this.shaderParts.put(id, new ShaderPart(name, type, data);
+			this.vertexShaderParts.put(id, new ShaderPart(id, GL20.GL_VERTEX_SHADER, this.rm.vertexShaderParts().get(id).getData()));
 		}
 		catch (Exception e)
 		{
@@ -200,15 +275,77 @@ public class DRM
 		}
 	}
 	
-	public void addShaderPart(String id, ShaderPart part)
+	public ShaderPart getVertexShaderPart(String id)
 	{
-		this.shaderParts.put(id, part);
+		return this.vertexShaderParts.get(id);
 	}
 	
-	
-	public ShaderPart getShaderPart(String id)
+	private void generateFragmentShaderPart(String id)
 	{
-		return this.shaderParts.get(id);
+		try
+		{
+			this.fragmentShaderParts.put(id, new ShaderPart(id, GL20.GL_FRAGMENT_SHADER, this.rm.fragmentShaderParts().get(id).getData()));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public ShaderPart getFragmentShaderPart(String id)
+	{
+		return this.fragmentShaderParts.get(id);
+	}
+	
+	private void generateGeometryShaderPart(String id)
+	{
+		try
+		{
+			this.geometryShaderParts.put(id, new ShaderPart(id, GL32.GL_GEOMETRY_SHADER, this.rm.geometryShaderParts().get(id).getData()));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public ShaderPart getGeometryShaderPart(String id)
+	{
+		return this.geometryShaderParts.get(id);
+	}
+	
+	private void generateTessellationControlShaderPart(String id)
+	{
+		try
+		{
+			this.tessellationControlShaderParts.put(id, new ShaderPart(id, GL40.GL_TESS_CONTROL_SHADER, this.rm.tessellationControlShaderParts().get(id).getData()));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public ShaderPart getTessellationControlShaderPart(String id)
+	{
+		return this.tessellationControlShaderParts.get(id);
+	}
+	
+	private void generateTessellationEvaluationShaderPart(String id)
+	{
+		try
+		{
+			this.tessellationEvaluationShaderParts.put(id, new ShaderPart(id, GL40.GL_TESS_EVALUATION_SHADER, this.rm.tessellationEvaluationShaderParts().get(id).getData()));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public ShaderPart getTessellationEvaluationShaderPart(String id)
+	{
+		return this.tessellationEvaluationShaderParts.get(id);
 	}
 	
 	public boolean isCritical()
@@ -261,7 +398,78 @@ public class DRM
 			for(String id : removedPendingMaterials)
 				this.currentBlock.getPendingMaterials().remove(id);
 			
+			Set<String> removedPendingVertexShaderParts = Sets.newHashSet();
+			for(String id : this.currentBlock.getPendingVertexShaderParts())
+			{
+				if(this.rm.vertexShaderParts().isAvailable(id))
+				{
+					generateVertexShaderPart(id);
+					removedPendingVertexShaderParts.add(id);
+				}
+			}
+			for(String id : removedPendingVertexShaderParts)
+				this.currentBlock.getPendingVertexShaderParts().remove(id);
+			
+			Set<String> removedPendingFragmentShaderParts = Sets.newHashSet();
+			for(String id : this.currentBlock.getPendingFragmentShaderParts())
+			{
+				if(this.rm.fragmentShaderParts().isAvailable(id))
+				{
+					
+					generateFragmentShaderPart(id);
+					removedPendingFragmentShaderParts.add(id);
+				}
+			}
+			for(String id : removedPendingFragmentShaderParts)
+				this.currentBlock.getPendingFragmentShaderParts().remove(id);
+			
+			Set<String> removedPendingGeometryShaderParts = Sets.newHashSet();
+			for(String id : this.currentBlock.getPendingGeometryShaderParts())
+			{
+				if(this.rm.geometryShaderParts().isAvailable(id))
+				{
+					generateGeometryShaderPart(id);
+					removedPendingGeometryShaderParts.add(id);
+				}
+			}
+			for(String id : removedPendingGeometryShaderParts)
+				this.currentBlock.getPendingGeometryShaderParts().remove(id);
+			
+			Set<String> removedPendingTessellationControlShaderParts = Sets.newHashSet();
+			for(String id : this.currentBlock.getPendingTessellationControlShaderParts())
+			{
+				if(this.rm.tessellationControlShaderParts().isAvailable(id))
+				{
+					generateTessellationControlShaderPart(id);
+					removedPendingTessellationControlShaderParts.add(id);
+				}
+			}
+			for(String id : removedPendingTessellationControlShaderParts)
+				this.currentBlock.getPendingTessellationControlShaderParts().remove(id);
+			
+			Set<String> removedPendingTessellationEvaluationShaderParts = Sets.newHashSet();
+			for(String id : this.currentBlock.getPendingTessellationEvaluationShaderParts())
+			{
+				if(this.rm.tessellationEvaluationShaderParts().isAvailable(id))
+				{
+					generateTessellationEvaluationShaderPart(id);
+					removedPendingTessellationEvaluationShaderParts.add(id);
+				}
+			}
+			for(String id : removedPendingTessellationEvaluationShaderParts)
+				this.currentBlock.getPendingTessellationEvaluationShaderParts().remove(id);
+			
 			if(this.currentBlock.isFinished()) this.currentBlock = null;
 		}
+	}
+	
+	public void addShader(String id, Shader shader)
+	{
+		this.shaders.put(id, shader);
+	}
+	
+	public Shader getShader(String id)
+	{
+		return this.shaders.get(id);
 	}
 }

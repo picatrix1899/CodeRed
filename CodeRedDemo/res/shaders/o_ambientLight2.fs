@@ -11,21 +11,25 @@ struct AmbientLight
 	BaseLight base;
 };
 
+struct Material
+{
+	sampler2D albedoMap;
+};
+
 vec4 calcAmbientLight(AmbientLight);
 
 in vec2 pass_texCoords;
-in float pass_vis;
 
 out vec4 out_Color;
 
 uniform AmbientLight ambientLight;
 
-uniform sampler2D albedoMap;
+uniform Material material;
 
 void main(void)
 {
 
 	vec4 totalLight = calcAmbientLight(ambientLight);
 
-	out_Color = texture(albedoMap, pass_texCoords) * totalLight;
+	out_Color = texture(material.albedoMap, pass_texCoords) * totalLight;
 }

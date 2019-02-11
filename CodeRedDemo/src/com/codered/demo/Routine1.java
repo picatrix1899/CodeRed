@@ -1,7 +1,5 @@
 package com.codered.demo;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.barghos.core.color.LDRColor3;
@@ -9,7 +7,6 @@ import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import com.codered.BuiltInShaders;
 import com.codered.StaticEntityTreeImpl;
@@ -22,11 +19,9 @@ import com.codered.input.InputConfiguration;
 import com.codered.input.Key;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
-import com.codered.managing.loader.data.ShaderPartData;
 import com.codered.resource.ResourceBlock;
 import com.codered.sh.AmbientLightShader;
 import com.codered.sh.ShaderPart;
-import com.codered.sh.ShaderPartLoader;
 import com.codered.sh.ShaderProgram;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.EvalFunc;
@@ -53,38 +48,11 @@ public class Routine1 extends WindowRoutine
 	private boolean initializing;
 	
 	public ShaderProgram ambientShader;
-	public ShaderPart vs;
-	public ShaderPart fs;
-	public ShaderPart fs2;
+	public ShaderProgram directionalLightShader;
 	
 	public void init()
 	{
 		BuiltInShaders.init();
-		try
-		{
-			ShaderPartData vsd = ShaderPartLoader.readShader(new File("res/shaders/o_ambientLight2.vs").toURI().toURL().openStream());
-			ShaderPartData fsd = ShaderPartLoader.readShader(new File("res/shaders/o_ambientLight2.fs").toURI().toURL().openStream());
-			ShaderPartData fs2d = ShaderPartLoader.readShader(new File("res/shaders/test.fs").toURI().toURL().openStream());
-			
-			vs = new ShaderPart("o_ambientLight2.vs", GL20.GL_VERTEX_SHADER, vsd.getData());
-			fs = new ShaderPart("o_ambientLight2.fs", GL20.GL_FRAGMENT_SHADER, fsd.getData());
-			fs2 = new ShaderPart("test.fs", GL20.GL_FRAGMENT_SHADER, fs2d.getData());
-			
-			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(vs.getName(), vs);
-			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(fs.getName(), fs);
-			EngineRegistry.getCurrentWindowContext().getDRM().addShaderPart(fs2.getName(), fs2);
-			
-			ambientShader = new AmbientLightShader();
-			ambientShader.addShaderPart(vs.getName());
-			ambientShader.addShaderPart(fs.getName());
-			ambientShader.addShaderPart(fs2.getName());
-			ambientShader.compile();
-			
-			
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		
 		PrimitiveRenderer.create();
 
@@ -124,6 +92,9 @@ public class Routine1 extends WindowRoutine
 		block2.addTexture("res/materials/inventory-background.png");
 		block2.addStaticMesh("res/models/crate.obj");
 		block2.addMaterial("res/materials/crate.json");
+		block2.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		block2.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		block2.addFragmentShaderPart("res/shaders/test.fs");
 		this.context.getDRM().loadResourceBlock(block2);
 		
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
@@ -131,6 +102,18 @@ public class Routine1 extends WindowRoutine
 
 	public void initPhase1()
 	{
+		ambientShader = new AmbientLightShader();
+		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		ambientShader.addFragmentShaderPart("res/shaders/test.fs");
+		ambientShader.compile();
+		
+//		directionalLightShader = new AmbientLightShader();
+//		directionalLightShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+//		directionalLightShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+//		directionalLightShader.addFragmentShaderPart("res/shaders/test.fs");
+//		directionalLightShader.compile();
+		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
 		
 		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 50, 0.1, 1000);

@@ -64,6 +64,7 @@ public class Window
 		}
 		
 		makeContextCurrent();
+
 		this.capabilities = GL.createCapabilities();
 		
 		glfwShowWindow(this.window);

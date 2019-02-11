@@ -107,20 +107,7 @@ public class InternalResourceManager
 			this.fonts.put(filename, font);
 		}
 	}
-	
-	public void loadTextureForced(String fileName)
-	{
-		if(fileName.isEmpty()) return;
-		
-		if(!this.textures.containsKey(fileName))
-		{
-			ResourceBlock block = new ResourceBlock(false);
-			block.addTexture(fileName);
-			
-			this.context.getDRM().loadResourceBlockForced(block);
-			this.textures.put(fileName, this.context.getDRM().getTexture(fileName));
-		}
-	}
+
 	
 	public void regRawModel(String name, RawModel model)
 	{
@@ -132,9 +119,6 @@ public class InternalResourceManager
 	{
 		if(!this.texturedModels.containsKey(name))
 		{
-			//regStaticMesh(fileNameModel);
-			//regMaterial(fileNameMaterial);
-			
 			TexturedModel model = new TexturedModel(fileNameModel, fileNameMaterial);
 			
 			this.texturedModels.put(name, model);

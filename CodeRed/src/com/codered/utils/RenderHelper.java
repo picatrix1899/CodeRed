@@ -61,8 +61,8 @@ public class RenderHelper
 	{
 		oShader.setUniformValue("T_model", e.getTransformationMatrix());
 		oShader.setUniformValue("T_projection", projection);
-		oShader.setUniformValue("T_view", c.getViewMatrix());
-		oShader.setUniformValue("albedoMap", e.getModel().getMaterial().getAlbedoMap().getId());
+		oShader.setUniformValue("camera.T_view", c.getViewMatrix());
+		oShader.setUniformValue("material.albedoMap", e.getModel().getMaterial().getAlbedoMap().getId());
 
 		oShader.load();
 		
