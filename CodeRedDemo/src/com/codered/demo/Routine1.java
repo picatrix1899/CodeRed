@@ -93,6 +93,8 @@ public class Routine1 extends WindowRoutine
 		block2.addMaterial("res/materials/crate.json");
 		block2.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		block2.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		block2.addVertexShaderPart("res/shaders/o_directionalLight.vs");
+		block2.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
 		this.context.getDRM().loadResourceBlock(block2);
 		
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
@@ -105,11 +107,10 @@ public class Routine1 extends WindowRoutine
 		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
 		ambientShader.compile();
 		
-//		directionalLightShader = new AmbientLightShader();
-//		directionalLightShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-//		directionalLightShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-//		directionalLightShader.addFragmentShaderPart("res/shaders/test.fs");
-//		directionalLightShader.compile();
+		directionalLightShader = new DirectionalLightShader();
+		directionalLightShader.addVertexShaderPart("res/shaders/o_directionalLight.vs");
+		directionalLightShader.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
+		directionalLightShader.compile();
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
 		
@@ -201,21 +202,21 @@ public class Routine1 extends WindowRoutine
 		
 		if(DemoGame.getInstance().directional)
 		{
-		
-
+			
 			GLUtils.blend(true);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-				
-			DirectionalLight_OShader shader2 = EngineRegistry.getShader(DirectionalLight_OShader.class);
-			shader2.start();
-			shader2.u_directionalLight.set(this.directionalLight);
 			
-			while(it.hasNext())
+			try(ShaderSession ss = directionalLightShader.start())
 			{
-				RenderHelper.renderStaticEntity(it.next(), cam, shader2, this.projection);
+				directionalLightShader.setUniformValue("directionalLight.base.color", this.directionalLight.base.color);
+				directionalLightShader.setUniformValue("directionalLight.base.intensity", this.directionalLight.base.intensity);
+				directionalLightShader.setUniformValue("directionalLight.direction", this.directionalLight.direction);
+				
+				while(it.hasNext())
+				{
+					RenderHelper.renderStaticEntity2(it.next(), cam, directionalLightShader, this.projection);
+				}
 			}
-			
-			shader2.stop();
 			
 			GLUtils.blend(false);
 		}

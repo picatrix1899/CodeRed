@@ -36,6 +36,7 @@ public abstract class Uniform
 		for(String uniform : this.uniforms.keySet())
 		{
 			this.uniforms.put(uniform, GL20.glGetUniformLocation(shaderProgrammId, uniform));
+			System.out.println("program: " + shaderProgrammId + " uniform: " + uniform + " location: " + this.uniforms.get(uniform));
 		}
 
 	}
@@ -108,8 +109,6 @@ public abstract class Uniform
 		matrixBuffer.put(c3.getW());
 		
 		matrixBuffer.flip();
-		
-		
 		
 		GL20.glUniformMatrix4fv(this.uniforms.get(getUniformName(uniform)), false, matrixBuffer);
 	}

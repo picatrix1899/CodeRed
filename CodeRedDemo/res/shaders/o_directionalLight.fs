@@ -12,6 +12,37 @@ struct DirectionalLight
 	vec3 direction;
 };
 
+struct Camera
+{
+	vec3 position;
+	mat4 T_view;
+};
+
+
+struct Material
+{
+	sampler2D albedoMap;
+	sampler2D normalMap;
+	float specularIntensity;
+	float specularPower;
+};
+
+in vec2 pass_texCoords;
+in vec3 pass_normal;
+in vec3 pass_worldPos;
+in mat3 pass_tbn;
+in Camera pass_camera;
+
+out vec4 out_Color;
+
+uniform DirectionalLight directionalLight;
+uniform Material material;
+
+float calcBrightness(vec4 color)
+{
+	return dot(color.rgb, vec3(0.2126,0.7152, 0.0722));
+}
+
 vec4 calcDirectionalLight(BaseLight light, vec3 dir,  vec3 normal)
 {
 	float diffuseFactor = dot(-dir, normal);
@@ -27,7 +58,7 @@ vec4 calcDirectionalLight(BaseLight light, vec3 dir,  vec3 normal)
 	return diffuseColor;
 }
 
-vec4 calcSpecularReflection(BaseLight light, vec3 dir, vec3 camPos, vec3 fragPos, vec3 normal,  float intensity, float power, float divident)
+vec4 calcSpecularReflection(BaseLight light, vec3 dir, vec3 camPos, vec3 fragPos, vec3 normal, float intensity, float power, float divident)
 {
 	float diffuseFactor = dot(-dir, normal);
 	
@@ -54,45 +85,18 @@ vec4 calcSpecularReflection(BaseLight light, vec3 dir, vec3 camPos, vec3 fragPos
 	return specularColor / divident;
 }
 
-struct Camera
-{
-	vec3 position;
-	mat4 T_view;
-};
-
-
-struct Material
-{
-	sampler2D albedoMap;
-	sampler2D normalMap;
-	float specularIntensity;
-	float specularPower;
-};
-
-in vec2 pass_texCoords;
-in vec3 pass_normal;
-in vec3 pass_worldPos;
-in float pass_vis;
-in Camera pass_camera;
-
-out vec4 out_Color;
-
-uniform DirectionalLight directionalLight;
-uniform vec3 skyColor;
-
-uniform Material material;
-
 void main(void)
 {
-
 	vec4 textureColor = texture(material.albedoMap, pass_texCoords);
 	
-	vec4 dLight = calcDirectionalLight(directionalLight.base, directionalLight.direction, pass_normal);
+	vec3 nrm = normalize(pass_tbn * ((2 * texture(material.normalMap, pass_texCoords).rgb) - 1));
+	
+	vec4 dLight = calcDirectionalLight(directionalLight.base, directionalLight.direction, nrm);
 	
 	float atten = 1 / (calcBrightness(dLight) + (directionalLight.base.intensity / 10));
 	
-	dLight += calcSpecularReflection(directionalLight.base, directionalLight.direction, pass_camera.position, pass_worldPos, pass_normal, material.specularIntensity, material.specularPower, atten);
+	dLight += calcSpecularReflection(directionalLight.base, directionalLight.direction, pass_camera.position, pass_worldPos, nrm, material.specularIntensity, material.specularPower, atten);
 
 	out_Color = textureColor * dLight;
-//	out_Color = mix(vec4(skyColor,1.0), out_Color, pass_vis);
+
 }
