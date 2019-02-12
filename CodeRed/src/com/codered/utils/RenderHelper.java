@@ -26,9 +26,7 @@ public class RenderHelper
 		GLUtils.blend(true);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GLUtils.depthTest(false);
-		
 
-		
 		Font_GUIShader shader = EngineRegistry.getShader(Font_GUIShader.class);
 		shader.start();
 		shader.u_fontAtlas.set(text.font.getTexture());

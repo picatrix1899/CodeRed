@@ -12,7 +12,7 @@ public interface Shader
 	Set<String> getUniforms();
 	void setUniformValue(String name, Object obj);
 	
-	void start();
+	ShaderSession start();
 	void stop();
 	void load();
 	

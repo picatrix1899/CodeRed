@@ -113,10 +113,11 @@ public abstract class ShaderProgram implements Shader
 		this.uniforms.put(name, uniform);
 	}
 	
-	public void start()
+	public ShaderSession start()
 	{
 		GL20.glUseProgram(this.id);
 		this.isRunning = true;
+		return new ShaderSession(this);
 	}
 	
 	public void stop()

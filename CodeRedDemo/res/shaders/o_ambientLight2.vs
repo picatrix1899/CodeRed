@@ -10,11 +10,11 @@ in vec2 texCoords;
 in vec3 normal;
 in vec3 tangent;
 
+out vec2 pass_texCoords;
+
 uniform mat4 T_model;
 uniform mat4 T_projection;
 uniform Camera camera;
-
-out vec2 pass_texCoords;
 
 void main(void)
 {

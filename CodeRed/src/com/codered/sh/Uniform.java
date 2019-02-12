@@ -5,12 +5,12 @@ import java.util.Map;
 
 import org.barghos.core.tuple.Tup4f;
 import org.barghos.math.matrix.Mat4f;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import cmn.utilslib.essentials.BufferUtils;
@@ -47,7 +47,7 @@ public abstract class Uniform
 	
 	private String getUniformName(String name)
 	{
-		return Strings.isNullOrEmpty(name) ? this.name : this.name + "." + name;
+		return name == "" ? this.name : this.name + "." + name;
 	}
 	
 	public abstract void set(Object obj);
@@ -56,43 +56,31 @@ public abstract class Uniform
 	
 	protected void loadInt(String uniform, int value)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL20.glUniform1i(this.uniforms.get(getUniformName(uniform)), value);
 	}
 	
 	protected void loadFloat(String uniform, float value)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL20.glUniform1f(this.uniforms.get(getUniformName(uniform)), value);
 	}
 	
 	protected void loadVec2f(String uniform, float x, float y)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL20.glUniform2f(this.uniforms.get(getUniformName(uniform)), x, y);
 	}
 	
 	protected void loadVec3f(String uniform, float x, float y, float z)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL20.glUniform3f(this.uniforms.get(getUniformName(uniform)), x, y, z);
 	}
 	
 	protected void loadVec4f(String uniform, float x, float y, float z, float w)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL20.glUniform4f(this.uniforms.get(getUniformName(uniform)), x, y, z, w);
 	}
 	
 	protected void loadMat4(String uniform, Mat4f mat)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 		
 		Tup4f c0 = mat.getColumn(0);
@@ -128,8 +116,6 @@ public abstract class Uniform
 	
 	protected void loadTexture2D(String uniform, int attrib, int texturedId)
 	{
-		if(!this.uniforms.containsKey(getUniformName(uniform))) throw new IllegalArgumentException();
-		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + attrib);
 		GL11.glBindTexture(GL32.GL_TEXTURE_2D, texturedId);
 		loadInt(uniform, attrib);

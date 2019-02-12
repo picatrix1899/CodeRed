@@ -20,9 +20,8 @@ import com.codered.input.Key;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.resource.ResourceBlock;
-import com.codered.sh.AmbientLightShader;
-import com.codered.sh.ShaderPart;
 import com.codered.sh.ShaderProgram;
+import com.codered.sh.ShaderSession;
 import com.codered.shaders.object.simple.DirectionalLight_OShader;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
@@ -94,7 +93,6 @@ public class Routine1 extends WindowRoutine
 		block2.addMaterial("res/materials/crate.json");
 		block2.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		block2.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-		block2.addFragmentShaderPart("res/shaders/test.fs");
 		this.context.getDRM().loadResourceBlock(block2);
 		
 		this.context.getResourceManager().GUI.regFont("res/fonts/arial");
@@ -105,7 +103,6 @@ public class Routine1 extends WindowRoutine
 		ambientShader = new AmbientLightShader();
 		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-		ambientShader.addFragmentShaderPart("res/shaders/test.fs");
 		ambientShader.compile();
 		
 //		directionalLightShader = new AmbientLightShader();
@@ -189,16 +186,17 @@ public class Routine1 extends WindowRoutine
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 
-		ambientShader.start();
-		ambientShader.setUniformValue("ambientLight.base.color", this.ambient.base.color);
-		ambientShader.setUniformValue("ambientLight.base.intensity", this.ambient.base.intensity);
-		
-		while(it.hasNext())
+		try(ShaderSession ss = ambientShader.start())
 		{
-			RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection);
+			ambientShader.setUniformValue("ambientLight.base.color", this.ambient.base.color);
+			ambientShader.setUniformValue("ambientLight.base.intensity", this.ambient.base.intensity);
+			
+			while(it.hasNext())
+			{
+				RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection);
+			}
 		}
-		ambientShader.stop();
-		
+
 		it = this.world.iterator();
 		
 		if(DemoGame.getInstance().directional)
