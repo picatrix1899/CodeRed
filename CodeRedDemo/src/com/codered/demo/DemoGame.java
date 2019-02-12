@@ -32,9 +32,9 @@ public class DemoGame extends Engine
 		w1.setWindowHintCallback(() -> initWindowHints());
 		this.context1 = new WindowContext("main", w1, new Routine1());
 
-//		Window w2 = new Window(800, 600, "CoderRed 3 Extension", 0);
-//		w2.setWindowHintCallback(() -> initWindowHints());
-//		this.context2 = new WindowContext("ext", w2, new Routine2());
+		Window w2 = new Window(800, 600, "CoderRed 3 Extension", 0);
+		w2.setWindowHintCallback(() -> initWindowHints());
+		this.context2 = new WindowContext("ext", w2, new Routine2());
 	}
 
 	private void printDebugInfo()
@@ -62,15 +62,14 @@ public class DemoGame extends Engine
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.start();
 		
+		this.context1.initWindow();
+		this.context2.initWindow();
+		
 		this.context1.init();
 		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 		
-//		this.context2.init();
-//		this.context2.getWindow().WindowClose.addHandler((arg1) -> 
-//		{
-//			this.context2.release();
-//			this.context2 = null;
-//		});
+
+		this.context2.init();
 		
 		printDebugInfo();
 	}
@@ -84,7 +83,7 @@ public class DemoGame extends Engine
 	public void render(double delta)
 	{
 		this.context1.render(delta);
-		if(this.context2 != null)  this.context2.render(delta);
+		//if(this.context2 != null)  this.context2.render(delta);
 	}
 
 	

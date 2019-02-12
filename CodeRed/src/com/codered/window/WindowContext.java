@@ -28,17 +28,21 @@ public class WindowContext
 		this.routine.setContext(this);
 	}
 
+	public void initWindow()
+	{
+		this.window.init();
+	}
+	
 	public void init()
 	{
 		makeContextCurrent();
-		this.window.init();
 		
 		EngineRegistry.registerWindowContext(name, getWindowId(), this);
 		EngineRegistry.registerShaderList(name, getWindowId(), new ShaderList(this));
 		EngineRegistry.registerShaderParts(name, getWindowId(), new ShaderParts());
 		EngineRegistry.registerVAOManager(name, getWindowId(), new VAOManager());
 		this.resourceManager = new ResourceManager();
-		this.drm = new DRM(this);
+		this.drm = new DRM();
 		this.input = new Input();
 		this.routine.init();
 	}

@@ -16,7 +16,6 @@ import com.codered.sh.Shader;
 import com.codered.sh.ShaderPart;
 import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
-import com.codered.window.WindowContext;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -24,7 +23,6 @@ import com.google.common.collect.Sets;
 public class DRM
 {
 	private ResourceBlock currentBlock;
-	private WindowContext context;
 	private org.resources.ResourceManager rm;
 	
 	private Map<String, Texture> textures = Maps.newHashMap();
@@ -36,11 +34,11 @@ public class DRM
 	private Map<String, ShaderPart> tessellationControlShaderParts = Maps.newHashMap();
 	private Map<String, ShaderPart> tessellationEvaluationShaderParts = Maps.newHashMap();
 	private Map<String, Shader> shaders = Maps.newHashMap();
+
 	
-	public DRM(WindowContext context)
+	public DRM()
 	{
 		this.rm = org.resources.ResourceManager.getInstance();
-		this.context = context;
 	}
 	
 	public void loadResourceBlockForced(ResourceBlock block)
@@ -183,7 +181,7 @@ public class DRM
 	{
 		try
 		{
-			this.textures.put(id, TextureUtils.genTexture(this.rm.textures().get(id), context));
+			this.textures.put(id, TextureUtils.genTexture(this.rm.textures().get(id)));
 		}
 		catch (Exception e)
 		{

@@ -11,7 +11,6 @@ import com.codered.managing.VAO;
 import com.codered.material.Material;
 import com.codered.sh.Shader;
 import com.codered.shaders.gui.Font_GUIShader;
-import com.codered.shaders.object.simple.TexturedObjectShader;
 import com.codered.window.WindowContext;
 
 
@@ -39,18 +38,6 @@ public class RenderHelper
 
 		GLUtils.blend(false);
 		GLUtils.depthTest(true);
-	}
-	
-	public static void renderStaticEntity(StaticEntity e, Camera c, TexturedObjectShader oShader, Mat4f projection)
-	{
-		oShader.u_camera.set(c);
-		oShader.u_T_model.set(e.getTransformationMatrix());
-		oShader.u_T_projection.set(projection);
-		oShader.u_material.set(e.getModel().getMaterial());
-
-		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
-		
-		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 	
 	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection)
