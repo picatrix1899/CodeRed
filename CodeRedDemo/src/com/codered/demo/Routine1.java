@@ -159,8 +159,7 @@ public class Routine1 extends WindowRoutine
 			{
 				renderWorld(delta);
 
-				GLUtils.blend(true);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			}
 
 			this.inventory.render();
@@ -182,8 +181,7 @@ public class Routine1 extends WindowRoutine
 
 		Iterator<StaticEntity> it = this.world.iterator();
 		
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glCullFace(GL11.GL_BACK);
+		GLUtils.cullFace(GL11.GL_BACK);
 
 		try(ShaderSession ss = ambientShader.start())
 		{
@@ -201,8 +199,7 @@ public class Routine1 extends WindowRoutine
 		if(DemoGame.getInstance().directional)
 		{
 			
-			GLUtils.blend(true);
-			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GLUtils.blend(GL11.GL_ONE, GL11.GL_ONE);
 			
 			try(ShaderSession ss = directionalLightShader.start())
 			{
@@ -219,7 +216,7 @@ public class Routine1 extends WindowRoutine
 			GLUtils.blend(false);
 		}
 
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GLUtils.cullFace(false);
 	}
 	
 	private void renderWorld(double delta)

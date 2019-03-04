@@ -13,12 +13,33 @@ public class GLUtils
 {
 	private GLUtils() { }
 	
+	public static void cullFace(boolean state)
+	{
+		if(state)
+			GL11.glEnable(GL11.GL_CULL_FACE);
+		else
+			GL11.glDisable(GL11.GL_CULL_FACE);
+	}
+	
+	public static void cullFace(int face)
+	{
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(face);
+
+	}
+	
 	public static void blend(boolean state)
 	{
 		if(state)
 			GL11.glEnable(GL11.GL_BLEND);
 		else
 			GL11.glDisable(GL11.GL_BLEND);
+	}
+	
+	public static void blend(int src, int dst)
+	{
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(src, dst);
 	}
 	
 	public static void multisample(boolean state)

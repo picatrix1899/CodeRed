@@ -75,9 +75,10 @@ public abstract class ResourceLoader<T>
 			if(exception != null)
 				response.resourceError = new ResourceErrorThrownException(exception);
 			
+			this.pendingIds.remove(id);
+			
 			callback.callback(response);
 			
-			this.pendingIds.remove(id);
 			return null;
 		};
 		

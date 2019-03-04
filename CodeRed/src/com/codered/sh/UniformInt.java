@@ -4,10 +4,11 @@ public class UniformInt extends Uniform
 {
 	private int value = 0;
 	
+	private int location = -1;
+	
 	public UniformInt(String name, Object... data)
 	{
 		super(name);
-		addUniform("");
 	}
 
 	@Override
@@ -21,7 +22,13 @@ public class UniformInt extends Uniform
 	@Override
 	public void load()
 	{
-		loadInt("", this.value);
+		loadInt(this.location, this.value);
+	}
+
+	@Override
+	public void loadUniformLocations(int shaderProgrammId)
+	{
+		this.location = getLocationFor(this.name, shaderProgrammId);
 	}
 
 }

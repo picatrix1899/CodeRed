@@ -6,11 +6,12 @@ public class UniformTexture2D extends Uniform
 	private int texture;
 	private int index;
 	
+	private int location = -1;
+	
 	public UniformTexture2D(String name, Object... data)
 	{
 		super(name);
 		this.index = (int)data[0];
-		addUniform("");
 	}
 	
 	@Override
@@ -24,7 +25,13 @@ public class UniformTexture2D extends Uniform
 	@Override
 	public void load()
 	{
-		loadTexture2D("", this.index, this.texture);
+		loadTexture2D(this.location, this.index, this.texture);
+	}
+
+	@Override
+	public void loadUniformLocations(int shaderProgrammId)
+	{
+		this.location = getLocationFor(this.name, shaderProgrammId);
 	}
 
 }

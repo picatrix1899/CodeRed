@@ -1,8 +1,8 @@
 package com.codered.resource;
 
 import java.io.File;
+import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
@@ -18,7 +18,6 @@ import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 public class DRM
 {
@@ -360,102 +359,93 @@ public class DRM
 	{
 		if(this.currentBlock != null)
 		{
-			Set<String> removedPendingTextures = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingTextures())
+			for(ListIterator<String> it = this.currentBlock.getPendingTextures().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.textures().isAvailable(id))
 				{
 					generateTexture(id);
-					removedPendingTextures.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingTextures)
-				this.currentBlock.getPendingTextures().remove(id);
-			
-			Set<String> removedPendingStaticMeshes = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingStaticMeshes())
+
+			for(ListIterator<String> it = this.currentBlock.getPendingStaticMeshes().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.staticMeshs().isAvailable(id))
 				{
 					generateStaticMesh(id);
-					removedPendingStaticMeshes.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingStaticMeshes)
-				this.currentBlock.getPendingStaticMeshes().remove(id);
 			
-			Set<String> removedPendingMaterials = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingMaterials())
+			for(ListIterator<String> it = this.currentBlock.getPendingMaterials().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.materials().isAvailable(id))
 				{
 					generateMaterial(id);
-					removedPendingMaterials.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingMaterials)
-				this.currentBlock.getPendingMaterials().remove(id);
 			
-			Set<String> removedPendingVertexShaderParts = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingVertexShaderParts())
+			for(ListIterator<String> it = this.currentBlock.getPendingVertexShaderParts().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.vertexShaderParts().isAvailable(id))
 				{
 					generateVertexShaderPart(id);
-					removedPendingVertexShaderParts.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingVertexShaderParts)
-				this.currentBlock.getPendingVertexShaderParts().remove(id);
 			
-			Set<String> removedPendingFragmentShaderParts = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingFragmentShaderParts())
+			for(ListIterator<String> it = this.currentBlock.getPendingFragmentShaderParts().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.fragmentShaderParts().isAvailable(id))
 				{
-					
 					generateFragmentShaderPart(id);
-					removedPendingFragmentShaderParts.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingFragmentShaderParts)
-				this.currentBlock.getPendingFragmentShaderParts().remove(id);
 			
-			Set<String> removedPendingGeometryShaderParts = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingGeometryShaderParts())
+			for(ListIterator<String> it = this.currentBlock.getPendingGeometryShaderParts().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.geometryShaderParts().isAvailable(id))
 				{
 					generateGeometryShaderPart(id);
-					removedPendingGeometryShaderParts.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingGeometryShaderParts)
-				this.currentBlock.getPendingGeometryShaderParts().remove(id);
 			
-			Set<String> removedPendingTessellationControlShaderParts = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingTessellationControlShaderParts())
+			for(ListIterator<String> it = this.currentBlock.getPendingTessellationControlShaderParts().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.tessellationControlShaderParts().isAvailable(id))
 				{
 					generateTessellationControlShaderPart(id);
-					removedPendingTessellationControlShaderParts.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingTessellationControlShaderParts)
-				this.currentBlock.getPendingTessellationControlShaderParts().remove(id);
 			
-			Set<String> removedPendingTessellationEvaluationShaderParts = Sets.newHashSet();
-			for(String id : this.currentBlock.getPendingTessellationEvaluationShaderParts())
+			for(ListIterator<String> it = this.currentBlock.getPendingTessellationEvaluationShaderParts().listIterator(); it.hasNext();)
 			{
+				String id = it.next();
+				
 				if(this.rm.tessellationEvaluationShaderParts().isAvailable(id))
 				{
 					generateTessellationEvaluationShaderPart(id);
-					removedPendingTessellationEvaluationShaderParts.add(id);
+					it.remove();
 				}
 			}
-			for(String id : removedPendingTessellationEvaluationShaderParts)
-				this.currentBlock.getPendingTessellationEvaluationShaderParts().remove(id);
 			
 			if(this.currentBlock.isFinished()) this.currentBlock = null;
 		}

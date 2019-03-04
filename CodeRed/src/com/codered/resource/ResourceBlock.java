@@ -1,21 +1,20 @@
 package com.codered.resource;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ResourceBlock
 {
 	private boolean isCritical = false;
 	
-	private Set<String> pendingTextures = Sets.newHashSet();
- 	private Set<String> pendingStaticMeshes = Sets.newHashSet();
- 	private Set<String> pendingMaterials = Sets.newHashSet();
-	private Set<String> pendingVertexShaderParts = Sets.newHashSet();
-	private Set<String> pendingFragmentShaderParts = Sets.newHashSet();
-	private Set<String> pendingGeometryShaderParts = Sets.newHashSet();
-	private Set<String> pendingTessellationControlShaderParts = Sets.newHashSet();
-	private Set<String> pendingTessellationEvaluationShaderParts = Sets.newHashSet();
+	private List<String> pendingTextures = new LinkedList<>();
+ 	private List<String> pendingStaticMeshes = new LinkedList<>();
+ 	private List<String> pendingMaterials = new LinkedList<>();
+	private List<String> pendingVertexShaderParts = new LinkedList<>();
+	private List<String> pendingFragmentShaderParts = new LinkedList<>();
+	private List<String> pendingGeometryShaderParts = new LinkedList<>();
+	private List<String> pendingTessellationControlShaderParts = new LinkedList<>();
+	private List<String> pendingTessellationEvaluationShaderParts = new LinkedList<>();
 	
 	public ResourceBlock(boolean critical)
 	{
@@ -67,42 +66,42 @@ public class ResourceBlock
 		return this.isCritical;
 	}
 	
-	public Set<String> getPendingTextures()
+	public List<String> getPendingTextures()
 	{
 		return this.pendingTextures;
 	}
 	
-	public Set<String> getPendingStaticMeshes()
+	public List<String> getPendingStaticMeshes()
 	{
 		return this.pendingStaticMeshes;
 	}
 	
-	public Set<String> getPendingMaterials()
+	public List<String> getPendingMaterials()
 	{
 		return this.pendingMaterials;
 	}
 	
-	public Set<String> getPendingVertexShaderParts()
+	public List<String> getPendingVertexShaderParts()
 	{
 		return this.pendingVertexShaderParts;
 	}
 	
-	public Set<String> getPendingFragmentShaderParts()
+	public List<String> getPendingFragmentShaderParts()
 	{
 		return this.pendingFragmentShaderParts;
 	}
 	
-	public Set<String> getPendingGeometryShaderParts()
+	public List<String> getPendingGeometryShaderParts()
 	{
 		return this.pendingGeometryShaderParts;
 	}
 	
-	public Set<String> getPendingTessellationControlShaderParts()
+	public List<String> getPendingTessellationControlShaderParts()
 	{
 		return this.pendingTessellationControlShaderParts;
 	}
 	
-	public Set<String> getPendingTessellationEvaluationShaderParts()
+	public List<String> getPendingTessellationEvaluationShaderParts()
 	{
 		return this.pendingTessellationEvaluationShaderParts;
 	}

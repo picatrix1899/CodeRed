@@ -74,6 +74,8 @@ public class ResourceManagerPart<T>
 		if(!this.lookup.contains(id)) throw new MissingResourceLookupException(this.type, id);
 		if(this.storage.contains(id)) return;
 
+		System.out.println(id);
+		
 		this.loader.loadResource(id, this.lookup.get(id), (response) ->
 		{
 			if(response.resourceError == null) this.storage.add(id, response.resourceData);

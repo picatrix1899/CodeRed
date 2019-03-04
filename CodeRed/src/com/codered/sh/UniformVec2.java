@@ -7,10 +7,11 @@ public class UniformVec2 extends Uniform
 {
 	private Vec2f value = new Vec2f();
 	
+	private int location = -1;
+	
 	public UniformVec2(String name, Object... data)
 	{
 		super(name);
-		addUniform("");
 	}
 
 	@Override
@@ -24,7 +25,13 @@ public class UniformVec2 extends Uniform
 	@Override
 	public void load()
 	{
-		loadVec2f("", this.value.getX(), this.value.getY());
+		loadVec2f(this.location, this.value.getX(), this.value.getY());
+	}
+
+	@Override
+	public void loadUniformLocations(int shaderProgrammId)
+	{
+		this.location = getLocationFor(this.name, shaderProgrammId);
 	}
 
 }

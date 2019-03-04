@@ -100,7 +100,7 @@ public class InternalResourceManager
 		{
 			TextureData data = TextureLoader.loadTexture(filename + ".png");
 			
-			Texture texture = TextureUtils.genTexture(data, this.context);
+			Texture texture = TextureUtils.genTexture(data);
 			
 			FontType font = new FontType(texture, new File(filename + ".fnt"));
 			

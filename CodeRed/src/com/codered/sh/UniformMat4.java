@@ -5,12 +5,13 @@ import org.barghos.math.matrix.Mat4f;
 public class UniformMat4 extends Uniform
 {
 
-	Mat4f mat = new Mat4f();
+	private Mat4f mat = new Mat4f();
+	
+	private int location = -1;
 	
 	public UniformMat4(String name, Object... data)
 	{
 		super(name);
-		addUniform("");
 	}
 
 	@Override
@@ -24,7 +25,13 @@ public class UniformMat4 extends Uniform
 	@Override
 	public void load()
 	{
-		loadMat4("", this.mat);
+		loadMat4(this.location, this.mat);
+	}
+
+	@Override
+	public void loadUniformLocations(int shaderProgrammId)
+	{
+		this.location = getLocationFor(this.name, shaderProgrammId);
 	}
 
 }

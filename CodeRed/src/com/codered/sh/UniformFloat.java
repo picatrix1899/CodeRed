@@ -4,10 +4,11 @@ public class UniformFloat extends Uniform
 {
 	private float value = 0;
 	
+	private int location = -1;
+	
 	public UniformFloat(String name, Object... data)
 	{
 		super(name);
-		addUniform("");
 	}
 
 	@Override
@@ -21,7 +22,13 @@ public class UniformFloat extends Uniform
 	@Override
 	public void load()
 	{
-		loadFloat("", this.value);
+		loadFloat(this.location, this.value);
+	}
+
+	@Override
+	public void loadUniformLocations(int shaderProgrammId)
+	{
+		this.location = getLocationFor(this.name, shaderProgrammId);
 	}
 
 }
