@@ -2,6 +2,7 @@ package com.codered.window;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
+import com.codered.input.NInput;
 import com.codered.managing.VAOManager;
 import com.codered.resource.DRM;
 import com.codered.resource.ResourceManager;
@@ -19,7 +20,8 @@ public class WindowContext
 	private DRM drm;
 	
 	private Input input;
-
+	private NInput ninput;
+	
 	public WindowContext(String name, Window window, WindowRoutine routine)
 	{
 		this.window = window;
@@ -44,6 +46,7 @@ public class WindowContext
 		this.resourceManager = new ResourceManager();
 		this.drm = new DRM();
 		this.input = new Input();
+		this.ninput = new NInput(this);
 		this.routine.init();
 	}
 	
@@ -56,7 +59,8 @@ public class WindowContext
 		
 		this.input.update(delta);
 		this.drm.update(delta);
-		this.routine.update(delta);
+		this.routine.update(delta);	
+		this.ninput.update();
 	}
 	
 	public void render(double delta)
@@ -93,7 +97,8 @@ public class WindowContext
 	public Window getWindow() { return this.window; }
 
 	public Input getInputManager() { return this.input; }
-
+	public NInput getInputManager2() { return this.ninput; }
+	
 	public String getName() { return this.name; }
 	
 	/*

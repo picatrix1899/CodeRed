@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.barghos.core.color.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
-
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
@@ -16,6 +16,7 @@ import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.input.InputConfiguration;
 import com.codered.input.Key;
+import com.codered.input.NInputConfiguration;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.resource.ResourceBlock;
@@ -77,11 +78,16 @@ public class Routine1 extends WindowRoutine
 		
 		config.registerButton(Keys.b_moveCam);
 		config.registerButton(Keys.b_fire);
-		
-		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.ESCAPE)) Engine.getInstance().stop(false); });
+
 		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.Q)) DemoGame.getInstance().directional = !DemoGame.getInstance().directional; });
 		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.TAB)) {DemoGame.getInstance().showInventory = true; this.inventory.open();} });
 
+		NInputConfiguration cdf = new NInputConfiguration();
+		cdf.registerKey(GLFW.GLFW_KEY_ESCAPE);
+		cdf.registerKey(GLFW.GLFW_KEY_2);
+		
+		this.context.getInputManager2().pushInputConfiguration(cdf);
+		
 		this.context.getInputManager().setConfiguration(config);
 		
 		ResourceBlock block2 = new ResourceBlock(true);
@@ -133,6 +139,7 @@ public class Routine1 extends WindowRoutine
 	
 	public void update(double delta)
 	{
+		if(this.context.getInputManager2().isPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
 		if(this.initializing)
 		{
 			if(!this.context.getDRM().isOccupied())

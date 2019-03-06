@@ -73,13 +73,13 @@ public class EngineRoutine
 					frameCounter = 0;
 				}				
 				
-				this.engine.update(this.time.getDelta());
+				this.engine.update(frameTime);
 				
 			}
 			
 			if(render)
 			{
-				this.engine.render(this.time.getDelta());
+				this.engine.render(frameTime);
 				frames++;
 			}
 		}
