@@ -38,8 +38,8 @@ public class Area
 	
 	public boolean mouseIsInsideInclusive()
 	{
-		float mX = this.context.getInputManager().getMouseX();
-		float mY = this.context.getInputManager().getMouseY();
+		float mX = this.context.getMouse().getCurrentPos().x;
+		float mY = this.context.getMouse().getCurrentPos().y;
 
 		boolean bX = mX >= minX && mX <= maxX;
 		boolean bY = mY >= minY && mY <= maxY;
@@ -49,8 +49,8 @@ public class Area
 
 	public boolean mouseIsInsideExclusive()
 	{
-		float mX = this.context.getInputManager().getMouseX();
-		float mY = this.context.getInputManager().getMouseY();
+		float mX = this.context.getMouse().getCurrentPos().x;
+		float mY = this.context.getMouse().getCurrentPos().y;
 
 		boolean bX = mX > minX && mX < maxX;
 		boolean bY = mY > minY && mY < maxY;

@@ -106,8 +106,10 @@ public class Window
 	
 	public void update(double delta)
 	{
-		glfwPollEvents();
+		//glfwPollEvents();
 
+		glfwWaitEventsTimeout(5);
+		
 		if(glfwWindowShouldClose(this.window))
 			WindowClose.fire(NoArgs.getInstance());
 	}

@@ -6,7 +6,7 @@ public class Time
 	
 	private double delta;
 	private int fps;
-	private int fps_cap = 30;
+	private int fps_cap = 60;
 	
 	public long getTime() { return System.nanoTime(); }
 	

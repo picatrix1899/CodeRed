@@ -10,13 +10,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.codered.BuiltInShaders;
 import com.codered.StaticEntityTreeImpl;
-import com.codered.demo.GlobalSettings.Keys;
 import com.codered.engine.Engine;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.input.InputConfiguration;
-import com.codered.input.Key;
-import com.codered.input.NInputConfiguration;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.resource.ResourceBlock;
@@ -61,34 +58,18 @@ public class Routine1 extends WindowRoutine
 		loadingScreen = new GuiLoadingScreen();
 		
 		this.initializing = true;
-		
-		GlobalSettings.ingameInput = new InputConfiguration();
-		InputConfiguration config = GlobalSettings.ingameInput;
-		config.registerKey(Keys.k_forward);
-		config.registerKey(Keys.k_back);
-		config.registerKey(Keys.k_left);
-		config.registerKey(Keys.k_right);
-		config.registerKey(Keys.k_up);
-		config.registerKey(Keys.k_exit);
-		config.registerKey(Keys.k_turnLeft);
-		config.registerKey(Keys.k_turnRight);
-		config.registerKey(Keys.k_delete);
-		config.registerKey(Key.Q);
-		config.registerKey(Key.TAB);
-		
-		config.registerButton(Keys.b_moveCam);
-		config.registerButton(Keys.b_fire);
 
-		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.Q)) DemoGame.getInstance().directional = !DemoGame.getInstance().directional; });
-		config.keyStroke.addHandler((src) -> {if(src.keyPresent(Key.TAB)) {DemoGame.getInstance().showInventory = true; this.inventory.open();} });
-
-		NInputConfiguration cdf = new NInputConfiguration();
+		InputConfiguration cdf = new InputConfiguration();
 		cdf.registerKey(GLFW.GLFW_KEY_ESCAPE);
-		cdf.registerKey(GLFW.GLFW_KEY_2);
+		cdf.registerKey(GLFW.GLFW_KEY_Q);
+		cdf.registerKey(GLFW.GLFW_KEY_TAB);
+		cdf.registerKey(GLFW.GLFW_KEY_W);
+		cdf.registerKey(GLFW.GLFW_KEY_A);
+		cdf.registerKey(GLFW.GLFW_KEY_S);
+		cdf.registerKey(GLFW.GLFW_KEY_D);
+		cdf.registerMouseButton(2);
 		
-		this.context.getInputManager2().pushInputConfiguration(cdf);
-		
-		this.context.getInputManager().setConfiguration(config);
+		this.context.getInputManager().pushInputConfiguration(cdf);
 		
 		ResourceBlock block2 = new ResourceBlock(true);
 		block2.addTexture("res/materials/gray_rsquare.png");
@@ -118,7 +99,7 @@ public class Routine1 extends WindowRoutine
 		
 		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
 		
-		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 50, 0.1, 1000);
+		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 60, 0.1, 1000);
 		
 		this.world = new StaticEntityTreeImpl();
 		
@@ -139,7 +120,9 @@ public class Routine1 extends WindowRoutine
 	
 	public void update(double delta)
 	{
-		if(this.context.getInputManager2().isPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
+		if(!DemoGame.getInstance().showInventory)
+			if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
+		
 		if(this.initializing)
 		{
 			if(!this.context.getDRM().isOccupied())
@@ -147,6 +130,20 @@ public class Routine1 extends WindowRoutine
 				initPhase1();
 				this.initializing = false;
 			}
+		}
+		else
+		{
+			if(!DemoGame.getInstance().showInventory)
+			{
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) DemoGame.getInstance().directional = !DemoGame.getInstance().directional;
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
+				this.player.update(delta);
+			}
+			else
+			{
+				this.inventory.update();
+			}
+
 		}
 	}
 
@@ -181,13 +178,10 @@ public class Routine1 extends WindowRoutine
 		
 	}
 
-
 	private void renderWorldFromCamera(double delta, Camera cam)
 	{
 		GLUtils.depthFunc(EvalFunc.LEQUAL);
 
-		Iterator<StaticEntity> it = this.world.iterator();
-		
 		GLUtils.cullFace(GL11.GL_BACK);
 
 		try(ShaderSession ss = ambientShader.start())
@@ -195,13 +189,11 @@ public class Routine1 extends WindowRoutine
 			ambientShader.setUniformValue("ambientLight.base.color", this.ambient.base.color);
 			ambientShader.setUniformValue("ambientLight.base.intensity", this.ambient.base.intensity);
 			
-			while(it.hasNext())
+			for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 			{
 				RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection);
 			}
 		}
-
-		it = this.world.iterator();
 		
 		if(DemoGame.getInstance().directional)
 		{
@@ -214,7 +206,7 @@ public class Routine1 extends WindowRoutine
 				directionalLightShader.setUniformValue("directionalLight.base.intensity", this.directionalLight.base.intensity);
 				directionalLightShader.setUniformValue("directionalLight.direction", this.directionalLight.direction);
 				
-				while(it.hasNext())
+				for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 				{
 					RenderHelper.renderStaticEntity2(it.next(), cam, directionalLightShader, this.projection);
 				}

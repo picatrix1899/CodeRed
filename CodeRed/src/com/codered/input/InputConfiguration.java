@@ -1,267 +1,122 @@
 package com.codered.input;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.Stack;
-
-import org.barghos.core.event.Event;
-import org.barghos.core.event.EventArgs;
-import org.lwjgl.glfw.GLFW;
-
-import com.codered.window.WindowContext;
-import com.google.common.collect.Sets;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 public class InputConfiguration
 {
-	private Set<Integer> registeredKeys = Sets.newHashSet();
-	private Set<Integer> registeredButtons = Sets.newHashSet();
+	private List<Integer> registeredKeys = new ArrayList<>();
+	private Map<Integer,Boolean> lastKeyStates = new HashMap<>();
+	private Map<Integer,Boolean> currentKeyStates = new HashMap<>();
 	
-	private Stack<InputConfiguration> dubConfigurations = new Stack<InputConfiguration>();
-	
-	public Event<KeyEventArgs> keyStroke = new Event<KeyEventArgs>();
-	public Event<KeyEventArgs> keyPress = new Event<KeyEventArgs>();
-	public Event<KeyEventArgs> keyRelease = new Event<KeyEventArgs>();
-	
-	public Event<ButtonEventArgs> buttonStroke = new Event<ButtonEventArgs>();
-	public Event<ButtonEventArgs> buttonPress = new Event<ButtonEventArgs>();
-	public Event<ButtonEventArgs> buttonRelease = new Event<ButtonEventArgs>();
-	
-	private HashMap<Integer,Boolean> lastKeyDown = new HashMap<Integer,Boolean>();
-	private HashMap<Integer,Boolean> isKeyDown = new HashMap<Integer,Boolean>();
-	
-	private HashMap<Integer,Boolean> lastButtonDown = new HashMap<Integer,Boolean>();
-	private HashMap<Integer,Boolean> isButtonDown = new HashMap<Integer,Boolean>();
-	
-	public boolean isPending = false;
-	
-	public void pushDubConfiguration(InputConfiguration config)
-	{
-		this.dubConfigurations.push(config);
-		this.dubConfigurations.peek().isPending = true;
-	}
-	
-	public void popDubConfiguration()
-	{
-		this.dubConfigurations.pop();
-		if(this.dubConfigurations.isEmpty())
-		{
-			this.isPending = true;
-		}
-		else
-		{
-			this.dubConfigurations.peek().isPending = true;
-		}
-	}
-	
+	private List<Integer> registeredMouseButtons = new ArrayList<>();
+	private Map<Integer,Boolean> lastMouseButtonStates = new HashMap<>();
+	private Map<Integer,Boolean> currentMouseButtonStates = new HashMap<>();
+ 	
 	public void registerKey(int key)
 	{
 		this.registeredKeys.add(key);
-		this.isKeyDown.put(key, false);
-		this.lastKeyDown.put(key, false);
-	}
-	
-	public void registerKey(Key key)
-	{
-		this.registeredKeys.add(key.getId());
-		this.isKeyDown.put(key.getId(), false);
-		this.lastKeyDown.put(key.getId(), false);
-	}
-	
-	public void registerButton(int button)
-	{
-		this.registeredButtons.add(button);
-		this.isButtonDown.put(button, false);
-		this.lastButtonDown.put(button, false);
-	}
-	
-	public void registerButton(MouseButton button)
-	{
-		this.registeredButtons.add(button.getId());
-		this.isButtonDown.put(button.getId(), false);
-		this.lastButtonDown.put(button.getId(), false);
+		this.lastKeyStates.put(key, false);
+		this.currentKeyStates.put(key, false);
 	}
 	
 	public void unregisterKey(int key)
 	{
 		this.registeredKeys.remove(key);
-		this.isKeyDown.remove(key);
-		this.lastKeyDown.remove(key);
+		this.lastKeyStates.remove(key);
+		this.currentKeyStates.remove(key);
 	}
 	
-	public void unregisterKey(Key key)
+	public void registerMouseButton(int button)
 	{
-		this.registeredKeys.remove(key.getId());
-		this.isKeyDown.remove(key.getId());
-		this.lastKeyDown.remove(key.getId());
+		this.registeredMouseButtons.add(button);
+		this.lastMouseButtonStates.put(button, false);
+		this.currentMouseButtonStates.put(button, false);
 	}
 	
-	public void unregisterButton(int button)
+	public void unregisterMouseButton(int button)
 	{
-		this.registeredButtons.remove(button);
-		this.isButtonDown.remove(button);
-		this.lastButtonDown.remove(button);
+		this.registeredMouseButtons.add(button);
+		this.lastMouseButtonStates.put(button, false);
+		this.currentMouseButtonStates.put(button, false);
 	}
 	
-	public void unregisterButton(MouseButton button)
-	{
-		this.registeredButtons.remove(button.getId());
-		this.isButtonDown.remove(button.getId());
-		this.lastButtonDown.remove(button.getId());
-	}
-	
-	public Set<Integer> getRegisteredKeys()
+	public List<Integer> getRegisteredKeys()
 	{
 		return this.registeredKeys;
 	}
 	
-	public Set<Integer> getRegisteredButtons()
+	public List<Integer> getRegisteredMouseButtons()
 	{
-		return this.registeredButtons;
+		return this.registeredMouseButtons;
 	}
-	
-	public void update(double delta, WindowContext context)
+			
+	public void update()
 	{
-		if(this.dubConfigurations.isEmpty())
+		for(Iterator<Integer> it = this.registeredKeys.iterator(); it.hasNext();)
 		{
-			updateInternal(delta, context);
+			int key = it.next();
+			this.lastKeyStates.put(key, this.currentKeyStates.get(key));
 		}
-		else
-		{
-			this.dubConfigurations.peek().update(delta, context);
-		}
-	}
-	
-	private void updateInternal(double delta, WindowContext context)
-	{
-		Set<Integer> keyStrokes = Sets.newHashSet();
-		Set<Integer> keyHolds = Sets.newHashSet();
-		Set<Integer> keyReleases = Sets.newHashSet();
 		
-		Set<Integer> buttonStrokes = Sets.newHashSet();
-		Set<Integer> buttonHolds = Sets.newHashSet();
-		Set<Integer> buttonReleases = Sets.newHashSet();
-		
-		for(int key : this.registeredKeys)
+		for(Iterator<Integer> it = this.registeredMouseButtons.iterator(); it.hasNext();)
 		{
-			this.lastKeyDown.put(key, this.isKeyDown.get(key));
-			
-			if(GLFW.glfwGetKey(context.getWindowId(), key) == GLFW.GLFW_PRESS)
-			{
-				this.isKeyDown.put(key, true);		
-			}
-			else if(GLFW.glfwGetKey(context.getWindowId(), key) == GLFW.GLFW_RELEASE)
-			{
-				this.isKeyDown.put(key, false);	
-			}
-			
-			if(this.lastKeyDown.get(key) == false && this.isKeyDown.get(key) == true)
-			{
-				keyStrokes.add(key);
-				keyHolds.add(key);
-			}
-			
-			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == false)
-			{
-				keyHolds.add(key);
-			}
-			
-			if(this.lastKeyDown.get(key) == true && this.isKeyDown.get(key) == true)
-			{
-				keyReleases.add(key);
-				keyHolds.add(key);
-			}
-		}
-
-		for(int button : this.registeredButtons)
-		{
-			lastButtonDown.put(button, isButtonDown.get(button));
-			if(GLFW.glfwGetMouseButton(context.getWindowId(), button) == GLFW.GLFW_PRESS)
-			{
-				isButtonDown.put(button, true);
-			}
-			else if(GLFW.glfwGetMouseButton(context.getWindowId(), button) == GLFW.GLFW_RELEASE)
-			{
-				isButtonDown.put(button, false);
-			}
-			
-			if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
-			{
-				buttonStrokes.add(button);
-				buttonHolds.add(button);
-			}
-			
-			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == true)
-			{
-				buttonHolds.add(button);
-			}
-			else
-			{
-				if(lastButtonDown.get(button) == false && isButtonDown.get(button) == true)
-				{
-					buttonHolds.add(button);
-				}
-			}
-			
-			if(lastButtonDown.get(button) == true && isButtonDown.get(button) == false)
-			{
-				buttonReleases.add(button);
-				buttonHolds.add(button);
-			}
-		}
-
-		if(this.isPending)
-		{
-			if(!this.isKeyDown.containsValue(true) && !this.isButtonDown.containsValue(true))
-			{
-				this.isPending = false;
-			}
-		}
-		else
-		{
-			if(!keyStrokes.isEmpty()) this.keyStroke.fire(new KeyEventArgs(keyStrokes, delta));
-			if(!keyHolds.isEmpty()) this.keyPress.fire(new KeyEventArgs(keyHolds, delta));
-			if(!keyReleases.isEmpty()) this.keyRelease.fire(new KeyEventArgs(keyReleases, delta));
-			if(!buttonStrokes.isEmpty()) this.buttonStroke.fire(new ButtonEventArgs(new ButtonResponse(buttonStrokes), delta));
-			if(!buttonHolds.isEmpty()) this.buttonPress.fire(new ButtonEventArgs(new ButtonResponse(buttonHolds), delta));
-			if(!buttonReleases.isEmpty()) this.buttonRelease.fire(new ButtonEventArgs(new ButtonResponse(buttonReleases), delta));
+			int mouseButton = it.next();
+			this.lastMouseButtonStates.put(mouseButton, this.currentMouseButtonStates.get(mouseButton));
 		}
 	}
 	
-	public class KeyEventArgs implements EventArgs
+	public boolean hasActiveKeys()
 	{
-		private ArrayList<Integer> keys = new ArrayList<Integer>();
-		
-		public double delta;
-		
-		public boolean keyPresent(int key)
-		{
-			return this.keys.contains(key);
-		}
-		
-		public boolean keyPresent(Key key)
-		{
-			return this.keys.contains(key.getId());
-		}
-		
-		public KeyEventArgs(Collection<Integer> keys, double delta)
-		{
-			this.keys.addAll(keys);
-			this.delta = delta;
-		}
+		return this.lastKeyStates.containsValue(true) || this.currentKeyStates.containsValue(true);
 	}
 	
-	public class ButtonEventArgs implements EventArgs
+	public boolean hasActiveMouseButtons()
 	{
-		public ButtonResponse response;
-		public double delta;
-		
-		public ButtonEventArgs(ButtonResponse response, double delta)
-		{
-			this.response = response;
-			this.delta = delta;
-		}
+		return this.lastMouseButtonStates.containsValue(true) || this.currentMouseButtonStates.containsValue(true);
+	}
+	
+	public void setKey(int key, boolean value)
+	{
+		this.currentKeyStates.put(key, value);
+	}
+	
+	public void setMouseButton(int button, boolean value)
+	{
+		this.currentMouseButtonStates.put(button, value);
+	}
+	
+	public boolean isKeyPressed(int key)
+	{
+		return !this.lastKeyStates.get(key) && this.currentKeyStates.get(key);
+	}
+	
+	public boolean isKeyHold(int key)
+	{
+		return this.lastKeyStates.get(key) || this.currentKeyStates.get(key);
+	}
+	
+	public boolean isKeyReleased(int key)
+	{
+		return this.lastKeyStates.get(key) && !this.currentKeyStates.get(key);
+	}
+	
+	public boolean isMouseButtonPressed(int key)
+	{
+		return !this.lastMouseButtonStates.get(key) && this.currentMouseButtonStates.get(key);
+	}
+	
+	public boolean isMouseButtonHold(int key)
+	{
+		return this.lastMouseButtonStates.get(key) || this.currentMouseButtonStates.get(key);
+	}
+	
+	public boolean isMouseButtonReleased(int key)
+	{
+		return this.lastMouseButtonStates.get(key) && !this.currentMouseButtonStates.get(key);
 	}
 }

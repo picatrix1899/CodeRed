@@ -6,18 +6,15 @@ import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
+import org.lwjgl.glfw.GLFW;
 
 import com.codered.ConvUtils;
 import com.codered.StaticEntityTreeImpl;
-import com.codered.demo.GlobalSettings.Keys;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.BaseEntity;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.GUIWindow;
-import com.codered.input.InputConfiguration;
-import com.codered.input.InputConfiguration.ButtonEventArgs;
-import com.codered.input.InputConfiguration.KeyEventArgs;
 import com.codered.window.WindowContext;
 
 import cmn.utilslib.math.geometry.AABB3f;
@@ -38,8 +35,6 @@ public class Player extends BaseEntity
 	public GUIWindow window;
 	
 	private Camera camera;
-	
-	private long selectedEntity = -1;
 	
 	private WindowContext context;
 	
@@ -65,81 +60,62 @@ public class Player extends BaseEntity
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
-		
-		InputConfiguration config = GlobalSettings.ingameInput;
-		
-		config.keyPress.addHandler((src) -> updateMovement(src));
-		config.buttonStroke.addHandler((src) -> buttonStroke(src));
-		config.buttonRelease.addHandler((src) -> buttonRelease(src));
-		config.buttonPress.addHandler((src) -> buttonPress(src));
 	}
 	
-	private void buttonStroke(ButtonEventArgs args)
+	public void update(double delta)
 	{
-		if(args.response.buttonPresent(Keys.b_moveCam))
+		updateMovement(delta);
+		updateOrientation(delta);
+	}
+	
+	public void updateOrientation(double delta)
+	{
+		if(this.context.getInputManager().isMouseButtonPressed(2))
 		{
-			this.context.getInputManager().setMouseGrabbed(true);
+			this.context.getMouse().grab(true);
 		}
-	}
-	
-	private void buttonPress(ButtonEventArgs args)
-	{
-		if(args.response.buttonPresent(Keys.b_moveCam))
+		
+		if(this.context.getInputManager().isMouseButtonHold(2))
 		{
 			updateOrientation();
 		}
-	}
-	
-	private void buttonRelease(ButtonEventArgs args)
-	{
-		if(args.response.buttonPresent(Keys.b_moveCam))
+		
+		if(this.context.getInputManager().isMouseButtonReleased(2))
 		{
-			this.context.getInputManager().setMouseGrabbed(false);
+			this.context.getMouse().grab(false);
 		}
 	}
 	
-	
-	
-	private void updateMovement(KeyEventArgs args)
+	public void updateMovement(double delta)
 	{
 		Vec3f dir = new Vec3f();
 		Vec3f vel = new Vec3f();
-
-		if(args.keyPresent(Keys.k_delete))
-		{
-			if(this.selectedEntity != -1)
-			{
-				this.selectedEntity = -1;
-			}
-		}
 		
-		if(args.keyPresent(Keys.k_forward))
+		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_W))
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, null).normal(), dir);
 		}
 		
-		if(args.keyPresent(Keys.k_right))
+		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_D))
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, null).normal(), dir);
 		}
 		
-		if(args.keyPresent(Keys.k_left))
+		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_A))
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, null).normal(), dir);
 		}
 		
-		if(args.keyPresent(Keys.k_back))
+		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_S))
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, null).normal(), dir);
 		}
 		
-		if(dir.length() == 0) { return; }
+		if(dir.squaredLength() == 0) { return; }
 		
 		dir.normal();
-		
-		float time = (float)args.delta;
-		
-		float acceleration = 20.0f * time;
+	
+		float acceleration = 20.0f * (float)delta;
 		
 		dir.mul(acceleration, vel);
 		
@@ -209,9 +185,9 @@ public class Player extends BaseEntity
 	
 	private void updateOrientation()
 	{
-		this.camera.rotateYaw(-this.context.getInputManager().getDX());
+		this.camera.rotateYaw(-this.context.getMouse().getDeltaPos().x);
 
-		this.camera.rotatePitch(this.context.getInputManager().getDY());
+		this.camera.rotatePitch(-this.context.getMouse().getDeltaPos().y);
 		
 //		World w = Session.get().getWorld();
 //		

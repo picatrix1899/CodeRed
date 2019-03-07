@@ -39,7 +39,7 @@ public abstract class GUI
 	
 	protected void setMousePos(float x, float y)
 	{
-		this.context.getInputManager().setMousePos(x, this.context.getWindow().getHeight() - y);
+		this.context.getMouse().setMousePos(x, this.context.getWindow().getHeight() - y);
 	}
 	
 	protected void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
@@ -182,8 +182,8 @@ public abstract class GUI
 	
 	public boolean mouseIsInsideInclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = this.context.getInputManager().getMouseX();
-		float mY = this.context.getInputManager().getMouseY();
+		float mX = this.context.getMouse().getCurrentPos().x;
+		float mY = this.context.getMouse().getCurrentPos().y;
 
 		boolean bX = mX >= minX && mX <= maxX;
 		boolean bY = mY >= minY && mY <= maxY;
@@ -193,8 +193,8 @@ public abstract class GUI
 
 	public boolean mouseIsInsideExclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = this.context.getInputManager().getMouseX();
-		float mY = this.context.getInputManager().getMouseY();
+		float mX = this.context.getMouse().getCurrentPos().x;
+		float mY = this.context.getMouse().getCurrentPos().y;
 
 		boolean bX = mX > minX && mX < maxX;
 		boolean bY = mY > minY && mY < maxY;

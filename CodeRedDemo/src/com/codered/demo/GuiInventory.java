@@ -1,10 +1,11 @@
 package com.codered.demo;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
 import com.codered.gui.elements.GUIEButton;
 import com.codered.input.InputConfiguration;
-import com.codered.input.Key;
 
 public class GuiInventory extends GUIWindow
 {
@@ -20,15 +21,21 @@ public class GuiInventory extends GUIWindow
 		super();
 		this.main = parent;
 		inventoryInput = new InputConfiguration();
-		inventoryInput.registerKey(Key.TAB);
-		inventoryInput.registerButton(0);
-		inventoryInput.keyStroke.addHandler((src) -> { if(src.keyPresent(Key.TAB)) close(); });
-		inventoryInput.buttonStroke.addHandler((src) -> { this.button.onClick(); });
+		inventoryInput.registerKey(GLFW.GLFW_KEY_TAB);
+		inventoryInput.registerKey(GLFW.GLFW_KEY_ESCAPE);
+		inventoryInput.registerMouseButton(0);
 		
 		this.button = new GUIEButton(1, this, 0, 0, 60, 82, "res/materials/gray_rsquare.png");
 		this.button.setText("Back Test", 20, "res/fonts/arial", true, false);
 		
 		addElement(this.button);
+	}
+	
+	public void update()
+	{
+		if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) close();
+		if(this.context.getInputManager().isMouseButtonPressed(0)) this.button.onClick();
+		super.update();
 	}
 	
 	public void render()
@@ -40,13 +47,13 @@ public class GuiInventory extends GUIWindow
 	
 	public void open()
 	{
-		GlobalSettings.ingameInput.pushDubConfiguration(inventoryInput);
+		this.context.getInputManager().pushInputConfiguration(inventoryInput);
 	}
 	
 	public void close()
 	{
 		DemoGame.getInstance().showInventory = false;
-		GlobalSettings.ingameInput.popDubConfiguration();
+		this.context.getInputManager().popInputConfiguration();
 	}
 	
 	public boolean allowWorldProcessing()

@@ -1,135 +1,148 @@
+package com.codered.input;
 
- package com.codered.input;
+import java.util.Stack;
 
-import java.nio.DoubleBuffer;
+import static org.lwjgl.glfw.GLFW.*;
 
-import org.lwjgl.glfw.GLFW;
-
-import com.codered.engine.EngineRegistry;
 import com.codered.window.WindowContext;
-
-import cmn.utilslib.essentials.BufferUtils;
-import cmn.utilslib.math.vector.Vector2f;
 
 public class Input
 {
-	private WindowContext context;
-
-	private InputConfiguration configuration;
+	private long windowId;
 	
-	private float DX = 0;
-	private float DY = 0;
+	private Stack<InputConfiguration> configuration = new Stack<>();
+	private boolean isConfigPushPending = false;
+	private boolean isConfigPopPending = false;
+	private InputConfiguration pending; 
 	
-	private int X = 0;
-	private int Y = 0;
-	
-	private double grabX = 0;
-	private double grabY = 0;
-	
-	private boolean lock;
-	private boolean startLocked;
-	
-	private Vector2f center;
-
-	public Input()
+	public Input(WindowContext context)
 	{
-		this.context = EngineRegistry.getCurrentWindowContext();
+		this.windowId = context.getWindowId();
 		
-		this.center = new Vector2f(this.context.getWindow().getWidth() / 2.0, this.context.getWindow().getHeight() / 2.0);
+		glfwSetKeyCallback(this.windowId, (w, k, s, a, m) -> keyCallback(w, k, s, a, m));
+		glfwSetMouseButtonCallback(this.windowId, (w, b, a, m) -> mouseButtonCallback(w, b, a, m));
 	}
 	
-	public void setConfiguration(InputConfiguration config)
+	public void pushInputConfiguration(InputConfiguration config)
 	{
-		this.configuration = config;
-		this.configuration.isPending = true;
+		pending = config;
+		this.isConfigPushPending = true;
 	}
-
-	public void update(double delta)
+	
+	public void popInputConfiguration()
 	{
-		if(this.configuration != null)
-			this.configuration.update(delta, this.context);
+		this.isConfigPopPending = true;
+	}
+	
+	public void keyCallback(long window, int key, int scancode, int action, int mods)
+	{
+		if(window != windowId) return;
+		if(this.configuration.isEmpty()) return;
 		
-		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-		
-		GLFW.glfwGetCursorPos(this.context.getWindowId(), x, y);
-		
-		this.X = (int)x.get();
-		this.Y = (int)y.get();	
-			
-		if(this.lock)
+		if(action == GLFW_RELEASE)
 		{
-			if(this.startLocked)
-			{
-				GLFW.glfwSetCursorPos(this.context.getWindowId(), center.x, center.y);
-				
-				this.startLocked = false;
-			}
-			else
-			{
-				this.DX = this.X - this.center.x;
-				this.DY = this.Y - this.center.y;
-				
-				GLFW.glfwSetCursorPos(this.context.getWindowId(), center.x, center.y);
-			}
-		}
-		
-		
-	}
-
-	public float getDX()
-	{
-		return DX;
-	}
-	
-	public float getDY()
-	{
-		return -DY;
-	}
-	
-	public int getMouseX()
-	{
-		return X;
-	}
-	
-	public int getMouseY()
-	{
-		return Y;
-	}
-	
-	public boolean isMouseGrabbed()
-	{
-		return lock;
-	}
-	
-	public void setMousePos(float x, float y)
-	{
-		GLFW.glfwSetCursorPos(this.context.getWindowId(), x, y);
-	}
-	
-	public void setMouseGrabbed(boolean lock)
-	{
-		this.lock = lock;
-		
-		if(lock)
-		{
-			this.startLocked = true;
-			
-			DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-			DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-			GLFW.glfwGetCursorPos(this.context.getWindowId(), x, y);
-			
-			this.grabX = x.get();
-			this.grabY = y.get();
-			
-			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.context.getWindow().getWidth() / 2.0, this.context.getWindow().getHeight() / 2.0);
-
-			GLFW.glfwSetInputMode(this.context.getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+			this.configuration.peek().setKey(key, false);
 		}
 		else
 		{
-			GLFW.glfwSetInputMode(this.context.getWindowId(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-			GLFW.glfwSetCursorPos(this.context.getWindowId(), this.grabX, this.grabY);
+			this.configuration.peek().setKey(key, true);
 		}
+	}
+	
+	public void mouseButtonCallback(long window, int button, int action, int mods)
+	{
+		if(window != windowId) return;
+		if(this.configuration.isEmpty()) return;
+		
+		if(action == GLFW_RELEASE)
+		{
+			this.configuration.peek().setMouseButton(button, false);
+		}
+		else
+		{
+			this.configuration.peek().setMouseButton(button, true);
+		}
+	}
+	
+	public void update()
+	{
+		if(!this.configuration.isEmpty())
+			this.configuration.peek().update();
+		
+		if(this.isConfigPushPending)
+		{
+			if(!this.configuration.isEmpty())
+			{
+				if(!this.configuration.peek().hasActiveKeys() && !this.configuration.peek().hasActiveMouseButtons())
+				{
+					this.configuration.push(this.pending);
+					this.pending = null;
+					this.isConfigPushPending = false;
+				}
+			}
+			else
+			{
+				this.configuration.push(this.pending);
+				this.pending = null;
+				this.isConfigPushPending = false;
+			}
+		}
+		
+		if(this.isConfigPopPending && !this.configuration.isEmpty())
+		{
+			if(!this.configuration.peek().hasActiveKeys() && !this.configuration.peek().hasActiveMouseButtons())
+			{
+				this.configuration.pop();
+				this.isConfigPopPending = false;
+			}
+		}
+	}
+	
+	public boolean isKeyPressed(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isKeyPressed(key);
+	}
+	
+	public boolean isKeyHold(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isKeyHold(key);
+	}
+	
+	public boolean isKeyReleased(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isKeyReleased(key);
+	}
+	
+	public boolean isMouseButtonPressed(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isMouseButtonPressed(key);
+	}
+	
+	public boolean isMouseButtonHold(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isMouseButtonHold(key);
+	}
+	
+	public boolean isMouseButtonReleased(int key)
+	{
+		if(this.configuration.isEmpty()) return false;
+		if(this.isConfigPopPending || this.isConfigPushPending) return false;
+		
+		return this.configuration.peek().isMouseButtonReleased(key);
 	}
 }
