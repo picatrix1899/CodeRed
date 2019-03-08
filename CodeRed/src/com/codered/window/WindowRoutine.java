@@ -1,6 +1,8 @@
 package com.codered.window;
 
-public abstract class WindowRoutine
+import com.codered.engine.EngineObject;
+
+public abstract class WindowRoutine implements EngineObject
 {
 	protected WindowContext context;
 	
@@ -10,7 +12,7 @@ public abstract class WindowRoutine
 	}
 	
  	public abstract void init();
-	public abstract void update(double delta);
-	public abstract void render(double delta);
-	public abstract void release();
+	public abstract void update(double timestep);
+	public abstract void render(double timestep, double alpha);
+	public abstract void release(boolean forced);
 }

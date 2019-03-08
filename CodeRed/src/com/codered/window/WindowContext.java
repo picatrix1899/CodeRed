@@ -1,5 +1,6 @@
 package com.codered.window;
 
+import com.codered.engine.EngineObject;
 import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
 import com.codered.input.Mouse;
@@ -9,7 +10,7 @@ import com.codered.resource.ResourceManager;
 import com.codered.shader.ShaderList;
 import com.codered.shader.ShaderParts;
 
-public class WindowContext
+public class WindowContext implements EngineObject
 {
 	private String name;
 	
@@ -68,17 +69,17 @@ public class WindowContext
 		this.mouse.update();
 	}
 	
-	public void render(double delta)
+	public void render(double delta, double alpha)
 	{
 		makeContextCurrent();
 		this.window.render(delta);
-		this.routine.render(delta);
+		this.routine.render(delta, alpha);
 	}
 	
-	public void release()
+	public void release(boolean forced)
 	{
 		makeContextCurrent();
-		this.routine.release();
+		this.routine.release(forced);
 		
 		EngineRegistry.getShaderParts().release();
 		this.resourceManager.clear();

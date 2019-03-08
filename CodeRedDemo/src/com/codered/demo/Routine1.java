@@ -147,7 +147,7 @@ public class Routine1 extends WindowRoutine
 		}
 	}
 
-	public void render(double delta)
+	public void render(double delta, double alpha)
 	{
 		GLUtils.clearAll();
 
@@ -223,8 +223,7 @@ public class Routine1 extends WindowRoutine
 		renderWorldFromCamera(delta, this.player.getCamera());
 	}
 
-	public void release()
+	public void release(boolean forced)
 	{
 	}
-
 }

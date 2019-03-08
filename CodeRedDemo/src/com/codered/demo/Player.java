@@ -116,10 +116,11 @@ public class Player extends BaseEntity
 		dir.normal();
 	
 		float acceleration = 20.0f * (float)delta;
+		System.out.println(delta);
 		
 		dir.mul(acceleration, vel);
 		
-		vel = checkCollisionStatic(vel);
+		//vel = checkCollisionStatic(vel);
 		
 		this.transform.moveBy(vel);
 	}

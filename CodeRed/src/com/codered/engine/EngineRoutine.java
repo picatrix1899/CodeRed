@@ -43,45 +43,23 @@ public class EngineRoutine
 		long startTime;
 		long passedTime;
 		
-		boolean render = false;
-		
-		int frames = 0;
-		long frameCounter = 0;
 		while(isRunning)
 		{
-			render = false;
 			startTime = this.time.getTime();
 			passedTime = startTime - lastTime;
 			lastTime = startTime;
 			
 			unprocessedTime += passedTime / (double) this.time.SECOND;
-			frameCounter += passedTime;
 			
 			while(unprocessedTime > frameTime)
 			{
-				render = true;
-				
-				this.time.setDelta(frameTime);
-				
-				unprocessedTime -= frameTime;
-				
-				if(frameCounter >= this.time.SECOND)
-				{
-					this.time.setFPS(frames);
-					
-					frames = 0;
-					frameCounter = 0;
-				}				
-				
 				this.engine.update(frameTime);
 				
+				unprocessedTime -= frameTime;			
+
 			}
-			
-			if(render)
-			{
-				this.engine.render(frameTime);
-				frames++;
-			}
+
+			this.engine.render(frameTime, unprocessedTime / frameTime);
 		}
 		
 		this.engine.release(this.forcedShutdown);

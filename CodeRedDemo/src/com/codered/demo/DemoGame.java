@@ -80,10 +80,10 @@ public class DemoGame extends Engine
 		if(this.context2 != null) this.context2.update(delta);
 	}
 
-	public void render(double delta)
+	public void render(double delta, double alpha)
 	{
-		this.context1.render(delta);
-		if(this.context2 != null)  this.context2.render(delta);
+		this.context1.render(delta, alpha);
+		if(this.context2 != null)  this.context2.render(delta, alpha);
 	}
 
 	
@@ -92,8 +92,8 @@ public class DemoGame extends Engine
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.stop();
 		
-		if(this.context2 != null) this.context2.release();
-		this.context1.release();
+		if(this.context2 != null) this.context2.release(forced);
+		this.context1.release(forced);
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.codered.engine;
 
 
-public abstract class Engine
+public abstract class Engine implements EngineObject
 {
 	private static Engine instance;
 	
@@ -20,9 +20,9 @@ public abstract class Engine
 	
 	public abstract void init();
 	
-	public abstract void update(double delta);
+	public abstract void update(double timestep);
 	
-	public abstract void render(double delta);
+	public abstract void render(double timestep, double alpha);
 	
 	public abstract void release(boolean forced);
 	

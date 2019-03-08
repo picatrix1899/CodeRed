@@ -44,7 +44,8 @@ public class Window
 	
 	public void makeContextCurrent()
 	{
-		glfwMakeContextCurrent(this.window);
+		if(glfwGetCurrentContext() != this.window)
+			glfwMakeContextCurrent(this.window);
 	}
 	
 	public void setWindowHintCallback(Runnable callback)

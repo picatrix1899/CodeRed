@@ -1,8 +1,5 @@
 package com.codered.demo;
 
-import com.codered.input.Key;
-import com.codered.input.MouseButton;
-
 public class GlobalSettings
 {
 
