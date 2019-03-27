@@ -64,6 +64,14 @@ public class UniformFactory
 			{
 				return new UniformFloat(name, data);
 			}
+			case "camera":
+			{
+				return new UniformCamera(name, data);
+			}
+			case "material":
+			{
+				return new UniformMaterial(name, data);
+			}
 			default:
 			{
 				if(this.extendedUniformTypes.containsKey(type))

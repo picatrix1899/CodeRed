@@ -9,8 +9,7 @@ public interface Shader
 	Set<String> getVariants();
 	void applyVariant(String name);
 	
-	Set<String> getUniforms();
-	void setUniformValue(String name, Object obj);
+	void setUniformValue(int id, Object obj);
 	
 	ShaderSession start();
 	void stop();

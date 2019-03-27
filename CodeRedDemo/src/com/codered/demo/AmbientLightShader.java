@@ -11,12 +11,12 @@ public class AmbientLightShader extends ShaderProgram
 		try
 		{
 			UniformFactory factory = UniformFactory.getInstance();
-			addUniform("T_model", factory.createUniform("T_model", "mat4"));
-			addUniform("T_projection", factory.createUniform("T_projection", "mat4"));
-			addUniform("camera.T_view", factory.createUniform("camera.T_view", "mat4"));
-			addUniform("material.albedoMap", factory.createUniform("material.albedoMap", "sampler2D", 0));
-			addUniform("ambientLight.base.color", factory.createUniform("ambientLight.base.color", "vec3"));
-			addUniform("ambientLight.base.intensity", factory.createUniform("ambientLight.base.intensity", "float"));
+			addUniform(0, factory.createUniform("T_model", "mat4"));
+			addUniform(1, factory.createUniform("T_projection", "mat4"));
+			addUniform(2, factory.createUniform("camera", "camera"));
+			addUniform(3, factory.createUniform("material", "material", 0, 1));
+			addUniform(4, factory.createUniform("ambientLight.base.color", "vec3"));
+			addUniform(5, factory.createUniform("ambientLight.base.intensity", "float"));
 			
 			addAttribute(0, "vertexPos");
 			addAttribute(1, "texCoords");

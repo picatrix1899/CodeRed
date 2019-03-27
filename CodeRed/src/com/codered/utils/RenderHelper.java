@@ -8,7 +8,6 @@ import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.elements.GUIText;
 import com.codered.managing.VAO;
-import com.codered.material.Material;
 import com.codered.sh.Shader;
 import com.codered.shaders.gui.Font_GUIShader;
 import com.codered.window.WindowContext;
@@ -42,15 +41,10 @@ public class RenderHelper
 	
 	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection)
 	{
-		oShader.setUniformValue("T_model", e.getTransformationMatrix());
-		oShader.setUniformValue("T_projection", projection);
-		oShader.setUniformValue("camera.T_view", c.getViewMatrix());
-		oShader.setUniformValue("camera.position", c.getTotalPos());
-		Material m = e.getModel().getMaterial();
-		oShader.setUniformValue("material.albedoMap", m.getAlbedoMap().getId());
-		oShader.setUniformValue("material.normalMap", m.getNormalMap().getId());
-		oShader.setUniformValue("material.specularIntensity", m.getSpecularIntensity());
-		oShader.setUniformValue("material.specularPower", m.getSpecularPower());
+		oShader.setUniformValue(0, e.getTransformationMatrix());
+		oShader.setUniformValue(1, projection);
+		oShader.setUniformValue(2, c);
+		oShader.setUniformValue(3, e.getModel().getMaterial());
 		oShader.load();
 		
 		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);

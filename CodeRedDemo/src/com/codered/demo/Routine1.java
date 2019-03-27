@@ -186,8 +186,8 @@ public class Routine1 extends WindowRoutine
 
 		try(ShaderSession ss = ambientShader.start())
 		{
-			ambientShader.setUniformValue("ambientLight.base.color", this.ambient.base.color);
-			ambientShader.setUniformValue("ambientLight.base.intensity", this.ambient.base.intensity);
+			ambientShader.setUniformValue(4, this.ambient.base.color);
+			ambientShader.setUniformValue(5, this.ambient.base.intensity);
 			
 			for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 			{
@@ -202,9 +202,9 @@ public class Routine1 extends WindowRoutine
 			
 			try(ShaderSession ss = directionalLightShader.start())
 			{
-				directionalLightShader.setUniformValue("directionalLight.base.color", this.directionalLight.base.color);
-				directionalLightShader.setUniformValue("directionalLight.base.intensity", this.directionalLight.base.intensity);
-				directionalLightShader.setUniformValue("directionalLight.direction", this.directionalLight.direction);
+				directionalLightShader.setUniformValue(4, this.directionalLight.base.color);
+				directionalLightShader.setUniformValue(5, this.directionalLight.base.intensity);
+				directionalLightShader.setUniformValue(6, this.directionalLight.direction);
 				
 				for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 				{

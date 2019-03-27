@@ -1,5 +1,6 @@
 package com.codered.sh;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +11,6 @@ import org.lwjgl.opengl.GL20;
 
 import com.codered.engine.EngineRegistry;
 
-import com.google.common.collect.Maps;
-
 public abstract class ShaderProgram implements Shader
 {
 	private int id;
@@ -21,9 +20,9 @@ public abstract class ShaderProgram implements Shader
 	private List<String> fixedGeometryShaderParts = new LinkedList<>();
 	private List<String> fixedTessellationControlShaderParts = new LinkedList<>();
 	private List<String> fixedTessellationEvaluationShaderParts = new LinkedList<>();
-	private Map<String,ShaderVariant> variants = Maps.newHashMap();
-	private Map<String,Uniform> uniforms = Maps.newHashMap();
-	private Map<String,Integer> attribs = Maps.newHashMap();
+	private Map<String,ShaderVariant> variants = new HashMap<>();
+	private Map<Integer,Uniform> uniforms = new HashMap<>();
+	private Map<String,Integer> attribs = new HashMap<>();
 	
 	private ShaderVariant activeVariant;
 	
@@ -94,25 +93,20 @@ public abstract class ShaderProgram implements Shader
 		if(wasRunning) start();
 	}
 	
-	public Set<String> getUniforms()
+	public Uniform getUniform(int id)
 	{
-		return this.uniforms.keySet();
+		return this.uniforms.get(id);
 	}
 	
-	public Uniform getUniform(String name)
+	public void setUniformValue(int id, Object obj)
 	{
-		return this.uniforms.get(name);
+		if(this.uniforms.containsKey(id))
+			this.uniforms.get(id).set(obj);
 	}
 	
-	public void setUniformValue(String name, Object obj)
+	public void addUniform(int id, Uniform uniform)
 	{
-		if(this.uniforms.containsKey(name))
-			this.uniforms.get(name).set(obj);
-	}
-	
-	public void addUniform(String name, Uniform uniform)
-	{
-		this.uniforms.put(name, uniform);
+		this.uniforms.put(id, uniform);
 	}
 	
 	public ShaderSession start()

@@ -48,10 +48,6 @@ public class Player extends BaseEntity
 		this.aabb2 = new AABB3f(new Point3f(0, 9, 0), new Vector3f(4, 9, 4));
 		
 		this.transform.setPos(new Vec3f(0.0f, 0.0f, 0.0f));
-		//Transform t = Session.get().getWorld().getStaticEntity(0).getTransform();
-		
-		//t.setPos(Vector3f.TEMP.set(0.0f, 0.0f, 0.0f));
-		//t.setParent(getTransform());
 		
 		this.camera = new Camera(0.0f, 18.0f, 0.0f, 0.0d, 0.0d, 0.0d);
 		
@@ -189,34 +185,6 @@ public class Player extends BaseEntity
 		this.camera.rotateYaw(-this.context.getMouse().getDeltaPos().x);
 
 		this.camera.rotatePitch(-this.context.getMouse().getDeltaPos().y);
-		
-//		World w = Session.get().getWorld();
-//		
-//		List<StaticEntity> statents = Auto.ArrayList(w.getStaticEntities());
-		
-//		double minlength = Double.MAX_VALUE;
-//		StaticEntity ent = null;
-		
-//		for(StaticEntity e : statents)
-//		{
-//			OBB3f entityOBB = e.getModel().getPhysicalMesh().getOBBf(e.getTransformationMatrix(), e.getRotationMatrix());
-//
-//			Vector3f center = getCamera().getTotalPos();
-//			Vector3f dir = getCamera().getTotalRot().getForwardf().negate();
-//
-//			if(RayOBBResolver.hit(center, dir, entityOBB))
-//			{
-//				Vector3f delta = getCamera().getTotalPos().subN(entityOBB.center);
-//				
-//				if(delta.length() <= minlength)
-//				{
-//					minlength = delta.length();
-//					ent = e;
-//				}
-//			}
-//			
-//			e.highlighted = false;
-//		}
 
 	}
 	
