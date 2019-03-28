@@ -6,6 +6,7 @@ import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
 import com.codered.gui.elements.GUIEButton;
 import com.codered.input.InputConfiguration;
+import com.codered.utils.IGuiRenderer;
 
 public class GuiInventory extends GUIWindow
 {
@@ -16,16 +17,16 @@ public class GuiInventory extends GUIWindow
 	
 	public Routine1 main;
 	
-	public GuiInventory(Routine1 parent)
+	public GuiInventory(Routine1 parent, IGuiRenderer renderer)
 	{
-		super();
+		super(renderer);
 		this.main = parent;
 		inventoryInput = new InputConfiguration();
 		inventoryInput.registerKey(GLFW.GLFW_KEY_TAB);
 		inventoryInput.registerKey(GLFW.GLFW_KEY_ESCAPE);
 		inventoryInput.registerMouseButton(0);
 		
-		this.button = new GUIEButton(1, this, 0, 0, 60, 82, "res/materials/gray_rsquare.png");
+		this.button = new GUIEButton(1, this, 0, 0, 60, 82, "res/materials/gray_rsquare.png", this.renderer);
 		this.button.setText("Back Test", 20, "res/fonts/arial", true, false);
 		
 		addElement(this.button);

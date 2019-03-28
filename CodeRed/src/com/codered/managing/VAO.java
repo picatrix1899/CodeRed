@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
+import org.barghos.core.api.tuple.ITup2fR;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -99,6 +100,29 @@ public class VAO
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
 		FloatBuffer buffer = BufferUtils.wrapFlippedVector2FBuffer(data);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
+		
+		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
+	}
+	
+	public void storeData(int attrib, ITup2fR[] data, int stride, int pointer, int drawFlag)
+	{
+		BindingUtils.bindVAO(this);
+		
+		int vboID = 0;
+
+		if(!this.vbos.containsKey(attrib))
+		{
+			vboID = GL15.glGenBuffers();
+			vbos.put(attrib, vboID);
+		}
+		else
+			vboID = this.vbos.get(attrib);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
+		FloatBuffer buffer = org.barghos.core.BufferUtils.wrapFlippedTuple2FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		

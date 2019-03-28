@@ -1,134 +1,279 @@
 package com.codered.shader;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.lwjgl.opengl.GL20;
 
-import com.codered.window.WindowContext;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.codered.engine.EngineRegistry;
 
-import cmn.utilslib.dmap.dmaps.DMap2;
-
-public abstract class ShaderProgram
+public abstract class ShaderProgram implements Shader
 {
-	protected int programID;
-	
-	private Set<ShaderPart> geometryShaders = Sets.newHashSet();
-	private Set<ShaderPart> vertexShaders = Sets.newHashSet();
-	private Set<ShaderPart> fragmentShaders = Sets.newHashSet();
+	private int id;
 
-	private Set<Uniform> newUniforms = Sets.newHashSet();
+	private List<String> fixedVertexShaderParts = new LinkedList<>();
+	private List<String> fixedFragmentShaderParts = new LinkedList<>();
+	private List<String> fixedGeometryShaderParts = new LinkedList<>();
+	private List<String> fixedTessellationControlShaderParts = new LinkedList<>();
+	private List<String> fixedTessellationEvaluationShaderParts = new LinkedList<>();
+	private Map<String,ShaderVariant> variants = new HashMap<>();
+	private Map<Integer,Uniform> uniforms = new HashMap<>();
+	private Map<String,Integer> attribs = new HashMap<>();
 	
-	protected WindowContext context;
+	private ShaderVariant activeVariant;
 	
-	public ShaderProgram(WindowContext context)
+	private boolean isRunning;
+	
+	public ShaderProgram()
 	{
-		this.context = context;
+		this.id = GL20.glCreateProgram();
 	}
 	
-	public void addUniform(Uniform uniform)
+	public int getId()
 	{
-		this.newUniforms.add(uniform);
+		return this.id;
 	}
-
+	
 	public void compile()
 	{
-		this.programID = GL20.glCreateProgram();
+		attachFixedShaderParts();
 
-		attachShaderParts();
-		
-		for(ShaderPart p : this.geometryShaders)
-			GL20.glAttachShader(programID, p.getId());
-		
-		for(ShaderPart p  : this.vertexShaders)
-			GL20.glAttachShader(programID, p.getId());
+		recompile();
+	}
+	
+	public void recompile()
+	{
 
-		for(ShaderPart p  : this.fragmentShaders)
-			GL20.glAttachShader(programID, p.getId());
-
-		ArrayList<DMap2<Integer,String>> attribs = Lists.newArrayList();
-		
-		getAttribs(attribs);
-		
-		for(DMap2<Integer,String> attrib : attribs)
+		for(String name : this.attribs.keySet())
 		{
-			bindAttribute(attrib.getA(), attrib.getB());
+			GL20.glBindAttribLocation(this.id, this.attribs.get(name), name);
 		}
 		
-		GL20.glLinkProgram(this.programID);
+		GL20.glLinkProgram(this.id);
 		
-		GL20.glValidateProgram(this.programID);
+		GL20.glValidateProgram(this.id);
+		
+		loadUniformLocations();
 	}
 	
-	protected void attachGeometryShader(ShaderPart part)
+	public void addVariant(String name, ShaderVariant variant)
 	{
-		this.geometryShaders.add(part);
+		this.variants.put(name, variant);
 	}
 	
-	protected void attachFragmentShader(ShaderPart part)
+	public ShaderVariant getVariant(String name)
 	{
-		this.fragmentShaders.add(part);
+		return this.variants.get(name);
 	}
 	
-	protected void attachVertexShader(ShaderPart part)
+	public Set<String> getVariants()
 	{
-		this.vertexShaders.add(part);
+		return this.variants.keySet();
 	}
-
-	public abstract void attachShaderParts();
 	
-	public abstract void getAttribs(List<DMap2<Integer,String>> attribs);
-	
-	public void start()
+	public void addAttribute(int attrib, String name)
 	{
-		GL20.glUseProgram(this.programID);
+		this.attribs.put(name, attrib);
+	}
+	
+	public void applyVariant(String name)
+	{
+		boolean wasRunning = this.isRunning;
+		if(wasRunning) stop();
+		
+		detachVariantShaderParts();
+		this.activeVariant = getVariant(name);
+		attachVariantShaderParts();
+		recompile();
+		
+		if(wasRunning) start();
+	}
+	
+	public Uniform getUniform(int id)
+	{
+		return this.uniforms.get(id);
+	}
+	
+	public void setUniformValue(int id, Object obj)
+	{
+		if(this.uniforms.containsKey(id))
+			this.uniforms.get(id).set(obj);
+	}
+	
+	public void addUniform(int id, Uniform uniform)
+	{
+		this.uniforms.put(id, uniform);
+	}
+	
+	public ShaderSession start()
+	{
+		GL20.glUseProgram(this.id);
+		this.isRunning = true;
+		return new ShaderSession(this);
 	}
 	
 	public void stop()
 	{
 		GL20.glUseProgram(0);
-	}
-	
-	public void cleanup()
-	{
-		GL20.glUseProgram(0);
-		
-		for(ShaderPart p : this.geometryShaders)
-			GL20.glDetachShader(this.programID, p.getId());
-		
-		for(ShaderPart p : this.vertexShaders)
-			GL20.glDetachShader(this.programID, p.getId());
-		
-		for(ShaderPart p : this.fragmentShaders)
-			GL20.glDetachShader(this.programID, p.getId());
-		
-		GL20.glDeleteProgram(this.programID);
-		
-		this.geometryShaders.clear();
-		this.vertexShaders.clear();
-		this.fragmentShaders.clear();
-	}
-	
-	protected void bindAttribute(int attrib, String var)
-	{
-		GL20.glBindAttribLocation(this.programID, attrib, var);
-	}
-	
-	protected int getUniformLocation(String uniform)
-	{
-		return GL20.glGetUniformLocation(this.programID, uniform);
-	}
-	
-	
-	protected void getAllUniformLocations()
-	{
-		for(Uniform uniform : this.newUniforms)
-		{
-			uniform.getUniformLocations(this);
-		}
+		this.isRunning = false;
 	}
 
+	public void load()
+	{
+		for(Uniform u : this.uniforms.values())
+			u.load();
+	}
+	
+	public void addVertexShaderPart(String part)
+	{
+		this.fixedVertexShaderParts.add(part);
+	}
+	
+	public void addFragmentShaderPart(String part)
+	{
+		this.fixedFragmentShaderParts.add(part);
+	}
+	
+	public void addGeometryShaderPart(String part)
+	{
+		this.fixedGeometryShaderParts.add(part);
+	}
+	
+	public void addTessellationControlShaderPart(String part)
+	{
+		this.fixedTessellationControlShaderParts.add(part);
+	}
+	
+	public void addTessellationEvaluationShaderPart(String part)
+	{
+		this.fixedTessellationEvaluationShaderParts.add(part);
+	}
+	
+	private void attachFixedShaderParts()
+	{
+	
+		for(Iterator<String> it = this.fixedVertexShaderParts.iterator(); it.hasNext();)
+		{
+			String p = it.next();
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getVertexShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(Iterator<String> it = this.fixedFragmentShaderParts.iterator(); it.hasNext();)
+		{
+			String p = it.next();
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getFragmentShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(Iterator<String> it = this.fixedGeometryShaderParts.iterator(); it.hasNext();)
+		{
+			String p = it.next();
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getGeometryShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(Iterator<String> it = this.fixedTessellationControlShaderParts.iterator(); it.hasNext();)
+		{
+			String p = it.next();
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationControlShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(Iterator<String> it = this.fixedTessellationEvaluationShaderParts.iterator(); it.hasNext();)
+		{
+			String p = it.next();
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationEvaluationShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+	}
+	
+	private void attachVariantShaderParts()
+	{
+		if(this.activeVariant == null) return;
+		
+		for(String p : this.activeVariant.getVertexShaderParts())
+		{
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getVertexShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(String p : this.activeVariant.getFragmentShaderParts())
+		{
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getFragmentShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(String p : this.activeVariant.getGeometryShaderParts())
+		{
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getGeometryShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(String p : this.activeVariant.getTessellationControlShaderParts())
+		{
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationControlShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+		
+		for(String p : this.activeVariant.getTessellationEvaluationShaderParts())
+		{
+			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationEvaluationShaderPart(p);
+			GL20.glAttachShader(this.id, part.getId());
+		}
+	}
+	
+	private void detachVariantShaderParts()
+	{
+		if(this.activeVariant == null) return;
+		
+			for(String p : this.activeVariant.getVertexShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getVertexShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
+			
+			for(String p : this.activeVariant.getFragmentShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getFragmentShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
+			
+			for(String p : this.activeVariant.getGeometryShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getGeometryShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
+			
+			for(String p : this.activeVariant.getTessellationControlShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationControlShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
+			
+			for(String p : this.activeVariant.getTessellationEvaluationShaderParts())
+			{
+				ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationEvaluationShaderPart(p);
+				GL20.glDetachShader(this.id, part.getId());
+			}
+
+	}
+	
+	public void release()
+	{
+		GL20.glDeleteProgram(this.id);
+	}
+
+	private void loadUniformLocations()
+	{
+		for(Uniform u : this.uniforms.values())
+		{
+			u.loadUniformLocations(this.id);
+		}
+	}
+	
 }

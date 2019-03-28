@@ -7,8 +7,6 @@ import com.codered.input.Mouse;
 import com.codered.managing.VAOManager;
 import com.codered.resource.DRM;
 import com.codered.resource.ResourceManager;
-import com.codered.shader.ShaderList;
-import com.codered.shader.ShaderParts;
 
 public class WindowContext implements EngineObject
 {
@@ -41,8 +39,6 @@ public class WindowContext implements EngineObject
 		makeContextCurrent();
 		
 		EngineRegistry.registerWindowContext(name, getWindowId(), this);
-		EngineRegistry.registerShaderList(name, getWindowId(), new ShaderList(this));
-		EngineRegistry.registerShaderParts(name, getWindowId(), new ShaderParts());
 		EngineRegistry.registerVAOManager(name, getWindowId(), new VAOManager());
 		this.resourceManager = new ResourceManager();
 		this.drm = new DRM();
@@ -81,7 +77,6 @@ public class WindowContext implements EngineObject
 		makeContextCurrent();
 		this.routine.release(forced);
 		
-		EngineRegistry.getShaderParts().release();
 		this.resourceManager.clear();
 		EngineRegistry.getVAOManager().release();
 		

@@ -2,13 +2,14 @@ package com.codered.demo;
 
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
+import com.codered.utils.IGuiRenderer;
 
 public class GuiLoadingScreen extends GUIWindow
 {
 
-	public GuiLoadingScreen()
+	public GuiLoadingScreen(IGuiRenderer renderer)
 	{
-		super();
+		super(renderer);
 	}
 	
 	public void render()

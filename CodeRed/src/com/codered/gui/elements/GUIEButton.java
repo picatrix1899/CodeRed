@@ -3,6 +3,7 @@ package com.codered.gui.elements;
 import com.codered.font.FontType;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
+import com.codered.utils.IGuiRenderer;
 
 public class GUIEButton extends GUIElement
 {
@@ -11,9 +12,9 @@ public class GUIEButton extends GUIElement
 	public String background;
 	public GUIText text;
 	
-	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, String background)
+	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, String background, IGuiRenderer renderer)
 	{
-		super(id, parent);
+		super(id, parent, renderer);
 		
 		this.main = new Area(this.context);
 		this.main.minX = posX;

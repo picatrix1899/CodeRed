@@ -3,26 +3,17 @@ package com.codered.shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import com.codered.managing.loader.data.ShaderPartData;
-
 public class ShaderPart
 {
 	private int id;
+	private String name;
 	
-	public ShaderPart()
-	{
-	}
-	
-	public int getId()
-	{
-		return this.id;
-	}
-	
-	public ShaderPart loadShader(String name, ShaderPartData data, int type) throws MalformedShaderException
+	public ShaderPart(String name, int type, String data)
 	{
 		this.id = GL20.glCreateShader(type);
+		this.name = name;
 		
-		GL20.glShaderSource(this.id, data.getData());
+		GL20.glShaderSource(this.id, data);
 		
 		GL20.glCompileShader(this.id);
 		
@@ -30,22 +21,28 @@ public class ShaderPart
 		{
 			try
 			{
-				throw new MalformedShaderException(name + " " + GL20.glGetShaderInfoLog(this.id, 500));
+				throw new Exception(name + " " + GL20.glGetShaderInfoLog(this.id, 500));
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				System.out.println(data.getData());
+				System.out.println(data);
 			}
 		}
-		
-		return this;
 	}
 	
-	public void clear()
+	public int getId()
+	{
+		return id;
+	}
+	
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public void release()
 	{
 		GL20.glDeleteShader(this.id);
 	}
-	
-
 }

@@ -19,7 +19,6 @@ public class DemoGame extends Engine
 	public static DemoGame getInstance() { return instance; }
 
 	private WindowContext context1;
-	private WindowContext context2;
 	
 	public boolean showInventory = false;
 	public boolean directional = true;
@@ -27,14 +26,10 @@ public class DemoGame extends Engine
 	public DemoGame()
 	{
 		instance = this;
-
+		
 		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
 		w1.setWindowHintCallback(() -> initWindowHints());
 		this.context1 = new WindowContext("main", w1, new Routine1());
-
-		//Window w2 = new Window(800, 600, "CoderRed 3 Extension", 0);
-		//w2.setWindowHintCallback(() -> initWindowHints());
-		//this.context2 = new WindowContext("ext", w2, new Routine2());
 	}
 
 	private void printDebugInfo()
@@ -61,15 +56,11 @@ public class DemoGame extends Engine
 	{
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.start();
-		
+	
 		this.context1.initWindow();
-		//this.context2.initWindow();
 		
 		this.context1.init();
 		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
-		
-
-		//this.context2.init();
 		
 		printDebugInfo();
 	}
@@ -77,13 +68,11 @@ public class DemoGame extends Engine
 	public void update(double delta)
 	{
 		this.context1.update(delta);
-		if(this.context2 != null) this.context2.update(delta);
 	}
 
 	public void render(double delta, double alpha)
 	{
 		this.context1.render(delta, alpha);
-		if(this.context2 != null)  this.context2.render(delta, alpha);
 	}
 
 	
@@ -92,7 +81,6 @@ public class DemoGame extends Engine
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.stop();
 		
-		if(this.context2 != null) this.context2.release(forced);
 		this.context1.release(forced);
 	}
 

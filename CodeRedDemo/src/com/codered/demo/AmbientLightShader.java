@@ -1,7 +1,7 @@
 package com.codered.demo;
 
-import com.codered.sh.ShaderProgram;
-import com.codered.sh.UniformFactory;
+import com.codered.shader.ShaderProgram;
+import com.codered.shader.UniformFactory;
 
 public class AmbientLightShader extends ShaderProgram
 {

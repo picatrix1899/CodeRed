@@ -8,7 +8,6 @@ import org.barghos.math.vector.Vec3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.BuiltInShaders;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.engine.Engine;
 import com.codered.entities.Camera;
@@ -17,12 +16,10 @@ import com.codered.input.InputConfiguration;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
 import com.codered.resource.ResourceBlock;
-import com.codered.sh.ShaderProgram;
-import com.codered.sh.ShaderSession;
+import com.codered.shader.ShaderProgram;
+import com.codered.shader.ShaderSession;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
-import com.codered.utils.PrimitiveRenderer;
-import com.codered.utils.RenderHelper;
 import com.codered.window.WindowRoutine;
 
 public class Routine1 extends WindowRoutine
@@ -32,8 +29,9 @@ public class Routine1 extends WindowRoutine
 	private Player player;
 
 	private GuiInventory inventory;
-	
 	private GuiLoadingScreen loadingScreen;
+	
+	private GUIRenderer guiRenderer;
 	
 	public StaticEntityTreeImpl world;
 	
@@ -44,18 +42,36 @@ public class Routine1 extends WindowRoutine
 	
 	public ShaderProgram ambientShader;
 	public ShaderProgram directionalLightShader;
+	public ShaderProgram noGuiShader;
+	public ShaderProgram fontGuiShader;
 	
 	public void init()
 	{
-		BuiltInShaders.init();
-		
-		PrimitiveRenderer.create();
-
 		ResourceBlock block1 = new ResourceBlock(true);
 		block1.addTexture("res/materials/loadingscreen.png");
+		block1.addFragmentShaderPart("res/shaders/gui_no.fs");
+		block1.addVertexShaderPart("res/shaders/gui_no.vs");
+		block1.addFragmentShaderPart("res/shaders/gui_font.fs");
+		block1.addVertexShaderPart("res/shaders/gui_font.vs");
+		block1.addFragmentShaderPart("res/shaders/gui_font.fs");
+		block1.addVertexShaderPart("res/shaders/gui_font.vs");
 		this.context.getDRM().loadResourceBlockForced(block1);
 		
-		loadingScreen = new GuiLoadingScreen();
+		this.noGuiShader = new NoGUIShader();
+		this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
+		this.noGuiShader.addVertexShaderPart("res/shaders/gui_no.vs");
+		this.noGuiShader.compile();
+		
+		this.fontGuiShader = new FontGuiShader();
+		this.fontGuiShader.addFragmentShaderPart("res/shaders/gui_font.fs");
+		this.fontGuiShader.addVertexShaderPart("res/shaders/gui_font.vs");
+		this.fontGuiShader.compile();
+		
+		this.guiRenderer = new GUIRenderer();
+		this.guiRenderer.noGuiShader = this.noGuiShader;
+		this.guiRenderer.fontGuiShader = this.fontGuiShader;
+		
+		loadingScreen = new GuiLoadingScreen(this.guiRenderer);
 		
 		this.initializing = true;
 
@@ -115,7 +131,7 @@ public class Routine1 extends WindowRoutine
 		
 		GLUtils.multisample(true);
 		
-		this.inventory = new GuiInventory(this);
+		this.inventory = new GuiInventory(this, this.guiRenderer);
 	}
 	
 	public void update(double delta)
@@ -135,7 +151,7 @@ public class Routine1 extends WindowRoutine
 		{
 			if(!DemoGame.getInstance().showInventory)
 			{
-				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) DemoGame.getInstance().directional = !DemoGame.getInstance().directional;
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
 				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
 				this.player.update(delta);
 			}
