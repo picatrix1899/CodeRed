@@ -8,6 +8,7 @@ import org.barghos.math.vector.Vec3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import com.codered.Profiling;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.engine.Engine;
 import com.codered.entities.Camera;
@@ -136,6 +137,7 @@ public class Routine1 extends WindowRoutine
 	
 	public void update(double delta)
 	{
+		Profiling.PROFILER.StartProfile("RoutineUpdate");
 		if(!DemoGame.getInstance().showInventory)
 			if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
 		
@@ -161,10 +163,12 @@ public class Routine1 extends WindowRoutine
 			}
 
 		}
+		Profiling.PROFILER.StopProfile("RoutineUpdate");
 	}
 
 	public void render(double delta, double alpha)
 	{
+		Profiling.PROFILER.StartProfile("RoutineRender");
 		GLUtils.clearAll();
 
 		if(this.initializing)
@@ -192,6 +196,7 @@ public class Routine1 extends WindowRoutine
 			renderWorld(delta);
 		}
 		
+		Profiling.PROFILER.StopProfile("RoutineRender");
 	}
 
 	private void renderWorldFromCamera(double delta, Camera cam)

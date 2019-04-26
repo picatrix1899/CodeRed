@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.CodeRed;
+import com.codered.Profiling;
 import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
@@ -55,6 +56,7 @@ public class Window
 	
 	public void init()
 	{
+		Profiling.PROFILER.StartProfile("WindowInit");
 		this.initWindowHints.run();
 		
 		this.window = glfwCreateWindow((int)this.size.x, (int)this.size.y, this.title, 0, this.parentWindow);
@@ -71,6 +73,8 @@ public class Window
 		glfwShowWindow(this.window);
 		
 		glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
+		
+		Profiling.PROFILER.StopProfile("WindowInit");
 	}
 	
 	public GLCapabilities getCapabilities()
@@ -107,23 +111,32 @@ public class Window
 	
 	public void update(double delta)
 	{
-		//glfwPollEvents();
+		Profiling.PROFILER.StartProfile("WindowUpdate");
+		glfwPollEvents();
 
-		glfwWaitEventsTimeout(5);
+		//glfwWaitEventsTimeout(5);
 		
 		if(glfwWindowShouldClose(this.window))
 			WindowClose.fire(NoArgs.getInstance());
+		Profiling.PROFILER.StopProfile("WindowUpdate");
 	}
 	
 	public void render(double delta)
 	{
+		Profiling.PROFILER.StartProfile("WindowRender");
+		Profiling.PROFILER.StartProfile("WindowSwapBuffer");
 		glfwSwapBuffers(this.window);
+		Profiling.PROFILER.StopProfile("WindowSwapBuffer");
 		
+		Profiling.PROFILER.StartProfile("WindowFrameBufferClear");
 		if(CodeRed.AUTORESET_DEFAULT_FBO)
 		{
 			BindingUtils.bindDefaultFramebuffer();
 			GLUtils.clearAll();
 		}
+		
+		Profiling.PROFILER.StopProfile("WindowFrameBufferClear");
+		Profiling.PROFILER.StopProfile("WindowRender");
 	}
 
 	public void release()

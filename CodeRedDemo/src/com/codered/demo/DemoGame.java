@@ -5,6 +5,7 @@ import org.resources.ResourceManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import com.codered.Profiling;
 import com.codered.engine.Engine;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.WindowHint;
@@ -54,6 +55,7 @@ public class DemoGame extends Engine
 	
 	public void init()
 	{
+		Profiling.PROFILER.StartProfile("GameInit");
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.start();
 	
@@ -63,25 +65,34 @@ public class DemoGame extends Engine
 		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 		
 		printDebugInfo();
+		Profiling.PROFILER.StopProfile("GameInit");
 	}
 	
 	public void update(double delta)
 	{
+		Profiling.PROFILER.StartProfile("GameUpdate");
 		this.context1.update(delta);
+		Profiling.PROFILER.StopProfile("GameUpdate");
 	}
 
 	public void render(double delta, double alpha)
 	{
+		Profiling.PROFILER.StartProfile("GameRender");
 		this.context1.render(delta, alpha);
+		Profiling.PROFILER.StopProfile("GameRender");
 	}
 
 	
 	public void release(boolean forced)
 	{
+		Profiling.PROFILER.StartProfile("GameRelease");
 		ResourceManager resources = ResourceManager.getInstance();
 		resources.stop();
 		
 		this.context1.release(forced);
+		Profiling.PROFILER.StopProfile("GameRelease");
+		
+		System.out.print(Profiling.PROFILER.dump());
 	}
 
 }
