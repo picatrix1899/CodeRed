@@ -19,27 +19,35 @@ public class TextureLoader
 		{
 			BufferedImage image = ImageIO.read(img);
 
-			int[] pixels = new int[image.getWidth() * image.getHeight()];
-			image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-
-			byte[] arr = new byte[image.getWidth() * image.getHeight() * 4];
+			int height = image.getHeight();
+			int width = image.getWidth();
 			
-			for(int y = 0; y < image.getHeight(); y++)
+			int sum = width * height;
+			
+			int[] pixels = new int[sum];
+			image.getRGB(0, 0, width, height, pixels, 0, width);
+
+
+			byte[] arr = new byte[sum * 4];
+			
+
+			int pixel;
+			int pos;
+			for(int y = 0; y < height; y++)
 			{
-				for(int x = 0; x < image.getWidth(); x++)
+				for(int x = 0; x < width; x++)
 				{
-					int pixel = pixels[y * image.getWidth() + x];
+					pixel = pixels[y * width + x];
 					
-					int pos = y * (image.getWidth() * 4) + (x * 4);
-					arr[pos + 0] = ((byte) ((pixel >> 16) & 0xFF));     // Red component
+					pos = y * (width * 4) + (x * 4);
+					arr[pos] = ((byte) ((pixel >> 16) & 0xFF));     // Red component
 					arr[pos + 1] = ((byte) ((pixel >> 8) & 0xFF));      // Green component
 					arr[pos + 2] = ((byte) (pixel & 0xFF));               // Blue component
 					arr[pos + 3] = ((byte) ((pixel >> 24) & 0xFF));    // Alpha component
 				}
 			}
 
-			return new TextureData(arr, image.getWidth(), image.getHeight());
+			return new TextureData(arr, width, height);
 			
 		}
 		catch (IOException e)

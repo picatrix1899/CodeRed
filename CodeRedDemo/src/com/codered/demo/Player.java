@@ -1,6 +1,7 @@
 package com.codered.demo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Quat;
@@ -9,6 +10,7 @@ import org.barghos.math.vector.Vec3fAxis;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.ConvUtils;
+import com.codered.Profiling;
 import com.codered.StaticEntityTreeImpl;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.BaseEntity;
@@ -60,8 +62,10 @@ public class Player extends BaseEntity
 	
 	public void update(double delta)
 	{
+		Profiling.PROFILER.StartProfile("PlayerUpdate");
 		updateMovement(delta);
 		updateOrientation(delta);
+		Profiling.PROFILER.StopProfile("PlayerUpdate");
 	}
 	
 	public void updateOrientation(double delta)
@@ -116,7 +120,7 @@ public class Player extends BaseEntity
 		
 		dir.mul(acceleration, vel);
 		
-		//vel = checkCollisionStatic(vel);
+		vel = checkCollisionStatic(vel);
 		
 		this.transform.moveBy(vel);
 	}
@@ -153,7 +157,7 @@ public class Player extends BaseEntity
 		
 		sweptAABB = this.aabb2.transform(ConvUtils.matToMatrix(translation));
 		
-		ArrayList<StaticEntity> entities = this.world.walker.walk(sweptAABB);
+		List<StaticEntity> entities = this.world.walker.walk(sweptAABB);
 		
 		for(StaticEntity entity : entities)
 		{

@@ -33,9 +33,9 @@ public class FBO extends Framebuffer
 				
 				if(att != null)
 					if(att.isBuffer())
-						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
+						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
 					else
-						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
+						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
 			}
 			
 			if(this.depth != null)
@@ -60,8 +60,11 @@ public class FBO extends Framebuffer
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		
-		for(FBOTarget t : targets)
+		FBOTarget t;
+		for(int i = 0; i < targets.length; i++)
 		{
+			t = targets[i];
+			
 			FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
 			
 			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
@@ -84,8 +87,10 @@ public class FBO extends Framebuffer
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		
-		for(int t : targets)
+		int t;
+		for(int i = 0; i < targets.length; i++)
 		{
+			t = targets[i];
 			FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, false, hdr, false, false, false);
 			
 			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL11.GL_TEXTURE_2D, att.getId(), 0);
@@ -167,10 +172,10 @@ public class FBO extends Framebuffer
 	public void applyDepthStencilBufferAttachment()
 	{
 		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, 0, true, false, true, true, false);
-		
 		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
+		int attId = att.getId();
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, attId);
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, attId);
 		
 		this.depth = att;
 	}

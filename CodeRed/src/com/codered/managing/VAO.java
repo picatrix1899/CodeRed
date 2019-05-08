@@ -3,8 +3,8 @@ package com.codered.managing;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.barghos.core.api.tuple.ITup2fR;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -12,8 +12,9 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.utils.BindingUtils;
 
-import cmn.utilslib.essentials.Auto;
-import cmn.utilslib.essentials.BufferUtils;
+import org.barghos.core.BufferUtils;
+import org.barghos.core.api.tuple.ITup2fR;
+
 import cmn.utilslib.math.vector.Vector4f;
 import cmn.utilslib.math.vector.api.Vec2fBase;
 import cmn.utilslib.math.vector.api.Vec3fBase;
@@ -22,7 +23,7 @@ public class VAO
 {
 	private int id;
 	
-	private HashMap<Integer,Integer> vbos = Auto.HashMap();
+	private Map<Integer,Integer> vbos = new HashMap<>();
 	
 	private int indicesVBO = 0;
 	
@@ -99,7 +100,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedVector2FBuffer(data);
+		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector2FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -122,7 +123,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = org.barghos.core.BufferUtils.wrapFlippedTuple2FBuffer(data);
+		FloatBuffer buffer = BufferUtils.wrapFlippedTuple2FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -145,7 +146,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedVector3FBuffer(data);
+		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector3FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -168,7 +169,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedVector4FBuffer(data);
+		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector4FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		

@@ -1,6 +1,7 @@
 package com.codered.managing.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Quat;
@@ -13,16 +14,15 @@ import org.resources.objects.TriangleData;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 
-import cmn.utilslib.essentials.Auto;
 import cmn.utilslib.essentials.ListUtils;
 import cmn.utilslib.math.geometry.Triangle3f;
 import cmn.utilslib.math.vector.Vector2f;
 import cmn.utilslib.math.vector.Vector3f;
 public class Mesh
 {
-	public ArrayList<Triangle3f> triangles = Auto.ArrayList();
-	public ArrayList<TriangleData>triangleData = Auto.ArrayList();
-	public ArrayList<Integer> indices = Auto.ArrayList();
+	public List<Triangle3f> triangles = new ArrayList<>();
+	public List<TriangleData>triangleData = new ArrayList<>();
+	public List<Integer> indices = new ArrayList<>();
 	
 	private float yc = 0.0f;
 	
@@ -183,7 +183,7 @@ public class Mesh
 		
 	}
 	
-	private Mesh loadToVAO0(Vector3f[] positions,Vector2f[] texCoords,Vector3f[] normals, Vector3f[] tangents, int[] indices)
+	private Mesh loadToVAO0(Vector3f[] positions, Vector2f[] texCoords, Vector3f[] normals, Vector3f[] tangents, int[] indices)
 	{
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		

@@ -45,7 +45,7 @@ public abstract class Framebuffer
 	
 	public void resize(int width, int height)
 	{
-		for(int i = 0; i < this.attachments.length; i++)
+		for(int i = 0; i < 8; i++)
 			if(this.attachments[i] != null) this.attachments[i].resize(width, height);
 
 		if(this.depth != null) this.depth.resize(width, height);
@@ -173,7 +173,12 @@ public abstract class Framebuffer
 	{
 		GL30.glDeleteFramebuffers(this.id);
 		
-		for(FBOAttachment attachment : this.attachments)
-			if(attachment != null) attachment.release();
+		FBOAttachment att;
+		for(int i = 0; i < 8; i++)
+		{
+			att = this.attachments[i];
+			if(att != null) att.release();
+		}
+
 	}
 }

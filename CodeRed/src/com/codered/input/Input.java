@@ -39,29 +39,15 @@ public class Input
 		if(window != windowId) return;
 		if(this.configuration.isEmpty()) return;
 		
-		if(action == GLFW_RELEASE)
-		{
-			this.configuration.peek().setKey(key, false);
-		}
-		else
-		{
-			this.configuration.peek().setKey(key, true);
-		}
+		this.configuration.peek().setKey(key, action != GLFW_RELEASE);
 	}
 	
 	public void mouseButtonCallback(long window, int button, int action, int mods)
 	{
 		if(window != windowId) return;
 		if(this.configuration.isEmpty()) return;
-		
-		if(action == GLFW_RELEASE)
-		{
-			this.configuration.peek().setMouseButton(button, false);
-		}
-		else
-		{
-			this.configuration.peek().setMouseButton(button, true);
-		}
+
+		this.configuration.peek().setMouseButton(button, action != GLFW_RELEASE);
 	}
 	
 	public void update()

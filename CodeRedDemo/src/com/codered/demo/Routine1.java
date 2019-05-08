@@ -199,8 +199,10 @@ public class Routine1 extends WindowRoutine
 		Profiling.PROFILER.StopProfile("RoutineRender");
 	}
 
-	private void renderWorldFromCamera(double delta, Camera cam)
+	private void renderWorld(double delta)
 	{
+		Camera cam = this.player.getCamera();
+		
 		GLUtils.depthFunc(EvalFunc.LEQUAL);
 
 		GLUtils.cullFace(GL11.GL_BACK);
@@ -237,11 +239,6 @@ public class Routine1 extends WindowRoutine
 		}
 
 		GLUtils.cullFace(false);
-	}
-	
-	private void renderWorld(double delta)
-	{
-		renderWorldFromCamera(delta, this.player.getCamera());
 	}
 
 	public void release(boolean forced)

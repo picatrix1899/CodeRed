@@ -32,15 +32,16 @@ public class MSFBO extends Framebuffer
 		{
 			BindingUtils.bindFramebuffer(this.id);
 			
-			for(int i = 0; i < this.attachments.length; i++)
+			FBOAttachment att;
+			for(int i = 0; i < 8; i++)
 			{
-				FBOAttachment att = this.attachments[i];
+				att = this.attachments[i];
 				
 				if(att != null)
 					if(att.isBuffer())
-						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
+						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
 					else
-						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.values()[i].getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
+						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
 			}
 			
 			if(this.depth != null)

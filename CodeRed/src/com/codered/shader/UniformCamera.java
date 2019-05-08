@@ -11,7 +11,7 @@ public class UniformCamera extends Uniform
 	private int location_position = -1;
 	
 	private Camera value;
-	
+
 	public UniformCamera(String name, Object... data)
 	{
 		super(name, data);

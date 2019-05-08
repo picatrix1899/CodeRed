@@ -36,15 +36,17 @@ public class BindingUtils
 	{
 		GL30.glBindVertexArray(vao.getID());
 		
-		for(int i : attribs)
-			GL20.glEnableVertexAttribArray(i);
+		int length = attribs.length;
+		for(int i = 0; i < length; i++)
+			GL20.glEnableVertexAttribArray(attribs[i]);
 	}
 	
 	public static void bindVAO(int vao, int...attribs)
 	{
 		GL30.glBindVertexArray(vao);
 		
-		for(int i : attribs)
-			GL20.glEnableVertexAttribArray(i);
+		int length = attribs.length;
+		for(int i = 0; i < length; i++)
+			GL20.glEnableVertexAttribArray(attribs[i]);
 	}
 }

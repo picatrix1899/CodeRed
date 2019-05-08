@@ -14,34 +14,23 @@ public class ShaderPartLoader
 		StringBuilder shaderSource = new StringBuilder();
 		
 		String line = "";
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
+		
 		try
 		{
-			while((line = reader.readLine()) != null)
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream)))
 			{
-					shaderSource.append(line).append("\n");					
-			}
-			
+					while((line = reader.readLine()) != null)
+					{
+							shaderSource.append(line).append("\n");					
+					}
 
+			}
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			try
-			{
-				reader.close();
-				stream.close();	
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-
+		
 		return new ShaderPartData(shaderSource.toString());
 	}
 }

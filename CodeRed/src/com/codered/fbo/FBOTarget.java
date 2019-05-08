@@ -22,6 +22,8 @@ public enum FBOTarget
 	public static final int DST_COLOR = 0;
 	public static final int DST_DEPTH = 1;
 	
+	private static FBOTarget[] values = FBOTarget.values();
+
 	private FBOTarget(int index, int type, int target)
 	{
 		this.index = index;
@@ -33,6 +35,10 @@ public enum FBOTarget
 	public int getType() { return this.type; }
 	public int getTarget() { return this.target; }
 	
+	public static FBOTarget[] cachedValues()
+	{
+		return FBOTarget.values;
+	}
 	
 	public static FBOTarget getByIndex(int id)
 	{
@@ -40,7 +46,7 @@ public enum FBOTarget
 		
 		if(id >= 0)
 		{
-			return values()[id];
+			return FBOTarget.values[id];
 		}
 		else
 		{

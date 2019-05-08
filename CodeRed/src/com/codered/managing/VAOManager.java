@@ -1,12 +1,11 @@
 package com.codered.managing;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VAOManager
 {
-	private Set<VAO> vaos = Sets.newHashSet();
+	private List<VAO> vaos = new ArrayList<>();
 	
 	public VAO getNewVAO()
 	{
@@ -17,9 +16,10 @@ public class VAOManager
 	
 	public void release()
 	{
-		for(VAO vao : vaos)
+		int size = vaos.size();
+		for(int i = 0; i < size; i++)
 		{
-			vao.release();
+			vaos.get(i).release();
 		}
 		
 		vaos.clear();

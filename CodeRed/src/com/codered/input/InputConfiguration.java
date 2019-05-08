@@ -2,7 +2,6 @@ package com.codered.input;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,15 +56,21 @@ public class InputConfiguration
 			
 	public void update()
 	{
-		for(Iterator<Integer> it = this.registeredKeys.iterator(); it.hasNext();)
+		int i;
+		
+		int key;
+		int size = this.registeredKeys.size();
+		for(i = 0; i < size; i++)
 		{
-			int key = it.next();
+			key = this.registeredKeys.get(i);
 			this.lastKeyStates.put(key, this.currentKeyStates.get(key));
 		}
 		
-		for(Iterator<Integer> it = this.registeredMouseButtons.iterator(); it.hasNext();)
+		int mouseButton;
+		size = this.registeredMouseButtons.size();
+		for(i = 0; i <size; i++)
 		{
-			int mouseButton = it.next();
+			mouseButton = this.registeredMouseButtons.get(i);
 			this.lastMouseButtonStates.put(mouseButton, this.currentMouseButtonStates.get(mouseButton));
 		}
 	}
