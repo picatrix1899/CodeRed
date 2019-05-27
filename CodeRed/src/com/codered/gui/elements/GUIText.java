@@ -1,9 +1,9 @@
 package com.codered.gui.elements;
 
+import org.barghos.math.vector.Vec3f;
+
 import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
-
-import cmn.utilslib.math.vector.Vector3f;
 
 /**
  * Represents a piece of text in the game.
@@ -22,7 +22,7 @@ public class GUIText
 	
 	public int fontsize;
 	
-	public Vector3f color = new Vector3f(0f, 0f, 0f);
+	public Vec3f color = new Vec3f(0f, 0f, 0f);
 
 	public int numberOfLines;
 

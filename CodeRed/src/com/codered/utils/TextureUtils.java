@@ -2,14 +2,13 @@ package com.codered.utils;
 
 import java.nio.ByteBuffer;
 
+import org.barghos.core.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.texture.Texture;
 import com.codered.texture.TextureData;
-
-import cmn.utilslib.essentials.BufferUtils;
 
 public class TextureUtils
 {

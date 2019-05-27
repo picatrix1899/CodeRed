@@ -1,13 +1,13 @@
 package com.codered.managing.models;
 
+import org.barghos.math.geometry.ConvexTriangleMesh3f;
+
 import com.codered.engine.EngineRegistry;
 import com.codered.material.Material;
 
-import cmn.utilslib.math.geometry.ConcaveTriangleMesh3f;
-
 public class TexturedModel
 {
-	private ConcaveTriangleMesh3f pysicalModel;
+	private ConvexTriangleMesh3f pysModel;
 	private String model;
 	private String mat;
 	
@@ -18,10 +18,10 @@ public class TexturedModel
 		
 		Mesh mesh = EngineRegistry.getCurrentWindowContext().getDRM().getStaticMesh(this.model);
 		
-		this.pysicalModel = new ConcaveTriangleMesh3f(mesh.triangles);
+		this.pysModel = new ConvexTriangleMesh3f(mesh.triangles);
 	}
-
-	public ConcaveTriangleMesh3f getPhysicalMesh() { return this.pysicalModel; }
+	
+	public ConvexTriangleMesh3f getPhysicalMesh() { return this.pysModel; }
 	
 	public Mesh getModel() { return EngineRegistry.getCurrentWindowContext().getDRM().getStaticMesh(this.model); }
 

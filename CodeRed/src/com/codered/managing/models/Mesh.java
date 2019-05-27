@@ -3,8 +3,12 @@ package com.codered.managing.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.barghos.core.ListUtils;
+import org.barghos.math.geometry.Triangle3f;
 import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.point.Point3f;
 import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.Vec2f;
 import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL15;
@@ -14,10 +18,6 @@ import org.resources.objects.TriangleData;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 
-import cmn.utilslib.essentials.ListUtils;
-import cmn.utilslib.math.geometry.Triangle3f;
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.Vector3f;
 public class Mesh
 {
 	public List<Triangle3f> triangles = new ArrayList<>();
@@ -55,13 +55,13 @@ public class Mesh
 		return this.downscale;
 	}
 	
-	private void calculateAABB(Vector3f[] p)
+	private void calculateAABB(Point3f[] p)
 	{
 		
-		Vector3f min_point = new Vector3f(1000.0f);
-		Vector3f max_point = new Vector3f(0.0f);
+		Vec3f min_point = new Vec3f(1000.0f);
+		Vec3f max_point = new Vec3f(0.0f);
 		
-		for(Vector3f pos : p)
+		for(Point3f pos : p)
 		{
 			if(pos.getX() < min_point.getX())
 			{
@@ -98,7 +98,7 @@ public class Mesh
 	}
 	
 	
-	public Mesh setAABB(Vector3f min, Vector3f max)
+	public Mesh setAABB(Vec3f min, Vec3f max)
 	{
 
 		if(min.getY() != 0)
@@ -135,6 +135,8 @@ public class Mesh
 	
 	public Mesh loadFromObj(ObjectData obj)
 	{
+		
+
 		this.indices = obj.indices;
 		this.triangles = obj.triangles;
 		this.triangleData = obj.data;
@@ -142,10 +144,10 @@ public class Mesh
 		int triangleCount = this.triangles.size();
 		int verticesCount = triangleCount * 3;
 		
-		Vector3f[] pos = new Vector3f[verticesCount];
-		Vector2f[] uvs = new Vector2f[verticesCount];
-		Vector3f[] nrm = new Vector3f[verticesCount];
-		Vector3f[] tng = new Vector3f[verticesCount];
+		Point3f[] pos = new Point3f[verticesCount];
+		Vec2f[] uvs = new Vec2f[verticesCount];
+		Vec3f[] nrm = new Vec3f[verticesCount];
+		Vec3f[] tng = new Vec3f[verticesCount];
 		
 		int[] indices =	 new int[this.indices.size()];
 		
@@ -157,13 +159,13 @@ public class Mesh
 			tr = this.triangles.get(i); 
 			td = this.triangleData.get(i);
 			
-			pos[i * 3] = tr.a.asVector3f(new Vector3f());
-			pos[i * 3 + 1] = tr.b.asVector3f(new Vector3f());
-			pos[i * 3 + 2] = tr.c.asVector3f(new Vector3f());
+			pos[i * 3] = tr.getP1(null);
+			pos[i * 3 + 1] = tr.getP2(null);
+			pos[i * 3 + 2] = tr.getP3(null);
 			
-			uvs[i * 3] = td.uvA.mulN(1,-1);
-			uvs[i * 3 + 1] = td.uvB.mulN(1,-1);
-			uvs[i * 3 + 2] = td.uvC.mulN(1,-1);
+			uvs[i * 3] = td.uvA.mul(1,-1, null);
+			uvs[i * 3 + 1] = td.uvB.mul(1,-1, null);
+			uvs[i * 3 + 2] = td.uvC.mul(1,-1, null);
 			
 			nrm[i * 3] = td.normalA;
 			nrm[i * 3 + 1] = td.normalB;
@@ -183,7 +185,7 @@ public class Mesh
 		
 	}
 	
-	private Mesh loadToVAO0(Vector3f[] positions, Vector2f[] texCoords, Vector3f[] normals, Vector3f[] tangents, int[] indices)
+	private Mesh loadToVAO0(Point3f[] positions, Vec2f[] texCoords, Vec3f[] normals, Vec3f[] tangents, int[] indices)
 	{
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		

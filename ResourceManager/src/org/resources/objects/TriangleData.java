@@ -1,17 +1,17 @@
 package org.resources.objects;
 
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.Vector3f;
+import org.barghos.math.vector.Vec2f;
+import org.barghos.math.vector.Vec3f;
 
 public class TriangleData
 {
-	public Vector2f uvA;
-	public Vector2f uvB;
-	public Vector2f uvC;
-	public Vector3f normalA;
-	public Vector3f normalB;
-	public Vector3f normalC;
-	public Vector3f tangentA;
-	public Vector3f tangentB;
-	public Vector3f tangentC;
+	public Vec2f uvA;
+	public Vec2f uvB;
+	public Vec2f uvC;
+	public Vec3f normalA;
+	public Vec3f normalB;
+	public Vec3f normalC;
+	public Vec3f tangentA;
+	public Vec3f tangentB;
+	public Vec3f tangentC;
 }

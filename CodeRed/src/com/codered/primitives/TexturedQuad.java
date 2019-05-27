@@ -1,16 +1,15 @@
 package com.codered.primitives;
 
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Vec2f;
+import org.barghos.math.vector.Vec3f;
+import org.barghos.math.vector.Vec3fAxis;
 import org.lwjgl.opengl.GL15;
 
+import com.codered.Transform;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.material.Material;
-
-import cmn.utilslib.math.Transform;
-import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.vector.api.Vec3f;
 
 public class TexturedQuad
 {
@@ -18,8 +17,8 @@ public class TexturedQuad
 	
 	private Transform transform = new Transform();
 	
-	private Vector3f newX = new Vector3f();
-	private Vector3f newZ = new Vector3f();
+	private Vec3f newX = new Vec3f();
+	private Vec3f newZ = new Vec3f();
 	
 	private VAO vao;
 	
@@ -29,58 +28,58 @@ public class TexturedQuad
 		this.newZ.set(newZ);
 		this.mat = mat;
 
-		Vector3f[] v = new Vector3f[4];
-		v[0] = new Vector3f().add(newZ);
-		v[1] = new Vector3f();
-		v[2] = new Vector3f().add(newX);
-		v[3] = new Vector3f().add(newX).add(newZ);
+		Vec3f[] v = new Vec3f[4];
+		v[0] = new Vec3f().add(newZ, null);
+		v[1] = new Vec3f();
+		v[2] = new Vec3f().add(newX, null);
+		v[3] = new Vec3f().add(newX, null).add(newZ, null);
 		
-		Vector3f normal = ((Vector3f)newX.crossN(newZ)).normalize();
-		Vector3f tangent = calculateTangents();
+		Vec3f normal = Vec3f.cross(newX, newZ, null).normal();
+		Vec3f tangent = calculateTangents();
 		
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		this.vao.storeData(0, v, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(1, new Vector2f[] { new Vector2f(0,0), new Vector2f(0,1), new Vector2f(1,1), new Vector2f(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(2, new Vector3f[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(3, new Vector3f[] {tangent, tangent, tangent, tangent}, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(1, new Vec2f[] { new Vec2f(0,0), new Vec2f(0,1), new Vec2f(1,1), new Vec2f(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(2, new Vec3f[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(3, new Vec3f[] {tangent, tangent, tangent, tangent}, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeIndices(new int[] {0, 1, 2, 2, 3, 0}, GL15.GL_STATIC_DRAW);
 	}
 	
-	private Vector3f calculateTangents()
+	private Vec3f calculateTangents()
 	{
-		Vector3f deltaPos1 = new Vector3f(newX);
-		Vector3f deltaPos2 = new Vector3f(newZ);
+		Vec3f deltaPos1 = new Vec3f(newX);
+		Vec3f deltaPos2 = new Vec3f(newZ);
 		
-		Vector2f uv0 = new Vector2f(0,1);
-		Vector2f uv1 = new Vector2f(1,1);
-		Vector2f uv2 = new Vector2f(0,0);
+		Vec2f uv0 = new Vec2f(0,1);
+		Vec2f uv1 = new Vec2f(1,1);
+		Vec2f uv2 = new Vec2f(0,0);
 		
-		Vector2f deltaUv1 = uv1.subN(uv0);
-		Vector2f deltaUv2 = uv2.subN(uv0);
+		Vec2f deltaUv1 = uv1.sub(uv0, null);
+		Vec2f deltaUv2 = uv2.sub(uv0, null);
 
 		float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
 	
-		deltaPos1.mul(deltaUv2.getY());
-		deltaPos2.mul(deltaUv1.getY());
+		deltaPos1.mul(deltaUv2.getY(), deltaPos1);
+		deltaPos2.mul(deltaUv1.getY(), deltaPos2);
 		
-		Vector3f tangent = deltaPos1.subN(deltaPos2);
+		Vec3f tangent = deltaPos1.sub(deltaPos2, null);
 		
-		tangent.mul(r);
+		tangent.mul(r, tangent);
 		
-		return tangent.normalize();
+		return tangent.normal();
 	}
 	
-	public Matrix4f getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
 		
-		Matrix4f baseTransformation = Matrix4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vector3f.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
-		Matrix4f ownTransformation = baseTransformation.mul(Matrix4f.scaling(getTransform().getScale()));;
+		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
 		{
-			Matrix4f parentTransformation = this.transform.getParent().getTransformationMatrix();
+			Mat4f parentTransformation = this.transform.getParent().getTransformationMatrix();
 			
-			return parentTransformation.mul(ownTransformation);
+			return parentTransformation.mul(ownTransformation, null);
 		}
 		
 		return ownTransformation;

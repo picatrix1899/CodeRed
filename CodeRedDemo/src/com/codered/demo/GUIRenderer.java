@@ -1,10 +1,10 @@
 package com.codered.demo;
 
 import org.barghos.math.vector.Vec2f;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-import com.codered.ConvUtils;
 import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.font.TextMeshData;
@@ -105,7 +105,7 @@ public class GUIRenderer implements IGuiRenderer
 		try(ShaderSession ss = this.fontGuiShader.start())
 		{
 			this.fontGuiShader.setUniformValue(0, this.context.getWindow().getSize());
-			this.fontGuiShader.setUniformValue(1, ConvUtils.vector3fToVec3f(text.color));
+			this.fontGuiShader.setUniformValue(1, text.color);
 			this.fontGuiShader.setUniformValue(2, text.font.getTexture().getId());
 			this.fontGuiShader.load();
 			

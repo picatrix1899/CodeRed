@@ -1,14 +1,14 @@
 package com.codered.managing;
 
-import cmn.utilslib.math.vector.Vector3f;
-import cmn.utilslib.math.geometry.Point3f;
-import cmn.utilslib.math.vector.Vector2f;
+import org.barghos.math.point.Point3f;
+import org.barghos.math.vector.Vec2f;
+import org.barghos.math.vector.Vec3f;
 
 public class Vertex
 {
 	public Point3f pos;
-	public Vector2f uv;
-	public Vector3f normal;
-	public Vector3f tangent = new Vector3f();
+	public Vec2f uv;
+	public Vec3f normal;
+	public Vec3f tangent = new Vec3f();
 	public int index;
 }

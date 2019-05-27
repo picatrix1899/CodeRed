@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.barghos.math.geometry.Triangle3f;
+import org.barghos.math.point.Point3f;
+import org.barghos.math.vector.Vec2f;
+import org.barghos.math.vector.Vec3f;
 import org.resources.utils.ResourceLoader;
-
-import cmn.utilslib.math.geometry.Point3f;
-import cmn.utilslib.math.geometry.Triangle3f;
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.Vector3f;
 
 public class ObjectLoader extends ResourceLoader<ObjectData>
 {
@@ -39,12 +38,12 @@ public class ObjectLoader extends ResourceLoader<ObjectData>
 				else if(line.startsWith("vt "))
 				{
 					parts = line.split(" ");
-					data.uvs.add(new Vector2f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2])));
+					data.uvs.add(new Vec2f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2])));
 				}
 				else if(line.startsWith("vn "))
 				{
 					parts = line.split(" ");
-					data.normals.add(new Vector3f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2]),Float.parseFloat(parts[3])));
+					data.normals.add(new Vec3f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2]),Float.parseFloat(parts[3])));
 				}
 				else if(line.startsWith("f "))
 				{
@@ -58,9 +57,7 @@ public class ObjectLoader extends ResourceLoader<ObjectData>
 					calculateTangents(vA, vB, vC);	
 					
 					Triangle3f tr = new Triangle3f();
-					tr.a = vA.pos;
-					tr.b = vB.pos;
-					tr.c = vC.pos;
+					tr.set(vA.pos, vB.pos, vC.pos);
 					
 					TriangleData d = new TriangleData();
 					d.normalA = vA.normal;
@@ -108,7 +105,7 @@ private Vertex processVertex(ObjectData data, String line)
 	v.pos = data.pos.get(posIndex);
 	v.uv = data.uvs.get(textureIndex);
 	v.normal = data.normals.get(normalIndex);
-	v.tangent = new Vector3f();
+	v.tangent = new Vec3f();
 
 	data.indices.add(data.indices.size());
 	
@@ -117,24 +114,24 @@ private Vertex processVertex(ObjectData data, String line)
 
 private void calculateTangents(Vertex a, Vertex b, Vertex c)
 {
-	Vector3f deltaPos1 = a.pos.vectorTof(b.pos, new Vector3f());
-	Vector3f deltaPos2 = a.pos.vectorTof(c.pos, new Vector3f());
+	Vec3f deltaPos1 = Vec3f.sub(b.pos, a.pos, null);
+	Vec3f deltaPos2 = Vec3f.sub(c.pos, a.pos, null);
 	
-	Vector2f uv0 = a.uv;
-	Vector2f uv1 = b.uv;
-	Vector2f uv2 = c.uv;
+	Vec2f uv0 = a.uv;
+	Vec2f uv1 = b.uv;
+	Vec2f uv2 = c.uv;
 	
-	Vector2f deltaUv1 = uv1.subN(uv0);
-	Vector2f deltaUv2 = uv2.subN(uv0);
+	Vec2f deltaUv1 = uv1.sub(uv0, null);
+	Vec2f deltaUv2 = uv2.sub(uv0, null);
 
 	float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
-	deltaPos1.mul(deltaUv2.getY());
-	deltaPos2.mul(deltaUv1.getY());
-	Vector3f tangent = deltaPos1.subN(deltaPos2);
-	tangent.mul(r);
+	deltaPos1.mul(deltaUv2.getY(), deltaPos1);
+	deltaPos2.mul(deltaUv1.getY(), deltaPos2);
+	Vec3f tangent = deltaPos1.sub(deltaPos2, null);
+	tangent.mul(r, tangent);
 	
-	a.tangent.add(tangent);
-	b.tangent.add(tangent);
-	c.tangent.add(tangent);
+	a.tangent.add(tangent, a.tangent);
+	b.tangent.add(tangent, b.tangent);
+	c.tangent.add(tangent, c.tangent);
 }
 }

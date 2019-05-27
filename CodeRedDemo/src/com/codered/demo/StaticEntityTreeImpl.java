@@ -1,12 +1,8 @@
-package com.codered;
+package com.codered.demo;
 
 import java.util.Iterator;
 
 import com.codered.entities.StaticEntity;
-
-import cmn.utilslib.trees.btree.AABB3fBTree;
-import cmn.utilslib.trees.btree.AABB3fBTreeBuilder;
-import cmn.utilslib.trees.btree.AABB3fBTreeWalker;
 
 public class StaticEntityTreeImpl
 {

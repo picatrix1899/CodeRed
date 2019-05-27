@@ -12,6 +12,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ResourceManager/lib/guava-27.0.1-jre-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilslib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/barghos-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/barghos-math"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

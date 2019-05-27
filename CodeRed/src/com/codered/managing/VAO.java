@@ -14,10 +14,7 @@ import com.codered.utils.BindingUtils;
 
 import org.barghos.core.BufferUtils;
 import org.barghos.core.api.tuple.ITup2fR;
-
-import cmn.utilslib.math.vector.Vector4f;
-import cmn.utilslib.math.vector.api.Vec2fBase;
-import cmn.utilslib.math.vector.api.Vec3fBase;
+import org.barghos.core.api.tuple.ITup3fR;
 
 public class VAO
 {
@@ -84,29 +81,6 @@ public class VAO
 		GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_INT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Vec2fBase[] data, int stride, int pointer, int drawFlag)
-	{
-		BindingUtils.bindVAO(this);
-		
-		int vboID = 0;
-
-		if(!this.vbos.containsKey(attrib))
-		{
-			vboID = GL15.glGenBuffers();
-			vbos.put(attrib, vboID);
-		}
-		else
-			vboID = this.vbos.get(attrib);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		
-		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector2FBuffer(data);
-		
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-		
-		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
-	}
-	
 	public void storeData(int attrib, ITup2fR[] data, int stride, int pointer, int drawFlag)
 	{
 		BindingUtils.bindVAO(this);
@@ -130,7 +104,7 @@ public class VAO
 		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Vec3fBase[] data, int stride, int pointer, int drawFlag)
+	public void storeData(int attrib, ITup3fR[] data, int stride, int pointer, int drawFlag)
 	{
 		BindingUtils.bindVAO(this);
 		
@@ -146,35 +120,12 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector3FBuffer(data);
+		FloatBuffer buffer = BufferUtils.wrapFlippedTuple3FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
 		GL20.glVertexAttribPointer(attrib, 3, GL11.GL_FLOAT, false, stride, pointer);
 	}
-	
-	public void storeData(int attrib, Vector4f[] data, int stride, int pointer, int drawFlag)
-	{
-		BindingUtils.bindVAO(this);
-		
-		int vboID = 0;
-
-		if(!this.vbos.containsKey(attrib))
-		{
-			vboID = GL15.glGenBuffers();
-			vbos.put(attrib, vboID);
-		}
-		else
-			vboID = this.vbos.get(attrib);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		
-		FloatBuffer buffer = cmn.utilslib.essentials.BufferUtils.wrapFlippedVector4FBuffer(data);
-		
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-		
-		GL20.glVertexAttribPointer(attrib, 4, GL11.GL_FLOAT, false, stride, pointer);
-}
 	
 	public void storeIndices(int[] indices, int drawflag)
 	{
@@ -188,6 +139,7 @@ public class VAO
 		
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
 	}
+
 	
 	public void clearVBOs()
 	{

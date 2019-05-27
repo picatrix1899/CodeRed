@@ -1,10 +1,10 @@
 package com.codered.terrain;
 
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Vec3f;
+
 import com.codered.managing.models.RawModel;
 import com.codered.material.Material;
-
-import cmn.utilslib.math.matrix.Matrix4f;
-import cmn.utilslib.math.vector.Vector3f;
 
 public class Terrain
 {
@@ -46,8 +46,8 @@ public class Terrain
 		return this.material;
 	}
 	
-	public Matrix4f getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
-		return Matrix4f.translation(new Vector3f(getX(), 0.0f, getZ()));
+		return Mat4f.translation(new Vec3f(getX(), 0.0f, getZ()));
 	}
 }

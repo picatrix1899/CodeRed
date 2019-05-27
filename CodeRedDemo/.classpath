@@ -6,7 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilslib"/>
 	<classpathentry kind="lib" path="lib/lwjgl-glfw.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-natives-windows.jar"/>

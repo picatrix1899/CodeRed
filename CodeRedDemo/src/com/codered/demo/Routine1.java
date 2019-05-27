@@ -9,7 +9,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.Profiling;
-import com.codered.StaticEntityTreeImpl;
 import com.codered.engine.Engine;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
@@ -120,10 +119,10 @@ public class Routine1 extends WindowRoutine
 		
 		this.world = new StaticEntityTreeImpl();
 		
-		this.world.add(new StaticEntity("crate", new Vec3f(0,0,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(0,10,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(10,0,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(10,10,-40), 0, 0, 0));
+		this.world.add(new StaticEntity("crate", new Vec3f(0,0,-40), 0, 45, 0));
+		//this.world.add(new StaticEntity("crate", new Vec3f(0,10,-40), 0, 45, 0));
+		//this.world.add(new StaticEntity("crate", new Vec3f(10,0,-40), 0, 0, 0));
+		//this.world.add(new StaticEntity("crate", new Vec3f(10,10,-40), 0, 0, 0));
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);

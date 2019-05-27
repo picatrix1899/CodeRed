@@ -1,13 +1,11 @@
 package com.codered.managing;
 
+import org.barghos.math.vector.Vec2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
-
-import cmn.utilslib.math.vector.Vector2f;
-import cmn.utilslib.math.vector.api.Vec2f;
 
 public class UnityScreen
 {
@@ -15,7 +13,7 @@ public class UnityScreen
 	
 	public UnityScreen()
 	{
-		Vec2f[] CORNERS = new Vector2f[] { new Vector2f(-1, 1), new Vector2f(-1, -1), new Vector2f(1, 1), new Vector2f(1, -1) };
+		Vec2f[] CORNERS = new Vec2f[] { new Vec2f(-1, 1), new Vec2f(-1, -1), new Vec2f(1, 1), new Vec2f(1, -1) };
 		
 		vao = EngineRegistry.getVAOManager().getNewVAO();
 		vao.storeData(0, CORNERS, 0, 0, GL15.GL_STATIC_DRAW);
