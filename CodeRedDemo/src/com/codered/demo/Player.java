@@ -2,6 +2,7 @@ package com.codered.demo;
 
 import java.util.List;
 
+import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.barghos.math.geometry.AABB3f;
 import org.barghos.math.geometry.OBB3f;
 import org.barghos.math.geometry.OBBOBBResolver;
@@ -58,10 +59,11 @@ public class Player extends BaseEntity
 	
 	public void update(double delta)
 	{
-		Profiling.PROFILER.StartProfile("PlayerUpdate");
-		updateMovement(delta);
-		updateOrientation(delta);
-		Profiling.PROFILER.StopProfile("PlayerUpdate");
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
+		{
+			updateMovement(delta);
+			updateOrientation(delta);
+		}
 	}
 	
 	public void updateOrientation(double delta)
@@ -144,7 +146,7 @@ public class Player extends BaseEntity
 		
 		translation = Mat4f.translation(tempPos);
 		
-		List<StaticEntity> entities = this.world.walker.walk(this.aabb.transform(translation,null));
+		List<StaticEntity> entities = this.world.walker.walk(this.aabb.transform(translation, null));
 		
 		for(StaticEntity entity : entities)
 		{
@@ -154,7 +156,7 @@ public class Player extends BaseEntity
 			
 			sweptAABB = this.aabb.transform(translation, null);
 			
-			tempOBB = new OBB3f(sweptAABB.getCenter(), sweptAABB.getHalfExtend(), Mat4f.identity());
+			tempOBB = sweptAABB.getOBB();
 			
 			if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
 			{

@@ -1,7 +1,7 @@
 package com.codered.demo;
 
 import org.resources.ResourceManager;
-
+import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -55,44 +55,49 @@ public class DemoGame extends Engine
 	
 	public void init()
 	{
-		Profiling.PROFILER.StartProfile("GameInit");
-		ResourceManager resources = ResourceManager.getInstance();
-		resources.start();
-	
-		this.context1.initWindow();
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameInit"))
+		{
+			ResourceManager resources = ResourceManager.getInstance();
+
+			resources.start();
 		
-		this.context1.init();
-		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
-		
-		printDebugInfo();
-		Profiling.PROFILER.StopProfile("GameInit");
+			this.context1.initWindow();
+			
+			this.context1.init();
+			this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
+			
+			printDebugInfo();
+		}
 	}
 	
 	public void update(double delta)
 	{
-		Profiling.PROFILER.StartProfile("GameUpdate");
-		this.context1.update(delta);
-		Profiling.PROFILER.StopProfile("GameUpdate");
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameUpdate"))
+		{
+			this.context1.update(delta);
+		}
 	}
 
 	public void render(double delta, double alpha)
 	{
-		Profiling.PROFILER.StartProfile("GameRender");
-		this.context1.render(delta, alpha);
-		Profiling.PROFILER.StopProfile("GameRender");
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameRender"))
+		{
+			this.context1.render(delta, alpha);
+		}
 	}
 
 	
 	public void release(boolean forced)
 	{
-		Profiling.PROFILER.StartProfile("GameRelease");
-		ResourceManager resources = ResourceManager.getInstance();
-		resources.stop();
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameRelease"))
+		{
+			ResourceManager resources = ResourceManager.getInstance();
+			resources.stop();
+			
+			this.context1.release(forced);
+		}
 		
-		this.context1.release(forced);
-		Profiling.PROFILER.StopProfile("GameRelease");
-		
-		System.out.print(Profiling.PROFILER.dump());
+		System.out.print(Profiling.CPROFILER);
 	}
 
 }

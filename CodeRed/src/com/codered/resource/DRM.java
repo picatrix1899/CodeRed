@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
@@ -413,131 +414,131 @@ public class DRM
 	{
 		if(this.currentBlock != null)
 		{
-			Profiling.PROFILER.StartProfile("DRMUpdate");
-			
-			int i;
-			String id;
-			List<String> pendingResource = this.currentBlock.getPendingTextures();
-			int size = pendingResource.size();
-			for(i = 0; i < size; i++)
+			try(ProfilingSession session = Profiling.CPROFILER.startSession("DRMUpdate"))
 			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.textures().isAvailable(id))
+				int i;
+				String id;
+				List<String> pendingResource = this.currentBlock.getPendingTextures();
+				int size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateTexture(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.textures().isAvailable(id))
+					{
+						generateTexture(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingStaticMeshes();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.staticMeshs().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingStaticMeshes();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateStaticMesh(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.staticMeshs().isAvailable(id))
+					{
+						generateStaticMesh(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-			pendingResource = this.currentBlock.getPendingMaterials();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.materials().isAvailable(id))
+				pendingResource = this.currentBlock.getPendingMaterials();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateMaterial(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.materials().isAvailable(id))
+					{
+						generateMaterial(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingVertexShaderParts();
-			size = pendingResource.size();
-			for(i = 0; i < size ; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.vertexShaderParts().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingVertexShaderParts();
+				size = pendingResource.size();
+				for(i = 0; i < size ; i++)
 				{
-					generateVertexShaderPart(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.vertexShaderParts().isAvailable(id))
+					{
+						generateVertexShaderPart(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingFragmentShaderParts();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.fragmentShaderParts().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingFragmentShaderParts();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateFragmentShaderPart(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.fragmentShaderParts().isAvailable(id))
+					{
+						generateFragmentShaderPart(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingGeometryShaderParts();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.geometryShaderParts().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingGeometryShaderParts();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateGeometryShaderPart(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.geometryShaderParts().isAvailable(id))
+					{
+						generateGeometryShaderPart(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingTessellationControlShaderParts();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.tessellationControlShaderParts().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingTessellationControlShaderParts();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateTessellationControlShaderPart(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.tessellationControlShaderParts().isAvailable(id))
+					{
+						generateTessellationControlShaderPart(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
-			}
-
-			pendingResource = this.currentBlock.getPendingTessellationEvaluationShaderParts();
-			size = pendingResource.size();
-			for(i = 0; i < size; i++)
-			{
-				id = pendingResource.get(i);
-				
-				if(this.rm.tessellationEvaluationShaderParts().isAvailable(id))
+	
+				pendingResource = this.currentBlock.getPendingTessellationEvaluationShaderParts();
+				size = pendingResource.size();
+				for(i = 0; i < size; i++)
 				{
-					generateTessellationEvaluationShaderPart(id);
-					pendingResource.remove(id);
-					i--;
-					size--;
+					id = pendingResource.get(i);
+					
+					if(this.rm.tessellationEvaluationShaderParts().isAvailable(id))
+					{
+						generateTessellationEvaluationShaderPart(id);
+						pendingResource.remove(id);
+						i--;
+						size--;
+					}
 				}
+	
+				if(this.currentBlock.isFinished()) this.currentBlock = null;
 			}
-
-			if(this.currentBlock.isFinished()) this.currentBlock = null;
-			Profiling.PROFILER.StopProfile("DRMUpdate");
 		}
 	}
 	

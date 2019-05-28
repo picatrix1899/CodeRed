@@ -1,8 +1,8 @@
 package com.codered;
 
-import org.barghos.core.profiler.Profiler;
+import org.barghos.core.profiler.CascadingProfiler;
 
 public class Profiling
 {
-	public static Profiler PROFILER = new Profiler();
+	public static CascadingProfiler CPROFILER = new CascadingProfiler(0);
 }
