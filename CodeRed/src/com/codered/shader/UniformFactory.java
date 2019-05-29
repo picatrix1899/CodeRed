@@ -2,16 +2,15 @@ package com.codered.shader;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 public class UniformFactory
 {
 	
 	private static UniformFactory instance;
 	
-	private Map<String, Class<? extends Uniform>> extendedUniformTypes = Maps.newHashMap();
+	private Map<String, Class<? extends Uniform>> extendedUniformTypes = new HashMap<>();
 	
 	public static UniformFactory  getInstance()
 	{
