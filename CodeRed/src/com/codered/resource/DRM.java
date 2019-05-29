@@ -20,8 +20,6 @@ import com.codered.shader.ShaderPart;
 import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
 
-import com.google.common.collect.Maps;
-
 public class DRM
 {
 	private ResourceBlock currentBlock;
@@ -35,7 +33,7 @@ public class DRM
 	private Map<String,ShaderPart> geometryShaderParts = new HashMap<>();
 	private Map<String,ShaderPart> tessellationControlShaderParts = new HashMap<>();
 	private Map<String,ShaderPart> tessellationEvaluationShaderParts = new HashMap<>();
-	private Map<String,Shader> shaders = Maps.newHashMap();
+	private Map<String,Shader> shaders = new HashMap<>();
 
 	
 	public DRM()

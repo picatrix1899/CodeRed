@@ -5,27 +5,24 @@ import java.util.HashMap;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
-import com.codered.managing.loader.data.MaterialData;
 import com.codered.managing.models.Mesh;
 import com.codered.managing.models.RawModel;
 import com.codered.managing.models.TexturedModel;
 import com.codered.material.Material;
-import com.codered.material.MaterialLoader;
 import com.codered.texture.Texture;
 import com.codered.texture.TextureData;
 import com.codered.texture.TextureLoader;
 import com.codered.utils.TextureUtils;
 import com.codered.window.WindowContext;
-import com.google.common.collect.Maps;
 
 public class InternalResourceManager
 {
-	private HashMap<String,Texture> textures = Maps.newHashMap();
-	private HashMap<String,Material> materials = Maps.newHashMap();
-	private HashMap<String,Mesh> staticMeshes = Maps.newHashMap();
-	private HashMap<String,RawModel> rawModels = Maps.newHashMap();
-	private HashMap<String,TexturedModel> texturedModels = Maps.newHashMap();
-	private HashMap<String,FontType> fonts = Maps.newHashMap();
+	private HashMap<String,Texture> textures = new HashMap<>();
+	private HashMap<String,Material> materials = new HashMap<>();
+	private HashMap<String,Mesh> staticMeshes = new HashMap<>();
+	private HashMap<String,RawModel> rawModels = new HashMap<>();
+	private HashMap<String,TexturedModel> texturedModels = new HashMap<>();
+	private HashMap<String,FontType> fonts = new HashMap<>();
 	
 	private WindowContext context;
 
