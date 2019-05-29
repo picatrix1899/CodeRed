@@ -50,6 +50,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/CodeRed/lib/log4j-core-2.11.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilslib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,7 +3,7 @@ package com.codered.demo;
 import java.util.ArrayList;
 
 import org.barghos.math.geometry.AABB3f;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.point.Point3f;
 import org.barghos.structs.simpletree.btree.BTree;
 import org.barghos.structs.simpletree.btree.BTreeWalker;
 
@@ -25,18 +25,18 @@ public class AABB3fBTreeWalker<T> extends BTreeWalker<T, AABB3f>
 
 	protected boolean isOverlapping(AABB3f oldEvalData, AABB3f newEvalData)
 	{
-		Vec3f minA = Vec3f.sub(newEvalData.getCenter(), newEvalData.getHalfExtend(), null);
-		Vec3f maxA = Vec3f.add(newEvalData.getCenter(), newEvalData.getHalfExtend(), null);
+		Point3f minA = newEvalData.getMin();
+		Point3f maxA = newEvalData.getMax();
 		
 		return isPointInside(minA, oldEvalData) || isPointInside(maxA, oldEvalData);
 		
 		
 	}
 	
-	private boolean isPointInside(Vec3f point, AABB3f area)
+	private boolean isPointInside(Point3f point, AABB3f area)
 	{
-		Vec3f minB = Vec3f.sub(area.getCenter(), area.getHalfExtend(), null);
-		Vec3f maxB = Vec3f.add(area.getCenter(), area.getHalfExtend(), null);
+		Point3f minB = area.getMin();
+		Point3f maxB = area.getMax();
 		
 		return minB.x <= point.x && point.x <= maxB.x &&
 			   minB.y <= point.y && point.y <= maxB.y &&

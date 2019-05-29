@@ -1,6 +1,7 @@
 package com.codered.demo;
 
 import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.point.Point3f;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.structs.simpletree.btree.BTree;
 import org.barghos.structs.simpletree.btree.BTreeBuilder;
@@ -25,10 +26,10 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 	
 	public AABB3f mergeAABBs(AABB3f a, AABB3f b)
 	{
-		Vec3f minA = Vec3f.sub(a.getCenter(), a.getHalfExtend(), null);
-		Vec3f maxA = Vec3f.add(a.getCenter(), a.getHalfExtend(), null);
-		Vec3f minB = Vec3f.sub(b.getCenter(), b.getHalfExtend(), null);
-		Vec3f maxB = Vec3f.add(b.getCenter(), b.getHalfExtend(), null);
+		Point3f minA = a.getMin();
+		Point3f maxA = a.getMax();
+		Point3f minB = b.getMin();
+		Point3f maxB = b.getMax();
 		
 		float minX = minA.x <= minB.x ? minA.x : minB.x;
 		float minY = minA.y <= minB.y ? minA.y : minB.y;
@@ -38,15 +39,24 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 		float maxY = maxA.y >= maxB.y ? maxA.y : maxB.y;
 		float maxZ = maxA.z >= maxB.z ? maxA.z : maxB.z;
 
-		return new AABB3f(new Vec3f(minX, minY, minZ), new Vec3f(maxX, maxY, maxZ));
+		Vec3f min = new Vec3f(minX, minY, minZ);
+		Vec3f max = new Vec3f(maxX, maxY, maxZ);
+		
+		Vec3f he = new Vec3f();
+		max.sub(min, he).mul(0.5, he);
+		
+		Vec3f center = new Vec3f();
+		min.add(he, center);
+		
+		return new AABB3f(center, he);
 	}
 
 	protected boolean isInRange(AABB3f oldEvalData, AABB3f newEvalData)
 	{
-		Vec3f minA = Vec3f.sub(newEvalData.getCenter(),newEvalData.getHalfExtend(), null);
-		Vec3f minB = Vec3f.sub(oldEvalData.getCenter(), oldEvalData.getHalfExtend(), null);
-		Vec3f maxA = Vec3f.add(newEvalData.getCenter(), newEvalData.getHalfExtend(), null);
-		Vec3f maxB = Vec3f.add(oldEvalData.getCenter(), oldEvalData.getHalfExtend(), null);
+		Point3f minA = newEvalData.getMin();
+		Point3f minB = oldEvalData.getMin();
+		Point3f maxA = newEvalData.getMax();
+		Point3f maxB = oldEvalData.getMax();
 		
 		if(minA.x < minB.x) return false;
 		if(minA.y < minB.y) return false;
@@ -65,12 +75,12 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 			AABB3f newEvalData)
 	{
 		
-		Vec3f minEval = Vec3f.sub(newEvalData.getCenter(),newEvalData.getHalfExtend(), null);
-		Vec3f maxEval = Vec3f.add(newEvalData.getCenter(), newEvalData.getHalfExtend(), null);
-		Vec3f minA = Vec3f.sub(a.evalData.getCenter(), a.evalData.getHalfExtend(), null);
-		Vec3f maxA = Vec3f.add(a.evalData.getCenter(), a.evalData.getHalfExtend(), null);
-		Vec3f minB = Vec3f.sub(b.evalData.getCenter(), b.evalData.getHalfExtend(), null);
-		Vec3f maxB = Vec3f.add(b.evalData.getCenter(), b.evalData.getHalfExtend(), null);
+		Point3f minEval = newEvalData.getMin();
+		Point3f maxEval = newEvalData.getMax();
+		Point3f minA = a.evalData.getMin();
+		Point3f maxA = a.evalData.getMax();
+		Point3f minB = b.evalData.getMin();
+		Point3f maxB = b.evalData.getMax();
 		
 		Vec3f minEA = Vec3f.sub(minA, minEval, null);
 		double distMinA = minEA.squaredLength();
