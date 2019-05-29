@@ -4,11 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import com.google.common.collect.Maps;
 
 public class ArgumentInterpreter
 {
-		private HashMap<String, Argument> interpreter = Maps.newHashMap();
+		private HashMap<String, Argument> interpreter = new HashMap<>();
 		
 		public void addArgument(String args, Argument destination)
 		{

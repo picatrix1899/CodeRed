@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 import org.barghos.core.StringUtils;
 
-import com.google.common.collect.Lists;
-
 public class DebugInfo
 {
 	private int maxLengthTitle;
 	private int maxLengthValue;
-	private ArrayList<String> titles = Lists.newArrayList();
-	private ArrayList<String> values = Lists.newArrayList();
+	private ArrayList<String> titles = new ArrayList<>();
+	private ArrayList<String> values = new ArrayList<>();
 	private String lead = "+  ";
 	private String trail = "  +";
 	private String gap = "        ";

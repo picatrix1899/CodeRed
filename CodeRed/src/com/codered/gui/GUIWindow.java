@@ -3,12 +3,11 @@ package com.codered.gui;
 import java.util.HashMap;
 
 import com.codered.utils.IGuiRenderer;
-import com.google.common.collect.Maps;
 
 public abstract class GUIWindow extends GUI
 {
 	
-	private HashMap<Integer, GUIElement> elements = Maps.newHashMap();
+	private HashMap<Integer, GUIElement> elements = new HashMap<>();
 	
 	public GUIWindow(IGuiRenderer renderer)
 	{

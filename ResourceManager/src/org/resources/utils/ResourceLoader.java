@@ -2,18 +2,17 @@ package org.resources.utils;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.resources.errors.ResourceErrorThrownException;
 import org.resources.errors.ResourcePendingException;
 
-import com.google.common.collect.Sets;
-
 public abstract class ResourceLoader<T>
 {
 	private ManagedFuturePool<Void> pool;
-	private Set<String> pendingIds = Sets.newHashSet();
+	private Set<String> pendingIds = new HashSet<>();
 
 	public ResourceLoader(String threadname)
 	{
