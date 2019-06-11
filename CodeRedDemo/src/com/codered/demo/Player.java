@@ -60,15 +60,21 @@ public class Player extends BaseEntity
 	
 	public void update(double delta)
 	{
+
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
 		{
+			Vec3fPool.start();
 			updateMovement(delta);
+			
 			updateOrientation(delta);
+			Vec3fPool.stop();
 		}
+
 	}
 	
 	public void updateOrientation(double delta)
 	{
+
 		if(this.context.getInputManager().isMouseButtonPressed(2))
 		{
 			this.context.getMouse().grab(true);
@@ -83,10 +89,12 @@ public class Player extends BaseEntity
 		{
 			this.context.getMouse().grab(false);
 		}
+		
 	}
 	
 	public void updateMovement(double delta)
 	{
+
 		Vec3f dir = Vec3fPool.get();
 		Vec3f vel = Vec3fPool.get();
 		
@@ -109,20 +117,24 @@ public class Player extends BaseEntity
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, null).normal(), dir);
 		}
-		
-		if(Vec3f.isZero(dir)) { return; }
-		
-		dir.normal();
-	
-		float acceleration = 20.0f * (float)delta;
 
-		dir.mul(acceleration, vel);
-		
-		vel = checkCollisionStatic(vel);
-		
-		this.transform.moveBy(vel);
+		if(!Vec3f.isZero(dir))
+		{
+			dir.normal();
+			
+			float acceleration = 20.0f * (float)delta;
+
+			dir.mul(acceleration, vel);
+			
+			vel = checkCollisionStatic(vel);
+			
+			this.transform.moveBy(vel);
+		}
+
+
 		
 		Vec3fPool.store(dir, vel);
+
 	}
 	
 	public Camera getCamera() { return this.camera; }
@@ -133,6 +145,7 @@ public class Player extends BaseEntity
 	
 	private Vec3f checkCollisionStatic(Vec3f vel)
 	{
+		
 		Vec3f sum = Vec3fPool.get();
 		Vec3f partial = Vec3fPool.get();
 		Vec3f tempPos = Vec3fPool.get();
