@@ -11,10 +11,10 @@ import org.barghos.math.geometry.OBB3f;
 import org.barghos.math.geometry.OBBOBBResolver;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3f;
-import org.barghos.math.pool.Vec3fPool;
 import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
+import org.barghos.math.vector.Vec3fPool;
 
 import com.codered.Profiling;
 import com.codered.engine.EngineRegistry;
@@ -63,11 +63,9 @@ public class Player extends BaseEntity
 
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
 		{
-			Vec3fPool.start();
 			updateMovement(delta);
 			
 			updateOrientation(delta);
-			Vec3fPool.stop();
 		}
 
 	}
@@ -97,32 +95,33 @@ public class Player extends BaseEntity
 
 		Vec3f dir = Vec3fPool.get();
 		Vec3f vel = Vec3fPool.get();
+		Vec3f t = Vec3fPool.get();
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_W))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, null).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, t).normal(), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_D))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, null).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, t).normal(), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_A))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, null).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, t).normal(), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_S))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, null).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal(), dir);
 		}
 
 		if(!Vec3f.isZero(dir))
 		{
 			dir.normal();
 			
-			float acceleration = 20.0f * (float)delta;
+			float acceleration = 25.0f * (float)delta;
 
 			dir.mul(acceleration, vel);
 			
@@ -133,7 +132,7 @@ public class Player extends BaseEntity
 
 
 		
-		Vec3fPool.store(dir, vel);
+		Vec3fPool.store(dir, vel, t);
 
 	}
 	

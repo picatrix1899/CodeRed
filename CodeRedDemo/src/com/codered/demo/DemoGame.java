@@ -2,6 +2,7 @@ package com.codered.demo;
 
 import org.resources.ResourceManager;
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
+import org.barghos.math.vector.Vec3fPool;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -27,6 +28,7 @@ public class DemoGame extends Engine
 	public DemoGame()
 	{
 		instance = this;
+		Thread.currentThread().setName("CodeRedDemo");
 		
 		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
 		w1.setWindowHintCallback(() -> initWindowHints());
@@ -98,6 +100,7 @@ public class DemoGame extends Engine
 		}
 		
 		System.out.print(Profiling.CPROFILER);
+		System.out.println(Vec3fPool.size());
 	}
 
 }
