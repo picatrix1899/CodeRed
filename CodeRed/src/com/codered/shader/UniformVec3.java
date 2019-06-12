@@ -15,10 +15,10 @@ public class UniformVec3 extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof ITup3R)) throw new IllegalArgumentException();
-		ITup3R v = (ITup3R)obj;
+		if(!(obj[0] instanceof ITup3R)) throw new IllegalArgumentException();
+		ITup3R v = (ITup3R)obj[0];
 		this.value.set(v);
 	}
 

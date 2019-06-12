@@ -4,7 +4,7 @@ public interface Shader
 {
 	void recompile();
 	
-	void setUniformValue(int id, Object obj);
+	void setUniformValue(int id, Object... obj);
 	
 	ShaderSession start();
 	void stop();

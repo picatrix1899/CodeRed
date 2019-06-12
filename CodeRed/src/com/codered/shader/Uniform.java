@@ -27,7 +27,7 @@ public abstract class Uniform
 		return position;
 	}
 	
-	public abstract void set(Object obj);
+	public abstract void set(Object... obj);
 	
 	public abstract void load();
 	

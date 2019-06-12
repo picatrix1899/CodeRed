@@ -21,6 +21,7 @@ public class StaticEntity extends BaseEntity
 		setRotX(rx);
 		setRotY(ry);
 		setRotZ(rz);
+		this.transform.swap();
 	}
 	
 	public StaticEntity setPos(Vec3f pos) { super.setPos(pos); return this; }

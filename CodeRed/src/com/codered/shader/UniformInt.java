@@ -12,10 +12,10 @@ public class UniformInt extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Integer)) throw new IllegalArgumentException();
-		int v = (int)obj;
+		if(!(obj[0] instanceof Integer)) throw new IllegalArgumentException();
+		int v = (int)obj[0];
 		this.value = v;
 	}
 

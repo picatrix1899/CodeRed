@@ -39,6 +39,8 @@ public class Player extends BaseEntity
 	
 	private StaticEntityTreeImpl world;
 	
+	
+	
 	public Player(StaticEntityTreeImpl world)
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
@@ -56,6 +58,12 @@ public class Player extends BaseEntity
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
+	}
+	
+	public void preUpdate()
+	{
+		this.transform.swap();
+		this.camera.getTransform().swap();
 	}
 	
 	public void update(double delta)
@@ -92,29 +100,28 @@ public class Player extends BaseEntity
 	
 	public void updateMovement(double delta)
 	{
-
 		Vec3f dir = Vec3fPool.get();
 		Vec3f vel = Vec3fPool.get();
 		Vec3f t = Vec3fPool.get();
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_W))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, t).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, t).normal(t), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_D))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, t).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, t).normal(t), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_A))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, t).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, t).normal(t), dir);
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_S))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal(), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal(t), dir);
 		}
 
 		if(!Vec3f.isZero(dir))

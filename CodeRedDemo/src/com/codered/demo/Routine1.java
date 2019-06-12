@@ -198,12 +198,12 @@ public class Routine1 extends WindowRoutine
 			}
 			else
 			{
-				renderWorld(delta);
+				renderWorld(alpha);
 			}
 		}
 	}
 
-	private void renderWorld(double delta)
+	private void renderWorld(double alpha)
 	{
 		Camera cam = this.player.getCamera();
 		
@@ -218,7 +218,7 @@ public class Routine1 extends WindowRoutine
 			
 			for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 			{
-				RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection);
+				RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection, alpha);
 			}
 		}
 		
@@ -235,7 +235,7 @@ public class Routine1 extends WindowRoutine
 				
 				for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 				{
-					RenderHelper.renderStaticEntity2(it.next(), cam, directionalLightShader, this.projection);
+					RenderHelper.renderStaticEntity2(it.next(), cam, directionalLightShader, this.projection, alpha);
 				}
 			}
 			
@@ -247,5 +247,13 @@ public class Routine1 extends WindowRoutine
 
 	public void release(boolean forced)
 	{
+	}
+
+	public void preUpdate()
+	{
+		if(!this.initializing)
+		{
+			this.player.preUpdate();
+		}
 	}
 }

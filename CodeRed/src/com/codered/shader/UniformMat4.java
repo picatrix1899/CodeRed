@@ -15,10 +15,10 @@ public class UniformMat4 extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Mat4f)) throw new IllegalArgumentException();
-		Mat4f m = (Mat4f)obj;
+		if(!(obj[0] instanceof Mat4f)) throw new IllegalArgumentException();
+		Mat4f m = (Mat4f)obj[0];
 		mat.set(m);
 	}
 

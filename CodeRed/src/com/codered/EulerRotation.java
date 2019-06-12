@@ -17,6 +17,15 @@ public class EulerRotation
 		this.rotRoll = 0.0d;
 	}
 	
+	public EulerRotation set(EulerRotation rot)
+	{
+		this.rotPitch = rot.rotPitch;
+		this.rotRoll = rot.rotRoll;
+		this.rotYaw = rot.rotYaw;
+		
+		return this;
+	}
+	
 	public Quat getRotation()
 	{	
 		return getRotationRoll().mul(getRotationYaw().mul(getRotationPitch()));

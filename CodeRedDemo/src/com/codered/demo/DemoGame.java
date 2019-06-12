@@ -72,6 +72,14 @@ public class DemoGame extends Engine
 		}
 	}
 	
+	public void preUpdate()
+	{
+		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameUpdate"))
+		{
+			this.context1.preUpdate();
+		}
+	}
+	
 	public void update(double delta)
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameUpdate"))

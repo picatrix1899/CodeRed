@@ -43,7 +43,7 @@ public class EngineRoutine
 		
 		long startTime;
 		long passedTime;
-		
+
 		while(isRunning)
 		{
 			startTime = this.time.getTime();
@@ -52,14 +52,14 @@ public class EngineRoutine
 			
 			unprocessedTime += passedTime / (double) this.time.SECOND;
 			
-			while(unprocessedTime > frameTime)
+			while(unprocessedTime >= frameTime)
 			{
+				this.engine.preUpdate();
 				this.engine.update(frameTime);
 				
-				unprocessedTime -= frameTime;			
-
+				unprocessedTime -= frameTime;	
 			}
-
+			
 			this.engine.render(frameTime, unprocessedTime / frameTime);
 		}
 		

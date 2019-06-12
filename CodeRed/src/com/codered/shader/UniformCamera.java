@@ -11,7 +11,8 @@ public class UniformCamera extends Uniform
 	private int location_position = -1;
 	
 	private Camera value;
-
+	private double alpha;
+	
 	public UniformCamera(String name, Object... data)
 	{
 		super(name, data);
@@ -25,17 +26,21 @@ public class UniformCamera extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Camera)) throw new IllegalArgumentException();
-		Camera v = (Camera)obj;
+		if(!(obj[0] instanceof Camera)) throw new IllegalArgumentException();
+		if(!(obj[1] instanceof Double)) throw new IllegalArgumentException();
+		Camera v = (Camera)obj[0];
+		double a = (double)obj[1];
 		this.value = v;
+		this.alpha = a;
+		
 	}
 
 	@Override
 	public void load()
 	{
-		loadMat4(this.location_T_view, this.value.getViewMatrix());
+		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
 		Vec3f v = this.value.getTotalPos();
 		loadVec3f(this.location_position, v.x, v.y, v.z);
 	}

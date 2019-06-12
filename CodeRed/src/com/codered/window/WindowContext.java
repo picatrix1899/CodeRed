@@ -52,6 +52,11 @@ public class WindowContext implements EngineObject
 		return this.mouse;
 	}
 	
+	public void preUpdate()
+	{
+		this.routine.preUpdate();
+	}
+	
 	public void update(double delta)
 	{
 		makeContextCurrent();

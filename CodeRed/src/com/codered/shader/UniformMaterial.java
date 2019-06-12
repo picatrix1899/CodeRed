@@ -32,10 +32,10 @@ public class UniformMaterial extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Material)) throw new IllegalArgumentException();
-		Material v = (Material)obj;
+		if(!(obj[0] instanceof Material)) throw new IllegalArgumentException();
+		Material v = (Material)obj[0];
 		this.value = v;
 	}
 

@@ -15,10 +15,10 @@ public class UniformTexture2D extends Uniform
 	}
 	
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Integer)) throw new IllegalArgumentException();
-		int i = (int)obj;
+		if(!(obj[0] instanceof Integer)) throw new IllegalArgumentException();
+		int i = (int)obj[0];
 		this.texture = i;
 	}
 

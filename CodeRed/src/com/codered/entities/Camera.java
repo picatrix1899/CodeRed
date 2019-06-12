@@ -40,6 +40,7 @@ public class Camera
 		rotatePitch(pitch);
 		rotateYaw(yaw);
 		rotateRoll(roll);
+		this.transform.swap();
 	}
 	
 	public Camera(float posX, float posY, float posZ, double pitch, double yaw, double roll)
@@ -49,6 +50,7 @@ public class Camera
 		rotatePitch(pitch);
 		rotateYaw(yaw);
 		rotateRoll(roll);
+		this.transform.swap();
 	}
 	
 	public Camera limitPitch(boolean limit) { this.limitRotPitch = limit; return this; }
@@ -117,9 +119,15 @@ public class Camera
 	public Vec3f getRelativePos() { return this.transform.getPos(); }
 	public Vec3f getTotalPos() { return this.transform.getTransformedPos(); }
 	
-	public Mat4f getViewMatrix() { return Mat4f.viewMatrix(getTotalPos(), getTotalRot()); }
+	public Mat4f getViewMatrix()
+	{
+		return Mat4f.viewMatrix(getTotalPos(), getTotalRot());
+	}
 	
-	
+	public Mat4f getLerpedViewMatrix(double alpha)
+	{
+		return Mat4f.viewMatrix(this.transform.getLerpedTransformedPos(alpha), this.transform.getLerpedRot(alpha));
+	}
 	
 	public Camera rotatePitch(double amount)
 	{

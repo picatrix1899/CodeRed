@@ -12,10 +12,10 @@ public class UniformFloat extends Uniform
 	}
 
 	@Override
-	public void set(Object obj)
+	public void set(Object... obj)
 	{
-		if(!(obj instanceof Float)) throw new IllegalArgumentException();
-		float v = (float)obj;
+		if(!(obj[0] instanceof Float)) throw new IllegalArgumentException();
+		float v = (float)obj[0];
 		this.value = v;
 	}
 

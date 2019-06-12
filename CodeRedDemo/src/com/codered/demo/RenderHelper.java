@@ -14,11 +14,11 @@ import com.codered.utils.BindingUtils;
 public class RenderHelper
 {
 	
-	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection)
+	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection, double alpha)
 	{
 		oShader.setUniformValue(0, e.getTransformationMatrix());
 		oShader.setUniformValue(1, projection);
-		oShader.setUniformValue(2, c);
+		oShader.setUniformValue(2, c, alpha);
 		oShader.setUniformValue(3, e.getModel().getMaterial());
 		oShader.load();
 		

@@ -64,7 +64,7 @@ public abstract class ShaderProgram implements Shader
 		return this.uniforms.get(id);
 	}
 	
-	public void setUniformValue(int id, Object obj)
+	public void setUniformValue(int id, Object... obj)
 	{
 		if(this.uniforms.containsKey(id))
 			this.uniforms.get(id).set(obj);
