@@ -97,13 +97,41 @@ public class Transform
 	{
 		Quat q1 = this.rot.getRotation();
 		Quat q2 = this.newRot.getRotation();
+	
+		double dot = q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
 		
-		double x = q1.x * (1 - alpha) + q2.x * alpha;
-		double y = q1.y * (1 - alpha) + q2.y * alpha;
-		double z = q1.z * (1 - alpha) + q2.z * alpha;
-		double w = q1.w * (1 - alpha) + q2.w * alpha;
+		if(dot < 0)
+		{
+			q1.inverse();
+			dot = -dot;
+		}
 		
-		return new Quat(w,x,y,z);
+		double w, x, y, z;
+		
+		if(dot > 0.9995)
+		{
+			x = q1.x + alpha * (q2.x - q1.x);
+			y = q1.y + alpha * (q2.y - q1.y);
+			z = q1.z + alpha * (q2.z - q1.z);
+			w = q1.w + alpha * (q2.w - q1.w);
+		}
+		else
+		{
+			double theta_0 = Math.acos(dot);
+			double theta = theta_0 * alpha;
+			double sin_theta = Math.sin(theta);
+			double sin_theta_0 = Math.sin(theta_0);
+			
+			double s0 = Math.cos(theta) - dot * sin_theta / sin_theta_0;
+			double s1 = sin_theta / sin_theta_0;
+			
+			x = q1.x * s0 + q2.x * s1;
+			y = q1.y * s0 + q2.y * s1;
+			z = q1.z * s0 + q2.z * s1;
+			w = q1.w * s0 + q2.w * s1;
+		}
+
+		return new Quat(w, x, y, z).normal();
 	}
 	
 	public Vec3f getLerpedTransformedPos(double alpha)
