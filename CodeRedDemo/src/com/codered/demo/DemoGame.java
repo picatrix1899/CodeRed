@@ -1,6 +1,5 @@
 package com.codered.demo;
 
-import org.resources.ResourceManager;
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.barghos.math.vector.Vec3fPool;
 import org.lwjgl.opengl.GL11;
@@ -8,6 +7,7 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.Profiling;
 import com.codered.engine.Engine;
+import com.codered.resourcemanager.ResourceManager;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.WindowHint;
 import com.codered.utils.WindowHint.GLProfile;
