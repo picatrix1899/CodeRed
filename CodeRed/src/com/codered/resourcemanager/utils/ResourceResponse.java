@@ -1,6 +1,6 @@
 package com.codered.resourcemanager.utils;
 
-import org.resources.errors.ResourceError;
+import com.codered.resourcemanager.errors.ResourceError;
 
 public class ResourceResponse<R>
 {

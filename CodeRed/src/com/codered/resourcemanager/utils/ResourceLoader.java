@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import org.resources.errors.ResourceErrorThrownException;
-import org.resources.errors.ResourcePendingException;
+import com.codered.resourcemanager.errors.ResourceErrorThrownException;
+import com.codered.resourcemanager.errors.ResourcePendingException;
 
 public abstract class ResourceLoader<T>
 {
