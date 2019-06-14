@@ -9,6 +9,8 @@ import com.codered.managing.models.Mesh;
 import com.codered.managing.models.RawModel;
 import com.codered.managing.models.TexturedModel;
 import com.codered.material.Material;
+import com.codered.resourcemanager.materials.MaterialData;
+import com.codered.resourcemanager.materials.MaterialLoader;
 import com.codered.texture.Texture;
 import com.codered.texture.TextureData;
 import com.codered.texture.TextureLoader;

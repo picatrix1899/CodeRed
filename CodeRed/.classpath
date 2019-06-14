@@ -14,7 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-math"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/barghos-structs"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ResourceManager"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

@@ -41,7 +41,7 @@ public class TextureUtils
 		return new Texture(textureID, data.width(), data.height(), false);
 	}
 	
-	public static Texture genTexture(org.resources.textures.TextureData data)
+	public static Texture genTexture(com.codered.resourcemanager.textures.TextureData data)
 	{
 		int textureID = GL11.glGenTextures();
 

@@ -12,11 +12,11 @@ import org.barghos.math.vector.Vec2f;
 import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL15;
-import org.resources.objects.ObjectData;
-import org.resources.objects.TriangleData;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
+import com.codered.resourcemanager.objects.ObjectData;
+import com.codered.resourcemanager.objects.TriangleData;
 
 public class Mesh
 {

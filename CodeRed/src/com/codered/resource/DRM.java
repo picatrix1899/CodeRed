@@ -10,11 +10,10 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
 
-import org.resources.materials.MaterialData;
-
 import com.codered.Profiling;
 import com.codered.managing.models.Mesh;
 import com.codered.material.Material;
+import com.codered.resourcemanager.materials.MaterialData;
 import com.codered.shader.Shader;
 import com.codered.shader.ShaderPart;
 import com.codered.texture.Texture;
@@ -23,7 +22,7 @@ import com.codered.utils.TextureUtils;
 public class DRM
 {
 	private ResourceBlock currentBlock;
-	private org.resources.ResourceManager rm;
+	private com.codered.resourcemanager.ResourceManager rm;
 	
 	private Map<String,Texture> textures = new HashMap<>();
 	private Map<String,Mesh> staticMeshes = new HashMap<>();
@@ -38,7 +37,7 @@ public class DRM
 	
 	public DRM()
 	{
-		this.rm = org.resources.ResourceManager.getInstance();
+		this.rm = com.codered.resourcemanager.ResourceManager.getInstance();
 	}
 	
 	public void loadResourceBlockForced(ResourceBlock block)

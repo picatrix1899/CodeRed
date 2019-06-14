@@ -65,6 +65,17 @@
   		<classifier>natives-windows</classifier>
   	</dependency>
   	<dependency>
+  		<groupId>org.lwjgl</groupId>
+  		<artifactId>lwjgl-assimp</artifactId>
+  		<version>3.2.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.lwjgl</groupId>
+  		<artifactId>lwjgl-assimp</artifactId>
+  		<version>3.2.2</version>
+  		<classifier>natives-windows</classifier>
+  	</dependency>
+  	<dependency>
   		<groupId>ResourceManager</groupId>
   		<artifactId>ResourceManager</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
