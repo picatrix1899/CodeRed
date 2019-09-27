@@ -15,8 +15,8 @@ import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
-import com.codered.resourcemanager.objects.ObjectData;
-import com.codered.resourcemanager.objects.TriangleData;
+import com.codered.resource.object.ObjectData;
+import com.codered.resource.object.TriangleData;
 
 public class Mesh
 {

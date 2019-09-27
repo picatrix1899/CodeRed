@@ -5,15 +5,14 @@ import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
 import org.barghos.math.vector.Vec3fAxis;
 
-import com.codered.engine.EngineRegistry;
 import com.codered.managing.models.TexturedModel;
 
 public class StaticEntity extends BaseEntity
 {
 	
-	protected String model;
+	protected TexturedModel model;
 
-	public StaticEntity(String model, Vec3f pos, float rx, float ry, float rz)
+	public StaticEntity(TexturedModel model, Vec3f pos, float rx, float ry, float rz)
 	{
 		this.model = model;
 		
@@ -32,7 +31,7 @@ public class StaticEntity extends BaseEntity
 	
 	public StaticEntity setRotZ(float rz) { super.rotateZ(rz); return this; }
 
-	public TexturedModel getModel() { return EngineRegistry.getCurrentWindowContext().getResourceManager().getTexturedModel(this.model); }
+	public TexturedModel getModel() { return this.model; }
 
 	public Vec3f getPos() { return super.getPos(); }
 	

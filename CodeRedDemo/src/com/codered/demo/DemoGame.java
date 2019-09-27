@@ -1,14 +1,13 @@
 package com.codered.demo;
 
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
-import org.barghos.math.vector.Vec3fPool;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.Profiling;
 import com.codered.engine.Engine;
-import com.codered.resourcemanager.ResourceManager;
 import com.codered.utils.DebugInfo;
+import com.codered.utils.GLCommon;
 import com.codered.utils.WindowHint;
 import com.codered.utils.WindowHint.GLProfile;
 import com.codered.window.Window;
@@ -59,10 +58,6 @@ public class DemoGame extends Engine
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameInit"))
 		{
-			ResourceManager resources = ResourceManager.getInstance();
-
-			resources.start();
-		
 			this.context1.initWindow();
 			
 			this.context1.init();
@@ -101,14 +96,11 @@ public class DemoGame extends Engine
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameRelease"))
 		{
-			ResourceManager resources = ResourceManager.getInstance();
-			resources.stop();
-			
 			this.context1.release(forced);
 		}
 		
-		System.out.print(Profiling.CPROFILER);
-		System.out.println(Vec3fPool.size());
+		System.out.println(Profiling.CPROFILER);
+		GLCommon.report(System.out);
 	}
 
 }

@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
 import com.codered.CodeRed;
+import com.codered.utils.GLCommon;
 
 public abstract class FBOAttachment
 {	
@@ -45,7 +46,7 @@ public abstract class FBOAttachment
 	
 	private static int create(int width, int height, int samples, boolean isBuffer, boolean isHDR, boolean isDepth, boolean isStencil)
 	{
-		int id = isBuffer ? GL30.glGenRenderbuffers() : GL11.glGenTextures();
+		int id = isBuffer ? GL30.glGenRenderbuffers() : GLCommon.genTextures();
 		
 		edit(id, width, height, samples, isBuffer, isHDR, isDepth, isStencil);
 		
@@ -99,7 +100,7 @@ public abstract class FBOAttachment
 					if(isBuffer)
 						GL30.glDeleteRenderbuffers(this.id);
 					else
-						GL11.glDeleteTextures(this.id);
+						GLCommon.deleteTextures(this.id);
 			
 					this.id = create(this.width, this.height, this.samples, isBuffer, isHDR, isDepth, isStencil);
 				}
@@ -124,6 +125,6 @@ public abstract class FBOAttachment
 		if(isBuffer())
 			GL30.glDeleteRenderbuffers(this.id);
 		else
-			GL11.glDeleteTextures(this.id);
+			GLCommon.deleteTextures(this.id);
 	}
 }

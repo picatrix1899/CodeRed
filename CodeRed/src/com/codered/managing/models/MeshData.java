@@ -11,10 +11,9 @@ import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3f;
 import org.barghos.math.vector.Vec2f;
 import org.barghos.math.vector.Vec3f;
-import org.resources.objects.ObjectData;
-import org.resources.objects.TriangleData;
 
-import com.codered.CodeRed;
+import com.codered.resource.object.ObjectData;
+import com.codered.resource.object.TriangleData;
 
 public class MeshData
 {

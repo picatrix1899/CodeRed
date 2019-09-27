@@ -4,6 +4,7 @@ import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 import com.codered.gui.elements.GUIText;
 import com.codered.managing.VAO;
+import com.codered.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 import com.codered.window.WindowContext;
 
@@ -39,6 +40,11 @@ public abstract class GUI
 	}
 	
 	protected void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
+	{
+		this.renderer.drawTexturedRect(t, posX, posY, sizeX, sizeY);
+	}
+	
+	protected void drawTexturedRect(Texture t, float posX, float posY, float sizeX, float sizeY)
 	{
 		this.renderer.drawTexturedRect(t, posX, posY, sizeX, sizeY);
 	}

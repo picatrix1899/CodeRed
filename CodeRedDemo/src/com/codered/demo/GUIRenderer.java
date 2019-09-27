@@ -12,6 +12,7 @@ import com.codered.gui.elements.GUIText;
 import com.codered.managing.VAO;
 import com.codered.shader.ShaderProgram;
 import com.codered.shader.ShaderSession;
+import com.codered.texture.Texture;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 import com.codered.utils.IGuiRenderer;
@@ -35,9 +36,14 @@ public class GUIRenderer implements IGuiRenderer
 	@Override
 	public void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
 	{
-		drawTexturedRect(this.context.getDRM().getTexture(t).getId(), posX, posY, sizeX, sizeY);
+		drawTexturedRect(EngineRegistry.getResourceRegistry().textures().get(t), posX, posY, sizeX, sizeY);
 	}
 
+	public void drawTexturedRect(Texture t, float posX, float posY, float sizeX, float sizeY)
+	{
+		drawTexturedRect(t.getId(), posX, posY, sizeX, sizeY);
+	}
+	
 	@Override
 	public void drawTexturedRect(int t, float posX, float posY, float sizeX, float sizeY)
 	{
@@ -116,6 +122,8 @@ public class GUIRenderer implements IGuiRenderer
 		GLUtils.blend(false);
 		GLUtils.depthTest(true);
 	}
+
+
 
 	
 }

@@ -3,13 +3,15 @@ package com.codered.managing;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.codered.utils.GLCommon;
+
 public class VAOManager
 {
 	private List<VAO> vaos = new ArrayList<>();
 	
 	public VAO getNewVAO()
 	{
-		VAO vao = new VAO();
+		VAO vao = new VAO(GLCommon.genVertexArrays());
 		this.vaos.add(vao);
 		return vao;
 	}

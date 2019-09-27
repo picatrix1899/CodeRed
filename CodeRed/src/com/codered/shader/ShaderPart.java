@@ -3,6 +3,8 @@ package com.codered.shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import com.codered.utils.GLCommon;
+
 public class ShaderPart
 {
 	private int id;
@@ -10,7 +12,7 @@ public class ShaderPart
 	
 	public ShaderPart(String name, int type, String data)
 	{
-		this.id = GL20.glCreateShader(type);
+		this.id = GLCommon.createShader(type);
 		this.name = name;
 		
 		GL20.glShaderSource(this.id, data);
@@ -43,6 +45,6 @@ public class ShaderPart
 	
 	public void release()
 	{
-		GL20.glDeleteShader(this.id);
+		GLCommon.deleteShader(this.id);
 	}
 }

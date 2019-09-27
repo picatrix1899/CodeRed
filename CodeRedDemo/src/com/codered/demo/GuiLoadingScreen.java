@@ -1,20 +1,25 @@
 package com.codered.demo;
 
+import com.codered.engine.EngineRegistry;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
+import com.codered.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GuiLoadingScreen extends GUIWindow
 {
 
+	Texture background;
+	
 	public GuiLoadingScreen(IGuiRenderer renderer)
 	{
 		super(renderer);
+		this.background = EngineRegistry.getResourceRegistry().textures().get("res/materials/loadingscreen.png");
 	}
 	
 	public void render()
 	{
-		drawTexturedRect("res/materials/loadingscreen.png", 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+		drawTexturedRect(this.background, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
 		super.render();
 	}

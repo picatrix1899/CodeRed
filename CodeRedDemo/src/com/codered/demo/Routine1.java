@@ -1,5 +1,6 @@
 package com.codered.demo;
 
+import java.io.File;
 import java.util.Iterator;
 
 import org.barghos.core.color.LDRColor3;
@@ -10,13 +11,18 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.Profiling;
+import com.codered.engine.CriticalEngineStateException;
 import com.codered.engine.Engine;
+import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
+import com.codered.font.FontType;
 import com.codered.input.InputConfiguration;
 import com.codered.light.AmbientLight;
 import com.codered.light.DirectionalLight;
-import com.codered.resource.ResourceBlock;
+import com.codered.managing.models.TexturedModel;
+import com.codered.resource.ResourceRequest;
+import com.codered.resource.ResourceRequestBlock;
 import com.codered.shader.ShaderProgram;
 import com.codered.shader.ShaderSession;
 import com.codered.utils.EvalFunc;
@@ -46,35 +52,41 @@ public class Routine1 extends WindowRoutine
 	public ShaderProgram noGuiShader;
 	public ShaderProgram fontGuiShader;
 	
+	public FontType font;
+	
+	public ResourceRequestBlock resBlock;
+	
 	public void init()
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("RoutineInit"))
 		{
-			ResourceBlock block1 = new ResourceBlock(true);
-			block1.addTexture("res/materials/loadingscreen.png");
-			block1.addFragmentShaderPart("res/shaders/gui_no.fs");
-			block1.addVertexShaderPart("res/shaders/gui_no.vs");
-			block1.addFragmentShaderPart("res/shaders/gui_font.fs");
-			block1.addVertexShaderPart("res/shaders/gui_font.vs");
-			block1.addFragmentShaderPart("res/shaders/gui_font.fs");
-			block1.addVertexShaderPart("res/shaders/gui_font.vs");
-			this.context.getDRM().loadResourceBlockForced(block1);
+			ResourceRequestBlock bl1 = new ResourceRequestBlock(false);
+			bl1.addTexture(ResourceRequest.getFile("res/materials/loadingscreen.png"));
+			bl1.addTexture(ResourceRequest.getFile("res/fonts/arial.png"));
+			bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_no.fs"));
+			bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_no.vs"));
+			bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_font.fs"));
+			bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_font.vs"));
+			
+			EngineRegistry.getResourceManager().load(bl1);
 			
 			this.noGuiShader = new NoGUIShader();
-			this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
-			this.noGuiShader.addVertexShaderPart("res/shaders/gui_no.vs");
+			this.noGuiShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/gui_no.fs"));
+			this.noGuiShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/gui_no.vs"));
 			this.noGuiShader.compile();
 			
 			this.fontGuiShader = new FontGuiShader();
-			this.fontGuiShader.addFragmentShaderPart("res/shaders/gui_font.fs");
-			this.fontGuiShader.addVertexShaderPart("res/shaders/gui_font.vs");
+			this.fontGuiShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/gui_font.fs"));
+			this.fontGuiShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/gui_font.vs"));
 			this.fontGuiShader.compile();
 			
 			this.guiRenderer = new GUIRenderer();
 			this.guiRenderer.noGuiShader = this.noGuiShader;
 			this.guiRenderer.fontGuiShader = this.fontGuiShader;
+
+			this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
 			
-			loadingScreen = new GuiLoadingScreen(this.guiRenderer);
+			this.loadingScreen = new GuiLoadingScreen(this.guiRenderer);
 			
 			this.initializing = true;
 	
@@ -86,47 +98,47 @@ public class Routine1 extends WindowRoutine
 			cdf.registerKey(GLFW.GLFW_KEY_A);
 			cdf.registerKey(GLFW.GLFW_KEY_S);
 			cdf.registerKey(GLFW.GLFW_KEY_D);
+			cdf.registerKey(GLFW.GLFW_KEY_C);
 			cdf.registerMouseButton(2);
 			
 			this.context.getInputManager().pushInputConfiguration(cdf);
 			
-			ResourceBlock block2 = new ResourceBlock(true);
-			block2.addTexture("res/materials/gray_rsquare.png");
-			block2.addTexture("res/materials/inventory-background.png");
-			block2.addStaticMesh("res/models/crate.obj");
-			block2.addMaterial("res/materials/crate.json");
-			block2.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-			block2.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-			block2.addVertexShaderPart("res/shaders/o_directionalLight.vs");
-			block2.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
-			this.context.getDRM().loadResourceBlock(block2);
-			
-			this.context.getResourceManager().GUI.regFont("res/fonts/arial");
+			resBlock = new ResourceRequestBlock(true);
+			resBlock.addVertexShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.vs"));
+			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.fs"));
+			resBlock.addVertexShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.vs"));
+			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.fs"));
+			resBlock.addTexture(ResourceRequest.getFile("res/materials/gray_rsquare.png"));
+			resBlock.addTexture(ResourceRequest.getFile("res/materials/inventory-background.png"));
+			resBlock.addStaticMesh(ResourceRequest.getFile("res/models/crate.obj"));
+			resBlock.addMaterial(ResourceRequest.getFile("res/materials/crate.json"));
+			EngineRegistry.getResourceManager().load(resBlock);
 		}
 	}
 
 	public void initPhase1()
 	{
 		ambientShader = new AmbientLightShader();
-		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		ambientShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/o_ambientLight2.vs"));
+		ambientShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/o_ambientLight2.fs"));
 		ambientShader.compile();
 		
 		directionalLightShader = new DirectionalLightShader();
-		directionalLightShader.addVertexShaderPart("res/shaders/o_directionalLight.vs");
-		directionalLightShader.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
+		directionalLightShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/o_directionalLight.vs"));
+		directionalLightShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/o_directionalLight.fs"));
 		directionalLightShader.compile();
-		
-		this.context.getResourceManager().WORLD.regTexturedModel("crate", "res/models/crate.obj", "res/materials/crate.json");
-		
+
 		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 60, 0.1, 1000);
 		
 		this.world = new StaticEntityTreeImpl();
 		
-		this.world.add(new StaticEntity("crate", new Vec3f(0,0,-40), 0, 45, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(0,10,-40), 0, 45, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(10,0,-40), 0, 0, 0));
-		this.world.add(new StaticEntity("crate", new Vec3f(10,10,-40), 0, 0, 0));
+		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/crate.obj"),
+				EngineRegistry.getResourceRegistry().materials().get("res/materials/crate.json"));
+		
+		this.world.add(new StaticEntity(crate, new Vec3f(0,0,-40), 0, 45, 0));
+		this.world.add(new StaticEntity(crate, new Vec3f(0,10,-40), 0, 45, 0));
+		this.world.add(new StaticEntity(crate, new Vec3f(10,0,-40), 0, 0, 0));
+		this.world.add(new StaticEntity(crate, new Vec3f(10,10,-40), 0, 0, 0));
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
@@ -135,7 +147,7 @@ public class Routine1 extends WindowRoutine
 		
 		GLUtils.multisample(true);
 		
-		this.inventory = new GuiInventory(this, this.guiRenderer);
+		this.inventory = new GuiInventory(this, this.guiRenderer, this.font);
 	}
 	
 	public void update(double delta)
@@ -147,7 +159,7 @@ public class Routine1 extends WindowRoutine
 			
 			if(this.initializing)
 			{
-				if(!this.context.getDRM().isOccupied())
+				if(this.resBlock.isFinished())
 				{
 					initPhase1();
 					this.initializing = false;
@@ -159,6 +171,7 @@ public class Routine1 extends WindowRoutine
 				{
 					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
 					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
+					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_C)) { throw new CriticalEngineStateException(new Exception("test")); }
 					this.player.update(delta);
 				}
 				else

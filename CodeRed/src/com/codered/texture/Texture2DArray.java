@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL42;
 
+import com.codered.utils.GLCommon;
+
 public class Texture2DArray
 {
 	private int id;
@@ -25,7 +27,7 @@ public class Texture2DArray
 	
 	public static Texture2DArray createTexture(int width, int height, int depth, boolean hdr)
 	{
-		int id = GL11.glGenTextures();
+		int id = GLCommon.genTextures();
 		
 		GL11.glBindTexture(GL30.GL_TEXTURE_2D_ARRAY, id);
 
@@ -46,5 +48,5 @@ public class Texture2DArray
 	public int getHeight() { return this.height; }
 	public int getDepth() { return this.depth; }
 	
-	public void cleanup() { GL11.glDeleteTextures(this.id); }
+	public void cleanup() { GLCommon.deleteTextures(this.id); }
 }

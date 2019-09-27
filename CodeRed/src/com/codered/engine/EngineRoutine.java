@@ -32,38 +32,56 @@ public class EngineRoutine
 	
 	public void run()
 	{
-		this.engine.init();
-		
-		isRunning = true;
-		
-		final double frameTime = 1.0d / this.time.getFPSCap();
-		
-		long lastTime = this.time.getTime();
-		double unprocessedTime = 0;
-		
-		long startTime;
-		long passedTime;
-
-		while(isRunning)
+		try
 		{
-			startTime = this.time.getTime();
-			passedTime = startTime - lastTime;
-			lastTime = startTime;
+			this.engine.init();
 			
-			unprocessedTime += passedTime / (double) this.time.SECOND;
+			isRunning = true;
 			
-			while(unprocessedTime >= frameTime)
+			final double frameTime = 1.0d / this.time.getFPSCap();
+			
+			long lastTime = this.time.getTime();
+			double unprocessedTime = 0;
+			
+			long startTime;
+			long passedTime;
+	
+			while(isRunning)
 			{
-				this.engine.preUpdate();
-				this.engine.update(frameTime);
-				
-				unprocessedTime -= frameTime;	
+	
+					startTime = this.time.getTime();
+					passedTime = startTime - lastTime;
+					lastTime = startTime;
+					
+					unprocessedTime += passedTime / (double) this.time.SECOND;
+					
+					while(unprocessedTime >= frameTime)
+					{
+						this.engine.preUpdate();
+						this.engine.update(frameTime);
+						
+						unprocessedTime -= frameTime;	
+					}
+					
+					this.engine.render(frameTime, unprocessedTime / frameTime);
 			}
-			
-			this.engine.render(frameTime, unprocessedTime / frameTime);
+		
+		}
+		catch(CriticalEngineStateException e)
+		{
+			e.printStackTrace();
+			this.forcedShutdown = true;
 		}
 		
-		this.engine.release(this.forcedShutdown);
+		try
+		{
+			this.engine.release(this.forcedShutdown);
+		}
+		catch(CriticalEngineStateException e)
+		{
+			throw new Error(e);
+		}
+
 	}
 
 }

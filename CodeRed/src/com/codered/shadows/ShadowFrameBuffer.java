@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
+import com.codered.utils.GLCommon;
 import com.codered.utils.WindowContextHelper;
 import com.codered.window.WindowContext;
 
@@ -50,7 +51,7 @@ public class ShadowFrameBuffer
 	protected void cleanUp()
 	{
 		GL30.glDeleteFramebuffers(fbo);
-		GL11.glDeleteTextures(shadowMap);
+		GLCommon.deleteTextures(shadowMap);
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class ShadowFrameBuffer
 	 */
 	private static int createDepthBufferAttachment(int width, int height)
 	{
-		int texture = GL11.glGenTextures();
+		int texture = GLCommon.genTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT16, width, height, 0,
 				GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (ByteBuffer) null);

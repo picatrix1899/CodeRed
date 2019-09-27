@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.utils.BindingUtils;
+import com.codered.utils.GLCommon;
 
 public class Texture
 {
@@ -29,7 +30,7 @@ public class Texture
 	
 	public static Texture createDepthTexture(int width, int height)
 	{
-		int id = GL11.glGenTextures();
+		int id = GLCommon.genTextures();
 		
 		BindingUtils.bindTexture2D(id);
 		
@@ -46,7 +47,7 @@ public class Texture
 	
 	public static Texture createTexture(int width, int height, boolean hdr)
 	{
-		int id = GL11.glGenTextures();
+		int id = GLCommon.genTextures();
 		
 		BindingUtils.bindTexture2D(id);
 		
@@ -71,5 +72,5 @@ public class Texture
 	
 	public boolean getWrap() { return this.wrap; }
 	
-	public void cleanup() { GL11.glDeleteTextures(this.id); }
+	public void cleanup() { GLCommon.deleteTextures(this.id); }
 }

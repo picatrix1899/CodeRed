@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.utils.BindingUtils;
+import com.codered.utils.GLCommon;
 
 import org.barghos.core.BufferUtils;
 import org.barghos.core.api.tuple.ITup2fR;
@@ -24,9 +25,9 @@ public class VAO
 	
 	private int indicesVBO = 0;
 	
-	public VAO()
+	public VAO(int id)
 	{
-		this.id = GL30.glGenVertexArrays();
+		this.id = id;
 	}
 	
 	public int getID()
@@ -43,7 +44,7 @@ public class VAO
 
 		if(!this.vbos.containsKey(attrib))
 		{
-			vboID = GL15.glGenBuffers();
+			vboID = GLCommon.genBuffers();
 			vbos.put(attrib, vboID);
 		}
 		else
@@ -66,7 +67,7 @@ public class VAO
 
 		if(!this.vbos.containsKey(attrib))
 		{
-			vboID = GL15.glGenBuffers();
+			vboID = GLCommon.genBuffers();
 			vbos.put(attrib, vboID);
 		}
 		else
@@ -89,7 +90,7 @@ public class VAO
 
 		if(!this.vbos.containsKey(attrib))
 		{
-			vboID = GL15.glGenBuffers();
+			vboID = GLCommon.genBuffers();
 			vbos.put(attrib, vboID);
 		}
 		else
@@ -112,7 +113,7 @@ public class VAO
 
 		if(!this.vbos.containsKey(attrib))
 		{
-			vboID = GL15.glGenBuffers();
+			vboID = GLCommon.genBuffers();
 			vbos.put(attrib, vboID);
 		}
 		else
@@ -131,7 +132,7 @@ public class VAO
 	{
 		BindingUtils.bindVAO(this);
 		
-		if(this.indicesVBO == 0) this.indicesVBO = GL15.glGenBuffers();
+		if(this.indicesVBO == 0) this.indicesVBO = GLCommon.genBuffers();
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
 		
@@ -147,21 +148,21 @@ public class VAO
 		
 		for(int i : vbos.values())
 		{
-			GL15.glDeleteBuffers(i);
+			GLCommon.deleteBuffers(i);
 		}
 		
 		if(this.indicesVBO != 0)
 		{
-			GL15.glDeleteBuffers(this.indicesVBO);	
+			GLCommon.deleteBuffers(this.indicesVBO);	
 		}
 		
 		vbos.clear();
 		
 		indicesVBO = 0;
 		
-		GL30.glDeleteVertexArrays(this.id);
+		GLCommon.deleteVertexArrays(this.id);
 
-		this.id = GL30.glGenVertexArrays();
+		this.id = GLCommon.genVertexArrays();
 	}
 	
 	public void release()
@@ -170,14 +171,14 @@ public class VAO
 		
 		for(int i : vbos.values())
 		{
-			GL15.glDeleteBuffers(i);
+			GLCommon.deleteBuffers(i);
 		}
 		
 		if(this.indicesVBO != 0)
 		{
-			GL15.glDeleteBuffers(this.indicesVBO);	
+			GLCommon.deleteBuffers(this.indicesVBO);	
 		}
 		
-		GL30.glDeleteVertexArrays(this.id);
+		GLCommon.deleteVertexArrays(this.id);
 	}
 }

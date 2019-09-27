@@ -22,8 +22,6 @@ public abstract class Uniform
 	{
 		int position = GL20.glGetUniformLocation(shaderProgrammId, uniform);
 		
-		System.out.println("program: " + shaderProgrammId + " uniform: " + uniform + " location: " + position);
-		
 		return position;
 	}
 	

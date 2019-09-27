@@ -9,22 +9,23 @@ import java.util.Map;
 import org.lwjgl.opengl.GL20;
 
 import com.codered.engine.EngineRegistry;
+import com.codered.utils.GLCommon;
 
 public abstract class ShaderProgram implements Shader
 {
 	private int id;
 
-	private List<String> fixedVertexShaderParts = new ArrayList<>();
-	private List<String> fixedFragmentShaderParts = new ArrayList<>();
-	private List<String> fixedGeometryShaderParts = new ArrayList<>();
-	private List<String> fixedTessellationControlShaderParts = new ArrayList<>();
-	private List<String> fixedTessellationEvaluationShaderParts = new ArrayList<>();
+	private List<ShaderPart> fixedVertexShaderParts = new ArrayList<>();
+	private List<ShaderPart> fixedFragmentShaderParts = new ArrayList<>();
+	private List<ShaderPart> fixedGeometryShaderParts = new ArrayList<>();
+	private List<ShaderPart> fixedTessellationControlShaderParts = new ArrayList<>();
+	private List<ShaderPart> fixedTessellationEvaluationShaderParts = new ArrayList<>();
 	private Map<Integer,Uniform> uniforms = new HashMap<>();
 	private Map<String,Integer> attribs = new HashMap<>();
 
 	public ShaderProgram()
 	{
-		this.id = GL20.glCreateProgram();
+		this.id = GLCommon.createProgram();
 	}
 	
 	public int getId()
@@ -94,78 +95,67 @@ public abstract class ShaderProgram implements Shader
 	
 	public void addVertexShaderPart(String part)
 	{
+		this.fixedVertexShaderParts.add(EngineRegistry.getResourceRegistry().vertexShaderParts().get(part));
+	}
+	
+	public void addVertexShaderPart(ShaderPart part)
+	{
 		this.fixedVertexShaderParts.add(part);
 	}
 	
 	public void addFragmentShaderPart(String part)
 	{
+		this.fixedFragmentShaderParts.add(EngineRegistry.getResourceRegistry().fragmentShaderParts().get(part));
+	}
+	
+	public void addFragmentShaderPart(ShaderPart part)
+	{
 		this.fixedFragmentShaderParts.add(part);
-	}
-	
-	public void addGeometryShaderPart(String part)
-	{
-		this.fixedGeometryShaderParts.add(part);
-	}
-	
-	public void addTessellationControlShaderPart(String part)
-	{
-		this.fixedTessellationControlShaderParts.add(part);
-	}
-	
-	public void addTessellationEvaluationShaderPart(String part)
-	{
-		this.fixedTessellationEvaluationShaderParts.add(part);
 	}
 	
 	private void attachFixedShaderParts()
 	{
 		int i;
-		String p;
-		
+		ShaderPart part;
 		int size = this.fixedVertexShaderParts.size();
 		for(i = 0; i < size; i++)
 		{
-			p = this.fixedVertexShaderParts.get(i);
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getVertexShaderPart(p);
+			part = this.fixedVertexShaderParts.get(i);
 			GL20.glAttachShader(this.id, part.getId());
 		}
 		
 		size = this.fixedFragmentShaderParts.size();
 		for(i = 0; i < size; i++)
 		{
-			p = this.fixedFragmentShaderParts.get(i);
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getFragmentShaderPart(p);
+			part = this.fixedFragmentShaderParts.get(i);
 			GL20.glAttachShader(this.id, part.getId());
 		}
 		
 		size = this.fixedGeometryShaderParts.size();
 		for(i = 0; i < size; i++)
 		{
-			p = this.fixedGeometryShaderParts.get(i);
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getGeometryShaderPart(p);
+			part = this.fixedGeometryShaderParts.get(i);
 			GL20.glAttachShader(this.id, part.getId());
 		}
 		
 		size = this.fixedTessellationControlShaderParts.size();
 		for(i = 0; i < size; i++)
 		{
-			p = this.fixedTessellationControlShaderParts.get(i);
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationControlShaderPart(p);
+			part = this.fixedTessellationControlShaderParts.get(i);
 			GL20.glAttachShader(this.id, part.getId());
 		}
 		
 		size = this.fixedTessellationEvaluationShaderParts.size();
 		for(i = 0; i < size; i++)
 		{
-			p = this.fixedTessellationEvaluationShaderParts.get(i);
-			ShaderPart part = EngineRegistry.getCurrentWindowContext().getDRM().getTessellationEvaluationShaderPart(p);
+			part = this.fixedTessellationEvaluationShaderParts.get(i);
 			GL20.glAttachShader(this.id, part.getId());
 		}
 	}
 
 	public void release()
 	{
-		GL20.glDeleteProgram(this.id);
+		GLCommon.deleteProgram(this.id);
 	}
 
 	private void loadUniformLocations()
