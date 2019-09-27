@@ -8,7 +8,6 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
