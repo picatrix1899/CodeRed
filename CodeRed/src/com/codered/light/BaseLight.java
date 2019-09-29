@@ -1,6 +1,6 @@
 package com.codered.light;
 
-import org.barghos.core.api.color.IColor3R;
+import org.barghos.core.color.api.IColor3R;
 
 public class BaseLight
 {

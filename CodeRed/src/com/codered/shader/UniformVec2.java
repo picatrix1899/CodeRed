@@ -1,6 +1,6 @@
 package com.codered.shader;
 
-import org.barghos.core.api.tuple.ITup2R;
+import org.barghos.core.tuple.tuple2.api.ITup2R;
 import org.barghos.math.vector.Vec2f;
 
 public class UniformVec2 extends Uniform

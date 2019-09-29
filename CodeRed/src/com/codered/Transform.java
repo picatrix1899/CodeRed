@@ -1,6 +1,6 @@
 package com.codered;
 
-import org.barghos.core.api.tuple.ITup3R;
+import org.barghos.core.tuple.tuple3.api.ITup3R;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Quat;
 import org.barghos.math.vector.Vec3f;
