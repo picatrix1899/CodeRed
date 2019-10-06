@@ -3,8 +3,8 @@ package com.codered.demo;
 import java.io.File;
 import java.util.Iterator;
 
-import org.barghos.core.color.LDRColor3;
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
+import org.barghos.core.testcolor.LDRColor3;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.Vec3f;
 import org.lwjgl.glfw.GLFW;
