@@ -13,8 +13,8 @@ import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
 
 import org.barghos.core.BufferUtils;
-import org.barghos.core.tuple.tuple2.api.ITup2fR;
-import org.barghos.core.tuple.tuple3.api.ITup3fR;
+import org.barghos.core.api.tuple.ITup2fR;
+import org.barghos.core.api.tuple.ITup3fR;
 
 public class VAO
 {
