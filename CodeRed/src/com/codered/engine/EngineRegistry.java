@@ -3,7 +3,6 @@ package com.codered.engine;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.codered.managing.DataManager;
 import com.codered.managing.TextureManager;
 import com.codered.managing.VAOManager;
 import com.codered.resource.manager.ResourceManager;
@@ -22,9 +21,6 @@ public class EngineRegistry
 	
 	private static Map<Long, TextureManager> textureManagersById = new HashMap<>();
 	private static Map<String, TextureManager> textureManagersByName = new HashMap<>();
-	
-	private static Map<Long, DataManager> dataManagersById = new HashMap<>();
-	private static Map<String, DataManager> dataManagersByName = new HashMap<>();
 	
 	private static Map<Long, ResourceManager> resourceManagersById = new HashMap<>();
 	private static Map<String, ResourceManager> resourceManagersByName = new HashMap<>();
@@ -99,21 +95,7 @@ public class EngineRegistry
 	{
 		return textureManagersById.get(currentWindowContext.getWindowId());
 	}
-	
-	public static DataManager getDataManager(String contextName)
-	{
-		return dataManagersByName.get(contextName);
-	}
-	
-	public static DataManager getDataManager(long windowId)
-	{
-		return dataManagersById.get(windowId);
-	}
-	
-	public static DataManager getDataManager()
-	{
-		return dataManagersById.get(currentWindowContext.getWindowId());
-	}
+
 	
 	public static void registerResourceManager(String contextName, long windowId, ResourceManager manager)
 	{
@@ -166,8 +148,6 @@ public class EngineRegistry
 		contextsByName.remove(name);
 		vaoManagersById.remove(id);
 		vaoManagersByName.remove(name);
-		dataManagersById.remove(id);
-		dataManagersByName.remove(name);
 		resourceManagersById.remove(id);
 		resourceManagersByName.remove(name);
 		resourceRegistriesById.remove(id);

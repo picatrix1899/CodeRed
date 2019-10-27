@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.barghos.core.ListUtils;
-import org.barghos.math.geometry.Triangle3f;
-import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.Quat;
+import org.barghos.math.experimental.geometry.Triangle3f;
+import org.barghos.math.experimental.matrix.Mat4f;
+import org.barghos.math.experimental.point.Point3;
+import org.barghos.math.experimental.vector.Quat;
+import org.barghos.math.experimental.vector.vec3.Vec3;
 import org.barghos.math.vector.Vec2f;
 import org.barghos.math.vector.Vec3f;
 
 import org.lwjgl.opengl.GL15;
 
+import com.codered.CodeRed;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.resource.object.ObjectData;
@@ -20,9 +22,9 @@ import com.codered.resource.object.TriangleData;
 
 public class Mesh
 {
-	public List<Triangle3f> triangles = new ArrayList<>();
 	public List<TriangleData>triangleData = new ArrayList<>();
 	public List<Integer> indices = new ArrayList<>();
+	public List<org.barghos.math.experimental.geometry.Triangle3f> triangles = new ArrayList<>();
 	
 	private float yc = 0.0f;
 	
@@ -55,13 +57,13 @@ public class Mesh
 		return this.downscale;
 	}
 	
-	private void calculateAABB(Point3f[] p)
+	private void calculateAABB(Point3[] p)
 	{
 		
-		Vec3f min_point = new Vec3f(1000.0f);
-		Vec3f max_point = new Vec3f(0.0f);
+		Vec3 min_point = new Vec3(1000.0f);
+		Vec3 max_point = new Vec3(0.0f);
 		
-		for(Point3f pos : p)
+		for(Point3 pos : p)
 		{
 			if(pos.getX() < min_point.getX())
 			{
@@ -98,7 +100,7 @@ public class Mesh
 	}
 	
 	
-	public Mesh setAABB(Vec3f min, Vec3f max)
+	public Mesh setAABB(Vec3 min, Vec3 max)
 	{
 
 		if(min.getY() != 0)
@@ -106,9 +108,9 @@ public class Mesh
 			this.yc = -min.getY();			
 		}
 		
-		if(max.getY() - min.getY() != 10.0f)
+		if(max.getY() - min.getY() != CodeRed.SCALE_ONE_METER)
 		{
-			float d = 10.0f - (max.getY() - min.getY());
+			float d = CodeRed.SCALE_ONE_METER - (max.getY() - min.getY());
 			
 			float o = 1.0f / (max.getY() - min.getY());
 			
@@ -125,7 +127,7 @@ public class Mesh
 	
 	public Mat4f getMatrix()
 	{
-		return Mat4f.modelMatrix(new Vec3f(0.0f,  yc,  0.0f), new Quat(), new Vec3f(downscale));
+		return Mat4f.modelMatrix(new Vec3(0.0f,  yc,  0.0f), new Quat(), new Vec3(downscale));
 	}
 	
 	public float getYCorrection()
@@ -138,13 +140,13 @@ public class Mesh
 		
 
 		this.indices = obj.indices;
-		this.triangles = obj.triangles;
+		this.triangles = obj.tr;
 		this.triangleData = obj.data;
 
 		int triangleCount = this.triangles.size();
 		int verticesCount = triangleCount * 3;
 		
-		Point3f[] pos = new Point3f[verticesCount];
+		Point3[] pos = new Point3[verticesCount];
 		Vec2f[] uvs = new Vec2f[verticesCount];
 		Vec3f[] nrm = new Vec3f[verticesCount];
 		Vec3f[] tng = new Vec3f[verticesCount];
@@ -185,7 +187,7 @@ public class Mesh
 		
 	}
 	
-	private Mesh loadToVAO0(Point3f[] positions, Vec2f[] texCoords, Vec3f[] normals, Vec3f[] tangents, int[] indices)
+	private Mesh loadToVAO0(Point3[] positions, Vec2f[] texCoords, Vec3f[] normals, Vec3f[] tangents, int[] indices)
 	{
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		

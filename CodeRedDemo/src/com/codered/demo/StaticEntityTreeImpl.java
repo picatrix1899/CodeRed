@@ -19,7 +19,8 @@ public class StaticEntityTreeImpl
 
 	public void add(StaticEntity entity)
 	{
-		builder.add(entity, entity.getModel().getPhysicalMesh().getAABBf());
+		builder.add(entity, entity.getModel().getPMesh().getAABBf());
+
 		walker.refreshLeafList();
 	}
 

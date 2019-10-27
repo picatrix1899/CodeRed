@@ -1,12 +1,12 @@
 package com.codered.light;
 
-import org.barghos.core.testcolor.api.IColor3R;
+import org.barghos.core.testcolor.Color3R;
 
 public class AmbientLight
 {
 	public BaseLight base;
 	
-	public AmbientLight(IColor3R color, float intensity)
+	public AmbientLight(Color3R color, float intensity)
 	{
 		this.base = new BaseLight(color, intensity);
 	}

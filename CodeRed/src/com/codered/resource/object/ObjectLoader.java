@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.barghos.math.experimental.point.Point3;
 import org.barghos.math.geometry.Triangle3f;
 import org.barghos.math.point.Point3f;
 import org.barghos.math.vector.Vec2f;
@@ -55,8 +56,9 @@ public class ObjectLoader
 
 					calculateTangents(vA, vB, vC);	
 					
-					Triangle3f tr = new Triangle3f();
-					tr.set(vA.pos, vB.pos, vC.pos);
+					Triangle3f tr = new Triangle3f(vA.pos, vB.pos, vC.pos);
+					
+					org.barghos.math.experimental.geometry.Triangle3f t = new org.barghos.math.experimental.geometry.Triangle3f(vA.p, vB.p, vC.p);
 					
 					TriangleData d = new TriangleData();
 					d.normalA = vA.normal;
@@ -71,6 +73,7 @@ public class ObjectLoader
 					d.tangentB = vB.tangent;
 					d.tangentC = vC.tangent;
 
+					data.tr.add(t);
 					data.triangles.add(tr);
 					data.data.add(d);
 				}
@@ -102,6 +105,7 @@ private static Vertex processVertex(ObjectData data, String line)
 	v = new Vertex();
 	
 	v.pos = data.pos.get(posIndex);
+	v.p = new Point3(v.pos.x, v.pos.y, v.pos.z);
 	v.uv = data.uvs.get(textureIndex);
 	v.normal = data.normals.get(normalIndex);
 	v.tangent = new Vec3f();

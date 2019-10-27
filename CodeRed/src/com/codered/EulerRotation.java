@@ -1,20 +1,20 @@
 package com.codered;
 
-import org.barghos.core.api.tuple.ITup3R;
-import org.barghos.math.vector.Quat;
-import org.barghos.math.vector.Vec3fAxis;
+import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.math.experimental.vector.Quat;
+import org.barghos.math.experimental.vector.vec3.Vec3Axis;
 
 public class EulerRotation
 {
-	public double rotPitch;
-	public double rotYaw;
-	public double rotRoll;
+	public float rotPitch;
+	public float rotYaw;
+	public float rotRoll;
 	
 	public EulerRotation()
 	{
-		this.rotPitch = 0.0d;
-		this.rotYaw = 0.0d;
-		this.rotRoll = 0.0d;
+		this.rotPitch = 0.0f;
+		this.rotYaw = 0.0f;
+		this.rotRoll = 0.0f;
 	}
 	
 	public EulerRotation set(EulerRotation rot)
@@ -31,47 +31,47 @@ public class EulerRotation
 		return getRotationRoll().mul(getRotationYaw().mul(getRotationPitch()));
 	}
 	
-	public void rotate(double pitch, double yaw, double roll)
+	public void rotate(float pitch, float yaw, float roll)
 	{
 		this.rotPitch += pitch;
 		this.rotYaw += yaw;
 		this.rotRoll += roll;
 	}
 	
-	public void rotate(ITup3R v, double angle)
+	public void rotate(Tup3fR v, float angle)
 	{
 		
-		rotate(angle * v.getUniX(), angle * v.getUniY(), angle * v.getUniZ());
+		rotate(angle * v.getX(), angle * v.getY(), angle * v.getZ());
 	}
 
-	public double getEulerPitch()
+	public float getEulerPitch()
 	{
 		return this.rotPitch;
 	}
 
-	public double getEulerYaw()
+	public float getEulerYaw()
 	{
 		return this.rotYaw;
 	}
 
-	public double getEulerRoll()
+	public float getEulerRoll()
 	{
 		return this.rotRoll;
 	}
 	
 	public Quat getRotationPitch()
 	{
-		return Quat.getFromAxis(Vec3fAxis.AXIS_NX, getEulerPitch());
+		return Quat.getFromAxis(Vec3Axis.AXIS_NX, getEulerPitch());
 	}
 
 	public Quat getRotationYaw()
 	{
-		return Quat.getFromAxis(Vec3fAxis.AXIS_Y, getEulerYaw());
+		return Quat.getFromAxis(Vec3Axis.AXIS_Y, getEulerYaw());
 	}
 
 	public Quat getRotationRoll()
 	{
-		return Quat.getFromAxis(Vec3fAxis.AXIS_Z, getEulerRoll());
+		return Quat.getFromAxis(Vec3Axis.AXIS_Z, getEulerRoll());
 	}
 	
 }

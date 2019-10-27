@@ -1,17 +1,17 @@
 package com.codered.light;
 
 
+import org.barghos.core.testcolor.Color3R;
 import org.barghos.core.testcolor.HDRColor3;
 import org.barghos.core.testcolor.LDRColor3;
-import org.barghos.core.testcolor.api.IColor3R;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.experimental.vector.vec3.Vec3;
 
 public class DirectionalLight
 {
 	public BaseLight base;
-	public Vec3f direction = new Vec3f();
+	public Vec3 direction = new Vec3();
 	
-	public DirectionalLight(IColor3R color, float intensity, Vec3f direction)
+	public DirectionalLight(Color3R color, float intensity, Vec3 direction)
 	{
 		this.base = new BaseLight(color, intensity);
 		this.direction.set(direction);

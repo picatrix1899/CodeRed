@@ -1,7 +1,7 @@
 package com.codered.entities;
 
-import org.barghos.math.vector.Quat;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.experimental.vector.Quat;
+import org.barghos.math.experimental.vector.vec3.Vec3;
 
 import com.codered.Transform;
 
@@ -14,7 +14,7 @@ public abstract class BaseEntity
 	public Transform getTransform() { return this.transform; }
 	public Transform getNewTransform() { return this.transform; }
 	
-	public Vec3f getPos() { return this.transform.getPos(); }
+	public Vec3 getPos() { return this.transform.getPos(); }
 	public Quat getRot() { return this.transform.getRot(); }
 	
 	public long id;
@@ -32,10 +32,10 @@ public abstract class BaseEntity
 		return this.parent;
 	}
 	
-	public BaseEntity setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
+	public BaseEntity setPos(Vec3 pos) { this.transform.setPos(pos); return this; }
 	public BaseEntity rotatePitch(float rx)  { this.transform.rotate(rx, 0.0f, 0.0f); return this; }
 	public BaseEntity rotateYaw(float ry)  { this.transform.rotate(0.0f, ry, 0.0f); return this; }
 	public BaseEntity rotateZ(float rz)  { this.transform.rotate(0.0f, 0.0f, rz); return this; }
-	public BaseEntity rotate(Vec3f v, float angle) {this.transform.rotate(v, angle); return this;}
+	public BaseEntity rotate(Vec3 v, float angle) {this.transform.rotate(v, angle); return this;}
 	
 }

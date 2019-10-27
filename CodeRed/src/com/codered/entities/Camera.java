@@ -1,17 +1,18 @@
 package com.codered.entities;
 
-import org.barghos.core.api.tuple.ITup3fR;
-import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.vector.Quat;
-import org.barghos.math.vector.Vec3f;
-import org.barghos.math.vector.Vec3fAxis;
+import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.math.experimental.matrix.Mat4f;
+import org.barghos.math.experimental.vector.Quat;
+import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.experimental.vector.vec3.Vec3Axis;
+import org.barghos.math.experimental.vector.vec3.Vec3Pool;
 
-import com.codered.Transform;
+import com.codered.SweptTransform;
 
 public class Camera
 {
 
-	private Transform transform;
+	private SweptTransform transform;
 	
 	private boolean limitRotPitch = false;
 	private boolean limitRotYaw = false;
@@ -30,10 +31,10 @@ public class Camera
 	
 	public Camera()
 	{
-		this.transform = new Transform();
+		this.transform = new SweptTransform();
 	}
 	
-	public Camera(Vec3f pos, double pitch, double yaw, double roll)
+	public Camera(Vec3 pos, float pitch, float yaw, float roll)
 	{
 		this();
 		setPos(pos);
@@ -43,10 +44,10 @@ public class Camera
 		this.transform.swap();
 	}
 	
-	public Camera(float posX, float posY, float posZ, double pitch, double yaw, double roll)
+	public Camera(float posX, float posY, float posZ, float pitch, float yaw, float roll)
 	{
 		this();
-		setPos(new Vec3f(posX, posY, posZ));
+		setPos(new Vec3(posX, posY, posZ));
 		rotatePitch(pitch);
 		rotateYaw(yaw);
 		rotateRoll(roll);
@@ -90,7 +91,7 @@ public class Camera
 	public Camera setYawSpeed(float speed) { this.speedYaw = speed; return this; }
 	public Camera setRollSpeed(float speed) { this.speedRoll = speed; return this; }
 	
-	public Transform getTransform() { return this.transform; }
+	public SweptTransform getTransform() { return this.transform; }
 	
 	public boolean isPitchRotLimited() { return this.limitRotPitch; }
 	public boolean isYawRotLimited() { return this.limitRotYaw; }
@@ -114,22 +115,22 @@ public class Camera
 	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
 	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
-	public Camera setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
-	public Camera moveBy(Vec3f velocity) { this.transform.moveBy(velocity); return this; }
-	public Vec3f getRelativePos() { return this.transform.getPos(); }
-	public Vec3f getTotalPos() { return this.transform.getTransformedPos(); }
+	public Camera setPos(Vec3 pos) { this.transform.setPos(pos); return this; }
+	public Camera moveBy(Vec3 velocity) { this.transform.setPos(this.transform.getPos().add(velocity, null)); return this; }
+	public Vec3 getRelativePos() { return this.transform.getPos(); }
+	public Vec3 getTotalPos() { return this.transform.getTransformedPos(); }
 	
 	public Mat4f getViewMatrix()
 	{
 		return Mat4f.viewMatrix(getTotalPos(), getTotalRot());
 	}
 	
-	public Mat4f getLerpedViewMatrix(double alpha)
+	public Mat4f getLerpedViewMatrix(float alpha)
 	{
-		return Mat4f.viewMatrix(this.transform.getLerpedTransformedPos(alpha), this.transform.getLerpedRot(alpha));
+		return Mat4f.viewMatrix(this.transform.getTransformedPos(alpha), this.transform.getRot(alpha));
 	}
 	
-	public Camera rotatePitch(double amount)
+	public Camera rotatePitch(float amount)
 	{
 		// +amount => down
 		// -amount => up
@@ -140,32 +141,34 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount < this.maxRotPitch)
-					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
+					this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount > this.minRotPitch)
-					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
+					this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
+				this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
 		}
 
 		return this;
 	}
 	
-	public double getAngle(ITup3fR a, ITup3fR b)
+	public double getAngle(Tup3fR a, Tup3fR b)
 	{
-		double combinedLength = Vec3f.length(a) * Vec3f.length(b);
-		Vec3f cross = Vec3f.cross(a, b, null);
+		Vec3 va = Vec3Pool.get(a);
+		Vec3 vb = Vec3Pool.get(b);
+		double combinedLength = va.lengthSafe() * vb.lengthSafe();
+		Vec3 cross = va.cross(vb, null);
 
 		double sin = cross.length() / combinedLength;
-		double cos = Vec3f.dot(a, b) / combinedLength;
+		double cos = va.dot(vb) / combinedLength;
 		
-		Vec3f n = cross.normal(null);
+		Vec3 n = cross.normal(null);
 		
 		double sign = n.dot(cross);
 	
@@ -173,34 +176,36 @@ public class Camera
 		
 		if(sign < 0) out = -out;
 		
+		Vec3Pool.store(va, vb);
+		
 		return out;
 	}
 	
-	public Camera rotateYaw(double amount)
+	public Camera rotateYaw(float amount)
 	{
 		if(this.limitRotYaw)
 		{
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount < this.maxRotYaw)
-					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
+					this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount > this.minRotYaw)
-					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
+					this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
+				this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
 		}
 
 		return this;
 	}
 	
-	public Camera rotateRoll(double amount)
+	public Camera rotateRoll(float amount)
 	{
 		
 		if(this.limitRotRoll)
@@ -208,18 +213,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount < this.maxRotRoll)
-					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedYaw * amount);
+					this.transform.rotate(Vec3Axis.AXIS_Z, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount > this.minRotRoll)
-					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
+					this.transform.rotate(Vec3Axis.AXIS_Z, this.speedRoll * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
+				this.transform.rotate(Vec3Axis.AXIS_Z, this.speedRoll * amount);
 		}
 
 		return this;

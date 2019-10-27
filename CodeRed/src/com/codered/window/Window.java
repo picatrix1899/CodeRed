@@ -3,7 +3,7 @@ package com.codered.window;
 import org.barghos.core.event.Event;
 import org.barghos.core.event.EventArgs;
 import org.barghos.core.event.NoArgs;
-import org.barghos.math.vector.Vec2f;
+import org.barghos.math.experimental.vector.vec2.Vec2;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -23,7 +23,7 @@ public class Window
 	
 	private GLCapabilities capabilities;
 
-	private Vec2f size = new Vec2f();
+	private Vec2 size = new Vec2();
 	private String title = "";
 	
 	private Runnable initWindowHints;
@@ -38,7 +38,7 @@ public class Window
 	public Window(int width, int height, String title, long parentWindow)
 	{
 		this.title = title;
-		this.size.set((double)width, (double)height);
+		this.size.set(width, height);
 		this.parentWindow = parentWindow;
 	}
 	
@@ -57,7 +57,7 @@ public class Window
 	{
 		this.initWindowHints.run();
 
-		this.window = glfwCreateWindow((int)this.size.x, (int)this.size.y, this.title, 0, this.parentWindow);
+		this.window = glfwCreateWindow((int)this.size.getX(), (int)this.size.getY(), this.title, 0, this.parentWindow);
 		
 		if(window == 0)
 		{
@@ -83,9 +83,9 @@ public class Window
 	}
 	
 	public String getTitle() { return this.title; }
-	public int getWidth() { return (int)this.size.x; }
-	public int getHeight() { return (int)this.size.y; }
-	public Vec2f getSize() { return new Vec2f(this.size); }
+	public int getWidth() { return (int)this.size.getX(); }
+	public int getHeight() { return (int)this.size.getY(); }
+	public Vec2 getSize() { return new Vec2(this.size); }
 
 	public void onResize(long id, int width, int height)
 	{
@@ -95,7 +95,7 @@ public class Window
 			WindowContext newContext = EngineRegistry.getWindowContext(this.window);
 			
 			newContext.makeContextCurrent();
-			this.size.set((double)width, (double)height);
+			this.size.set(width, height);
 			
 			GL11.glViewport(0, 0, width, height);
 			

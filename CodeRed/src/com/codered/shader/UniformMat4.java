@@ -1,6 +1,6 @@
 package com.codered.shader;
 
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.experimental.matrix.Mat4f;
 
 public class UniformMat4 extends Uniform
 {

@@ -1,11 +1,11 @@
 package com.codered.shader;
 
-import org.barghos.core.api.tuple.ITup2R;
-import org.barghos.math.vector.Vec2f;
+import org.barghos.math.experimental.vector.vec2.Vec2;
+import org.barghos.math.experimental.vector.vec2.Vec2R;
 
 public class UniformVec2 extends Uniform
 {
-	private Vec2f value = new Vec2f();
+	private Vec2 value = new Vec2();
 	
 	private int location = -1;
 	
@@ -17,9 +17,11 @@ public class UniformVec2 extends Uniform
 	@Override
 	public void set(Object... obj)
 	{
-		if(!(obj[0] instanceof ITup2R)) throw new IllegalArgumentException();
-		ITup2R v = (ITup2R)obj[0];
-		this.value.set(v);
+		if(obj[0] instanceof Vec2R)
+		{
+			Vec2R v = (Vec2R)obj[0];
+			this.value.set(v);
+		}
 	}
 
 	@Override

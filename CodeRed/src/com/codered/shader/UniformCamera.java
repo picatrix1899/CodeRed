@@ -1,6 +1,6 @@
 package com.codered.shader;
 
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.experimental.vector.vec3.Vec3;
 
 import com.codered.entities.Camera;
 
@@ -11,7 +11,7 @@ public class UniformCamera extends Uniform
 	private int location_position = -1;
 	
 	private Camera value;
-	private double alpha;
+	private float alpha;
 	
 	public UniformCamera(String name, Object... data)
 	{
@@ -33,7 +33,7 @@ public class UniformCamera extends Uniform
 		Camera v = (Camera)obj[0];
 		double a = (double)obj[1];
 		this.value = v;
-		this.alpha = a;
+		this.alpha = (float)a;
 		
 	}
 
@@ -41,8 +41,8 @@ public class UniformCamera extends Uniform
 	public void load()
 	{
 		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
-		Vec3f v = this.value.getTotalPos();
-		loadVec3f(this.location_position, v.x, v.y, v.z);
+		Vec3 v = this.value.getTotalPos();
+		loadVec3f(this.location_position, v.getX(), v.getY(), v.getZ());
 	}
 
 }

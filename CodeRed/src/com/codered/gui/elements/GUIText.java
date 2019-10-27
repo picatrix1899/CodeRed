@@ -2,7 +2,6 @@ package com.codered.gui.elements;
 
 import org.barghos.math.vector.Vec3f;
 
-import com.codered.engine.EngineRegistry;
 import com.codered.font.FontType;
 
 /**
@@ -62,19 +61,6 @@ public class GUIText
 		this.posX = x;
 		this.posY = y;
 		this.font = font;
-		this.width = width;
-		this.height = height;
-		this.centerTextHorizontal = centeredHorizontal;
-		this.centerTextVertical = centeredVertical;
-		this.fontsize = fontsize;
-	}
-
-	public GUIText(String text, int fontsize, float x, float y, float width, float height, String font, boolean centeredHorizontal, boolean centeredVertical)
-	{
-		this.textString = text;
-		this.posX = x;
-		this.posY = y;
-		this.font = EngineRegistry.getCurrentWindowContext().getResourceManager().getFont(font);
 		this.width = width;
 		this.height = height;
 		this.centerTextHorizontal = centeredHorizontal;

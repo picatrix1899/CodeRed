@@ -59,11 +59,6 @@ public abstract class GUI
 		this.renderer.drawText(text, fontsize, x, y, width, height, font, centeredHorizontal, centeredVertical);
 	}
 	
-	protected void drawText(String text, int fontsize, float x, float y, float width, float height, String font, boolean centeredHorizontal, boolean centeredVertical)
-	{
-		this.renderer.drawText(text, fontsize, x, y, width, height, font, centeredHorizontal, centeredVertical);
-	}
-	
 	protected void drawText(GUIText text)
 	{
 		this.renderer.drawText(text);

@@ -25,9 +25,9 @@ public class UniformVec3 extends Uniform
 			this.value.set(v);
 
 		}
-		else if(obj[0] instanceof org.barghos.core.tuple.tuple3.api.ITup3R)
+		else if(obj[0] instanceof org.barghos.core.tuple.tuple3.Tup3fR)
 		{
-			ITup3R v = ConvUtils.ITup3R_new_old((org.barghos.core.tuple.tuple3.api.ITup3R)obj[0]);
+			ITup3R v = ConvUtils.ITup3R_new_old((org.barghos.core.tuple.tuple3.Tup3fR)obj[0]);
 			this.value.set(v);
 		}
 		else

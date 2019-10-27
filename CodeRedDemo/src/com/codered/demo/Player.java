@@ -5,20 +5,19 @@ import java.util.ArrayList;
 import org.lwjgl.glfw.GLFW;
 
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
-
-import org.barghos.math.geometry.AABB3f;
-import org.barghos.math.geometry.OBB3f;
-import org.barghos.math.geometry.OBBOBBResolver;
-import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.Quat;
-import org.barghos.math.vector.Vec3f;
-import org.barghos.math.vector.Vec3fAxis;
-import org.barghos.math.vector.Vec3fPool;
+import org.barghos.math.experimental.geometry.AABB3f;
+import org.barghos.math.experimental.geometry.OBB3f;
+import org.barghos.math.experimental.geometry.OBBOBBResolver;
+import org.barghos.math.experimental.matrix.Mat4f;
+import org.barghos.math.experimental.point.Point3;
+import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.experimental.vector.vec3.Vec3Axis;
+import org.barghos.math.experimental.vector.vec3.Vec3Pool;
 
 import com.codered.Profiling;
+import com.codered.SweptTransform;
+import com.codered.TickUpdater;
 import com.codered.engine.EngineRegistry;
-import com.codered.entities.BaseEntity;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.GUIWindow;
@@ -27,7 +26,7 @@ import com.codered.window.WindowContext;
 
 
 
-public class Player extends BaseEntity
+public class Player
 {
 	public AABB3f aabb;
 
@@ -39,7 +38,13 @@ public class Player extends BaseEntity
 	
 	private StaticEntityTreeImpl world;
 	
+	private SweptTransform transform = new SweptTransform();
 	
+	private TickUpdater driftUpdater;
+	
+	private Vec3 lastVelocity = new Vec3();
+	
+	private Vec3 lastDirection = new Vec3();
 	
 	public Player(StaticEntityTreeImpl world)
 	{
@@ -47,17 +52,30 @@ public class Player extends BaseEntity
 		
 		this.world = world;
 
-		this.aabb = new AABB3f(new Point3f(0, 9, 0), new Vec3f(4, 9, 4));
+		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
 		
-		this.transform.setPos(new Vec3f(0.0f, 0.0f, 0.0f));
+		this.transform.setPos(new Vec3(0.0f, 0.0f, 0.0f));
 		
-		this.camera = new Camera(0.0f, 18.0f, 0.0f, 0.0d, 0.0d, 0.0d);
+		this.camera = new Camera(0.0f, 1.8f, 0.0f, 0.0f, 0.0f, 0.0f);
 		
-		this.camera.getTransform().setParent(getTransform());
+		this.camera.getTransform().setParent(this.transform);
 		
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
+		
+		this.driftUpdater = new TickUpdater(100l, (updater) -> updateDrift(updater));
+	}
+
+	public void updateDrift(TickUpdater updater)
+	{
+		this.lastVelocity.mul(0.98f, this.lastVelocity);
+		
+		if(this.lastVelocity.isZero(0.0001f))
+		{
+			this.lastVelocity.set(0f);
+			this.driftUpdater.finish();
+		}
 	}
 	
 	public void preUpdate()
@@ -68,9 +86,9 @@ public class Player extends BaseEntity
 	
 	public void update(double delta)
 	{
-
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
-		{
+		{	
+			this.driftUpdater.update();
 			updateMovement(delta);
 			
 			updateOrientation(delta);
@@ -80,7 +98,6 @@ public class Player extends BaseEntity
 	
 	public void updateOrientation(double delta)
 	{
-
 		if(this.context.getInputManager().isMouseButtonPressed(2))
 		{
 			this.context.getMouse().grab(true);
@@ -100,61 +117,91 @@ public class Player extends BaseEntity
 	
 	public void updateMovement(double delta)
 	{
-		Vec3f dir = Vec3fPool.get();
-		Vec3f vel = Vec3fPool.get();
-		Vec3f t = Vec3fPool.get();
+		Vec3 dir = Vec3Pool.get();
+		Vec3 t = Vec3Pool.get();
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_W))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, t).normal(t), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_Z, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_D))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, t).normal(t), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_NX, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_A))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, t).normal(t), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_X, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_S))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal(t), dir);
+			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_NZ, t).normal());
 		}
-
-		if(!Vec3f.isZero(dir))
-		{
-			dir.normal();
-			
-			float acceleration = 25.0f * (float)delta;
-
-			dir.mul(acceleration, vel);
-			
-			vel = checkCollisionStatic(vel);
-			
-			this.transform.moveBy(vel);
-		}
-
-
 		
-		Vec3fPool.store(dir, vel, t);
+		if(!dir.isZero(0.0f))
+		{
+			if(this.driftUpdater.isActive())
+			{
+				this.driftUpdater.finish();
+			}
+			
+			dir.normalSafe();
+			
+			float acceleration = 2.5f * (float)delta;
 
+			Vec3 vel = Vec3Pool.get();
+			
+			dir.mul(acceleration, vel);
+
+			vel.set(checkCollisionStatic(vel));
+			
+			this.transform.setPos(this.transform.getPos().add(vel, null));
+			
+			this.lastVelocity.set(vel);
+			this.lastDirection.set(dir);
+			
+			Vec3Pool.store(vel);
+		}
+		else
+		{
+			if(!this.lastDirection.isZero(0.0f) && !this.driftUpdater.isActive())
+			{
+				System.out.println("Test");
+				
+				this.driftUpdater.trigger();
+				this.lastDirection.set(0);
+			}
+			
+			if(this.driftUpdater.isActive())
+			{
+				Vec3 vel = Vec3Pool.get(this.lastVelocity);
+				
+				vel.set(checkCollisionStatic(vel));
+				
+				this.transform.setPos(this.transform.getPos().add(vel, null));
+				
+				Vec3Pool.store(vel);
+			}
+			
+			if(this.driftUpdater.isFinished())
+			{
+				System.out.println("Finished");
+				this.driftUpdater.reset();
+			}
+		}
+
+		Vec3Pool.store(dir, t);
 	}
 	
 	public Camera getCamera() { return this.camera; }
-	
-	public Quat getPitch() { return this.transform.getRotation().getRotationPitch(); }
-	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
-	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
-	
-	private Vec3f checkCollisionStatic(Vec3f vel)
+
+	private Vec3 checkCollisionStatic(Vec3 vel)
 	{
-		
-		Vec3f sum = Vec3fPool.get();
-		Vec3f partial = Vec3fPool.get();
-		Vec3f tempPos = Vec3fPool.get();
+		Vec3 sum = Vec3Pool.get();
+		Vec3 partial = Vec3Pool.get();
+		Vec3 tempPos = Vec3Pool.get();
 
 		Mat4f translation;
 		
@@ -173,8 +220,8 @@ public class Player extends BaseEntity
 		
 		for(StaticEntity entity : entities)
 		{
-			entityOBB = entity.getModel().getPhysicalMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
-
+			entityOBB = entity.getModel().getPMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+			
 			translation = Mat4f.translation(tempPos);
 			
 			sweptAABB = this.aabb.transform(translation, sweptAABB);
@@ -189,12 +236,12 @@ public class Player extends BaseEntity
 				tempPos.add(partial, tempPos);
 			}
 		}
-		
+	
 		vel.add(sum, vel);
 		
-		Vec3fPool.store(sum, partial, tempPos);
+		Vec3Pool.store(sum, partial, tempPos);
 		
-		return vel;	
+		return vel;
 	}
 	
 	private void updateOrientation()
@@ -205,8 +252,8 @@ public class Player extends BaseEntity
 
 	}
 	
-	public Vec3f getPos() { return this.transform.getPos(); }
+	public Vec3 getPos() { return this.transform.getPos(); }
 	
-	public Vec3f getEyePos() { return this.transform.getPos().add(0.0f, 18.0f, 0.0f, null); }
+	public Vec3 getEyePos() { return this.transform.getPos().add(0.0f, 18.0f, 0.0f, null); }
 
 }

@@ -1,9 +1,9 @@
 package com.codered.entities;
 
-import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.vector.Quat;
-import org.barghos.math.vector.Vec3f;
-import org.barghos.math.vector.Vec3fAxis;
+import org.barghos.math.experimental.matrix.Mat4f;
+import org.barghos.math.experimental.vector.Quat;
+import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.experimental.vector.vec3.Vec3Axis;
 
 import com.codered.managing.models.TexturedModel;
 
@@ -12,7 +12,7 @@ public class StaticEntity extends BaseEntity
 	
 	protected TexturedModel model;
 
-	public StaticEntity(TexturedModel model, Vec3f pos, float rx, float ry, float rz)
+	public StaticEntity(TexturedModel model, Vec3 pos, float rx, float ry, float rz)
 	{
 		this.model = model;
 		
@@ -23,7 +23,7 @@ public class StaticEntity extends BaseEntity
 		this.transform.swap();
 	}
 	
-	public StaticEntity setPos(Vec3f pos) { super.setPos(pos); return this; }
+	public StaticEntity setPos(Vec3 pos) { super.setPos(pos); return this; }
 
 	public StaticEntity setRotX(float rx) { super.rotatePitch(rx); return this; }
 	
@@ -33,13 +33,13 @@ public class StaticEntity extends BaseEntity
 
 	public TexturedModel getModel() { return this.model; }
 
-	public Vec3f getPos() { return super.getPos(); }
+	public Vec3 getPos() { return super.getPos(); }
 	
 	public Quat getRot() { return super.getRot(); }
 
 	public Mat4f getTransformationMatrix()
 	{
-		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
 		
 		Mat4f modelTransformation = baseTransformation.mul(getModel().getModel().getMatrix(), (Mat4f)null);
 		Mat4f ownTransformation = modelTransformation.mul(Mat4f.scaling(getTransform().getScale()), null);
@@ -61,7 +61,7 @@ public class StaticEntity extends BaseEntity
 	public Mat4f Test()
 	{
 	
-		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
 	
 		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)

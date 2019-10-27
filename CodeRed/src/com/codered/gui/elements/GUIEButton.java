@@ -36,11 +36,6 @@ public class GUIEButton extends GUIElement
 		this.text = new GUIText(text, fontsize, main.minX, main.minY, main.maxX, main.maxY, font, centeredHorizontal, centeredVertical);
 	}
 	
-	public void setText(String text, int fontsize, String font, boolean centeredHorizontal, boolean centeredVertical)
-	{
-		this.text = new GUIText(text, fontsize, main.minX, main.minY, main.maxX, main.maxY, font, centeredHorizontal, centeredVertical);
-	}
-	
 	public void onClick()
 	{
 		if(main.mouseIsInsideInclusive())
