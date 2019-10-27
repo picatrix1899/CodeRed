@@ -12,7 +12,6 @@ public abstract class BaseEntity
 	protected BaseEntity parent;
 	
 	public Transform getTransform() { return this.transform; }
-	public Transform getNewTransform() { return this.transform; }
 	
 	public Vec3 getPos() { return this.transform.getPos(); }
 	public Quat getRot() { return this.transform.getRot(); }

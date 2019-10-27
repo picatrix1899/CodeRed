@@ -1,9 +1,15 @@
 package com.codered.demo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import com.codered.ExcelPlotter;
 import com.codered.Profiling;
 import com.codered.engine.Engine;
 import com.codered.utils.DebugInfo;
@@ -101,6 +107,36 @@ public class DemoGame extends Engine
 		
 		System.out.println(Profiling.CPROFILER);
 		GLCommon.report(System.out);
+		
+		File f = new File("playerMovement_Plot.xlsx");
+		if(!f.exists())
+		{
+			try
+			{
+				f.createNewFile();
+			} catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
+			
+		try
+		{
+			FileOutputStream stream = new FileOutputStream(f);
+			ExcelPlotter.plot(stream);
+			
+			try
+			{
+				stream.close();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

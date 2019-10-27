@@ -118,7 +118,7 @@ public class Player
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_NZ, t).normal());
 		}
-		
+
 		if(!dir.isZero(0.0f))
 		{
 			dir.normal();
