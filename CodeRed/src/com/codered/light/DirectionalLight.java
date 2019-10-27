@@ -1,10 +1,10 @@
 package com.codered.light;
 
 
-import org.barghos.core.testcolor.Color3R;
-import org.barghos.core.testcolor.HDRColor3;
-import org.barghos.core.testcolor.LDRColor3;
-import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.core.color.Color3R;
+import org.barghos.core.color.HDRColor3;
+import org.barghos.core.color.LDRColor3;
+import org.barghos.math.vector.vec3.Vec3;
 
 public class DirectionalLight
 {

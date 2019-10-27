@@ -5,18 +5,17 @@ import java.util.ArrayList;
 import org.lwjgl.glfw.GLFW;
 
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
-import org.barghos.math.experimental.geometry.AABB3f;
-import org.barghos.math.experimental.geometry.OBB3f;
-import org.barghos.math.experimental.geometry.OBBOBBResolver;
-import org.barghos.math.experimental.matrix.Mat4f;
-import org.barghos.math.experimental.point.Point3;
-import org.barghos.math.experimental.vector.vec3.Vec3;
-import org.barghos.math.experimental.vector.vec3.Vec3Axis;
-import org.barghos.math.experimental.vector.vec3.Vec3Pool;
+import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.geometry.OBB3f;
+import org.barghos.math.geometry.OBBOBBResolver;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.point.Point3;
+import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3Pool;
 
 import com.codered.Profiling;
 import com.codered.SweptTransform;
-import com.codered.TickUpdater;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
@@ -39,13 +38,7 @@ public class Player
 	private StaticEntityTreeImpl world;
 	
 	private SweptTransform transform = new SweptTransform();
-	
-	private TickUpdater driftUpdater;
-	
-	private Vec3 lastVelocity = new Vec3();
-	
-	private Vec3 lastDirection = new Vec3();
-	
+
 	public Player(StaticEntityTreeImpl world)
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
@@ -63,19 +56,6 @@ public class Player
 		this.camera.setYawSpeed(GlobalSettings.camSpeed_yaw);
 		this.camera.setPitchSpeed(GlobalSettings.camSpeed_pitch);
 		this.camera.limitPitch(-70.0f, 70.0f);
-		
-		this.driftUpdater = new TickUpdater(100l, (updater) -> updateDrift(updater));
-	}
-
-	public void updateDrift(TickUpdater updater)
-	{
-		this.lastVelocity.mul(0.98f, this.lastVelocity);
-		
-		if(this.lastVelocity.isZero(0.0001f))
-		{
-			this.lastVelocity.set(0f);
-			this.driftUpdater.finish();
-		}
 	}
 	
 	public void preUpdate()
@@ -88,7 +68,6 @@ public class Player
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
 		{	
-			this.driftUpdater.update();
 			updateMovement(delta);
 			
 			updateOrientation(delta);
@@ -142,12 +121,7 @@ public class Player
 		
 		if(!dir.isZero(0.0f))
 		{
-			if(this.driftUpdater.isActive())
-			{
-				this.driftUpdater.finish();
-			}
-			
-			dir.normalSafe();
+			dir.normal();
 			
 			float acceleration = 2.5f * (float)delta;
 
@@ -159,39 +133,9 @@ public class Player
 			
 			this.transform.setPos(this.transform.getPos().add(vel, null));
 			
-			this.lastVelocity.set(vel);
-			this.lastDirection.set(dir);
-			
 			Vec3Pool.store(vel);
 		}
-		else
-		{
-			if(!this.lastDirection.isZero(0.0f) && !this.driftUpdater.isActive())
-			{
-				System.out.println("Test");
-				
-				this.driftUpdater.trigger();
-				this.lastDirection.set(0);
-			}
-			
-			if(this.driftUpdater.isActive())
-			{
-				Vec3 vel = Vec3Pool.get(this.lastVelocity);
-				
-				vel.set(checkCollisionStatic(vel));
-				
-				this.transform.setPos(this.transform.getPos().add(vel, null));
-				
-				Vec3Pool.store(vel);
-			}
-			
-			if(this.driftUpdater.isFinished())
-			{
-				System.out.println("Finished");
-				this.driftUpdater.reset();
-			}
-		}
-
+		
 		Vec3Pool.store(dir, t);
 	}
 	
@@ -246,9 +190,9 @@ public class Player
 	
 	private void updateOrientation()
 	{
-		this.camera.rotateYaw(-this.context.getMouse().getDeltaPos().x);
+		this.camera.rotateYaw(-this.context.getMouse().getDeltaPos().getX());
 
-		this.camera.rotatePitch(-this.context.getMouse().getDeltaPos().y);
+		this.camera.rotatePitch(-this.context.getMouse().getDeltaPos().getY());
 
 	}
 	

@@ -1,9 +1,9 @@
 package com.codered;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
-import org.barghos.math.experimental.matrix.Mat4f;
-import org.barghos.math.experimental.vector.Quat;
-import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.vec3.Vec3;
 
 public interface ITransform
 {

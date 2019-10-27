@@ -1,8 +1,8 @@
 package com.codered.demo;
 
-import org.barghos.math.experimental.geometry.AABB3f;
-import org.barghos.math.experimental.point.Point3;
-import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.point.Point3;
+import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.structs.simpletree.btree.BTree;
 import org.barghos.structs.simpletree.btree.BTreeBuilder;
 import org.barghos.structs.simpletree.btree.BTreeContent;

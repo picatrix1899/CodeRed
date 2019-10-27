@@ -1,17 +1,17 @@
 package com.codered.resource.object;
 
-import org.barghos.math.vector.Vec2f;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec3.Vec3;
 
 public class TriangleData
 {
-	public Vec2f uvA;
-	public Vec2f uvB;
-	public Vec2f uvC;
-	public Vec3f normalA;
-	public Vec3f normalB;
-	public Vec3f normalC;
-	public Vec3f tangentA;
-	public Vec3f tangentB;
-	public Vec3f tangentC;
+	public Vec2 uvA;
+	public Vec2 uvB;
+	public Vec2 uvC;
+	public Vec3 normalA;
+	public Vec3 normalB;
+	public Vec3 normalC;
+	public Vec3 tangentA;
+	public Vec3 tangentB;
+	public Vec3 tangentC;
 }

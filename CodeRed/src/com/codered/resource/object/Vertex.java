@@ -1,16 +1,15 @@
 package com.codered.resource.object;
 
-import org.barghos.math.experimental.point.Point3;
-import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.Vec2f;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.point.Point3;
+import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec3.Vec3;
 
 public class Vertex
 {
 	public Point3 p;
-	public Point3f pos;
-	public Vec2f uv;
-	public Vec3f normal;
-	public Vec3f tangent = new Vec3f();
+	public Point3 pos;
+	public Vec2 uv;
+	public Vec3 normal;
+	public Vec3 tangent = new Vec3();
 	public int index;
 }

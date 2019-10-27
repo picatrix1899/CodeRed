@@ -1,6 +1,6 @@
 package com.codered.shader;
 
-import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3;
 
 import com.codered.entities.Camera;
 

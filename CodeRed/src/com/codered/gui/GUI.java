@@ -66,8 +66,8 @@ public abstract class GUI
 	
 	public boolean mouseIsInsideInclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = this.context.getMouse().getCurrentPos().x;
-		float mY = this.context.getMouse().getCurrentPos().y;
+		float mX = this.context.getMouse().getCurrentPos().getX();
+		float mY = this.context.getMouse().getCurrentPos().getY();
 
 		boolean bX = mX >= minX && mX <= maxX;
 		boolean bY = mY >= minY && mY <= maxY;
@@ -77,8 +77,8 @@ public abstract class GUI
 
 	public boolean mouseIsInsideExclusive(float minX, float minY, float maxX, float maxY)
 	{
-		float mX = this.context.getMouse().getCurrentPos().x;
-		float mY = this.context.getMouse().getCurrentPos().y;
+		float mX = this.context.getMouse().getCurrentPos().getX();
+		float mY = this.context.getMouse().getCurrentPos().getY();
 
 		boolean bX = mX > minX && mX < maxX;
 		boolean bY = mY > minY && mY < maxY;

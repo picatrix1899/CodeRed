@@ -3,7 +3,7 @@ package com.codered.window;
 import org.barghos.core.event.Event;
 import org.barghos.core.event.EventArgs;
 import org.barghos.core.event.NoArgs;
-import org.barghos.math.experimental.vector.vec2.Vec2;
+import org.barghos.math.vector.vec2.Vec2;
 
 import static org.lwjgl.glfw.GLFW.*;
 

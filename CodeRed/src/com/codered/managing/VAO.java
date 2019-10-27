@@ -13,9 +13,6 @@ import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
 
 import org.barghos.core.BufferUtils;
-import org.barghos.core.BufferUtilsExp;
-import org.barghos.core.api.tuple.ITup2fR;
-import org.barghos.core.api.tuple.ITup3fR;
 import org.barghos.core.tuple.tuple2.Tup2fR;
 import org.barghos.core.tuple.tuple3.Tup3fR;
 
@@ -84,7 +81,7 @@ public class VAO
 		GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_INT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, ITup2fR[] data, int stride, int pointer, int drawFlag)
+	public void storeData(int attrib, Tup2fR[] data, int stride, int pointer, int drawFlag)
 	{
 		BindingUtils.bindVAO(this);
 		
@@ -107,52 +104,6 @@ public class VAO
 		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
 	}
 	
-	public void storeData(int attrib, Tup2fR[] data, int stride, int pointer, int drawFlag)
-	{
-		BindingUtils.bindVAO(this);
-		
-		int vboID = 0;
-
-		if(!this.vbos.containsKey(attrib))
-		{
-			vboID = GLCommon.genBuffers();
-			vbos.put(attrib, vboID);
-		}
-		else
-			vboID = this.vbos.get(attrib);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		
-		FloatBuffer buffer = BufferUtilsExp.wrapFlippedTuple2FBuffer(data);
-		
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-		
-		GL20.glVertexAttribPointer(attrib, 2, GL11.GL_FLOAT, false, stride, pointer);
-	}
-	
-	public void storeData(int attrib, ITup3fR[] data, int stride, int pointer, int drawFlag)
-	{
-		BindingUtils.bindVAO(this);
-		
-		int vboID = 0;
-
-		if(!this.vbos.containsKey(attrib))
-		{
-			vboID = GLCommon.genBuffers();
-			vbos.put(attrib, vboID);
-		}
-		else
-			vboID = this.vbos.get(attrib);
-		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		
-		FloatBuffer buffer = BufferUtils.wrapFlippedTuple3FBuffer(data);
-		
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
-		
-		GL20.glVertexAttribPointer(attrib, 3, GL11.GL_FLOAT, false, stride, pointer);
-	}
-	
 	public void storeData(int attrib, Tup3fR[] data, int stride, int pointer, int drawFlag)
 	{
 		BindingUtils.bindVAO(this);
@@ -169,7 +120,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtilsExp.wrapFlippedTuple3FBuffer(data);
+		FloatBuffer buffer = BufferUtils.wrapFlippedTuple3FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		

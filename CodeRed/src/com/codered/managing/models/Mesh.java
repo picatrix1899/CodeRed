@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.barghos.core.ListUtils;
-import org.barghos.math.experimental.geometry.Triangle3f;
-import org.barghos.math.experimental.matrix.Mat4f;
-import org.barghos.math.experimental.point.Point3;
-import org.barghos.math.experimental.vector.Quat;
-import org.barghos.math.experimental.vector.vec3.Vec3;
-import org.barghos.math.vector.Vec2f;
-import org.barghos.math.vector.Vec3f;
+import org.barghos.math.geometry.Triangle3f;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.point.Point3;
+import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec3.Vec3;
 
 import org.lwjgl.opengl.GL15;
 
@@ -24,7 +23,7 @@ public class Mesh
 {
 	public List<TriangleData>triangleData = new ArrayList<>();
 	public List<Integer> indices = new ArrayList<>();
-	public List<org.barghos.math.experimental.geometry.Triangle3f> triangles = new ArrayList<>();
+	public List<Triangle3f> triangles = new ArrayList<>();
 	
 	private float yc = 0.0f;
 	
@@ -147,9 +146,9 @@ public class Mesh
 		int verticesCount = triangleCount * 3;
 		
 		Point3[] pos = new Point3[verticesCount];
-		Vec2f[] uvs = new Vec2f[verticesCount];
-		Vec3f[] nrm = new Vec3f[verticesCount];
-		Vec3f[] tng = new Vec3f[verticesCount];
+		Vec2[] uvs = new Vec2[verticesCount];
+		Vec3[] nrm = new Vec3[verticesCount];
+		Vec3[] tng = new Vec3[verticesCount];
 		
 		int[] indices =	 new int[this.indices.size()];
 		
@@ -187,7 +186,7 @@ public class Mesh
 		
 	}
 	
-	private Mesh loadToVAO0(Point3[] positions, Vec2f[] texCoords, Vec3f[] normals, Vec3f[] tangents, int[] indices)
+	private Mesh loadToVAO0(Point3[] positions, Vec2[] texCoords, Vec3[] normals, Vec3[] tangents, int[] indices)
 	{
 		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		

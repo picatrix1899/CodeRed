@@ -1,6 +1,6 @@
 package com.codered.input;
 
-import org.barghos.math.vector.Vec2f;
+import org.barghos.math.vector.vec2.Vec2;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.window.WindowContext;
@@ -11,10 +11,10 @@ public class Mouse
 	
 	private boolean grabbed;
 	
-	private Vec2f currentPos = new Vec2f();
-	private Vec2f deltaPos = new Vec2f();
+	private Vec2 currentPos = new Vec2();
+	private Vec2 deltaPos = new Vec2();
 	
-	private Vec2f returnPos = new Vec2f();
+	private Vec2 returnPos = new Vec2();
 	
 	public Mouse(WindowContext context)
 	{
@@ -22,9 +22,9 @@ public class Mouse
 		GLFW.glfwSetCursorPosCallback(this.windowId, (w, x, y) -> cursorPosCallback(w, x, y));
 	}
 	
-	public void setMousePos(Vec2f pos)
+	public void setMousePos(Vec2 pos)
 	{
-		GLFW.glfwSetCursorPos(this.windowId, pos.x, pos.y);
+		GLFW.glfwSetCursorPos(this.windowId, pos.getX(), pos.getY());
 	}
 	
 	public void setMousePos(double x, double y)
@@ -45,15 +45,15 @@ public class Mouse
 		else
 		{
 			GLFW.glfwSetInputMode(this.windowId, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-			GLFW.glfwSetCursorPos(this.windowId, this.returnPos.x, this.returnPos.y);
+			GLFW.glfwSetCursorPos(this.windowId, this.returnPos.getX(), this.returnPos.getY());
 		}
 	}
 	
 	public void cursorPosCallback(long window, double x, double y)
 	{
-		if((this.grabbed && (this.returnPos.x != x || this.returnPos.y != y)) || !this.grabbed)
+		if((this.grabbed && (this.returnPos.getX() != x || this.returnPos.getY() != y)) || !this.grabbed)
 		{
-			currentPos.set(x, y);
+			currentPos.set((float)x, (float)y);
 			currentPos.sub(this.returnPos, deltaPos);
 		}
 
@@ -65,16 +65,16 @@ public class Mouse
 		{
 			this.currentPos.set(this.returnPos);
 			this.deltaPos.set(0);
-			GLFW.glfwSetCursorPos(this.windowId, this.returnPos.x, this.returnPos.y);
+			GLFW.glfwSetCursorPos(this.windowId, this.returnPos.getX(), this.returnPos.getY());
 		}
 	}
 	
-	public Vec2f getCurrentPos()
+	public Vec2 getCurrentPos()
 	{
 		return this.currentPos;
 	}
 	
-	public Vec2f getDeltaPos()
+	public Vec2 getDeltaPos()
 	{
 		return this.deltaPos;
 	}

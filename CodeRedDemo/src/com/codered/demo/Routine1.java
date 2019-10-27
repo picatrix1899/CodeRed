@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
-import org.barghos.core.testcolor.LDRColor3;
-import org.barghos.math.experimental.matrix.Mat4f;
-import org.barghos.math.experimental.vector.vec3.Vec3;
+import org.barghos.core.color.LDRColor3;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.vec3.Vec3;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -136,9 +136,9 @@ public class Routine1 extends WindowRoutine
 				EngineRegistry.getResourceRegistry().materials().get("res/materials/crate.json"));
 		
 		this.world.add(new StaticEntity(crate, new Vec3(0,0,-4), 0, 45, 0));
-//		this.world.add(new StaticEntity(crate, new Vec3(0,1,-4), 0, 45, 0));
+		this.world.add(new StaticEntity(crate, new Vec3(0,1,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(1,0,-4), 0, 0, 0));
-//		this.world.add(new StaticEntity(crate, new Vec3(1,1,-4), 0, 0, 0));
+		this.world.add(new StaticEntity(crate, new Vec3(1,1,-4), 0, 0, 0));
 		
 		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);

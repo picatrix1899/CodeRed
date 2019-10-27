@@ -4,11 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.barghos.math.experimental.point.Point3;
+import org.barghos.math.point.Point3;
+import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.geometry.Triangle3f;
-import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.Vec2f;
-import org.barghos.math.vector.Vec3f;
 
 public class ObjectLoader
 {
@@ -23,7 +22,7 @@ public class ObjectLoader
 			String line = "";
 			String[] parts;
 
-			Point3f position;
+			Point3 position;
 			
 			while((line = reader.readLine()) != null)
 			{
@@ -31,19 +30,19 @@ public class ObjectLoader
 				{
 					parts = line.split(" ");
 					
-					position = new Point3f(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]));
+					position = new Point3(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]));
 					
 					data.pos.add(position);
 				}
 				else if(line.startsWith("vt "))
 				{
 					parts = line.split(" ");
-					data.uvs.add(new Vec2f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2])));
+					data.uvs.add(new Vec2(Float.parseFloat(parts[1]),Float.parseFloat(parts[2])));
 				}
 				else if(line.startsWith("vn "))
 				{
 					parts = line.split(" ");
-					data.normals.add(new Vec3f(Float.parseFloat(parts[1]),Float.parseFloat(parts[2]),Float.parseFloat(parts[3])));
+					data.normals.add(new Vec3(Float.parseFloat(parts[1]),Float.parseFloat(parts[2]),Float.parseFloat(parts[3])));
 				}
 				else if(line.startsWith("f "))
 				{
@@ -58,7 +57,7 @@ public class ObjectLoader
 					
 					Triangle3f tr = new Triangle3f(vA.pos, vB.pos, vC.pos);
 					
-					org.barghos.math.experimental.geometry.Triangle3f t = new org.barghos.math.experimental.geometry.Triangle3f(vA.p, vB.p, vC.p);
+					Triangle3f t = new Triangle3f(vA.p, vB.p, vC.p);
 					
 					TriangleData d = new TriangleData();
 					d.normalA = vA.normal;
@@ -105,10 +104,10 @@ private static Vertex processVertex(ObjectData data, String line)
 	v = new Vertex();
 	
 	v.pos = data.pos.get(posIndex);
-	v.p = new Point3(v.pos.x, v.pos.y, v.pos.z);
+	v.p = new Point3(v.pos.getX(), v.pos.getY(), v.pos.getZ());
 	v.uv = data.uvs.get(textureIndex);
 	v.normal = data.normals.get(normalIndex);
-	v.tangent = new Vec3f();
+	v.tangent = new Vec3();
 
 	data.indices.add(data.indices.size());
 	
@@ -117,20 +116,20 @@ private static Vertex processVertex(ObjectData data, String line)
 
 private static void calculateTangents(Vertex a, Vertex b, Vertex c)
 {
-	Vec3f deltaPos1 = Vec3f.sub(b.pos, a.pos, null);
-	Vec3f deltaPos2 = Vec3f.sub(c.pos, a.pos, null);
+	Vec3 deltaPos1 = b.pos.sub(a.pos, null);
+	Vec3 deltaPos2 = c.pos.sub(a.pos, null);
 	
-	Vec2f uv0 = a.uv;
-	Vec2f uv1 = b.uv;
-	Vec2f uv2 = c.uv;
+	Vec2 uv0 = a.uv;
+	Vec2 uv1 = b.uv;
+	Vec2 uv2 = c.uv;
 	
-	Vec2f deltaUv1 = uv1.sub(uv0, null);
-	Vec2f deltaUv2 = uv2.sub(uv0, null);
+	Vec2 deltaUv1 = uv1.sub(uv0, null);
+	Vec2 deltaUv2 = uv2.sub(uv0, null);
 
 	float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
 	deltaPos1.mul(deltaUv2.getY(), deltaPos1);
 	deltaPos2.mul(deltaUv1.getY(), deltaPos2);
-	Vec3f tangent = deltaPos1.sub(deltaPos2, null);
+	Vec3 tangent = deltaPos1.sub(deltaPos2, null);
 	tangent.mul(r, tangent);
 	
 	a.tangent.add(tangent, a.tangent);

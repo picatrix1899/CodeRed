@@ -1,9 +1,9 @@
 package com.codered.primitives;
 
-import org.barghos.math.experimental.matrix.Mat4f;
-import org.barghos.math.experimental.vector.vec2.Vec2;
-import org.barghos.math.experimental.vector.vec3.Vec3;
-import org.barghos.math.experimental.vector.vec3.Vec3Axis;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3Axis;
 
 
 import org.lwjgl.opengl.GL15;

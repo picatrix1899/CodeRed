@@ -7,7 +7,7 @@ import com.codered.material.Material;
 public class TexturedModel
 {
 	private ConvexTriangleMesh3f physicalMesh;
-	private org.barghos.math.experimental.geometry.ConvexTriangleMesh3f pMesh;
+	private ConvexTriangleMesh3f pMesh;
 	private Material material;
 	private Mesh model;
 	
@@ -16,12 +16,12 @@ public class TexturedModel
 		this.model = model;
 		this.material = material;
 		
-		this.pMesh = new org.barghos.math.experimental.geometry.ConvexTriangleMesh3f(this.model.triangles);
+		this.pMesh = new ConvexTriangleMesh3f(this.model.triangles);
 	}
 	
 	public ConvexTriangleMesh3f getPhysicalMesh() { return this.physicalMesh; }
 	
-	public org.barghos.math.experimental.geometry.ConvexTriangleMesh3f getPMesh() { return this.pMesh; }
+	public ConvexTriangleMesh3f getPMesh() { return this.pMesh; }
 	
 	public Mesh getModel() { return this.model; }
 

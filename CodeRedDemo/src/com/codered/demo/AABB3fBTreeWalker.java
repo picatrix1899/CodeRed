@@ -2,8 +2,8 @@ package com.codered.demo;
 
 import java.util.ArrayList;
 
-import org.barghos.math.experimental.geometry.AABB3f;
-import org.barghos.math.experimental.point.Point3;
+import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.point.Point3;
 import org.barghos.structs.simpletree.btree.BTree;
 import org.barghos.structs.simpletree.btree.BTreeWalker;
 
