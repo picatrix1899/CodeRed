@@ -3,23 +3,27 @@ package com.codered.engine;
 import com.codered.resource.loader.ResourceLoader;
 import com.codered.resource.loader.ResourceLoaderImpl;
 
-public abstract class Engine implements EngineObject
+public abstract class Engine implements EngineObject, EngineTickUpdater
 {
 	private static Engine instance;
 	
-	private EngineRoutine routine;
+	private EngineTickRoutine routine;
 	
 	private ResourceLoader resourceLoader;
+	
+	private boolean isRunning;
+	private boolean forcedShutdown = false;
 	
 	public static Engine getInstance()
 	{
 		return instance;
 	}
 	
-	public Engine()
+	public Engine(EngineTickRoutine routine)
 	{
 		instance = this;
-		this.routine = new EngineRoutine(this);
+		this.routine = routine;
+		this.routine.setEngine(this);
 		this.resourceLoader = new ResourceLoaderImpl();
 	}
 	
@@ -33,6 +37,38 @@ public abstract class Engine implements EngineObject
 	
 	public abstract void release(boolean forced);
 	
+	private void run()
+	{
+		try
+		{
+			init();
+			
+			this.isRunning = true;
+			
+			this.routine.init();
+			
+			while(isRunning)
+			{
+				this.routine.run();
+			}
+		}
+		catch(CriticalEngineStateException e)
+		{
+			e.printStackTrace();
+			this.forcedShutdown = true;
+		}
+		
+		try
+		{
+			release(this.forcedShutdown);
+		}
+		catch(CriticalEngineStateException e)
+		{
+			throw new Error(e);
+		}
+
+	}
+	
 	public ResourceLoader getResourceLoader()
 	{
 		return this.resourceLoader;
@@ -41,12 +77,15 @@ public abstract class Engine implements EngineObject
 	public void start()
 	{
 		this.resourceLoader.start();
-		this.routine.start();
+		
+		run();
 	}
 	
 	public void stop(boolean forced)
 	{
 		this.resourceLoader.stop();
-		this.routine.stop(forced);
+		
+		this.isRunning = false;
+		this.forcedShutdown = forced;
 	}
 }

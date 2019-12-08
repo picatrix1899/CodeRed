@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL30;
 import com.codered.ExcelPlotter;
 import com.codered.Profiling;
 import com.codered.engine.Engine;
+import com.codered.engine.FixedTimestepTickRoutine;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.GLCommon;
 import com.codered.utils.WindowHint;
@@ -32,6 +33,8 @@ public class DemoGame extends Engine
 	
 	public DemoGame()
 	{
+		super(new FixedTimestepTickRoutine());
+		
 		instance = this;
 		Thread.currentThread().setName("CodeRedDemo");
 		
