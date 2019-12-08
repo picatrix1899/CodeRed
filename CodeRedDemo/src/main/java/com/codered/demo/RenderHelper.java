@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
-import com.codered.shader.Shader;
+import com.codered.rendering.shader.Shader;
 import com.codered.utils.BindingUtils;
 
 

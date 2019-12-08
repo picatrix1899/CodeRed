@@ -1,10 +1,10 @@
 package com.codered.gui;
 
 import com.codered.engine.EngineRegistry;
-import com.codered.font.FontType;
 import com.codered.gui.elements.GUIText;
+import com.codered.gui.font.FontType;
 import com.codered.managing.VAO;
-import com.codered.texture.Texture;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 import com.codered.window.WindowContext;
 

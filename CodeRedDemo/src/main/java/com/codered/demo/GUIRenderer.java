@@ -5,13 +5,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.engine.EngineRegistry;
-import com.codered.font.FontType;
-import com.codered.font.TextMeshData;
 import com.codered.gui.elements.GUIText;
+import com.codered.gui.font.FontType;
+import com.codered.gui.font.TextMeshData;
 import com.codered.managing.VAO;
-import com.codered.shader.ShaderProgram;
-import com.codered.shader.ShaderSession;
-import com.codered.texture.Texture;
+import com.codered.rendering.shader.ShaderProgram;
+import com.codered.rendering.shader.ShaderSession;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 import com.codered.utils.IGuiRenderer;

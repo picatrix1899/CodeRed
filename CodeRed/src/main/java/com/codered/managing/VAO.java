@@ -51,7 +51,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedFloatBuffer(data);
+		FloatBuffer buffer = BufferUtils.copyToFlippedFloatBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -74,7 +74,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(data);
+		IntBuffer buffer = BufferUtils.copyToFlippedIntBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -97,7 +97,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedTuple2FBuffer(data);
+		FloatBuffer buffer = BufferUtils.copyToFlippedTuple2FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -120,7 +120,7 @@ public class VAO
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
 		
-		FloatBuffer buffer = BufferUtils.wrapFlippedTuple3FBuffer(data);
+		FloatBuffer buffer = BufferUtils.copyToFlippedTuple3FBuffer(data);
 		
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
@@ -135,7 +135,7 @@ public class VAO
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
 		
-		IntBuffer buffer = BufferUtils.wrapFlippedIntBuffer(indices);
+		IntBuffer buffer = BufferUtils.copyToFlippedIntBuffer(indices);
 		
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
 	}

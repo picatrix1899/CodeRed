@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.fbo.Framebuffer;
 import com.codered.managing.VAO;
+import com.codered.rendering.fbo.Framebuffer;
 
 public class BindingUtils
 {

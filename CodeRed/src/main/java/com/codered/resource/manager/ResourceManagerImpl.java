@@ -12,7 +12,9 @@ import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.TextureManager;
 import com.codered.managing.models.Mesh;
-import com.codered.material.Material;
+import com.codered.rendering.material.Material;
+import com.codered.rendering.shader.ShaderPart;
+import com.codered.rendering.texture.Texture;
 import com.codered.resource.LoadingStage;
 import com.codered.resource.ResourceRequest;
 import com.codered.resource.ResourceRequestBlock;
@@ -22,8 +24,6 @@ import com.codered.resource.object.ObjectData;
 import com.codered.resource.registry.ResourceRegistry;
 import com.codered.resource.shaderpart.ShaderPartData;
 import com.codered.resource.texture.TextureData;
-import com.codered.shader.ShaderPart;
-import com.codered.texture.Texture;
 import com.codered.utils.TextureUtils;
 
 public class ResourceManagerImpl implements ResourceManager

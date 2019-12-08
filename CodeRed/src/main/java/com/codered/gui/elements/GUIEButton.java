@@ -1,9 +1,9 @@
 package com.codered.gui.elements;
 
-import com.codered.font.FontType;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
-import com.codered.texture.Texture;
+import com.codered.gui.font.FontType;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GUIEButton extends GUIElement

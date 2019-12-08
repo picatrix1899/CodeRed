@@ -2,7 +2,7 @@ package com.codered.gui.elements;
 
 import org.barghos.math.vector.vec3.Vec3;
 
-import com.codered.font.FontType;
+import com.codered.gui.font.FontType;
 
 /**
  * Represents a piece of text in the game.

@@ -2,7 +2,7 @@ package com.codered.managing.models;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3f;
 
-import com.codered.material.Material;
+import com.codered.rendering.material.Material;
 
 public class TexturedModel
 {

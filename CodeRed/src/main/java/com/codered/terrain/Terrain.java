@@ -4,7 +4,7 @@ import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.vec3.Vec3;
 
 import com.codered.managing.models.RawModel;
-import com.codered.material.Material;
+import com.codered.rendering.material.Material;
 
 public class Terrain
 {

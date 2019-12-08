@@ -3,10 +3,10 @@ package com.codered.demo;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.engine.EngineRegistry;
-import com.codered.font.FontType;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
 import com.codered.gui.elements.GUIEButton;
+import com.codered.gui.font.FontType;
 import com.codered.input.InputConfiguration;
 import com.codered.utils.IGuiRenderer;
 

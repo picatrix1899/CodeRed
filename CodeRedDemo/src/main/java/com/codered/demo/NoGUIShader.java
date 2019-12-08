@@ -1,7 +1,7 @@
 package com.codered.demo;
 
-import com.codered.shader.ShaderProgram;
-import com.codered.shader.UniformFactory;
+import com.codered.rendering.shader.ShaderProgram;
+import com.codered.rendering.shader.UniformFactory;
 
 public class NoGUIShader extends ShaderProgram
 {

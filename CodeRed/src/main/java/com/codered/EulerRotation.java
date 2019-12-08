@@ -40,7 +40,6 @@ public class EulerRotation
 	
 	public void rotate(Tup3fR v, float angle)
 	{
-		
 		rotate(angle * v.getX(), angle * v.getY(), angle * v.getZ());
 	}
 

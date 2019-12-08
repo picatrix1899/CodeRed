@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
+import com.codered.rendering.texture.Texture;
 import com.codered.resource.texture.TextureData;
-import com.codered.texture.Texture;
 
 public class TextureUtils
 {
@@ -16,7 +16,7 @@ public class TextureUtils
 	{
 		int textureID = id;
 
-		ByteBuffer buffer = BufferUtils.wrapFlippedByteBuffer(data.data()); //4 for RGBA, 3 for RGB
+		ByteBuffer buffer = BufferUtils.copyToFlippedByteBuffer(data.data()); //4 for RGBA, 3 for RGB
 		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 

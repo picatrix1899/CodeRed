@@ -1,9 +1,9 @@
 package com.codered.resource.registry;
 
 import com.codered.managing.models.Mesh;
-import com.codered.material.Material;
-import com.codered.shader.ShaderPart;
-import com.codered.texture.Texture;
+import com.codered.rendering.material.Material;
+import com.codered.rendering.shader.ShaderPart;
+import com.codered.rendering.texture.Texture;
 
 public interface ResourceRegistry
 {

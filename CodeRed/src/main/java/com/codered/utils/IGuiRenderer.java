@@ -1,8 +1,8 @@
 package com.codered.utils;
 
-import com.codered.font.FontType;
 import com.codered.gui.elements.GUIText;
-import com.codered.texture.Texture;
+import com.codered.gui.font.FontType;
+import com.codered.rendering.texture.Texture;
 
 public interface IGuiRenderer
 {

@@ -3,7 +3,7 @@ package com.codered.demo;
 import com.codered.engine.EngineRegistry;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
-import com.codered.texture.Texture;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GuiLoadingScreen extends GUIWindow
