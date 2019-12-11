@@ -1,8 +1,7 @@
 package com.codered.window;
 
 import org.barghos.core.event.Event;
-import org.barghos.core.event.EventArgs;
-import org.barghos.core.event.NoArgs;
+
 import org.barghos.math.vector.vec2.Vec2;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -32,8 +31,8 @@ public class Window
 	
 
 	
-	public Event<ResizeEventArgs> Resize = new Event<ResizeEventArgs>();
-	public Event<NoArgs> WindowClose = new Event<NoArgs>();
+	public Event<Vec2> Resize = new Event<>();
+	public Event<Void> WindowClose = new Event<>();
 	
 	public Window(int width, int height, String title, long parentWindow)
 	{
@@ -99,7 +98,7 @@ public class Window
 			
 			GL11.glViewport(0, 0, width, height);
 			
-			this.Resize.fire(new ResizeEventArgs(width, height));
+			this.Resize.fire(new Vec2(width, height));
 			oldContext.makeContextCurrent();
 		}
 	}
@@ -109,7 +108,7 @@ public class Window
 		glfwPollEvents();
 
 		if(glfwWindowShouldClose(this.window))
-			WindowClose.fire(NoArgs.getInstance());
+			WindowClose.fire(null);
 	}
 	
 	public void render(double delta)
@@ -132,17 +131,5 @@ public class Window
 	public boolean isReleased()
 	{
 		return this.isReleased;
-	}
-	
-	public static class ResizeEventArgs implements EventArgs
-	{
-		public int width;
-		public int height;
-		
-		public ResizeEventArgs(int width, int height)
-		{
-			this.width = width;
-			this.height = height;
-		}
 	}
 }
