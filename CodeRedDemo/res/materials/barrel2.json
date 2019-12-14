@@ -1,0 +1,6 @@
+{
+  "albedoMap": "res/materials/barrel2.png",
+  "normalMap": "res/materials/barrel2_normal.png",
+  "specularPower": 1.0,
+  "specularIntensity": 0.2
+}
