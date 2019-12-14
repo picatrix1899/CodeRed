@@ -21,6 +21,8 @@ public class GuiInventory extends GUIWindow
 	
 	public FontType font;
 
+	public boolean entermode;
+	
 	public GuiInventory(Routine1 parent, IGuiRenderer renderer, FontType font)
 	{
 		super(renderer);
@@ -32,7 +34,7 @@ public class GuiInventory extends GUIWindow
 		inventoryInput.registerMouseButton(0);
 		
 		this.button = new GUIEButton(1, this, 0, 0, 60, 82, EngineRegistry.getResourceRegistry().textures().get("res/materials/gray_rsquare.png"), this.renderer);
-		this.button.setText("Back Test", 20, this.font, true, false);
+		this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
 		
 		addElement(this.button);
 	}
@@ -41,6 +43,23 @@ public class GuiInventory extends GUIWindow
 	{
 		if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) close();
 		if(this.context.getInputManager().isMouseButtonPressed(0)) this.button.onClick();
+		
+		if(entermode)
+		{
+			int lastKey = this.context.getInputManager().lastFreeKey;
+			
+			if(lastKey != 0)
+			{
+				KeyBindings.main.unregisterKey(KeyBindings.forward);
+				KeyBindings.forward = lastKey;
+				KeyBindings.main.registerKey(KeyBindings.forward);
+				this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
+				this.context.getInputManager().setFreemode(false);
+				this.entermode = false;
+			}
+		}
+
+		
 		super.update();
 	}
 	
@@ -71,7 +90,9 @@ public class GuiInventory extends GUIWindow
 	{
 		if(e.getID() == 1)
 		{
-			close();
+			this.button.setText("-", 20, this.font, true, true);
+			this.context.getInputManager().setFreemode(true);
+			this.entermode = true;
 		}
 	}
 

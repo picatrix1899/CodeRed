@@ -3,7 +3,6 @@ package com.codered.demo;
 import java.io.File;
 import java.util.Iterator;
 
-import org.barghos.core.color.LDRColor3;
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.vec3.Vec3;
@@ -13,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import com.codered.Profiling;
 import com.codered.assimp.AssimpLoader;
 import com.codered.assimp.ModelData;
-import com.codered.engine.CriticalEngineStateException;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -73,16 +71,14 @@ public class Routine1 extends WindowRoutine
 			
 			EngineRegistry.getResourceManager().load(bl1);
 			
-			
-			
 			this.noGuiShader = new NoGUIShader();
-			this.noGuiShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/gui_no.fs"));
-			this.noGuiShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/gui_no.vs"));
+			this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
+			this.noGuiShader.addVertexShaderPart("res/shaders/gui_no.vs");
 			this.noGuiShader.compile();
 			
 			this.fontGuiShader = new FontGuiShader();
-			this.fontGuiShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/gui_font.fs"));
-			this.fontGuiShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/gui_font.vs"));
+			this.fontGuiShader.addFragmentShaderPart("res/shaders/gui_font.fs");
+			this.fontGuiShader.addVertexShaderPart("res/shaders/gui_font.vs");
 			this.fontGuiShader.compile();
 			
 			this.guiRenderer = new GUIRenderer();
@@ -95,11 +91,11 @@ public class Routine1 extends WindowRoutine
 			
 			this.initializing = true;
 	
-			InputConfiguration cdf = new InputConfiguration();
+			InputConfiguration cdf = KeyBindings.main;
 			cdf.registerKey(GLFW.GLFW_KEY_ESCAPE);
 			cdf.registerKey(GLFW.GLFW_KEY_Q);
 			cdf.registerKey(GLFW.GLFW_KEY_TAB);
-			cdf.registerKey(GLFW.GLFW_KEY_W);
+			cdf.registerKey(KeyBindings.forward);
 			cdf.registerKey(GLFW.GLFW_KEY_A);
 			cdf.registerKey(GLFW.GLFW_KEY_S);
 			cdf.registerKey(GLFW.GLFW_KEY_D);
@@ -115,41 +111,40 @@ public class Routine1 extends WindowRoutine
 			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.fs"));
 			resBlock.addTexture(ResourceRequest.getFile("res/materials/gray_rsquare.png"));
 			resBlock.addTexture(ResourceRequest.getFile("res/materials/inventory-background.png"));
-			//resBlock.addStaticMesh(ResourceRequest.getFile("res/models/crate.obj"));
-			resBlock.addMaterial(ResourceRequest.getFile("res/materials/crate.json"));
+			resBlock.addMaterial(ResourceRequest.getFile("res/materials/barrel2.json"));
 			EngineRegistry.getResourceManager().load(resBlock);
 			
-			ModelData md = AssimpLoader.load("res/models/crate.obj");
+			ModelData md = AssimpLoader.load("res/models/barrel.obj");
 			Mesh newMesh = new Mesh().loadFromMesh(md.meshes.get(0));
-			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/crate.obj", newMesh);
+			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh);
 		}
 	}
 
 	public void initPhase1()
 	{
 		ambientShader = new AmbientLightShader();
-		ambientShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/o_ambientLight2.vs"));
-		ambientShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/o_ambientLight2.fs"));
+		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
 		ambientShader.compile();
 		
 		directionalLightShader = new DirectionalLightShader();
-		directionalLightShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/o_directionalLight.vs"));
-		directionalLightShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/o_directionalLight.fs"));
+		directionalLightShader.addVertexShaderPart("res/shaders/o_directionalLight.vs");
+		directionalLightShader.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
 		directionalLightShader.compile();
 
 		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
 		
 		this.world = new StaticEntityTreeImpl();
 		
-		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/crate.obj"),
-				EngineRegistry.getResourceRegistry().materials().get("res/materials/crate.json"));
+		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/barrel.obj"),
+				EngineRegistry.getResourceRegistry().materials().get("res/materials/barrel2.json"));
 		
 		this.world.add(new StaticEntity(crate, new Vec3(0,0,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(0,1,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(1,0,-4), 0, 0, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(1,1,-4), 0, 0, 0));
 		
-		this.ambient = new AmbientLight(new LDRColor3(120, 100, 100), 3);
+		this.ambient = new AmbientLight(120, 100, 100, 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
 		
 		this.player = new Player(this.world);
@@ -180,7 +175,6 @@ public class Routine1 extends WindowRoutine
 				{
 					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
 					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
-					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_C)) { throw new CriticalEngineStateException(new Exception("test")); }
 					this.player.update(delta);
 				}
 				else

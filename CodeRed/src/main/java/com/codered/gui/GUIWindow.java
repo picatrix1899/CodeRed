@@ -40,14 +40,7 @@ public abstract class GUIWindow extends GUI
 			e.update();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public abstract boolean allowWorldProcessing();
 	
 	public abstract void response(GUIElement e);

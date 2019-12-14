@@ -25,7 +25,7 @@ public class InputConfiguration
 	
 	public void unregisterKey(int key)
 	{
-		this.registeredKeys.remove(key);
+		this.registeredKeys.remove((Object)key);
 		this.lastKeyStates.remove(key);
 		this.currentKeyStates.remove(key);
 	}
@@ -39,9 +39,9 @@ public class InputConfiguration
 	
 	public void unregisterMouseButton(int button)
 	{
-		this.registeredMouseButtons.add(button);
-		this.lastMouseButtonStates.put(button, false);
-		this.currentMouseButtonStates.put(button, false);
+		this.registeredMouseButtons.remove((Object)button);
+		this.lastMouseButtonStates.remove(button);
+		this.currentMouseButtonStates.remove(button);
 	}
 	
 	public List<Integer> getRegisteredKeys()

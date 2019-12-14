@@ -99,7 +99,7 @@ public class Player
 		Vec3 dir = Vec3Pool.get();
 		Vec3 t = Vec3Pool.get();
 		
-		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_W))
+		if(this.context.getInputManager().isKeyHold(KeyBindings.forward))
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_Z, t).normal());
 		}

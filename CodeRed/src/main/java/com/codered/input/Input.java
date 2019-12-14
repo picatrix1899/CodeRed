@@ -15,6 +15,10 @@ public class Input
 	private boolean isConfigPopPending = false;
 	private InputConfiguration pending; 
 	
+	private boolean freemodeEnabled = false;
+	
+	public int lastFreeKey;
+	
 	public Input(WindowContext context)
 	{
 		this.windowId = context.getWindowId();
@@ -37,9 +41,17 @@ public class Input
 	public void keyCallback(long window, int key, int scancode, int action, int mods)
 	{
 		if(window != windowId) return;
-		if(this.configuration.isEmpty()) return;
-		
-		this.configuration.peek().setKey(key, action != GLFW_RELEASE);
+		if(!this.freemodeEnabled)
+		{
+			if(this.configuration.isEmpty()) return;
+			
+			this.configuration.peek().setKey(key, action != GLFW_RELEASE);
+		}
+		else
+		{
+			this.lastFreeKey = key;
+			
+		}
 	}
 	
 	public void mouseButtonCallback(long window, int button, int action, int mods)
@@ -48,6 +60,12 @@ public class Input
 		if(this.configuration.isEmpty()) return;
 
 		this.configuration.peek().setMouseButton(button, action != GLFW_RELEASE);
+	}
+	
+	public void setFreemode(boolean b)
+	{
+		this.freemodeEnabled = b;
+		this.lastFreeKey = 0;
 	}
 	
 	public void update()
