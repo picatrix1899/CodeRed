@@ -14,6 +14,7 @@ import org.barghos.math.vector.vec3.Vec3;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.CodeRed;
+import com.codered.assimp.MeshData;
 import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.resource.object.ObjectData;
@@ -132,6 +133,58 @@ public class Mesh
 	public float getYCorrection()
 	{
 		return this.yc;
+	}
+	
+	public Mesh loadFromMesh(MeshData obj)
+	{
+		
+
+		this.indices = obj.indices;
+		this.triangles = obj.triangles;
+		this.triangleData = obj.triangleData;
+
+		int triangleCount = this.triangles.size();
+		int verticesCount = triangleCount * 3;
+		
+		Point3[] pos = new Point3[verticesCount];
+		Vec2[] uvs = new Vec2[verticesCount];
+		Vec3[] nrm = new Vec3[verticesCount];
+		Vec3[] tng = new Vec3[verticesCount];
+		
+		int[] indices =	 new int[this.indices.size()];
+		
+		Triangle3f tr;
+		TriangleData td; 
+		
+		for(int i = 0; i < triangleCount; i++)
+		{
+			tr = this.triangles.get(i); 
+			td = this.triangleData.get(i);
+			
+			pos[i * 3] = tr.getP1(null);
+			pos[i * 3 + 1] = tr.getP2(null);
+			pos[i * 3 + 2] = tr.getP3(null);
+			
+			uvs[i * 3] = td.uvA.mul(1,-1, null);
+			uvs[i * 3 + 1] = td.uvB.mul(1,-1, null);
+			uvs[i * 3 + 2] = td.uvC.mul(1,-1, null);
+			
+			nrm[i * 3] = td.normalA;
+			nrm[i * 3 + 1] = td.normalB;
+			nrm[i * 3 + 2] = td.normalC;
+			
+			tng[i * 3] = td.tangentA;
+			tng[i * 3 + 1] = td.tangentB;
+			tng[i * 3 + 2] = td.tangentC;
+			
+		}
+		
+		calculateAABB(pos);
+		
+		indices = ListUtils.toIntArray(this.indices);
+		
+		return loadToVAO0(pos, uvs, nrm, tng, indices);
+		
 	}
 	
 	public Mesh loadFromObj(ObjectData obj)

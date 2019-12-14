@@ -1,15 +1,9 @@
 package com.codered.demo;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import com.codered.ExcelPlotter;
 import com.codered.Profiling;
 import com.codered.engine.Engine;
 import com.codered.engine.FixedTimestepTickRoutine;
@@ -27,6 +21,7 @@ public class DemoGame extends Engine
 	public static DemoGame getInstance() { return instance; }
 
 	private WindowContext context1;
+	private WindowContext context2;
 	
 	public boolean showInventory = false;
 	public boolean directional = true;
@@ -41,6 +36,10 @@ public class DemoGame extends Engine
 		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
 		w1.setWindowHintCallback(() -> initWindowHints());
 		this.context1 = new WindowContext("main", w1, new Routine1());
+		
+		Window w2 = new Window(800, 600, "CoderRed 3 Main", 0);
+		w2.setWindowHintCallback(() -> initWindowHints());
+		this.context2 = new WindowContext("main 2", w2, new Routine2());
 	}
 
 	private void printDebugInfo()
@@ -68,9 +67,13 @@ public class DemoGame extends Engine
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameInit"))
 		{
 			this.context1.initWindow();
+			this.context2.initWindow();
 			
 			this.context1.init();
+			this.context2.init();
+			
 			this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
+			this.context2.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 			
 			printDebugInfo();
 		}
@@ -81,6 +84,7 @@ public class DemoGame extends Engine
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameUpdate"))
 		{
 			this.context1.preUpdate();
+			this.context2.preUpdate();
 		}
 	}
 	
@@ -89,6 +93,7 @@ public class DemoGame extends Engine
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameUpdate"))
 		{
 			this.context1.update(delta);
+			this.context2.update(delta);
 		}
 	}
 
@@ -97,6 +102,7 @@ public class DemoGame extends Engine
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameRender"))
 		{
 			this.context1.render(delta, alpha);
+			this.context2.render(delta, alpha);
 		}
 	}
 
@@ -105,41 +111,12 @@ public class DemoGame extends Engine
 	{
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("GameRelease"))
 		{
+			this.context2.release(forced);
 			this.context1.release(forced);
 		}
 		
 		System.out.println(Profiling.CPROFILER);
 		GLCommon.report(System.out);
-		
-		File f = new File("playerMovement_Plot.xlsx");
-		if(!f.exists())
-		{
-			try
-			{
-				f.createNewFile();
-			} catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-		}
-			
-		try
-		{
-			FileOutputStream stream = new FileOutputStream(f);
-			ExcelPlotter.plot(stream);
-			
-			try
-			{
-				stream.close();
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 }

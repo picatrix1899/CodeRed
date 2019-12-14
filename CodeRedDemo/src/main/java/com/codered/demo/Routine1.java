@@ -11,6 +11,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.Profiling;
+import com.codered.assimp.AssimpLoader;
+import com.codered.assimp.ModelData;
 import com.codered.engine.CriticalEngineStateException;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
@@ -18,6 +20,7 @@ import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.font.FontType;
 import com.codered.input.InputConfiguration;
+import com.codered.managing.models.Mesh;
 import com.codered.managing.models.TexturedModel;
 import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.light.DirectionalLight;
@@ -70,6 +73,8 @@ public class Routine1 extends WindowRoutine
 			
 			EngineRegistry.getResourceManager().load(bl1);
 			
+			
+			
 			this.noGuiShader = new NoGUIShader();
 			this.noGuiShader.addFragmentShaderPart(EngineRegistry.getResourceRegistry().fragmentShaderParts().get("res/shaders/gui_no.fs"));
 			this.noGuiShader.addVertexShaderPart(EngineRegistry.getResourceRegistry().vertexShaderParts().get("res/shaders/gui_no.vs"));
@@ -110,9 +115,13 @@ public class Routine1 extends WindowRoutine
 			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.fs"));
 			resBlock.addTexture(ResourceRequest.getFile("res/materials/gray_rsquare.png"));
 			resBlock.addTexture(ResourceRequest.getFile("res/materials/inventory-background.png"));
-			resBlock.addStaticMesh(ResourceRequest.getFile("res/models/crate.obj"));
+			//resBlock.addStaticMesh(ResourceRequest.getFile("res/models/crate.obj"));
 			resBlock.addMaterial(ResourceRequest.getFile("res/materials/crate.json"));
 			EngineRegistry.getResourceManager().load(resBlock);
+			
+			ModelData md = AssimpLoader.load("res/models/crate.obj");
+			Mesh newMesh = new Mesh().loadFromMesh(md.meshes.get(0));
+			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/crate.obj", newMesh);
 		}
 	}
 
