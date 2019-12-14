@@ -19,7 +19,6 @@ import com.codered.rendering.fbo.FBO;
 import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
-import com.codered.resource.ResourceRequest;
 import com.codered.resource.ResourceRequestBlock;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.EvalFunc;
@@ -54,12 +53,12 @@ public class Routine2 extends WindowRoutine
 	public void init()
 	{
 		ResourceRequestBlock bl1 = new ResourceRequestBlock(false);
-		bl1.addTexture(ResourceRequest.getFile("res/materials/loadingscreen.png"));
-		bl1.addTexture(ResourceRequest.getFile("res/fonts/arial.png"));
-		bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_no.fs"));
-		bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_no.vs"));
-		bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_font.fs"));
-		bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_font.vs"));
+		bl1.addTexture("res/materials/loadingscreen.png");
+		bl1.addTexture("res/fonts/arial.png");
+		bl1.addFragmentShaderPart("res/shaders/gui_no.fs");
+		bl1.addVertexShaderPart("res/shaders/gui_no.vs");
+		bl1.addFragmentShaderPart("res/shaders/gui_font.fs");
+		bl1.addVertexShaderPart("res/shaders/gui_font.vs");
 		
 		EngineRegistry.getResourceManager().load(bl1);
 		
@@ -79,16 +78,15 @@ public class Routine2 extends WindowRoutine
 
 		this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
 		
-		
 		this.initializing = true;
 		
 		resBlock = new ResourceRequestBlock(true);
-		resBlock.addVertexShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.vs"));
-		resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.fs"));
-		resBlock.addMaterial(ResourceRequest.getFile("res/materials/barrel2.json"));
+		resBlock.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		resBlock.addMaterial("res/materials/barrel2.json");
 		EngineRegistry.getResourceManager().load(resBlock);
 		
-		ModelData md = AssimpLoader.load("res/models/barrel.obj");
+		ModelData md = AssimpLoader.load("res/models/nanosuit.obj");
 		Mesh newMesh1 = new Mesh().loadFromMesh(md.meshes.get(0));
 		EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh1);
 	}

@@ -1,18 +1,18 @@
 package com.codered.resource.shaderpart;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class ShaderPartLoader
 {
-	public static ShaderPartData loadResource(InputStream stream) throws Exception
+	public static ShaderPartData loadResource(String file) throws Exception
 	{
 		StringBuilder shaderSource = new StringBuilder();
 		
 		String line = "";
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		BufferedReader reader = new BufferedReader(new FileReader(new File(file)));
 
 		try
 		{

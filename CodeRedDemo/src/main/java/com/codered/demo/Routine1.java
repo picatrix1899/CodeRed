@@ -24,7 +24,6 @@ import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.light.DirectionalLight;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
-import com.codered.resource.ResourceRequest;
 import com.codered.resource.ResourceRequestBlock;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
@@ -62,12 +61,12 @@ public class Routine1 extends WindowRoutine
 		try(ProfilingSession session = Profiling.CPROFILER.startSession("RoutineInit"))
 		{
 			ResourceRequestBlock bl1 = new ResourceRequestBlock(false);
-			bl1.addTexture(ResourceRequest.getFile("res/materials/loadingscreen.png"));
-			bl1.addTexture(ResourceRequest.getFile("res/fonts/arial.png"));
-			bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_no.fs"));
-			bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_no.vs"));
-			bl1.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/gui_font.fs"));
-			bl1.addVertexShaderPart(ResourceRequest.getFile("res/shaders/gui_font.vs"));
+			bl1.addTexture("res/materials/loadingscreen.png");
+			bl1.addTexture("res/fonts/arial.png");
+			bl1.addFragmentShaderPart("res/shaders/gui_no.fs");
+			bl1.addVertexShaderPart("res/shaders/gui_no.vs");
+			bl1.addFragmentShaderPart("res/shaders/gui_font.fs");
+			bl1.addVertexShaderPart("res/shaders/gui_font.vs");
 			
 			EngineRegistry.getResourceManager().load(bl1);
 			
@@ -105,13 +104,13 @@ public class Routine1 extends WindowRoutine
 			this.context.getInputManager().pushInputConfiguration(cdf);
 			
 			resBlock = new ResourceRequestBlock(true);
-			resBlock.addVertexShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.vs"));
-			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_ambientLight2.fs"));
-			resBlock.addVertexShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.vs"));
-			resBlock.addFragmentShaderPart(ResourceRequest.getFile("res/shaders/o_directionalLight.fs"));
-			resBlock.addTexture(ResourceRequest.getFile("res/materials/gray_rsquare.png"));
-			resBlock.addTexture(ResourceRequest.getFile("res/materials/inventory-background.png"));
-			resBlock.addMaterial(ResourceRequest.getFile("res/materials/barrel2.json"));
+			resBlock.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+			resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+			resBlock.addVertexShaderPart("res/shaders/o_directionalLight.vs");
+			resBlock.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
+			resBlock.addTexture("res/materials/gray_rsquare.png");
+			resBlock.addTexture("res/materials/inventory-background.png");
+			resBlock.addMaterial("res/materials/barrel2.json");
 			EngineRegistry.getResourceManager().load(resBlock);
 			
 			ModelData md = AssimpLoader.load("res/models/barrel.obj");

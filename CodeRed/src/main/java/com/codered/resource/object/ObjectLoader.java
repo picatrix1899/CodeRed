@@ -1,8 +1,8 @@
 package com.codered.resource.object;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileReader;
 
 import org.barghos.math.point.Point3;
 import org.barghos.math.vector.vec2.Vec2;
@@ -12,13 +12,13 @@ import org.barghos.math.geometry.Triangle3f;
 public class ObjectLoader
 {
 
-	public static ObjectData loadResource(InputStream stream) throws Exception
+	public static ObjectData loadResource(String file) throws Exception
 	{
 		ObjectData data = new ObjectData();
 		
 		try
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			BufferedReader reader = new BufferedReader(new FileReader(new File(file)));
 			String line = "";
 			String[] parts;
 

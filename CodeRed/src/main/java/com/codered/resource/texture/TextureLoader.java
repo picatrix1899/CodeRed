@@ -1,15 +1,16 @@
 package com.codered.resource.texture;
 
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 
 public class TextureLoader
 {
-	public static TextureData loadResource(InputStream stream) throws Exception
+	public static TextureData loadResource(String file) throws Exception
 	{
-		BufferedImage image = ImageIO.read(stream);
+
+		BufferedImage image = ImageIO.read(new File(file));
 
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());

@@ -14,4 +14,5 @@ public class MeshData
 	public List<TriangleData>triangleData = new ArrayList<>();
 	public List<Integer> indices = new ArrayList<>();
 	public List<Triangle3f> triangles = new ArrayList<>();
+	public List<VertexData> vertices = new ArrayList<>();
 }

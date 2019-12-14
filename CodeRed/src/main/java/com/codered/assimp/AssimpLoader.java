@@ -1,13 +1,9 @@
 package com.codered.assimp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.barghos.core.BufferUtils;
 import org.barghos.math.geometry.Triangle3f;
 import org.barghos.math.vector.vec2.Vec2;
 import org.barghos.math.vector.vec3.Vec3;
@@ -58,7 +54,7 @@ public class AssimpLoader
 		
 		return model;
 	}
-
+	
 	private static void processMesh(AIMesh mesh, List<MeshData> meshes)
 	{
 		MeshData meshData = new MeshData();
@@ -67,6 +63,7 @@ public class AssimpLoader
 		List<Triangle3f> triangles = new ArrayList<>();
 		List<TriangleData> triangleDatas = new ArrayList<>();
 		List<Integer> indices = new ArrayList<>(); 
+		List<VertexData> vertices = new ArrayList<>();
 		
 		AIVector3D.Buffer bufferVertices = mesh.mVertices();
 		AIVector3D.Buffer bufferNormals = mesh.mNormals();
@@ -121,9 +118,26 @@ public class AssimpLoader
 			triangleDatas.add(td);
 		}
 		
+		for(int i = 0; i < mesh.mNumVertices(); i++)
+		{
+			VertexData vertex = new VertexData();
+			
+			AIVector3D v1 = bufferVertices.get();
+			vertex.pos = new Vec3(v1.x(), v1.y(), v1.z());
+			AIVector3D n1 = bufferNormals.get();
+			vertex.normal = new Vec3(n1.x(), n1.y(), n1.z());
+			AIVector3D t1 = bufferTangents.get();
+			vertex.tangent = new Vec3(t1.x(), t1.y(), t1.z());
+			AIVector3D tc1 = bufferTexCoords.get();
+			vertex.texCoord = new Vec2(tc1.x(), tc1.y());
+			
+			vertices.add(vertex);
+		}
+		
 		meshData.indices = indices;
 		meshData.triangles = triangles;
 		meshData.triangleData = triangleDatas;
+		meshData.vertices = vertices;
 		
 		meshes.add(meshData);
 	}
@@ -155,18 +169,5 @@ public class AssimpLoader
 		return nodeData;
 	}
 	
-	public static ByteBuffer bufferFromInputStream(InputStream is) throws Exception
-	{
-	    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-	    int nRead;
-	    byte[] data = new byte[1024];
-	    while ((nRead = is.read(data, 0, data.length)) != -1) {
-	        buffer.write(data, 0, nRead);
-	    }
-	 
-	    buffer.flush();
-	    byte[] byteArray = buffer.toByteArray();
-	    
-	    return BufferUtils.copyToByteBuffer(byteArray);
-	}
+	
 }

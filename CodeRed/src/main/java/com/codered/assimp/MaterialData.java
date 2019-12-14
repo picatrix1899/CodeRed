@@ -1,9 +1,10 @@
 package com.codered.assimp;
 
+import com.codered.resource.texture.TextureData;
 
 public class MaterialData
 {
-	public String diffuse;
-	public String normal;
-	public String specular;
+	public TextureData diffuse;
+	public TextureData normal;
+	public TextureData specular;
 }
