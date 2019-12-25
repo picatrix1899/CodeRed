@@ -1,16 +1,14 @@
 package com.codered.resource.material;
 
-import com.codered.resource.texture.TextureData;
-
 public class MaterialData
 {
-	private TextureData albedoMap;
-	private TextureData normalMap;
+	private org.haze.png.Image albedoMap;
+	private org.haze.png.Image normalMap;
 	
 	private float specularIntensity;
 	private float specularPower;
 	
-	public MaterialData(TextureData albedoMap, TextureData normalMap, float power, float intensity)
+	public MaterialData(org.haze.png.Image albedoMap, org.haze.png.Image normalMap, float power, float intensity)
 	{
 		this.albedoMap = albedoMap;
 		this.normalMap = normalMap;
@@ -19,12 +17,12 @@ public class MaterialData
 		this.specularIntensity = intensity;
 	}
 	
-	public TextureData getAlbedoMap()
+	public org.haze.png.Image getAlbedoMap()
 	{
 		return this.albedoMap;
 	}
 	
-	public TextureData getNormalMap()
+	public org.haze.png.Image getNormalMap()
 	{
 		return this.normalMap;
 	}

@@ -7,15 +7,12 @@ import java.io.FileReader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.codered.resource.texture.TextureData;
-import com.codered.resource.texture.TextureLoader;
-
 public class MaterialLoader
 {
 	public static MaterialData loadResource(String file) throws Exception
 	{
-		TextureData albedoMapData = null;
-		TextureData normalMapData = null;
+		org.haze.png.Image albedoMapData = null;
+		org.haze.png.Image normalMapData = null;
 		float specPower = 0.0f;
 		float specIntensity = 0.0f;
 
@@ -27,13 +24,13 @@ public class MaterialLoader
 		if(obj.has("albedoMap"))
 		{
 			String albedoMap = obj.getString("albedoMap");
-			albedoMapData = TextureLoader.loadResource(albedoMap);
+			albedoMapData = new org.haze.png.PNGReader().read(albedoMap);
 		}
 		
 		if(obj.has("normalMap"))
 		{
 			String normalMap = obj.getString("normalMap");
-			normalMapData = TextureLoader.loadResource(normalMap);
+			normalMapData =  new org.haze.png.PNGReader().read(normalMap);
 		}
 
 		

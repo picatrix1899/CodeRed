@@ -8,15 +8,14 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.rendering.texture.Texture;
-import com.codered.resource.texture.TextureData;
 
 public class TextureUtils
 {
-	public static Texture genTexture(int id, TextureData data)
+	public static Texture genTexture(int id, org.haze.png.Image data)
 	{
 		int textureID = id;
 
-		ByteBuffer buffer = BufferUtils.copyToFlippedByteBuffer(data.data()); //4 for RGBA, 3 for RGB
+		ByteBuffer buffer = BufferUtils.copyToFlippedByteBuffer(data.colors); //4 for RGBA, 3 for RGB
 		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
@@ -25,7 +24,7 @@ public class TextureUtils
 		
 
 
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, data.width(), data.height(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, data.height, data.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
 		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 		
@@ -38,6 +37,6 @@ public class TextureUtils
 //			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, amount);
 //		}
 		
-		return new Texture(textureID, data.width(), data.height(), false);
+		return new Texture(textureID, data.width, data.height, false);
 	}
 }

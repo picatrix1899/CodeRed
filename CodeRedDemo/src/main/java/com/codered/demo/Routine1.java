@@ -1,6 +1,7 @@
 package com.codered.demo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
@@ -10,8 +11,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.Profiling;
-import com.codered.assimp.AssimpLoader;
-import com.codered.assimp.ModelData;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -113,9 +112,19 @@ public class Routine1 extends WindowRoutine
 			resBlock.addMaterial("res/materials/barrel2.json");
 			EngineRegistry.getResourceManager().load(resBlock);
 			
-			ModelData md = AssimpLoader.load("res/models/barrel.obj");
-			Mesh newMesh = new Mesh().loadFromMesh(md.meshes.get(0));
-			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh);
+			org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
+			try
+			{
+				org.haze.obj.Model objmodel = objloader.read("res/models/barrel.obj");
+				org.haze.obj.Mesh objmesh = objmodel.meshes.get(0);
+
+				Mesh newMesh = new Mesh().loadFromMesh(objmesh);
+
+				EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh);
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -137,7 +146,7 @@ public class Routine1 extends WindowRoutine
 		
 		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/barrel.obj"),
 				EngineRegistry.getResourceRegistry().materials().get("res/materials/barrel2.json"));
-		
+
 		this.world.add(new StaticEntity(crate, new Vec3(0,0,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(0,1,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(1,0,-4), 0, 0, 0));

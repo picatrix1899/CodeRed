@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import org.lwjgl.opengl.GL20;
 
-import com.codered.assimp.AssimpLoader;
 import com.codered.engine.CriticalEngineStateException;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
@@ -27,8 +26,6 @@ import com.codered.resource.object.ObjectLoader;
 import com.codered.resource.registry.ResourceRegistry;
 import com.codered.resource.shaderpart.ShaderPartData;
 import com.codered.resource.shaderpart.ShaderPartLoader;
-import com.codered.resource.texture.TextureData;
-import com.codered.resource.texture.TextureLoader;
 import com.codered.utils.TextureUtils;
 
 public class ResourceManagerImpl implements ResourceManager
@@ -107,19 +104,6 @@ public class ResourceManagerImpl implements ResourceManager
 					process(this.currentBlock.staticMeshes(), (r) -> createStaticMesh(r.key, r.response.data));
 					if(this.currentBlock.areStaticMeshesFinished())
 					{
-						this.currentBlock.stage(LoadingStage.MODELS);
-						loadModels(this.currentBlock, true);
-					}
-					else
-					{
-						break;
-					}
-				}
-				case MODELS:
-				{
-					process(this.currentBlock.staticModels(), (r) -> createStaticModel(r.key, r.response.data));
-					if(this.currentBlock.areStaticModelsFinished())
-					{
 						this.currentBlock.stage(LoadingStage.MATERIALS);
 						loadMaterials(this.currentBlock, true);
 					}
@@ -181,20 +165,6 @@ public class ResourceManagerImpl implements ResourceManager
 		}
 	}
 	
-	private void loadModels(ResourceRequestBlock block, boolean async)
-	{
-		for(ResourceRequest request : block.staticModels())
-		{
-			if(this.registry.staticModels().contains(request.key))
-			{
-				request.created = true;
-				continue;
-			}
-
-			this.loader.loadResource(request, (s) -> AssimpLoader.load(s), async);
-		}
-	}
-	
 	private void loadTextures(ResourceRequestBlock block, boolean async)
 	{
 		for(ResourceRequest request : block.textures())
@@ -204,8 +174,8 @@ public class ResourceManagerImpl implements ResourceManager
 				request.created = true;
 				continue;
 			}
-			
-			this.loader.loadResource(request, (s) -> TextureLoader.loadResource(s), async);
+
+			this.loader.loadResource(request, (s) -> new org.haze.png.PNGReader().read(s), async);
 		}
 	}
 	
@@ -300,7 +270,7 @@ public class ResourceManagerImpl implements ResourceManager
 	
 	private void createTexture(String key, Object data)
 	{
-		Texture t = TextureUtils.genTexture(this.textureManager.create(), (TextureData)data);
+		Texture t = TextureUtils.genTexture(this.textureManager.create(), (org.haze.png.Image)data);
 		this.registry.textures().add(key, t);
 	}
 	
@@ -315,12 +285,7 @@ public class ResourceManagerImpl implements ResourceManager
 		ShaderPart s = new ShaderPart(key, GL20.GL_VERTEX_SHADER, ((ShaderPartData)data).getData());
 		this.registry.vertexShaderParts().add(key, s);
 	}
-	
-	private void createStaticModel(String key, Object data)
-	{
 
-	}
-	
 	private void createStaticMesh(String key, Object data)
 	{
 		Mesh m = new Mesh().loadFromObj((ObjectData)data);

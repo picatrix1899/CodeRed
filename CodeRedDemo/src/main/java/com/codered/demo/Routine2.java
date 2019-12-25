@@ -1,14 +1,13 @@
 package com.codered.demo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.vec3.Vec3;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.assimp.AssimpLoader;
-import com.codered.assimp.ModelData;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
@@ -85,10 +84,19 @@ public class Routine2 extends WindowRoutine
 		resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
 		resBlock.addMaterial("res/materials/barrel2.json");
 		EngineRegistry.getResourceManager().load(resBlock);
+
+		org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
 		
-		ModelData md = AssimpLoader.load("res/models/nanosuit.obj");
-		Mesh newMesh1 = new Mesh().loadFromMesh(md.meshes.get(0));
-		EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh1);
+		try
+		{
+			org.haze.obj.Model objmodel = objloader.read("res/models/barrel.obj");
+			Mesh newMesh1 = new Mesh().loadFromMesh(objmodel.meshes.get(0));
+			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh1);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void initPhase1()
