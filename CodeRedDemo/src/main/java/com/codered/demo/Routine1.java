@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.vector.vec3.Vec3;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import com.codered.Profiling;
+import com.codered.MemoryWatchdog;
+import com.codered.MemoryWatchdog.MemorySession;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -57,7 +57,7 @@ public class Routine1 extends WindowRoutine
 	
 	public void init()
 	{
-		try(ProfilingSession session = Profiling.CPROFILER.startSession("RoutineInit"))
+		try(MemorySession msession = MemoryWatchdog.start())
 		{
 			ResourceRequestBlock bl1 = new ResourceRequestBlock(false);
 			bl1.addTexture("res/materials/loadingscreen.png");
@@ -66,70 +66,71 @@ public class Routine1 extends WindowRoutine
 			bl1.addVertexShaderPart("res/shaders/gui_no.vs");
 			bl1.addFragmentShaderPart("res/shaders/gui_font.fs");
 			bl1.addVertexShaderPart("res/shaders/gui_font.vs");
-			
 			EngineRegistry.getResourceManager().load(bl1);
-			
-			this.noGuiShader = new NoGUIShader();
-			this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
-			this.noGuiShader.addVertexShaderPart("res/shaders/gui_no.vs");
-			this.noGuiShader.compile();
-			
-			this.fontGuiShader = new FontGuiShader();
-			this.fontGuiShader.addFragmentShaderPart("res/shaders/gui_font.fs");
-			this.fontGuiShader.addVertexShaderPart("res/shaders/gui_font.vs");
-			this.fontGuiShader.compile();
-			
-			this.guiRenderer = new GUIRenderer();
-			this.guiRenderer.noGuiShader = this.noGuiShader;
-			this.guiRenderer.fontGuiShader = this.fontGuiShader;
+		}
+		System.out.println(MemoryWatchdog.getLastDelta());
 
-			this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
-			
-			this.loadingScreen = new GuiLoadingScreen(this.guiRenderer);
-			
-			this.initializing = true;
-	
-			InputConfiguration cdf = KeyBindings.main;
-			cdf.registerKey(GLFW.GLFW_KEY_ESCAPE);
-			cdf.registerKey(GLFW.GLFW_KEY_Q);
-			cdf.registerKey(GLFW.GLFW_KEY_TAB);
-			cdf.registerKey(KeyBindings.forward);
-			cdf.registerKey(GLFW.GLFW_KEY_A);
-			cdf.registerKey(GLFW.GLFW_KEY_S);
-			cdf.registerKey(GLFW.GLFW_KEY_D);
-			cdf.registerKey(GLFW.GLFW_KEY_C);
-			cdf.registerMouseButton(2);
-			
-			this.context.getInputManager().pushInputConfiguration(cdf);
-			
-			resBlock = new ResourceRequestBlock(true);
-			resBlock.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-			resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-			resBlock.addVertexShaderPart("res/shaders/o_directionalLight.vs");
-			resBlock.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
-			resBlock.addTexture("res/materials/gray_rsquare.png");
-			resBlock.addTexture("res/materials/inventory-background.png");
-			resBlock.addMaterial("res/materials/barrel2.json");
-			EngineRegistry.getResourceManager().load(resBlock);
-			
-			org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
-			try
-			{
-				org.haze.obj.Model objmodel = objloader.read("res/models/barrel.obj");
-				org.haze.obj.Mesh objmesh = objmodel.meshes.get(0);
+		this.noGuiShader = new NoGUIShader();
+		this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
+		this.noGuiShader.addVertexShaderPart("res/shaders/gui_no.vs");
+		this.noGuiShader.compile();
+		
+		this.fontGuiShader = new FontGuiShader();
+		this.fontGuiShader.addFragmentShaderPart("res/shaders/gui_font.fs");
+		this.fontGuiShader.addVertexShaderPart("res/shaders/gui_font.vs");
+		this.fontGuiShader.compile();
+		
+		this.guiRenderer = new GUIRenderer();
+		this.guiRenderer.noGuiShader = this.noGuiShader;
+		this.guiRenderer.fontGuiShader = this.fontGuiShader;
 
-				Mesh newMesh = new Mesh().loadFromMesh(objmesh);
+		this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
+		
+		this.loadingScreen = new GuiLoadingScreen(this.guiRenderer);
+		
+		this.initializing = true;
 
-				EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh);
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+		InputConfiguration cdf = KeyBindings.main;
+		cdf.registerKey(GLFW.GLFW_KEY_ESCAPE);
+		cdf.registerKey(GLFW.GLFW_KEY_Q);
+		cdf.registerKey(GLFW.GLFW_KEY_TAB);
+		cdf.registerKey(KeyBindings.forward);
+		cdf.registerKey(GLFW.GLFW_KEY_A);
+		cdf.registerKey(GLFW.GLFW_KEY_S);
+		cdf.registerKey(GLFW.GLFW_KEY_D);
+		cdf.registerKey(GLFW.GLFW_KEY_C);
+		cdf.registerMouseButton(2);
+		
+		this.context.getInputManager().pushInputConfiguration(cdf);
+		
+		resBlock = new ResourceRequestBlock(true);
+		resBlock.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		resBlock.addVertexShaderPart("res/shaders/o_directionalLight.vs");
+		resBlock.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
+		resBlock.addTexture("res/materials/gray_rsquare.png");
+		resBlock.addTexture("res/materials/inventory-background.png");
+		resBlock.addMaterial("res/materials/tesla_dry.json");
+		EngineRegistry.getResourceManager().load(resBlock);
+		
+		org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
+		try
+		{
+			org.haze.obj.Model objmodel = objloader.read("res/models/tesla.obj");
+			org.haze.obj.Mesh objmesh = objmodel.meshes.get(0);
+			
+			Mesh newMesh = new Mesh().loadFromMesh(objmesh);
+
+			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/tesla.obj", newMesh);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 
 	public void initPhase1()
 	{
+		resBlock = null;
 		ambientShader = new AmbientLightShader();
 		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
@@ -144,8 +145,8 @@ public class Routine1 extends WindowRoutine
 		
 		this.world = new StaticEntityTreeImpl();
 		
-		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/barrel.obj"),
-				EngineRegistry.getResourceRegistry().materials().get("res/materials/barrel2.json"));
+		TexturedModel crate = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/tesla.obj"),
+				EngineRegistry.getResourceRegistry().materials().get("res/materials/tesla_dry.json"));
 
 		this.world.add(new StaticEntity(crate, new Vec3(0,0,-4), 0, 45, 0));
 		this.world.add(new StaticEntity(crate, new Vec3(0,1,-4), 0, 45, 0));
@@ -164,66 +165,60 @@ public class Routine1 extends WindowRoutine
 	
 	public void update(double delta)
 	{
-		try(ProfilingSession session = Profiling.CPROFILER.startSession("RoutineUpdate"))
+		if(!DemoGame.getInstance().showInventory)
+			if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
+		
+		if(this.initializing)
+		{
+			if(this.resBlock.isFinished())
+			{
+				initPhase1();
+				this.initializing = false;
+			}
+		}
+		else
 		{
 			if(!DemoGame.getInstance().showInventory)
-				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
-			
-			if(this.initializing)
 			{
-				if(this.resBlock.isFinished())
-				{
-					initPhase1();
-					this.initializing = false;
-				}
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
+				this.player.update(delta);
 			}
 			else
 			{
-				if(!DemoGame.getInstance().showInventory)
-				{
-					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
-					if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
-					this.player.update(delta);
-				}
-				else
-				{
-					this.inventory.update();
-				}
-	
+				this.inventory.update();
 			}
+
 		}
 	}
 
 	public void render(double delta, double alpha)
 	{
-		try(ProfilingSession session = Profiling.CPROFILER.startSession("RoutineRender"))
+		GLUtils.clearAll();
+
+		if(this.initializing)
 		{
-			GLUtils.clearAll();
-	
-			if(this.initializing)
+			this.loadingScreen.render();
+			return;
+		}
+		
+		if(DemoGame.getInstance().showInventory)
+		{
+			if(this.inventory.allowWorldProcessing())
 			{
-				this.loadingScreen.render();
-				return;
+				renderWorld(delta);
+
+				GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			}
+
+			this.inventory.render();
 			
-			if(DemoGame.getInstance().showInventory)
-			{
-				if(this.inventory.allowWorldProcessing())
-				{
-					renderWorld(delta);
-	
-					GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				}
-	
-				this.inventory.render();
-				
-				if(this.inventory.allowWorldProcessing())
-					GLUtils.blend(false);
-			}
-			else
-			{
-				renderWorld(alpha);
-			}
+			if(this.inventory.allowWorldProcessing())
+				GLUtils.blend(false);
+		}
+		else
+		{
+			renderWorld(alpha);
 		}
 	}
 

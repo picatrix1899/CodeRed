@@ -1,0 +1,6 @@
+{
+  "albedoMap": "res/materials/tesla.png",
+  "normalMap": "res/materials/tesla_normal.png",
+  "specularPower": 2.0,
+  "specularIntensity": 0.4
+}

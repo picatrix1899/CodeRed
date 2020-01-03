@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
-import org.barghos.core.profiler.CascadingProfiler.ProfilingSession;
 import org.barghos.math.geometry.AABB3f;
 import org.barghos.math.geometry.OBB3f;
 import org.barghos.math.geometry.OBBOBBResolver;
@@ -14,7 +13,6 @@ import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
 import org.barghos.math.vector.vec3.Vec3Pool;
 
-import com.codered.Profiling;
 import com.codered.SweptTransform;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -66,13 +64,9 @@ public class Player
 	
 	public void update(double delta)
 	{
-		try(ProfilingSession session = Profiling.CPROFILER.startSession("PlayerUpdate"))
-		{	
-			updateMovement(delta);
-			
-			updateOrientation(delta);
-		}
-
+		updateMovement(delta);
+		
+		updateOrientation(delta);
 	}
 	
 	public void updateOrientation(double delta)
@@ -164,7 +158,7 @@ public class Player
 		
 		for(StaticEntity entity : entities)
 		{
-			entityOBB = entity.getModel().getPMesh().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+			entityOBB = entity.getModel().getModel().physicalMesh.getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
 			
 			translation = Mat4f.translation(tempPos);
 			

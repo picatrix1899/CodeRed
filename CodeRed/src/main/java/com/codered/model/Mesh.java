@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.barghos.core.ListUtils;
+import org.barghos.math.geometry.ConvexTriangleMesh3f;
 import org.barghos.math.geometry.Triangle3f;
 import org.barghos.math.vector.vec2.Vec2;
 import org.barghos.math.vector.vec3.Vec3;
@@ -16,10 +17,10 @@ import com.codered.resource.object.TriangleData;
 
 public class Mesh
 {
-	private List<Triangle3f> triangles = new ArrayList<>();
-	private List<TriangleData> triangleData = new ArrayList<>();
 	private List<Vertex> vertices = new ArrayList<>();
 	private List<Integer> indices = new ArrayList<>();
+	
+	private ConvexTriangleMesh3f collisionMesh;
 	
 	private VAO vao;
 
@@ -27,8 +28,8 @@ public class Mesh
 	
 	public Mesh(List<Vertex> vertices, List<Integer> indices, List<Triangle3f> triangles, List<TriangleData> triangleData, Material material)
 	{
-		this.triangles = triangles;
-		this.triangleData = triangleData;
+		this.collisionMesh = new ConvexTriangleMesh3f(triangles);
+		
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
@@ -39,7 +40,7 @@ public class Mesh
 	private void setupMesh()
 	{
 		int vertexCount = this.vertices.size();
-		
+
 		Vec3[] pos = new Vec3[vertexCount];
 		Vec2[] uvs = new Vec2[vertexCount];
 		Vec3[] nrm = new Vec3[vertexCount];
@@ -59,7 +60,14 @@ public class Mesh
 
 		indices = ListUtils.toIntArray(this.indices);
 		
-		loadToVAO(pos, uvs, nrm, tng, indices);
+		this.vao = EngineRegistry.getVAOManager().getNewVAO();
+		
+		this.vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
+		
+		this.vao.storeData(0, pos, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(1, uvs, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(2, nrm, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(3, tng, 0, 0, GL15.GL_STATIC_DRAW);
 		
 	}
 	
@@ -78,15 +86,8 @@ public class Mesh
 		return this.vertices.size();
 	}
 	
-	private void loadToVAO(Vec3[] positions, Vec2[] texCoords, Vec3[] normals, Vec3[] tangents, int[] indices)
+	public ConvexTriangleMesh3f getCollisionMesh()
 	{
-		this.vao = EngineRegistry.getVAOManager().getNewVAO();
-		
-		this.vao.storeIndices(indices, GL15.GL_STATIC_DRAW);
-		
-		this.vao.storeData(0, positions, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(1, texCoords, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(2, normals, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(3, tangents, 0, 0, GL15.GL_STATIC_DRAW);
+		return this.collisionMesh;
 	}
 }

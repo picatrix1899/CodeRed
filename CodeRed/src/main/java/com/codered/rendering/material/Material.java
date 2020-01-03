@@ -4,15 +4,15 @@ import com.codered.rendering.texture.Texture;
 
 public class Material
 {
-	private Texture albedoMap;
+	private Texture diffuseMap;
 	private Texture normalMap;
 
 	private float specularIntensity;
 	private float specularPower;
 	
-	public Material(Texture albedoMap, Texture normalMap, float power, float intensity)
+	public Material(Texture diffuseMap, Texture normalMap, float power, float intensity)
 	{
-		this.albedoMap = albedoMap;
+		this.diffuseMap = diffuseMap;
 		this.normalMap = normalMap;
 		
 		this.specularPower = power;
@@ -21,7 +21,7 @@ public class Material
 	
 	public Texture getAlbedoMap()
 	{
-		return this.albedoMap;
+		return this.diffuseMap;
 	}
 	
 	public Texture getNormalMap()
@@ -42,5 +42,11 @@ public class Material
 	public float getSpecularIntensity()
 	{
 		return this.specularIntensity;
+	}
+	
+	public void release()
+	{
+		if(this.diffuseMap != null) this.diffuseMap.cleanup();
+		if(this.normalMap != null) this.normalMap.cleanup();
 	}
 }
