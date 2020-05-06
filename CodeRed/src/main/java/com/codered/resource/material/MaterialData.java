@@ -1,44 +1,27 @@
 package com.codered.resource.material;
 
+import java.util.Optional;
+
+import com.codered.resource.texture.TextureData;
+
 public class MaterialData
 {
-	private org.haze.png.Image albedoMap;
-	private org.haze.png.Image normalMap;
+	private Optional<TextureData> diffuse;
+	private Optional<TextureData> normal;
 	
-	private float specularIntensity;
-	private float specularPower;
-	
-	public MaterialData(org.haze.png.Image albedoMap, org.haze.png.Image normalMap, float power, float intensity)
+	public MaterialData(Optional<TextureData> diffuse, Optional<TextureData> normal)
 	{
-		this.albedoMap = albedoMap;
-		this.normalMap = normalMap;
-		
-		this.specularPower = power;
-		this.specularIntensity = intensity;
+		this.diffuse = diffuse;
+		this.normal = normal;
 	}
 	
-	public org.haze.png.Image getAlbedoMap()
+	public Optional<TextureData> getDiffuse()
 	{
-		return this.albedoMap;
+		return this.diffuse;
 	}
 	
-	public org.haze.png.Image getNormalMap()
+	public Optional<TextureData> getNormal()
 	{
-		return this.normalMap;
-	}
-	
-	public boolean hasNormalMap()
-	{
-		return this.normalMap != null;
-	}
-	
-	public float getSpecularPower()
-	{
-		return this.specularPower;
-	}
-	
-	public float getSpecularIntensity()
-	{
-		return this.specularIntensity;
+		return this.normal;
 	}
 }

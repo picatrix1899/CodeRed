@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
+import com.codered.entities.StaticModelEntity;
 import com.codered.rendering.shader.Shader;
 import com.codered.utils.BindingUtils;
 
@@ -13,16 +14,42 @@ import com.codered.utils.BindingUtils;
 public class RenderHelper
 {
 	
-	public static void renderStaticEntity2(StaticEntity e, Camera c, Shader oShader, Mat4f projection, double alpha)
+	public static void renderStaticEntity(StaticEntity e, Camera c, Shader oShader, Mat4f projection, double alpha)
 	{
-		oShader.setUniformValue(0, e.getTransformationMatrix());
-		oShader.setUniformValue(1, projection);
-		oShader.setUniformValue(2, c, alpha);
-		oShader.setUniformValue(3, e.getModel().getMaterial());
-		oShader.load();
+		if(e instanceof StaticModelEntity)
+		{
+			StaticModelEntity entity = (StaticModelEntity)e;
+			
+			oShader.setUniformValue(0, entity.getTransformationMatrix());
+			oShader.setUniformValue(1, projection);
+			oShader.setUniformValue(2, c, alpha);
+			
+			for(com.codered.model.Mesh mesh : entity.getNewModel().getMeshes())
+			{
+				if(mesh.getMaterial().isPresent())
+				{
+					oShader.setUniformValue(3, mesh.getMaterial().get());
+					oShader.load();
+					
+					BindingUtils.bindVAO(mesh.getVao(), 0, 1, 2, 3);
+					
+					GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				}
+			}
+		}
+		else
+		{
+			oShader.setUniformValue(0, e.getTransformationMatrix());
+			oShader.setUniformValue(1, projection);
+			oShader.setUniformValue(2, c, alpha);
+			oShader.setUniformValue(3, e.getModel().getMaterial());
+			oShader.load();
+			
+			BindingUtils.bindVAO(e.getModel().getModel().getVao(), 0, 1, 2, 3);
+			
+			GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+		}
 		
-		BindingUtils.bindVAO(e.getModel().getModel().getVAO(), 0, 1, 2, 3);
 		
-		GL11.glDrawElements(GL11.GL_TRIANGLES, e.getModel().getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 	}
 }

@@ -14,6 +14,11 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+      <plugin>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.3</version>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -96,6 +101,16 @@
   		<groupId>haze</groupId>
   		<artifactId>haze</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openjfx</groupId>
+  		<artifactId>javafx-controls</artifactId>
+  		<version>13</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openjfx</groupId>
+  		<artifactId>javafx-fxml</artifactId>
+  		<version>13</version>
   	</dependency>
   </dependencies>
   <properties>

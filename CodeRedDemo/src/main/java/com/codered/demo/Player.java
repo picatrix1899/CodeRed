@@ -17,6 +17,7 @@ import com.codered.SweptTransform;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
+import com.codered.entities.StaticModelEntity;
 import com.codered.gui.GUIWindow;
 import com.codered.window.WindowContext;
 
@@ -158,21 +159,47 @@ public class Player
 		
 		for(StaticEntity entity : entities)
 		{
-			entityOBB = entity.getModel().getModel().physicalMesh.getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
-			
-			translation = Mat4f.translation(tempPos);
-			
-			sweptAABB = this.aabb.transform(translation, sweptAABB);
-			
-			tempOBB = sweptAABB.getOBB();
-
-			if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+			if(entity instanceof StaticModelEntity)
 			{
-				partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+				for(com.codered.model.Mesh mesh : ((StaticModelEntity)entity).getNewModel().getMeshes())
+				{
+					entityOBB = mesh.getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+					
+					translation = Mat4f.translation(tempPos);
+					
+					sweptAABB = this.aabb.transform(translation, sweptAABB);
+					
+					tempOBB = sweptAABB.getOBB();
+
+					if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+					{
+						partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+						
+						sum.add(partial, sum);
+						tempPos.add(partial, tempPos);
+					}
+				}
 				
-				sum.add(partial, sum);
-				tempPos.add(partial, tempPos);
 			}
+			else
+			{
+				entityOBB = entity.getModel().getModel().getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+				
+				translation = Mat4f.translation(tempPos);
+				
+				sweptAABB = this.aabb.transform(translation, sweptAABB);
+				
+				tempOBB = sweptAABB.getOBB();
+
+				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+				{
+					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+					
+					sum.add(partial, sum);
+					tempPos.add(partial, tempPos);
+				}
+			}
+			
 		}
 	
 		vel.add(sum, vel);

@@ -1,52 +1,27 @@
 package com.codered.rendering.material;
 
+import java.util.Optional;
+
 import com.codered.rendering.texture.Texture;
 
 public class Material
 {
-	private Texture diffuseMap;
-	private Texture normalMap;
-
-	private float specularIntensity;
-	private float specularPower;
+	private Optional<Texture> diffuse;
+	private Optional<Texture> normal;
 	
-	public Material(Texture diffuseMap, Texture normalMap, float power, float intensity)
+	public Material(Optional<Texture> diffuse, Optional<Texture> normal)
 	{
-		this.diffuseMap = diffuseMap;
-		this.normalMap = normalMap;
-		
-		this.specularPower = power;
-		this.specularIntensity = intensity;
+		this.diffuse = diffuse;
+		this.normal = normal;
 	}
 	
-	public Texture getAlbedoMap()
+	public Optional<Texture> getDiffuse()
 	{
-		return this.diffuseMap;
+		return this.diffuse;
 	}
 	
-	public Texture getNormalMap()
+	public Optional<Texture> getNormal()
 	{
-		return this.normalMap;
-	}
-
-	public boolean hasNormalMap()
-	{
-		return this.normalMap != null;
-	}
-	
-	public float getSpecularPower()
-	{
-		return this.specularPower;
-	}
-	
-	public float getSpecularIntensity()
-	{
-		return this.specularIntensity;
-	}
-	
-	public void release()
-	{
-		if(this.diffuseMap != null) this.diffuseMap.cleanup();
-		if(this.normalMap != null) this.normalMap.cleanup();
+		return this.normal;
 	}
 }

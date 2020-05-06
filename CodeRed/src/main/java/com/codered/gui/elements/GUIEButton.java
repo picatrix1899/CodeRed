@@ -7,17 +7,16 @@ import org.barghos.math.vector.vec2.Vec2;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
 import com.codered.gui.font.FontType;
-import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GUIEButton extends GUIElement
 {
 	protected Area2f main;
 	
-	public Texture background;
+	public com.codered.rendering.texture.Texture background;
 	public GUIText text;
 	
-	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, Texture background, IGuiRenderer renderer)
+	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, com.codered.rendering.texture.Texture background, IGuiRenderer renderer)
 	{
 		super(id, parent, renderer);
 		

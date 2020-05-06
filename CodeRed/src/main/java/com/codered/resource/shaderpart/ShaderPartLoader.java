@@ -18,10 +18,8 @@ public class ShaderPartLoader
 		{
 			while((line = reader.readLine()) != null)
 			{
-					shaderSource.append(line).append("\n");					
+				shaderSource.append(line).append("\n");					
 			}
-			
-
 		}
 		catch (IOException e)
 		{

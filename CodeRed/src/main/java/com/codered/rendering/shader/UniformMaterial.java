@@ -34,18 +34,28 @@ public class UniformMaterial extends Uniform
 	@Override
 	public void set(Object... obj)
 	{
-		if(!(obj[0] instanceof Material)) throw new IllegalArgumentException();
-		Material v = (Material)obj[0];
-		this.value = v;
+		if((obj[0] instanceof Material))
+		{
+			Material v = (Material)obj[0];
+			this.value = v;
+		}
 	}
 
 	@Override
 	public void load()
 	{
-		loadTexture2D(this.location_albedoMap, this.index_albedoMap, this.value.getAlbedoMap().getId());
-		loadTexture2D(this.location_normalMap, this.index_normalMap, this.value.getNormalMap().getId());
-		loadFloat(this.location_specularIntensity, this.value.getSpecularIntensity());
-		loadFloat(this.location_specularPower, this.value.getSpecularPower());
+		if(this.value.getDiffuse().isPresent())
+			loadTexture2D(this.location_albedoMap, this.index_albedoMap, this.value.getDiffuse().get().getId());
+		else
+			loadTexture2D(this.location_albedoMap, this.index_albedoMap, 0);
+		
+		if(this.value.getNormal().isPresent())
+			loadTexture2D(this.location_normalMap, this.index_normalMap, this.value.getNormal().get().getId());
+		else
+			loadTexture2D(this.location_normalMap, this.index_normalMap, 0);
+		
+		loadFloat(this.location_specularIntensity, 1);
+		loadFloat(this.location_specularPower, 1);
 	}
 
 }

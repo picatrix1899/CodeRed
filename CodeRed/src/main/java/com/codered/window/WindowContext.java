@@ -1,24 +1,19 @@
 package com.codered.window;
 
-import com.codered.engine.EngineObject;
 import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
 import com.codered.input.Mouse;
 import com.codered.managing.TextureManager;
 import com.codered.managing.VAOManager;
-import com.codered.resource.manager.ResourceManager;
-import com.codered.resource.manager.ResourceManagerImpl;
 import com.codered.resource.registry.ResourceRegistryImpl;
 import com.codered.utils.GLCommon;
 
-public class WindowContext implements EngineObject
+public class WindowContext
 {
 	private String name;
 	
 	private Window window;
 	private WindowRoutine routine;
-
-	private ResourceManager resourceManager;
 	
 	private Input input;
 	private Mouse mouse;
@@ -48,8 +43,6 @@ public class WindowContext implements EngineObject
 		EngineRegistry.registerVAOManager(name, windowId, new VAOManager());
 		EngineRegistry.registerTextureManager(name, windowId, new TextureManager());
 		EngineRegistry.registerResourceRegistry(name, windowId, new ResourceRegistryImpl());
-		this.resourceManager = new ResourceManagerImpl();
-		EngineRegistry.registerResourceManager(name, windowId, this.resourceManager);
 		
 		this.input = new Input(this);
 		this.mouse = new Mouse(this);
@@ -73,7 +66,6 @@ public class WindowContext implements EngineObject
 		
 		if(this.window.isReleased()) return;
 		
-		this.resourceManager.update();
 		this.routine.update(delta);	
 		this.input.update();
 		this.mouse.update();
@@ -92,7 +84,6 @@ public class WindowContext implements EngineObject
 		this.routine.release(forced);
 		
 		EngineRegistry.getVAOManager().release();
-		this.resourceManager.cleanup();
 		
 		this.window.release();
 		

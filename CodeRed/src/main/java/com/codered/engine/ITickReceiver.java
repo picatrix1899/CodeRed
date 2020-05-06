@@ -1,7 +1,7 @@
 package com.codered.engine;
 
 
-public interface EngineTickUpdater
+public interface ITickReceiver
 {
 	void preUpdate();
 	

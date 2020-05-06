@@ -1,4 +1,4 @@
-package com.codered.managing.models;
+package com.codered.model;
 
 import com.codered.managing.VAO;
 

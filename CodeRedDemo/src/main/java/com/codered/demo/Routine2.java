@@ -1,23 +1,23 @@
 package com.codered.demo;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
+import org.barghos.core.debug.Debug;
 import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.vector.vec3.Vec3;
 import org.lwjgl.opengl.GL11;
 
+import com.codered.MemoryWatchdog;
+import com.codered.MemoryWatchdog.MemorySession;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
 import com.codered.entities.StaticEntity;
 import com.codered.gui.font.FontType;
-import com.codered.managing.models.Mesh;
-import com.codered.managing.models.TexturedModel;
 import com.codered.rendering.fbo.FBO;
 import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
+import com.codered.resource.ResManager;
 import com.codered.resource.ResourceRequestBlock;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.EvalFunc;
@@ -27,9 +27,7 @@ import com.codered.window.WindowRoutine;
 public class Routine2 extends WindowRoutine
 {
 	private Mat4f projection;
-	
-	private boolean initializing;
-	
+
 	public StaticEntityTreeImpl world;
 	
 	public AmbientLight ambient;
@@ -49,17 +47,25 @@ public class Routine2 extends WindowRoutine
 	
 	private GUIRenderer guiRenderer;
 	
+	public ResManager manager;
+	
 	public void init()
 	{
-		ResourceRequestBlock bl1 = new ResourceRequestBlock(false);
-		bl1.addTexture("res/materials/loadingscreen.png");
-		bl1.addTexture("res/fonts/arial.png");
-		bl1.addFragmentShaderPart("res/shaders/gui_no.fs");
-		bl1.addVertexShaderPart("res/shaders/gui_no.vs");
-		bl1.addFragmentShaderPart("res/shaders/gui_font.fs");
-		bl1.addVertexShaderPart("res/shaders/gui_font.vs");
+		manager = new ResManager();
+		manager.init();
 		
-		EngineRegistry.getResourceManager().load(bl1);
+		try(MemorySession msession = MemoryWatchdog.start())
+		{
+			ResourceRequestBlock bl0 = new ResourceRequestBlock();
+			bl0.loadTexture("res/materials/loadingscreen.png");
+			bl0.loadTexture("res/fonts/arial.png");
+			bl0.loadFragmentShaderPart("res/shaders/gui_no.fs");
+			bl0.loadVertexShaderPart("res/shaders/gui_no.vs");
+			bl0.loadFragmentShaderPart("res/shaders/gui_font.fs");
+			bl0.loadVertexShaderPart("res/shaders/gui_font.vs");
+			manager.loadAndWait(bl0);
+		}
+		Debug.println(MemoryWatchdog.getLastDelta());
 		
 		this.noGuiShader = new NoGUIShader();
 		this.noGuiShader.addFragmentShaderPart("res/shaders/gui_no.fs");
@@ -77,30 +83,14 @@ public class Routine2 extends WindowRoutine
 
 		this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
 		
-		this.initializing = true;
+		context.getWindow().show();
 		
-		resBlock = new ResourceRequestBlock(true);
-		resBlock.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-		resBlock.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
-		resBlock.addMaterial("res/materials/barrel2.json");
-		EngineRegistry.getResourceManager().load(resBlock);
-
-		org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
+		ResourceRequestBlock resBlock = new ResourceRequestBlock();
+		resBlock.loadVertexShaderPart("res/shaders/o_ambientLight2.vs");
+		resBlock.loadFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		resBlock.loadMaterial("res/materials/barrel2.json");
+		this.manager.loadAndWait(resBlock);
 		
-		try
-		{
-			org.haze.obj.Model objmodel = objloader.read("res/models/barrel.obj");
-			Mesh newMesh1 = new Mesh().loadFromMesh(objmodel.meshes.get(0));
-			EngineRegistry.getResourceRegistry().staticMeshes().add("res/models/barrel.obj", newMesh1);
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private void initPhase1()
-	{
 		ambientShader = new AmbientLightShader();
 		ambientShader.addVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		ambientShader.addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
@@ -109,12 +99,7 @@ public class Routine2 extends WindowRoutine
 		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
 		
 		this.world = new StaticEntityTreeImpl();
-		
-		TexturedModel crate1 = new TexturedModel(EngineRegistry.getResourceRegistry().staticMeshes().get("res/models/barrel.obj"),
-		EngineRegistry.getResourceRegistry().materials().get("res/materials/barrel2.json"));
 
-		this.world.add(new StaticEntity(crate1, new Vec3(0,0,-4), 0, 45, 0));
-		
 		this.ambient = new AmbientLight(120, 100, 100, 3);
 		
 		this.cam = new Camera(0.0f, 1.8f, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -133,23 +118,10 @@ public class Routine2 extends WindowRoutine
 
 	public void update(double timestep)
 	{
-		if(this.initializing)
-		{
-			if(this.resBlock.isFinished())
-			{
-				initPhase1();
-				this.initializing = false;
-			}
-		}
 	}
 
 	public void render(double timestep, double alpha)
 	{
-		if(this.initializing)
-		{
-			return;
-		}
-		
 		BindingUtils.bindFramebuffer(this.fbo);
 		GLUtils.clearAll();
 		
@@ -165,6 +137,7 @@ public class Routine2 extends WindowRoutine
 
 	public void release(boolean forced)
 	{
+		this.manager.release();
 	}
 
 	private void renderWorld(double alpha)
@@ -182,7 +155,7 @@ public class Routine2 extends WindowRoutine
 			
 			for(Iterator<StaticEntity> it = this.world.iterator(); it.hasNext();)
 			{
-				RenderHelper.renderStaticEntity2(it.next(), cam, ambientShader, this.projection, alpha);
+				RenderHelper.renderStaticEntity(it.next(), cam, ambientShader, this.projection, alpha);
 			}
 		}
 

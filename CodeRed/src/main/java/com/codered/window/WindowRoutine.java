@@ -1,8 +1,6 @@
 package com.codered.window;
 
-import com.codered.engine.EngineObject;
-
-public abstract class WindowRoutine implements EngineObject
+public abstract class WindowRoutine
 {
 	protected WindowContext context;
 	

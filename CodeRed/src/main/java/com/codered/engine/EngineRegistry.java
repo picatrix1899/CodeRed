@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.codered.managing.TextureManager;
 import com.codered.managing.VAOManager;
-import com.codered.resource.manager.ResourceManager;
 import com.codered.resource.registry.ResourceRegistry;
 import com.codered.window.WindowContext;
 
@@ -21,9 +20,6 @@ public class EngineRegistry
 	
 	private static Map<Long, TextureManager> textureManagersById = new HashMap<>();
 	private static Map<String, TextureManager> textureManagersByName = new HashMap<>();
-	
-	private static Map<Long, ResourceManager> resourceManagersById = new HashMap<>();
-	private static Map<String, ResourceManager> resourceManagersByName = new HashMap<>();
 	
 	private static Map<Long, ResourceRegistry> resourceRegistriesById = new HashMap<>();
 	private static Map<String, ResourceRegistry> resourceRegistriesByName = new HashMap<>();
@@ -95,28 +91,6 @@ public class EngineRegistry
 	{
 		return textureManagersById.get(currentWindowContext.getWindowId());
 	}
-
-	
-	public static void registerResourceManager(String contextName, long windowId, ResourceManager manager)
-	{
-		resourceManagersById.put(windowId, manager);
-		resourceManagersByName.put(contextName, manager);
-	}
-	
-	public static ResourceManager getResourceManager(String contextName)
-	{
-		return resourceManagersByName.get(contextName);
-	}
-	
-	public static ResourceManager getResourceManager(long windowId)
-	{
-		return resourceManagersById.get(windowId);
-	}
-	
-	public static ResourceManager getResourceManager()
-	{
-		return resourceManagersById.get(currentWindowContext.getWindowId());
-	}
 	
 	public static void registerResourceRegistry(String contextName, long windowId, ResourceRegistry manager)
 	{
@@ -148,8 +122,6 @@ public class EngineRegistry
 		contextsByName.remove(name);
 		vaoManagersById.remove(id);
 		vaoManagersByName.remove(name);
-		resourceManagersById.remove(id);
-		resourceManagersByName.remove(name);
 		resourceRegistriesById.remove(id);
 		resourceRegistriesByName.remove(name);
 	}

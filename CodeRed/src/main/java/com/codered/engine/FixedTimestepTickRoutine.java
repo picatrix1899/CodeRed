@@ -1,10 +1,8 @@
 package com.codered.engine;
 
-import com.codered.utils.Time;
-
-public class FixedTimestepTickRoutine extends EngineTickRoutine
+public class FixedTimestepTickRoutine extends TickRoutine
 {
-	private Time time;
+	private static final double SECOND = 1000000000;
 	
 	private double frameTime;
 	
@@ -14,34 +12,29 @@ public class FixedTimestepTickRoutine extends EngineTickRoutine
 	private long startTime;
 	private long passedTime;
 	
-	public FixedTimestepTickRoutine()
+	protected void init()
 	{
-		this.time = new Time();
-	}
-	
-	public void init()
-	{
-		frameTime = 1.0d / this.time.getFPSCap();
-		lastTime = this.time.getTime();
-		unprocessedTime = 0;
+		this.frameTime = 1.0d / Engine.getInstance().getEngineSetup().fpscap;
+		this.lastTime = System.nanoTime();
+		this.unprocessedTime = 0;
 	}
 
-	public void run()
+	protected void cycle()
 	{
-		startTime = this.time.getTime();
-		passedTime = startTime - lastTime;
-		lastTime = startTime;
+		this.startTime = System.nanoTime();
+		this.passedTime = this.startTime - this.lastTime;
+		this.lastTime = this.startTime;
 		
-		unprocessedTime += passedTime / (double) this.time.SECOND;
+		this.unprocessedTime += this.passedTime / SECOND;
 		
-		while(unprocessedTime >= frameTime)
+		while(this.unprocessedTime >= this.frameTime)
 		{
-			this.engine.preUpdate();
-			this.engine.update(frameTime);
+			preUpdate();
+			update(this.frameTime);
 			
-			unprocessedTime -= frameTime;	
+			this.unprocessedTime -= this.frameTime;	
 		}
 		
-		this.engine.render(frameTime, unprocessedTime / frameTime);
+		render(this.frameTime, this.unprocessedTime / this.frameTime);
 	}
 }

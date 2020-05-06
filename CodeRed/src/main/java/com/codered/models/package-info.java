@@ -6,4 +6,4 @@
  *
  */
 
-package com.codered.resource.manager;
+package com.codered.models;

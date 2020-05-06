@@ -5,154 +5,35 @@ import java.util.List;
 
 public class ResourceRequestBlock
 {
-	List<ResourceRequest> textures = new ArrayList<>();
-	List<ResourceRequest> shaderPartsFragment = new ArrayList<>();
-	List<ResourceRequest> shaderPartsVertex = new ArrayList<>();
-	List<ResourceRequest> staticMeshes = new ArrayList<>();
-	List<ResourceRequest> staticModels = new ArrayList<>();
-	List<ResourceRequest> materials = new ArrayList<>();
+	private List<ResourceRequest> requests = new ArrayList<>();
 	
-	private boolean loadAsync;
-	
-	private LoadingStage stage;
-	
-	public ResourceRequestBlock(boolean loadAsync)
+	public List<ResourceRequest> getRequests()
 	{
-		this.loadAsync = loadAsync;
+		return this.requests;
 	}
 	
-	public List<ResourceRequest> textures()
+	public void loadTexture(String resourcePath)
 	{
-		return this.textures;
+		requests.add(ResourceRequest.loadTexture(resourcePath));
 	}
 	
-	public List<ResourceRequest> fragmentShaderParts()
+	public void loadVertexShaderPart(String resourcePath)
 	{
-		return this.shaderPartsFragment;
+		requests.add(ResourceRequest.loadVertexShaderPart(resourcePath));
 	}
 	
-	public List<ResourceRequest> vertexShaderParts()
+	public void loadFragmentShaderPart(String resourcePath)
 	{
-		return this.shaderPartsVertex;
+		requests.add(ResourceRequest.loadFragmentShaderPart(resourcePath));
 	}
 	
-	public List<ResourceRequest> staticModels()
+	public void loadMaterial(String resourcePath)
 	{
-		return this.staticModels;
+		requests.add(ResourceRequest.loadMaterial(resourcePath));
 	}
 	
-	public List<ResourceRequest> staticMeshes()
+	public void loadModel(String resourcePath)
 	{
-		return this.staticMeshes;
-	}
-	
-	public List<ResourceRequest> materials()
-	{
-		return this.materials;
-	}
-	
-	public void addTexture(String file)
-	{
-		this.textures.add(new ResourceRequest(file));
-	}
-	
-	public void addTexture(ResourceRequest request)
-	{
-		this.textures.add(request);
-	}
-	
-	public void addFragmentShaderPart(String file)
-	{
-		this.shaderPartsFragment.add(new ResourceRequest(file));
-	}
-	
-	public void addFragmentShaderPart(ResourceRequest request)
-	{
-		this.shaderPartsFragment.add(request);
-	}
-	
-	public void addVertexShaderPart(String file)
-	{
-		this.shaderPartsVertex.add(new ResourceRequest(file));
-	}
-	
-	public void addVertexShaderPart(ResourceRequest request)
-	{
-		this.shaderPartsVertex.add(request);
-	}
-	
-	public void addStaticMesh(ResourceRequest request)
-	{
-		this.staticMeshes.add(request);
-	}
-	
-	public void addStaticModel(ResourceRequest request)
-	{
-		this.staticModels.add(request);
-	}
-	
-	public void addMaterial(String file)
-	{
-		this.materials.add(new ResourceRequest(file));
-	}
-	
-	public void addMaterial(ResourceRequest request)
-	{
-		this.materials.add(request);
-	}
-	
-	public LoadingStage stage()
-	{
-		return this.stage;
-	}
-	
-	public void stage(LoadingStage stage)
-	{
-		this.stage = stage;
-	}
-	
-	public boolean loadAsync()
-	{
-		return this.loadAsync;
-	}
-	
-	public boolean areTexturesFinished()
-	{
-		return this.textures.stream().allMatch((p) -> p.created);
-	}
-	
-	public boolean areFragmentShaderPartsFinished()
-	{
-		return this.shaderPartsFragment.stream().allMatch((p) -> p.created);
-	}
-	
-	public boolean areVertexShaderPartsFinished()
-	{
-		return this.shaderPartsVertex.stream().allMatch((p) -> p.created);
-	}
-	
-	public boolean areStaticMeshesFinished()
-	{
-		return this.staticMeshes.stream().allMatch((p) -> p.created); 
-	}
-	
-	public boolean areStaticModelsFinished()
-	{
-		return this.staticModels.stream().allMatch((p) -> p.created); 
-	}
-	
-	public boolean areMaterialsFinished()
-	{
-		return this.materials.stream().allMatch((p) -> p.created); 
-	}
-	
-	public boolean isFinished()
-	{
-		return areTexturesFinished() &&
-				areFragmentShaderPartsFinished() &&
-				areVertexShaderPartsFinished() &&
-				areStaticMeshesFinished() &&
-				areStaticModelsFinished() &&
-				areMaterialsFinished();
+		requests.add(ResourceRequest.loadModel(resourcePath));
 	}
 }

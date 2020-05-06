@@ -52,6 +52,11 @@ public class Window
 		this.initWindowHints = callback;
 	}
 	
+	public void show()
+	{
+		glfwShowWindow(this.window);
+	}
+	
 	public void init()
 	{
 		this.initWindowHints.run();
@@ -60,13 +65,12 @@ public class Window
 		
 		if(window == 0)
 		{
+			glfwTerminate();
 			System.exit(-1);
 		}
 
 		makeContextCurrent();
 		this.capabilities = GL.createCapabilities();
-		
-		glfwShowWindow(this.window);
 		
 		glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
 	}

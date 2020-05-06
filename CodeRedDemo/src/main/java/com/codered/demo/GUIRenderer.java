@@ -11,7 +11,6 @@ import com.codered.gui.font.TextMeshData;
 import com.codered.managing.VAO;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
-import com.codered.rendering.texture.Texture;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 import com.codered.utils.IGuiRenderer;
@@ -38,7 +37,7 @@ public class GUIRenderer implements IGuiRenderer
 		drawTexturedRect(EngineRegistry.getResourceRegistry().textures().get(t), posX, posY, sizeX, sizeY);
 	}
 
-	public void drawTexturedRect(Texture t, float posX, float posY, float sizeX, float sizeY)
+	public void drawTexturedRect(com.codered.rendering.texture.Texture t, float posX, float posY, float sizeX, float sizeY)
 	{
 		drawTexturedRect(t.getId(), posX, posY, sizeX, sizeY);
 	}

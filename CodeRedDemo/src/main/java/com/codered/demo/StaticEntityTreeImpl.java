@@ -3,6 +3,7 @@ package com.codered.demo;
 import java.util.Iterator;
 
 import com.codered.entities.StaticEntity;
+import com.codered.entities.StaticModelEntity;
 
 public class StaticEntityTreeImpl
 {
@@ -19,7 +20,20 @@ public class StaticEntityTreeImpl
 
 	public void add(StaticEntity entity)
 	{
-		builder.add(entity, entity.getModel().getModel().physicalMesh.getAABBf());
+		if(entity instanceof StaticModelEntity)
+		{
+			StaticModelEntity e = (StaticModelEntity)entity;
+			for(com.codered.model.Mesh mesh : e.getNewModel().getMeshes())
+			{
+				builder.add(entity, mesh.getCollisionMesh().get().getAABBf());
+			}
+			
+		}
+		else
+		{
+			builder.add(entity, entity.getModel().getModel().getCollisionMesh().get().getAABBf());
+		}
+		
 
 		walker.refreshLeafList();
 	}

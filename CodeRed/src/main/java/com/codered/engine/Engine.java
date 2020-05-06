@@ -1,30 +1,31 @@
 package com.codered.engine;
 
-import com.codered.resource.loader.ResourceLoader;
-import com.codered.resource.loader.ResourceLoaderImpl;
-
-public abstract class Engine implements EngineObject, EngineTickUpdater
+public abstract class Engine implements ITickReceiver
 {
 	private static Engine instance;
 	
-	private EngineTickRoutine routine;
-	
-	private ResourceLoader resourceLoader;
-	
-	private boolean isRunning;
+	private TickRoutine routine;
+
 	private boolean forcedShutdown = false;
+	
+	private EngineSetup setup;
 	
 	public static Engine getInstance()
 	{
 		return instance;
 	}
 	
-	public Engine(EngineTickRoutine routine)
+	public Engine()
 	{
 		instance = this;
-		this.routine = routine;
-		this.routine.setEngine(this);
-		this.resourceLoader = new ResourceLoaderImpl();
+	}
+	
+	protected void setup(EngineSetup setup)
+	{
+		this.setup = setup;
+		
+		this.routine = setup.mainTickRoutine;
+		this.routine.setTickReceiver(this);
 	}
 	
 	public abstract void init();
@@ -43,14 +44,7 @@ public abstract class Engine implements EngineObject, EngineTickUpdater
 		{
 			init();
 			
-			this.isRunning = true;
-			
-			this.routine.init();
-			
-			while(isRunning)
-			{
-				this.routine.run();
-			}
+			this.routine.start();
 		}
 		catch(CriticalEngineStateException e)
 		{
@@ -68,24 +62,20 @@ public abstract class Engine implements EngineObject, EngineTickUpdater
 		}
 
 	}
-	
-	public ResourceLoader getResourceLoader()
-	{
-		return this.resourceLoader;
-	}
-	
+
 	public void start()
 	{
-		this.resourceLoader.start();
-		
 		run();
 	}
 	
 	public void stop(boolean forced)
 	{
-		this.resourceLoader.stop();
-		
-		this.isRunning = false;
+		this.routine.stop();
 		this.forcedShutdown = forced;
+	}
+	
+	public EngineSetup getEngineSetup()
+	{
+		return this.setup;
 	}
 }
