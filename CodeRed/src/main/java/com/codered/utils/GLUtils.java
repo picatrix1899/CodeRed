@@ -2,7 +2,7 @@ package com.codered.utils;
 
 import java.util.List;
 
-import org.barghos.core.ListUtils;
+import org.barghos.core.util.ListUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;

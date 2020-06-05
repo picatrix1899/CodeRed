@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.barghos.core.SupplierWithException;
+import org.barghos.core.util.SupplierWithException;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryUtil;

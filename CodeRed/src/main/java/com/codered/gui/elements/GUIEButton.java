@@ -1,6 +1,6 @@
 package com.codered.gui.elements;
 
-import org.barghos.math.geometry.Area2f;
+import org.barghos.math.geometry.Area2;
 import org.barghos.math.point.Point2;
 import org.barghos.math.vector.vec2.Vec2;
 
@@ -11,7 +11,7 @@ import com.codered.utils.IGuiRenderer;
 
 public class GUIEButton extends GUIElement
 {
-	protected Area2f main;
+	protected Area2 main;
 	
 	public com.codered.rendering.texture.Texture background;
 	public GUIText text;
@@ -20,7 +20,7 @@ public class GUIEButton extends GUIElement
 	{
 		super(id, parent, renderer);
 		
-		this.main = new Area2f(new Point2(posX, posY), new Point2(posX + sizeX, posY + sizeY));
+		this.main = new Area2(new Point2(posX, posY), new Point2(posX + sizeX, posY + sizeY));
 		this.background = background;
 	}
 

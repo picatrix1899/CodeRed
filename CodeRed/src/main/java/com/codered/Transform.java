@@ -2,7 +2,7 @@ package com.codered;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.math.matrix.Mat4f;
-import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
 
 public class Transform implements ITransform
@@ -17,7 +17,7 @@ public class Transform implements ITransform
 	{
 		this.newPos = new Vec3();
 		this.newRot = new EulerRotation();
-		this.newScale = new Vec3(1);
+		this.newScale = new Vec3(1, 1, 1);
 	}
 	
 	public void swap()

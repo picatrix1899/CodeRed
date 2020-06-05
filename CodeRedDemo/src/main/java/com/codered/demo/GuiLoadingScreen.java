@@ -7,7 +7,6 @@ import com.codered.utils.IGuiRenderer;
 
 public class GuiLoadingScreen extends GUIWindow
 {
-
 	com.codered.rendering.texture.Texture background;
 	
 	public GuiLoadingScreen(IGuiRenderer renderer)

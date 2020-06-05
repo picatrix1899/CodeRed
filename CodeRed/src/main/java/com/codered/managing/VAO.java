@@ -13,9 +13,9 @@ import org.lwjgl.system.MemoryUtil;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
 
-import org.barghos.core.BufferUtils;
 import org.barghos.core.tuple.tuple2.Tup2fR;
 import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.util.BufferUtils;
 
 public class VAO
 {

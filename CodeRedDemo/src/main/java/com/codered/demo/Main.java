@@ -3,7 +3,7 @@ package com.codered.demo;
 import org.barghos.core.debug.Debug;
 import org.barghos.math.FastUnsafeMath;
 import org.barghos.math.Maths;
-import org.barghos.math.vector.QuatPool;
+import org.barghos.math.vector.quat.QuatPool;
 import org.barghos.math.vector.vec3.Vec3Pool;
 
 import com.codered.engine.EngineBootstrap;

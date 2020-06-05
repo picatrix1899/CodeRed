@@ -2,7 +2,7 @@ package com.codered.utils;
 
 import java.util.ArrayList;
 
-import org.barghos.core.StringUtils;
+import org.barghos.core.util.StringUtils;
 
 public class DebugInfo
 {

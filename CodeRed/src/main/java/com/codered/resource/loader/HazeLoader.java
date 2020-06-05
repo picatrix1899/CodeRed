@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.barghos.math.geometry.ConvexTriangleMesh3f;
-import org.barghos.math.geometry.Triangle3f;
+import org.barghos.math.geometry.ConvexTriangleMesh3;
+import org.barghos.math.geometry.Triangle3;
 import org.barghos.math.vector.vec3.Vec3;
 import org.haze.mtl.MaterialList;
 import org.haze.png.Image;
@@ -55,7 +55,7 @@ public class HazeLoader implements IResourceLoader
 		for(org.haze.obj.Mesh objmesh : objmodel.meshes)
 		{
 			List<FaceData> faces = new ArrayList<>();
-			List<Triangle3f> triangles = new ArrayList<>();
+			List<Triangle3> triangles = new ArrayList<>();
 			
 			for(org.haze.obj.Face face : objmesh.faces)
 			{
@@ -66,7 +66,7 @@ public class HazeLoader implements IResourceLoader
 				
 				faces.add(new FaceData(va, vb, vc, normal));
 				
-				triangles.add(new Triangle3f(face.vertexA.position, face.vertexB.position, face.vertexC.position));
+				triangles.add(new Triangle3(face.vertexA.position, face.vertexB.position, face.vertexC.position));
 			}
 			
 			int vertexCount = objmesh.faces.size() * 3;
@@ -108,7 +108,7 @@ public class HazeLoader implements IResourceLoader
 				}
 			}	
 			
-			Optional<ConvexTriangleMesh3f> collision = Optional.of(new ConvexTriangleMesh3f(triangles));
+			Optional<ConvexTriangleMesh3> collision = Optional.of(new ConvexTriangleMesh3(triangles));
 			
 			meshes.add(new MeshData(vertexCount, faces, collision, material));
 		}

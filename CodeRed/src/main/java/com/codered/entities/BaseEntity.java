@@ -1,6 +1,6 @@
 package com.codered.entities;
 
-import org.barghos.math.vector.Quat;
+import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
 
 import com.codered.Transform;

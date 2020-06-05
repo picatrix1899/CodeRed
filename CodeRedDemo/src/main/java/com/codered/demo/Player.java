@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
-import org.barghos.math.geometry.AABB3f;
-import org.barghos.math.geometry.OBB3f;
+import org.barghos.math.geometry.AABB3;
+import org.barghos.math.geometry.OBB3;
 import org.barghos.math.geometry.OBBOBBResolver;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3;
@@ -26,7 +26,7 @@ import com.codered.window.WindowContext;
 
 public class Player
 {
-	public AABB3f aabb;
+	public AABB3 aabb;
 
 	public GUIWindow window;
 	
@@ -44,7 +44,7 @@ public class Player
 		
 		this.world = world;
 
-		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
+		this.aabb = new AABB3(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
 		
 		this.transform.setPos(new Vec3(0.0f, 0.0f, 0.0f));
 		
@@ -124,7 +124,7 @@ public class Player
 			
 			dir.mul(acceleration, vel);
 
-			vel.set(checkCollisionStatic(vel));
+			//vel.set(checkCollisionStatic(vel));
 			
 			this.transform.setPos(this.transform.getPos().add(vel, null));
 			
@@ -146,11 +146,11 @@ public class Player
 		
 		this.transform.getTransformedPos().add(vel, tempPos);
 
-		OBB3f tempOBB;
+		OBB3 tempOBB;
 
-		OBB3f entityOBB;
+		OBB3 entityOBB;
 
-		AABB3f sweptAABB;
+		AABB3 sweptAABB;
 		translation = Mat4f.translation(tempPos);
 		
 		sweptAABB = this.aabb.transform(translation, null);

@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.geometry.AABB3;
 import org.barghos.math.point.Point3;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.structs.simpletree.btree.BTree;
@@ -8,15 +8,15 @@ import org.barghos.structs.simpletree.btree.BTreeBuilder;
 import org.barghos.structs.simpletree.btree.BTreeContent;
 import org.barghos.structs.simpletree.btree.BTreeNode;
 
-public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
+public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3>
 {
 
-	public AABB3fBTreeBuilder(BTree<T,AABB3f> tree)
+	public AABB3fBTreeBuilder(BTree<T,AABB3> tree)
 	{
 		super(tree);
 	}
 
-	protected void recalculateEvalData(BTreeNode<T,AABB3f> node)
+	protected void recalculateEvalData(BTreeNode<T,AABB3> node)
 	{
 		if(node.b != null)
 			node.evalData = mergeAABBs(node.a.evalData, node.b.evalData);
@@ -24,7 +24,7 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 			node.evalData = node.a.evalData;
 	}
 	
-	public AABB3f mergeAABBs(AABB3f a, AABB3f b)
+	public AABB3 mergeAABBs(AABB3 a, AABB3 b)
 	{
 		Point3 minA = a.getMin();
 		Point3 maxA = a.getMax();
@@ -48,10 +48,10 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 		Vec3 center = new Vec3();
 		min.add(he, center);
 		
-		return new AABB3f(center, he);
+		return new AABB3(center, he);
 	}
 
-	protected boolean isInRange(AABB3f oldEvalData, AABB3f newEvalData)
+	protected boolean isInRange(AABB3 oldEvalData, AABB3 newEvalData)
 	{
 		Point3 minA = newEvalData.getMin();
 		Point3 minB = oldEvalData.getMin();
@@ -71,8 +71,8 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3f>
 	
 
 
-	protected boolean getClosest(BTreeContent<T,AABB3f> a, BTreeContent<T,AABB3f> b,
-			AABB3f newEvalData)
+	protected boolean getClosest(BTreeContent<T,AABB3> a, BTreeContent<T,AABB3> b,
+			AABB3 newEvalData)
 	{
 		
 		Point3 minEval = newEvalData.getMin();

@@ -40,7 +40,7 @@ public class Mouse
 		{
 			GLFW.glfwSetInputMode(this.windowId, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 			this.returnPos.set(currentPos);
-			this.deltaPos.set(0);
+			this.deltaPos.set(0, 0);
 		}
 		else
 		{
@@ -64,7 +64,7 @@ public class Mouse
 		if(this.grabbed)
 		{
 			this.currentPos.set(this.returnPos);
-			this.deltaPos.set(0);
+			this.deltaPos.set(0, 0);
 			GLFW.glfwSetCursorPos(this.windowId, this.returnPos.getX(), this.returnPos.getY());
 		}
 	}

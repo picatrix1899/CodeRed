@@ -3,7 +3,7 @@ package com.codered.managing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.barghos.core.ListUtils;
+import org.barghos.core.util.ListUtils;
 
 import com.codered.utils.GLCommon;
 
