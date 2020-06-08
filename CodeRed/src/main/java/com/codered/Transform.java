@@ -1,7 +1,7 @@
 package com.codered;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
 
@@ -47,16 +47,16 @@ public class Transform implements ITransform
 	public Vec3 getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(this.newPos, (Vec3)null);
+			return this.parent.getTransformationMatrix().transform(this.newPos, new Vec3());
 		return this.newPos;
 	}
 
-	public Mat4f getTransformationMatrix()
+	public Mat4 getTransformationMatrix()
 	{
 		if(this.parent == null)
-			return Mat4f.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale);
+			return Mat4.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale);
 
-		return this.parent.getTransformationMatrix().mul(Mat4f.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale), null);
+		return this.parent.getTransformationMatrix().mul(Mat4.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale), null);
 	}
 
 	public Vec3 getPos(float alpha)
@@ -84,7 +84,7 @@ public class Transform implements ITransform
 		return getScale();
 	}
 
-	public Mat4f getTransformationMatrix(float alpha)
+	public Mat4 getTransformationMatrix(float alpha)
 	{
 		return getTransformationMatrix();
 	}

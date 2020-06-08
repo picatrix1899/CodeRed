@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL30;
 import com.codered.CodeRed;
 import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
+import com.codered.utils.GLCommon;
 import com.codered.utils.GLUtils;
 import com.codered.window.WindowContext;
 
@@ -15,7 +16,9 @@ public abstract class Framebuffer
 	protected int width;
 	protected int height;
 	
-	protected FBOAttachment[] attachments = new FBOAttachment[8];
+	protected FBOAttachmentList attachmentList = new FBOAttachmentList();
+	
+	protected FBOAttachment[] attachments = new FBOAttachment[CodeRed.AVAILABLE_FBO_ATTACHMENTS];
 	
 	protected FBOAttachment depth;
 	
@@ -23,7 +26,7 @@ public abstract class Framebuffer
 	
 	public Framebuffer()
 	{
-		this.id = GL30.glGenFramebuffers();
+		this.id = GLCommon.genFramebuffer();
 		this.context = EngineRegistry.getCurrentWindowContext();
 		this.width = context.getWindow().getWidth();
 		this.height = context.getWindow().getHeight();
@@ -31,7 +34,7 @@ public abstract class Framebuffer
 	
 	public Framebuffer(int width, int height)
 	{
-		this.id = GL30.glGenFramebuffers();
+		this.id = GLCommon.genFramebuffer();
 		this.context = EngineRegistry.getCurrentWindowContext();
 		this.width = width;
 		this.height = height;
@@ -45,16 +48,16 @@ public abstract class Framebuffer
 	
 	public void resize(int width, int height)
 	{
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
 			if(this.attachments[i] != null) this.attachments[i].resize(width, height);
 
 		if(this.depth != null) this.depth.resize(width, height);
 		
 		if(CodeRed.RECREATE_FBOS_ON_RESIZE)
 		{
-			GL30.glDeleteFramebuffers(this.id);
+			GLCommon.deleteFramebuffer(this.id);
 			
-			this.id = GL30.glGenFramebuffers();
+			this.id = GLCommon.genFramebuffer();
 		}
 		
 		this.width = width;
@@ -110,6 +113,7 @@ public abstract class Framebuffer
 		BindingUtils.bindFramebuffer(this.id);
 		GLUtils.glDrawBuffersAll();
 		GL11.glClearColor(0,0,0,1);
+		GLUtils.clearColor();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 	}
 	
@@ -118,15 +122,15 @@ public abstract class Framebuffer
 		BindingUtils.bindFramebuffer(this.id);
 		GLUtils.glDrawBuffersAll();
 		GL11.glClearColor(0,0,0,1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GLUtils.clear(true, true);
 	}
 	
 	public void clearAttachment(FBOTarget t)
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		GL11.glDrawBuffer(t.getTarget());
-		GL11.glClearColor(0,0,0,1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClearColor(0, 0, 0, 1);
+		GLUtils.clearColor();
 		
 		GLUtils.glDrawBuffersAll();
 	}
@@ -135,8 +139,8 @@ public abstract class Framebuffer
 	{
 		BindingUtils.bindFramebuffer(this.id);
 		GL11.glDrawBuffer(FBOTarget.getByIndex(t).getTarget());
-		GL11.glClearColor(0,0,0,1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClearColor(0, 0, 0, 1);
+		GLUtils.clearColor();
 		
 		GLUtils.glDrawBuffersAll();
 	}
@@ -171,10 +175,10 @@ public abstract class Framebuffer
 	
 	public void release()
 	{
-		GL30.glDeleteFramebuffers(this.id);
-		
+		GLCommon.deleteFramebuffer(this.id);
+
 		FBOAttachment att;
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
 		{
 			att = this.attachments[i];
 			if(att != null) att.release();

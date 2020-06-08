@@ -1,7 +1,7 @@
 package com.codered;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.VectorInterpolation;
 import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
@@ -49,14 +49,14 @@ public class SweptTransform implements ITransform
 	public Vec3 getTransformedPos(float alpha)
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), (Vec3)null);
+			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), new Vec3());
 		return getPos(alpha);
 	}
 
 	public Vec3 getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(getPos(), (Vec3)null);
+			return this.parent.getTransformationMatrix().transform(getPos(), new Vec3());
 		return getPos();
 	}
 
@@ -94,18 +94,18 @@ public class SweptTransform implements ITransform
 		return this.newTransform.getScale();
 	}
 
-	public Mat4f getTransformationMatrix(float alpha)
+	public Mat4 getTransformationMatrix(float alpha)
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix(alpha).mul(Mat4f.modelMatrix(getPos(alpha), getRot(alpha),getScale(alpha)), null);
-		return Mat4f.modelMatrix(getPos(alpha), getRot(alpha), getScale(alpha));
+			return this.parent.getTransformationMatrix(alpha).mul(Mat4.modelMatrix(getPos(alpha), getRot(alpha),getScale(alpha)), null);
+		return Mat4.modelMatrix(getPos(alpha), getRot(alpha), getScale(alpha));
 	}
 
-	public Mat4f getTransformationMatrix()
+	public Mat4 getTransformationMatrix()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().mul(Mat4f.modelMatrix(getPos(), getRot(),getScale()), null);
-		return Mat4f.modelMatrix(getPos(), getRot(), getScale());
+			return this.parent.getTransformationMatrix().mul(Mat4.modelMatrix(getPos(), getRot(),getScale()), null);
+		return Mat4.modelMatrix(getPos(), getRot(), getScale());
 	}
 
 	public SweptTransform setPos(Tup3fR pos)

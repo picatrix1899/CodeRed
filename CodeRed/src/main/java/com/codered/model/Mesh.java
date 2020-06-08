@@ -4,18 +4,19 @@ import java.util.Optional;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3;
 
+import com.codered.ResourceHolder;
 import com.codered.managing.VAO;
 import com.codered.rendering.material.Material;
 
-public class Mesh
+public class Mesh implements ResourceHolder
 {
 	
 	private VAO vao;
 	private int vertexCount;
-	private Optional<ConvexTriangleMesh3> collisionMesh;
-	private Optional<Material> material;
+	private ConvexTriangleMesh3 collisionMesh;
+	private Material material;
 
-	public Mesh(VAO vao, int vertexCount, Optional<ConvexTriangleMesh3> collisionMesh, Optional<Material> material)
+	public Mesh(VAO vao, int vertexCount, ConvexTriangleMesh3 collisionMesh, Material material)
 	{
 		this.vao = vao;
 		this.vertexCount = vertexCount;
@@ -35,11 +36,17 @@ public class Mesh
 	
 	public Optional<ConvexTriangleMesh3> getCollisionMesh()
 	{
-		return this.collisionMesh;
+		return Optional.ofNullable(this.collisionMesh);
 	}
 	
 	public Optional<Material> getMaterial()
 	{
-		return this.material;
+		return Optional.ofNullable(this.material);
+	}
+
+	public void release(boolean forced)
+	{
+		this.vao.release(forced);
+		this.material.release(forced);
 	}
 }

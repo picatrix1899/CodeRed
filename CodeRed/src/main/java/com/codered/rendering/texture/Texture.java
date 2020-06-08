@@ -1,6 +1,9 @@
 package com.codered.rendering.texture;
 
-public class Texture
+import com.codered.ResourceHolder;
+import com.codered.utils.GLCommon;
+
+public class Texture implements ResourceHolder
 {
 	
 	private int id;
@@ -28,5 +31,11 @@ public class Texture
 	public int getHeight()
 	{
 		return this.height;
+	}
+
+	public void release(boolean forced)
+	{
+		GLCommon.deleteTexture(this.id);
+		this.id = -1;
 	}
 }

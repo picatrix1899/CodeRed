@@ -3,11 +3,11 @@ package com.codered.demo;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
-
+import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.math.geometry.AABB3;
 import org.barghos.math.geometry.OBB3;
 import org.barghos.math.geometry.OBBOBBResolver;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.point.Point3;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
@@ -38,7 +38,7 @@ public class Player
 	
 	private SweptTransform transform = new SweptTransform();
 
-	public Player(StaticEntityTreeImpl world)
+	public Player(StaticEntityTreeImpl world, Tup3fR pos)
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
 		
@@ -46,9 +46,9 @@ public class Player
 
 		this.aabb = new AABB3(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
 		
-		this.transform.setPos(new Vec3(0.0f, 0.0f, 0.0f));
+		this.transform.setPos(pos);
 		
-		this.camera = new Camera(0.0f, 1.8f, 0.0f, 0.0f, 0.0f, 0.0f);
+		this.camera = new Camera(0.0f, pos.getY() + 1.8f, 0.0f, 0.0f, 0.0f, 0.0f);
 		
 		this.camera.getTransform().setParent(this.transform);
 		
@@ -124,9 +124,9 @@ public class Player
 			
 			dir.mul(acceleration, vel);
 
-			//vel.set(checkCollisionStatic(vel));
+			vel.set(checkCollisionStatic(vel));
 			
-			this.transform.setPos(this.transform.getPos().add(vel, null));
+			this.transform.setPos(this.transform.getPos().addN(vel));
 			
 			Vec3Pool.store(vel);
 		}
@@ -142,7 +142,7 @@ public class Player
 		Vec3 partial = Vec3Pool.get();
 		Vec3 tempPos = Vec3Pool.get();
 
-		Mat4f translation;
+		Mat4 translation;
 		
 		this.transform.getTransformedPos().add(vel, tempPos);
 
@@ -151,7 +151,7 @@ public class Player
 		OBB3 entityOBB;
 
 		AABB3 sweptAABB;
-		translation = Mat4f.translation(tempPos);
+		translation = Mat4.translation(tempPos);
 		
 		sweptAABB = this.aabb.transform(translation, null);
 
@@ -165,7 +165,7 @@ public class Player
 				{
 					entityOBB = mesh.getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
 					
-					translation = Mat4f.translation(tempPos);
+					translation = Mat4.translation(tempPos);
 					
 					sweptAABB = this.aabb.transform(translation, sweptAABB);
 					
@@ -185,7 +185,7 @@ public class Player
 			{
 				entityOBB = entity.getModel().getModel().getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
 				
-				translation = Mat4f.translation(tempPos);
+				translation = Mat4.translation(tempPos);
 				
 				sweptAABB = this.aabb.transform(translation, sweptAABB);
 				
@@ -219,6 +219,6 @@ public class Player
 	
 	public Vec3 getPos() { return this.transform.getPos(); }
 	
-	public Vec3 getEyePos() { return this.transform.getPos().add(0.0f, 18.0f, 0.0f, null); }
+	public Vec3 getEyePos() { return this.transform.getPos().addN(0.0f, 18.0f, 0.0f); }
 
 }

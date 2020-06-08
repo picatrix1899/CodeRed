@@ -42,17 +42,8 @@ public enum FBOTarget
 	
 	public static FBOTarget getByIndex(int id)
 	{
-		if(id < -1 || id > 7) return null;
-		
-		if(id >= 0)
-		{
-			return FBOTarget.values[id];
-		}
-		else
-		{
-			if(id == -1) return FBOTarget.DEPTH;
-		}
-		
-		return null;
+		if(id < -1 || id > 7) throw new IllegalArgumentException();
+
+		return id >= 0 ? FBOTarget.values[id] : FBOTarget.DEPTH;
 	}
 }

@@ -27,7 +27,7 @@ public class FBO extends Framebuffer
 		{
 			BindingUtils.bindFramebuffer(this.id);
 			
-			for(int i = 0; i < this.attachments.length; i++)
+			for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
 			{
 				FBOAttachment att = this.attachments[i];
 				

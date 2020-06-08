@@ -3,7 +3,9 @@ package com.codered.resource.registry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResourceRegistryEntry<T>
+import com.codered.ResourceHolder;
+
+public class ResourceRegistryEntry<T extends ResourceHolder> implements ResourceHolder
 {
 	public Map<String,T> resources = new HashMap<>();
 	
@@ -30,5 +32,11 @@ public class ResourceRegistryEntry<T>
 	public void clear()
 	{
 		this.resources.clear();
+	}
+
+	public void release(boolean forced)
+	{
+		for(T value : this.resources.values())
+			value.release(forced);
 	}
 }

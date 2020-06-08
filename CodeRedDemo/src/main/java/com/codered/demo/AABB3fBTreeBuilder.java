@@ -2,6 +2,7 @@ package com.codered.demo;
 
 import org.barghos.math.geometry.AABB3;
 import org.barghos.math.point.Point3;
+import org.barghos.math.point.Point3Pool;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.structs.simpletree.btree.BTree;
 import org.barghos.structs.simpletree.btree.BTreeBuilder;
@@ -82,16 +83,16 @@ public class AABB3fBTreeBuilder<T> extends BTreeBuilder<T,AABB3>
 		Point3 minB = b.evalData.getMin();
 		Point3 maxB = b.evalData.getMax();
 		
-		Vec3 minEA = minA.sub(minEval, null);
+		Vec3 minEA = minA.subN(minEval);
 		double distMinA = minEA.squaredLength();
 		
-		Vec3 minEB = minB.sub(minEval, null);
+		Vec3 minEB = minB.subN(minEval);
 		double distMinB = minEB.squaredLength();
 		
-		Vec3 maxEA = maxA.sub(maxEval, null);
+		Vec3 maxEA = maxA.subN(maxEval);
 		double distMaxA = maxEA.squaredLength();
 		
-		Vec3 maxEB = maxB.sub(maxEval, null);
+		Vec3 maxEB = maxB.subN(maxEval);
 		double distMaxB = maxEB.squaredLength();
 
 		double smallestX = distMinA;

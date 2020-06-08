@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryUtil;
 
+import com.codered.ResourceHolder;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
 
@@ -17,13 +18,18 @@ import org.barghos.core.tuple.tuple2.Tup2fR;
 import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.core.util.BufferUtils;
 
-public class VAO
+public class VAO implements ResourceHolder
 {
 	private int id;
 	
 	private Map<Integer,Integer> vbos = new HashMap<>();
 	
 	private int indicesVBO = 0;
+	
+	public VAO()
+	{
+		this.id = GLCommon.genVertexArrays();
+	}
 	
 	public VAO(int id)
 	{
@@ -211,8 +217,8 @@ public class VAO
 
 		this.id = GLCommon.genVertexArrays();
 	}
-	
-	public void release()
+
+	public void release(boolean forced)
 	{
 		BindingUtils.bindVAO(this);
 		

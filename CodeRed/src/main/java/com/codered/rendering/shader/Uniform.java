@@ -1,6 +1,6 @@
 package com.codered.rendering.shader;
 
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -53,7 +53,7 @@ public abstract class Uniform
 		GL20.glUniform4f(uniform, x, y, z, w);
 	}
 	
-	protected void loadMat4(int uniform, Mat4f mat)
+	protected void loadMat4(int uniform, Mat4 mat)
 	{
 		GL20.glUniformMatrix4fv(uniform, false, mat.toArrayColumnMajor());
 	}

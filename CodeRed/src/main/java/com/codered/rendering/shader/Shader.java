@@ -1,6 +1,8 @@
 package com.codered.rendering.shader;
 
-public interface Shader
+import com.codered.ResourceHolder;
+
+public interface Shader extends ResourceHolder
 {
 	void recompile();
 	
@@ -9,6 +11,5 @@ public interface Shader
 	ShaderSession start();
 	void stop();
 	void load();
-	
-	void release();
+
 }

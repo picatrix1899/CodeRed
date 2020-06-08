@@ -1,7 +1,7 @@
 package com.codered;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
 
@@ -34,6 +34,6 @@ public interface ITransform
 	Vec3 getScale(float alpha);
 	Vec3 getScale();
 	
-	Mat4f getTransformationMatrix(float alpha);
-	Mat4f getTransformationMatrix();
+	Mat4 getTransformationMatrix(float alpha);
+	Mat4 getTransformationMatrix();
 }

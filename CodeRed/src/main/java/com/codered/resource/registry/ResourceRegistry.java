@@ -1,19 +1,15 @@
 package com.codered.resource.registry;
 
+import com.codered.ResourceHolder;
 import com.codered.model.Mesh;
-import com.codered.model.Model;
-import com.codered.rendering.material.Material;
-import com.codered.rendering.shader.ShaderPart;
-import com.codered.rendering.texture.Texture;
 
-public interface ResourceRegistry
+public interface ResourceRegistry extends ResourceHolder
 {
-	ResourceRegistryEntry<Texture> textures();
 	ResourceRegistryEntry<Mesh> staticMeshes();
-	ResourceRegistryEntry<Material> materials();
-	ResourceRegistryEntry<ShaderPart> vertexShaderParts();
-	ResourceRegistryEntry<ShaderPart> fragmentShaderParts();
-	ResourceRegistryEntry<Model> models();
 	
-	void cleanup();
+	public void addResourceType(Class<? extends ResourceHolder> type);
+	
+	public <T extends ResourceHolder> void addResource(String key, T resource, Class<T> type);
+
+	public <T extends ResourceHolder> T get(String key, Class<T> type);
 }

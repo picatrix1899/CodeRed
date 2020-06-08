@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.barghos.core.debug.Debug;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.core.tuple.tuple3.Tup3f;
+import org.barghos.math.geometry.AABB3;
+import org.barghos.math.matrix.Mat4;
+import org.barghos.math.point.Point3;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
 import org.lwjgl.glfw.GLFW;
@@ -24,6 +27,7 @@ import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.light.DirectionalLight;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
+import com.codered.rendering.texture.Texture;
 import com.codered.resource.ResManager;
 import com.codered.resource.ResourceRequestBlock;
 import com.codered.utils.EvalFunc;
@@ -32,7 +36,7 @@ import com.codered.window.WindowRoutine;
 
 public class Routine1 extends WindowRoutine
 {
-	private Mat4f projection;
+	private Mat4 projection;
 	
 	private Player player;
 
@@ -96,7 +100,7 @@ public class Routine1 extends WindowRoutine
 		this.guiRenderer.noGuiShader = this.noGuiShader;
 		this.guiRenderer.fontGuiShader = this.fontGuiShader;
 
-		this.font = new FontType(EngineRegistry.getResourceRegistry().textures().get("res/fonts/arial.png"), new File("res/fonts/arial.fnt"));
+		this.font = new FontType(EngineRegistry.getResourceRegistry().get("res/fonts/arial.png", Texture.class), new File("res/fonts/arial.fnt"));
 		
 		this.loadingScreen = new GuiLoadingScreen(this.guiRenderer);
 		
@@ -128,7 +132,6 @@ public class Routine1 extends WindowRoutine
 		bl0.loadVertexShaderPart("res/shaders/o_ambientLight2.vs");
 		bl0.loadFragmentShaderPart("res/shaders/o_directionalLight.fs");
 		bl0.loadVertexShaderPart("res/shaders/o_directionalLight.vs");
-		bl0.loadMaterial("res/materials/crate.json");
 		bl0.loadModel("res/models/nanosuit.obj");
 		manager.loadAndBlock(bl0);
 		
@@ -142,21 +145,23 @@ public class Routine1 extends WindowRoutine
 		directionalLightShader.addFragmentShaderPart("res/shaders/o_directionalLight.fs");
 		directionalLightShader.compile();
 
-		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
+		this.projection = Mat4.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
 		
 		this.world = new StaticEntityTreeImpl();
 
-		Model model = EngineRegistry.getResourceRegistry().models().get("res/models/nanosuit.obj");
+		Model model = EngineRegistry.getResourceRegistry().get("res/models/nanosuit.obj", Model.class);
 		
-		this.ent = new StaticModelEntity(model, new Vec3(-10, 0, -10), 0,0,0);
-		
+		this.ent = new StaticModelEntity(model, new Vec3(-10, 0, -10), 0, 0, 0);
+		AABB3 aabb = this.ent.getAABB();
+		float height = aabb.getHalfExtend().mul(2.0f).getY();
+		this.ent.getTransform().setScale(new Tup3f(1.8f / height));
+		this.ent.getTransform().setPos(new Tup3f(-10, -aabb.getMin().getY(), -10));
 		this.world.add(ent);
-		
 		
 		this.ambient = new AmbientLight(120, 100, 100, 3);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 1.0f, -1.0f, 0);
 		
-		this.player = new Player(this.world);
+		this.player = new Player(this.world, new Point3(-5, 0, -5));
 		
 		GLUtils.multisample(true);
 		
@@ -250,6 +255,11 @@ public class Routine1 extends WindowRoutine
 	public void release(boolean forced)
 	{
 		this.manager.release();
+		this.guiRenderer.release(forced);
+		this.ambientShader.release(forced);
+		this.directionalLightShader.release(forced);
+		this.noGuiShader.release(forced);
+		this.fontGuiShader.release(forced);
 	}
 
 	public void preUpdate()

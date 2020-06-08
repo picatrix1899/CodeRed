@@ -3,8 +3,6 @@ package com.codered.window;
 import com.codered.engine.EngineRegistry;
 import com.codered.input.Input;
 import com.codered.input.Mouse;
-import com.codered.managing.TextureManager;
-import com.codered.managing.VAOManager;
 import com.codered.resource.registry.ResourceRegistryImpl;
 import com.codered.utils.GLCommon;
 
@@ -40,8 +38,6 @@ public class WindowContext
 		GLCommon.registerContext(windowId);
 		
 		EngineRegistry.registerWindowContext(name, windowId, this);
-		EngineRegistry.registerVAOManager(name, windowId, new VAOManager());
-		EngineRegistry.registerTextureManager(name, windowId, new TextureManager());
 		EngineRegistry.registerResourceRegistry(name, windowId, new ResourceRegistryImpl());
 		
 		this.input = new Input(this);
@@ -82,8 +78,8 @@ public class WindowContext
 	{
 		makeContextCurrent();
 		this.routine.release(forced);
-		
-		EngineRegistry.getVAOManager().release();
+
+		EngineRegistry.getResourceRegistry().release(forced);
 		
 		this.window.release();
 		

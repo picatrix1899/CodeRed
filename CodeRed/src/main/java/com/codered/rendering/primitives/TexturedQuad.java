@@ -1,6 +1,6 @@
 package com.codered.rendering.primitives;
 
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.vec2.Vec2;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
@@ -9,7 +9,6 @@ import org.barghos.math.vector.vec3.Vec3Axis;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.Transform;
-import com.codered.engine.EngineRegistry;
 import com.codered.managing.VAO;
 import com.codered.rendering.material.Material;
 
@@ -31,15 +30,15 @@ public class TexturedQuad
 		this.mat = mat;
 
 		Vec3[] v = new Vec3[4];
-		v[0] = new Vec3().add(newZ, null);
+		v[0] = new Vec3().add(newZ);
 		v[1] = new Vec3();
-		v[2] = new Vec3().add(newX, null);
-		v[3] = new Vec3().add(newX, null).add(newZ, null);
+		v[2] = new Vec3().add(newX);
+		v[3] = new Vec3().add(newX).add(newZ);
 		
 		Vec3 normal = newX.cross(newZ, null).normal();
 		Vec3 tangent = calculateTangents();
 		
-		this.vao = EngineRegistry.getVAOManager().getNewVAO();
+		this.vao = new VAO();
 		this.vao.storeData(0, v, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(1, new Vec2[] { new Vec2(0,0), new Vec2(0,1), new Vec2(1,1), new Vec2(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(2, new Vec3[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
@@ -64,22 +63,22 @@ public class TexturedQuad
 		deltaPos1.mul(deltaUv2.getY(), deltaPos1);
 		deltaPos2.mul(deltaUv1.getY(), deltaPos2);
 		
-		Vec3 tangent = deltaPos1.sub(deltaPos2, null);
+		Vec3 tangent = deltaPos1.subN(deltaPos2);
 		
 		tangent.mul(r, tangent);
 		
 		return tangent.normal();
 	}
 	
-	public Mat4f getTransformationMatrix()
+	public Mat4 getTransformationMatrix()
 	{
 		
-		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
+		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
 		
-		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling(getTransform().getScale()), null);
+		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
 		{
-			Mat4f parentTransformation = this.transform.getParent().getTransformationMatrix();
+			Mat4 parentTransformation = this.transform.getParent().getTransformationMatrix();
 			
 			return parentTransformation.mul(ownTransformation, null);
 		}

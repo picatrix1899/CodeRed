@@ -30,6 +30,8 @@ public class GLCommon
 	private static Map<Long, Integer> ACTIVE_VAOS = new HashMap<>();
 	private static Map<Long, Integer> ACTIVE_PROGRAMS = new HashMap<>();
 	private static Map<Long, Integer> ACTIVE_SHADERS = new HashMap<>();
+	private static Map<Long, Integer> ACTIVE_FRAMEBUFFERS = new HashMap<>();
+	private static Map<Long, Integer> ACTIVE_RENDERBUFFERS = new HashMap<>();
 	
 	public static void updateWindowId()
 	{
@@ -45,6 +47,8 @@ public class GLCommon
 			ACTIVE_VAOS.put(id, 0);
 			ACTIVE_PROGRAMS.put(id, 0);
 			ACTIVE_SHADERS.put(id, 0);
+			ACTIVE_FRAMEBUFFERS.put(id, 0);
+			ACTIVE_RENDERBUFFERS.put(id, 0);
 		}
 	}
 	
@@ -60,7 +64,7 @@ public class GLCommon
 		GLFW.glfwDestroyWindow(window);
 	}
 	
-	public static int genTextures()
+	public static int genTexture()
 	{
 		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) + 1);
 		return GL11.glGenTextures();
@@ -72,7 +76,7 @@ public class GLCommon
 		GL11.glGenTextures(textures);
 	}
 	
-	public static void deleteTextures(int texture)
+	public static void deleteTexture(int texture)
 	{
 		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) - 1);
 		GL11.glDeleteTextures(texture);
@@ -132,6 +136,29 @@ public class GLCommon
 		GL20.glDeleteShader(shader);
 	}
 	
+	public static int genFramebuffer()
+	{
+		if(detectLeaks) ACTIVE_FRAMEBUFFERS.put(currentWindowId, ACTIVE_FRAMEBUFFERS.get(currentWindowId) + 1);
+		return GL30.glGenFramebuffers();
+	}
+	
+	public static void deleteFramebuffer(int framebuffer)
+	{
+		if(detectLeaks) ACTIVE_FRAMEBUFFERS.put(currentWindowId, ACTIVE_FRAMEBUFFERS.get(currentWindowId) - 1);
+		GL30.glDeleteFramebuffers(framebuffer);
+	}
+	
+	public static int genRenderbuffer()
+	{
+		if(detectLeaks) ACTIVE_RENDERBUFFERS.put(currentWindowId, ACTIVE_RENDERBUFFERS.get(currentWindowId) + 1);
+		return GL30.glGenRenderbuffers();
+	}
+	
+	public static void deleteRenderbuffer(int renderbuffer)
+	{
+		if(detectLeaks) ACTIVE_RENDERBUFFERS.put(currentWindowId, ACTIVE_RENDERBUFFERS.get(currentWindowId) - 1);
+		GL30.glDeleteRenderbuffers(renderbuffer);
+	}
 	
 	public static void report(PrintStream stream)
 	{
@@ -141,5 +168,7 @@ public class GLCommon
 		stream.println("ACTIVE_VAOS: " + ACTIVE_VAOS);
 		stream.println("ACTIVE_PROGRAMS: " + ACTIVE_PROGRAMS);
 		stream.println("ACTIVE_SHADERS: " + ACTIVE_SHADERS);
+		stream.println("ACTIVE_FRAMEBUFFERS: " + ACTIVE_FRAMEBUFFERS);
+		stream.println("ACTIVE_RENDERBUFFERS: " + ACTIVE_RENDERBUFFERS);
 	}
 }

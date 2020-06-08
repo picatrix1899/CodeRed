@@ -3,8 +3,6 @@ package com.codered.engine;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.codered.managing.TextureManager;
-import com.codered.managing.VAOManager;
 import com.codered.resource.registry.ResourceRegistry;
 import com.codered.window.WindowContext;
 
@@ -14,12 +12,6 @@ public class EngineRegistry
 	private static Map<Long, WindowContext> contextsById = new HashMap<>();
 	private static Map<String, WindowContext> contextsByName = new HashMap<>();
 	private static WindowContext currentWindowContext;
-	
-	private static Map<Long, VAOManager> vaoManagersById = new HashMap<>();
-	private static Map<String, VAOManager> vaoManagersByName = new HashMap<>();
-	
-	private static Map<Long, TextureManager> textureManagersById = new HashMap<>();
-	private static Map<String, TextureManager> textureManagersByName = new HashMap<>();
 	
 	private static Map<Long, ResourceRegistry> resourceRegistriesById = new HashMap<>();
 	private static Map<String, ResourceRegistry> resourceRegistriesByName = new HashMap<>();
@@ -49,49 +41,7 @@ public class EngineRegistry
 	{
 		return currentWindowContext;
 	}
-	
-	public static void registerVAOManager(String contextName, long windowId, VAOManager list)
-	{
-		vaoManagersById.put(windowId, list);
-		vaoManagersByName.put(contextName, list);
-	}
-	
-	public static VAOManager getVAOManager(String contextName)
-	{
-		return vaoManagersByName.get(contextName);
-	}
-	
-	public static VAOManager getVAOManager(long windowId)
-	{
-		return vaoManagersById.get(windowId);
-	}
-	
-	public static VAOManager getVAOManager()
-	{
-		return vaoManagersById.get(currentWindowContext.getWindowId());
-	}
-	
-	public static void registerTextureManager(String contextName, long windowId, TextureManager list)
-	{
-		textureManagersById.put(windowId, list);
-		textureManagersByName.put(contextName, list);
-	}
-	
-	public static TextureManager getTextureManager(String contextName)
-	{
-		return textureManagersByName.get(contextName);
-	}
-	
-	public static TextureManager getTextureManager(long windowId)
-	{
-		return textureManagersById.get(windowId);
-	}
-	
-	public static TextureManager getTextureManager()
-	{
-		return textureManagersById.get(currentWindowContext.getWindowId());
-	}
-	
+
 	public static void registerResourceRegistry(String contextName, long windowId, ResourceRegistry manager)
 	{
 		resourceRegistriesById.put(windowId, manager);
@@ -120,8 +70,6 @@ public class EngineRegistry
 		
 		contextsById.remove(id);
 		contextsByName.remove(name);
-		vaoManagersById.remove(id);
-		vaoManagersByName.remove(name);
 		resourceRegistriesById.remove(id);
 		resourceRegistriesByName.remove(name);
 	}

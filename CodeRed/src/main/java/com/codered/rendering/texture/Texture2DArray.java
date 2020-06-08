@@ -27,7 +27,7 @@ public class Texture2DArray
 	
 	public static Texture2DArray createTexture(int width, int height, int depth, boolean hdr)
 	{
-		int id = GLCommon.genTextures();
+		int id = GLCommon.genTexture();
 		
 		GL11.glBindTexture(GL30.GL_TEXTURE_2D_ARRAY, id);
 
@@ -48,5 +48,5 @@ public class Texture2DArray
 	public int getHeight() { return this.height; }
 	public int getDepth() { return this.depth; }
 	
-	public void cleanup() { GLCommon.deleteTextures(this.id); }
+	public void cleanup() { GLCommon.deleteTexture(this.id); }
 }

@@ -3,6 +3,7 @@ package com.codered.gui.font;
 import java.io.File;
 
 import com.codered.gui.elements.GUIText;
+import com.codered.rendering.texture.Texture;
 
 /**
  * Represents a font. It holds the font's texture atlas as well as having the
@@ -14,7 +15,7 @@ import com.codered.gui.elements.GUIText;
 public class FontType
 {
 
-	private com.codered.rendering.texture.Texture texture;
+	private Texture texture;
 	private MetaFile meta;
 	private TextMeshCreator loader;
 
@@ -28,7 +29,7 @@ public class FontType
 	 *            - the font file containing information about each character in
 	 *            the texture atlas.
 	 */
-	public FontType(com.codered.rendering.texture.Texture texture, File fontFile)
+	public FontType(Texture texture, File fontFile)
 	{
 		this.texture = texture;
 		this.meta = new MetaFile(fontFile);
@@ -39,7 +40,7 @@ public class FontType
 	/**
 	 * @return The font texture atlas.
 	 */
-	public com.codered.rendering.texture.Texture getTexture() { return texture; }
+	public Texture getTexture() { return texture; }
 
 	public MetaFile getMeta()
 	{

@@ -8,6 +8,7 @@ import com.codered.gui.GUIWindow;
 import com.codered.gui.elements.GUIEButton;
 import com.codered.gui.font.FontType;
 import com.codered.input.InputConfiguration;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GuiInventory extends GUIWindow
@@ -33,7 +34,7 @@ public class GuiInventory extends GUIWindow
 		inventoryInput.registerKey(GLFW.GLFW_KEY_ESCAPE);
 		inventoryInput.registerMouseButton(0);
 		
-		this.button = new GUIEButton(1, this, 0, 0, 60, 82, EngineRegistry.getResourceRegistry().textures().get("res/materials/gray_rsquare.png"), this.renderer);
+		this.button = new GUIEButton(1, this, 0, 0, 60, 82, EngineRegistry.getResourceRegistry().get("res/materials/gray_rsquare.png", Texture.class), this.renderer);
 		this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
 		
 		addElement(this.button);
@@ -65,7 +66,7 @@ public class GuiInventory extends GUIWindow
 	
 	public void render()
 	{
-		drawTexturedRect(EngineRegistry.getResourceRegistry().textures().get("res/materials/inventory-background.png"), 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+		drawTexturedRect(EngineRegistry.getResourceRegistry().get("res/materials/inventory-background.png", Texture.class), 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
 		super.render();
 	}

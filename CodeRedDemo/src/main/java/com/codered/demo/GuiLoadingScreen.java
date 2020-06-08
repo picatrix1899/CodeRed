@@ -3,16 +3,17 @@ package com.codered.demo;
 import com.codered.engine.EngineRegistry;
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 
 public class GuiLoadingScreen extends GUIWindow
 {
-	com.codered.rendering.texture.Texture background;
+	Texture background;
 	
 	public GuiLoadingScreen(IGuiRenderer renderer)
 	{
 		super(renderer);
-		this.background = EngineRegistry.getResourceRegistry().textures().get("res/materials/loadingscreen.png");
+		this.background = EngineRegistry.getResourceRegistry().get("res/materials/loadingscreen.png", Texture.class);
 	}
 	
 	public void render()

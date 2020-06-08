@@ -1,7 +1,7 @@
 package com.codered.entities;
 
 import org.barghos.core.tuple.tuple3.Tup3fR;
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
@@ -116,18 +116,18 @@ public class Camera
 	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
 	public Camera setPos(Vec3 pos) { this.transform.setPos(pos); return this; }
-	public Camera moveBy(Vec3 velocity) { this.transform.setPos(this.transform.getPos().add(velocity, null)); return this; }
+	public Camera moveBy(Vec3 velocity) { this.transform.setPos(this.transform.getPos().addN(velocity)); return this; }
 	public Vec3 getRelativePos() { return this.transform.getPos(); }
 	public Vec3 getTotalPos() { return this.transform.getTransformedPos(); }
 	
-	public Mat4f getViewMatrix()
+	public Mat4 getViewMatrix()
 	{
-		return Mat4f.viewMatrix(getTotalPos(), getTotalRot());
+		return Mat4.viewMatrix(getTotalPos(), getTotalRot());
 	}
 	
-	public Mat4f getLerpedViewMatrix(float alpha)
+	public Mat4 getLerpedViewMatrix(float alpha)
 	{
-		return Mat4f.viewMatrix(this.transform.getTransformedPos(alpha), this.transform.getRot(alpha));
+		return Mat4.viewMatrix(this.transform.getTransformedPos(alpha), this.transform.getRot(alpha));
 	}
 	
 	public Camera rotatePitch(float amount)

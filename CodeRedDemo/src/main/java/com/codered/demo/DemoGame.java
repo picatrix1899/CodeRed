@@ -1,6 +1,5 @@
 package com.codered.demo;
 
-import org.barghos.core.debug.Debug;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -21,8 +20,7 @@ public class DemoGame extends Engine
 	public static DemoGame getInstance() { return instance; }
 
 	private WindowContext context1;
-	private WindowContext context2;
-	
+
 	public boolean showInventory = false;
 	public boolean directional = true;
 	
@@ -40,10 +38,6 @@ public class DemoGame extends Engine
 		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
 		w1.setWindowHintCallback(() -> initWindowHints());
 		this.context1 = new WindowContext("main", w1, new Routine1());
-		
-		Window w2 = new Window(800, 600, "CoderRed 3 Main", 0);
-		w2.setWindowHintCallback(() -> initWindowHints());
-		this.context2 = new WindowContext("main 2", w2, new Routine2());
 	}
 
 	private void printDebugInfo()
@@ -69,13 +63,10 @@ public class DemoGame extends Engine
 	public void init()
 	{
 		this.context1.initWindow();
-//		this.context2.initWindow();
 		
 		this.context1.init();
-//		this.context2.init();
 		
 		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
-//		this.context2.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 		
 		printDebugInfo();
 	}
@@ -83,28 +74,22 @@ public class DemoGame extends Engine
 	public void preUpdate()
 	{
 		this.context1.preUpdate();
-//		this.context2.preUpdate();
 	}
 	
 	public void update(double delta)
 	{
 		this.context1.update(delta);
-//		this.context2.update(delta);
 	}
 
 	public void render(double delta, double alpha)
 	{
 		this.context1.render(delta, alpha);
-//		this.context2.render(delta, alpha);
 	}
 
 	
 	public void release(boolean forced)
 	{
-//		this.context2.release(forced);
 		this.context1.release(forced);
-		
-		Debug.println("test");
 		
 		GLCommon.report(System.out);
 	}

@@ -3,9 +3,10 @@ package com.codered.rendering.shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import com.codered.ResourceHolder;
 import com.codered.utils.GLCommon;
 
-public class ShaderPart
+public class ShaderPart implements ResourceHolder
 {
 	private int id;
 	private String name;
@@ -42,8 +43,8 @@ public class ShaderPart
 	{
 		return this.name;
 	}
-	
-	public void release()
+
+	public void release(boolean forced)
 	{
 		GLCommon.deleteShader(this.id);
 	}

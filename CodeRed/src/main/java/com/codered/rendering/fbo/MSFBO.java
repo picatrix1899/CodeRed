@@ -33,7 +33,7 @@ public class MSFBO extends Framebuffer
 			BindingUtils.bindFramebuffer(this.id);
 			
 			FBOAttachment att;
-			for(int i = 0; i < 8; i++)
+			for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
 			{
 				att = this.attachments[i];
 				

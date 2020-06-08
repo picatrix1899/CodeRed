@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.barghos.core.util.BufferUtils;
 import org.barghos.core.util.SupplierWithException;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -14,12 +15,12 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
-import com.codered.managing.TextureManager;
 import com.codered.managing.VAO;
 import com.codered.model.Mesh;
 import com.codered.model.Model;
 import com.codered.rendering.material.Material;
-import com.codered.rendering.shader.ShaderPart;
+import com.codered.rendering.shader.FragmentShaderPart;
+import com.codered.rendering.shader.VertexShaderPart;
 import com.codered.rendering.texture.Texture;
 import com.codered.resource.ResourceRequest;
 import com.codered.resource.material.MaterialData;
@@ -30,6 +31,7 @@ import com.codered.resource.model.ModelData;
 import com.codered.resource.shaderpart.ShaderPartData;
 import com.codered.resource.shaderpart.ShaderPartLoader;
 import com.codered.resource.texture.TextureData;
+import com.codered.utils.GLCommon;
 import com.codered.utils.TextureUtils;
 
 public class DefaultResourceLoadingProcessFactory implements IResourceLoadingProcessFactory
@@ -39,14 +41,11 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 	public static final String SHADERPART_FRAGMENT = "shaderpart_fragment";
 	public static final String MATERIAL = "material";
 	public static final String MODEL = "model";
-	
-	private TextureManager textureManager;
-	
+
 	private IResourceLoader loader;
 	
 	public void init()
 	{
-		this.textureManager = EngineRegistry.getTextureManager();
 		this.loader = Engine.getInstance().getEngineSetup().resourceLoader;
 	}
 	
@@ -118,41 +117,41 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 	
 	private void createTexture(String key, Object data)
 	{
-		Texture t = TextureUtils.genTexture2(this.textureManager.create(), (TextureData)data);
-		EngineRegistry.getResourceRegistry().textures().add(key, t);
+		Texture t = TextureUtils.genTexture2(GLCommon.genTexture(), (TextureData)data);
+		EngineRegistry.getResourceRegistry().addResource(key, t, Texture.class);
 	}
 	
 	private void createFragmentShaderPart(String key, Object data)
 	{
-		ShaderPart s = new ShaderPart(key, GL20.GL_FRAGMENT_SHADER, ((ShaderPartData)data).getData());
-		EngineRegistry.getResourceRegistry().fragmentShaderParts().add(key, s);
+		FragmentShaderPart s = new FragmentShaderPart(key, GL20.GL_FRAGMENT_SHADER, ((ShaderPartData)data).getData());
+		EngineRegistry.getResourceRegistry().addResource(key, s, FragmentShaderPart.class);
 	}
 	
 	private void createVertexShaderPart(String key, Object data)
 	{
-		ShaderPart s = new ShaderPart(key, GL20.GL_VERTEX_SHADER, ((ShaderPartData)data).getData());
-		EngineRegistry.getResourceRegistry().vertexShaderParts().add(key, s);
+		VertexShaderPart s = new VertexShaderPart(key, GL20.GL_VERTEX_SHADER, ((ShaderPartData)data).getData());
+		EngineRegistry.getResourceRegistry().addResource(key, s, VertexShaderPart.class);
 	}
 	
 	private void createMaterial(String key, Object data)
 	{
 		MaterialData mdata = (MaterialData)data;
 		
-		Optional<Texture> diffuse = Optional.empty();
-		Optional<Texture> normal = Optional.empty();
+		Texture diffuse = null;
+		Texture normal = null;
 		
 		if(mdata.getDiffuse().isPresent())
 		{
-			diffuse = Optional.of(TextureUtils.genTexture2(this.textureManager.create(), mdata.getDiffuse().get()));
+			diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getDiffuse().get());
 		}
 		
 		if(mdata.getNormal().isPresent())
 		{
-			normal = Optional.of(TextureUtils.genTexture2(this.textureManager.create(), mdata.getNormal().get()));
+			normal = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getNormal().get());
 		}
 		
 		Material m = new Material(diffuse, normal);
-		EngineRegistry.getResourceRegistry().materials().add(key, m);
+		EngineRegistry.getResourceRegistry().addResource(key, m, Material.class);
 	}
 	
 	private void createModel(String key, Object data)
@@ -172,36 +171,10 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 			int vIndex = 0;
 			for(FaceData dFace : dmesh.getFaces())
 			{
-				bp.put(dFace.getVertexA().getPosition().getX());
-				bp.put(dFace.getVertexA().getPosition().getY());
-				bp.put(dFace.getVertexA().getPosition().getZ());
-				bp.put(dFace.getVertexB().getPosition().getX());
-				bp.put(dFace.getVertexB().getPosition().getY());
-				bp.put(dFace.getVertexB().getPosition().getZ());
-				bp.put(dFace.getVertexC().getPosition().getX());
-				bp.put(dFace.getVertexC().getPosition().getY());
-				bp.put(dFace.getVertexC().getPosition().getZ());
-				
-				bn.put(dFace.getVertexA().getNormal().getX());
-				bn.put(dFace.getVertexA().getNormal().getY());
-				bn.put(dFace.getVertexA().getNormal().getZ());
-				bn.put(dFace.getVertexB().getNormal().getX());
-				bn.put(dFace.getVertexB().getNormal().getY());
-				bn.put(dFace.getVertexB().getNormal().getZ());
-				bn.put(dFace.getVertexC().getNormal().getX());
-				bn.put(dFace.getVertexC().getNormal().getY());
-				bn.put(dFace.getVertexC().getNormal().getZ());
-				
-				bt.put(dFace.getVertexA().getTangent().getX());
-				bt.put(dFace.getVertexA().getTangent().getY());
-				bt.put(dFace.getVertexA().getTangent().getZ());
-				bt.put(dFace.getVertexB().getTangent().getX());
-				bt.put(dFace.getVertexB().getTangent().getY());
-				bt.put(dFace.getVertexB().getTangent().getZ());
-				bt.put(dFace.getVertexC().getTangent().getX());
-				bt.put(dFace.getVertexC().getTangent().getY());
-				bt.put(dFace.getVertexC().getTangent().getZ());
-				
+				BufferUtils.put(bp, dFace.getVertexA().getPosition(), dFace.getVertexB().getPosition(), dFace.getVertexC().getPosition());
+				BufferUtils.put(bn, dFace.getVertexA().getNormal(), dFace.getVertexB().getNormal(), dFace.getVertexC().getNormal());
+				BufferUtils.put(bt, dFace.getVertexA().getTangent(), dFace.getVertexB().getTangent(), dFace.getVertexC().getTangent());
+
 				buv.put(dFace.getVertexA().getUV().getX());
 				buv.put(-dFace.getVertexA().getUV().getY());
 				buv.put(dFace.getVertexB().getUV().getX());
@@ -220,7 +193,7 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 			bt.flip();
 			bind.flip();
 			
-			VAO vao = EngineRegistry.getVAOManager().getNewVAO();
+			VAO vao = new VAO();
 			
 			vao.storeIndices(bind, GL15.GL_STATIC_DRAW);
 			
@@ -234,31 +207,31 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 			MemoryUtil.memFree(bn);
 			MemoryUtil.memFree(bt);
 			
-			Optional<Material> material = Optional.empty();
+			Material material = null;
 			
 			if(dmesh.getMaterial().isPresent())
 			{
-				Optional<Texture> diffuse = Optional.empty();
-				Optional<Texture> normal = Optional.empty();
+				Texture diffuse = null;
+				Texture normal = null;
 				
 				if(dmesh.getMaterial().get().getDiffuse().isPresent())
 				{
-					diffuse = Optional.of(TextureUtils.genTexture2(this.textureManager.create(), dmesh.getMaterial().get().getDiffuse().get()));
+					diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().get().getDiffuse().get());
 				}
 				
 				if(dmesh.getMaterial().get().getNormal().isPresent())
 				{
-					normal = Optional.of(TextureUtils.genTexture2(this.textureManager.create(), dmesh.getMaterial().get().getNormal().get()));
+					normal = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().get().getNormal().get());
 				}
 
-				material = Optional.of(new Material(diffuse, normal));
+				material = new Material(diffuse, normal);
 			}
 			
-			meshes.add(new Mesh(vao, dmesh.getVertexCount(), dmesh.getCollisionMesh(), material));
+			meshes.add(new Mesh(vao, dmesh.getVertexCount(), dmesh.getCollisionMesh().get(), material));
 		}
 		
 		Model model = new Model(meshes);
 		
-		EngineRegistry.getResourceRegistry().models().add(key, model);
+		EngineRegistry.getResourceRegistry().addResource(key, model,  Model.class);
 	}
 }

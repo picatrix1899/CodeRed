@@ -46,7 +46,7 @@ public abstract class FBOAttachment
 	
 	private static int create(int width, int height, int samples, boolean isBuffer, boolean isHDR, boolean isDepth, boolean isStencil)
 	{
-		int id = isBuffer ? GL30.glGenRenderbuffers() : GLCommon.genTextures();
+		int id = isBuffer ? GLCommon.genRenderbuffer() : GLCommon.genTexture();
 		
 		edit(id, width, height, samples, isBuffer, isHDR, isDepth, isStencil);
 		
@@ -98,9 +98,9 @@ public abstract class FBOAttachment
 				if(CodeRed.RECREATE_FBOS_ON_RESIZE)
 				{
 					if(isBuffer)
-						GL30.glDeleteRenderbuffers(this.id);
+						GLCommon.deleteRenderbuffer(this.id);
 					else
-						GLCommon.deleteTextures(this.id);
+						GLCommon.deleteTexture(this.id);
 			
 					this.id = create(this.width, this.height, this.samples, isBuffer, isHDR, isDepth, isStencil);
 				}
@@ -123,8 +123,8 @@ public abstract class FBOAttachment
 	public void release()
 	{
 		if(isBuffer())
-			GL30.glDeleteRenderbuffers(this.id);
+			GLCommon.deleteRenderbuffer(this.id);
 		else
-			GLCommon.deleteTextures(this.id);
+			GLCommon.deleteTexture(this.id);
 	}
 }

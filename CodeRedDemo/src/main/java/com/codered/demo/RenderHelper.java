@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
 
 import com.codered.entities.Camera;
@@ -14,7 +14,7 @@ import com.codered.utils.BindingUtils;
 public class RenderHelper
 {
 	
-	public static void renderStaticEntity(StaticEntity e, Camera c, Shader oShader, Mat4f projection, double alpha)
+	public static void renderStaticEntity(StaticEntity e, Camera c, Shader oShader, Mat4 projection, double alpha)
 	{
 		if(e instanceof StaticModelEntity)
 		{

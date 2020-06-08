@@ -4,14 +4,12 @@ import com.codered.engine.EngineRegistry;
 import com.codered.gui.elements.GUIText;
 import com.codered.gui.font.FontType;
 import com.codered.managing.VAO;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.IGuiRenderer;
 import com.codered.window.WindowContext;
 
 public abstract class GUI
 {
-	
-	protected VAO vao;
-	
 	protected WindowContext context;
 	
 	public abstract void render();
@@ -29,7 +27,6 @@ public abstract class GUI
 	public GUI(IGuiRenderer renderer)
 	{	
 		this.renderer = renderer;
-		this.vao = EngineRegistry.getVAOManager().getNewVAO();
 		this.context = EngineRegistry.getCurrentWindowContext();
 	}
 	
@@ -43,7 +40,7 @@ public abstract class GUI
 		this.renderer.drawTexturedRect(t, posX, posY, sizeX, sizeY);
 	}
 	
-	protected void drawTexturedRect(com.codered.rendering.texture.Texture t, float posX, float posY, float sizeX, float sizeY)
+	protected void drawTexturedRect(Texture t, float posX, float posY, float sizeX, float sizeY)
 	{
 		this.renderer.drawTexturedRect(t, posX, posY, sizeX, sizeY);
 	}

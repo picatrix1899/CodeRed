@@ -11,6 +11,7 @@ import com.codered.gui.font.TextMeshData;
 import com.codered.managing.VAO;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
+import com.codered.rendering.texture.Texture;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLUtils;
 import com.codered.utils.IGuiRenderer;
@@ -27,14 +28,14 @@ public class GUIRenderer implements IGuiRenderer
 	
 	public GUIRenderer()
 	{
-		this.vao = EngineRegistry.getVAOManager().getNewVAO();
+		this.vao = new VAO();
 		this.context = EngineRegistry.getCurrentWindowContext();
 	}
 	
 	@Override
 	public void drawTexturedRect(String t, float posX, float posY, float sizeX, float sizeY)
 	{
-		drawTexturedRect(EngineRegistry.getResourceRegistry().textures().get(t), posX, posY, sizeX, sizeY);
+		drawTexturedRect(EngineRegistry.getResourceRegistry().get(t, Texture.class), posX, posY, sizeX, sizeY);
 	}
 
 	public void drawTexturedRect(com.codered.rendering.texture.Texture t, float posX, float posY, float sizeX, float sizeY)
@@ -111,6 +112,11 @@ public class GUIRenderer implements IGuiRenderer
 
 		GLUtils.blend(false);
 		GLUtils.depthTest(true);
+	}
+
+	public void release(boolean forced)
+	{
+		this.vao.release(forced);
 	}
 
 

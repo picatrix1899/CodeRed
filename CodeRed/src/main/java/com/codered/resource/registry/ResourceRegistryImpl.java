@@ -1,35 +1,62 @@
 package com.codered.resource.registry;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.codered.ResourceHolder;
 import com.codered.model.Mesh;
 import com.codered.model.Model;
 import com.codered.rendering.material.Material;
-import com.codered.rendering.shader.ShaderPart;
+import com.codered.rendering.shader.FragmentShaderPart;
+import com.codered.rendering.shader.VertexShaderPart;
 import com.codered.rendering.texture.Texture;
 
 public class ResourceRegistryImpl implements ResourceRegistry
 {
-	private ResourceRegistryEntry<Texture> textures = new ResourceRegistryEntry<>();
-	private ResourceRegistryEntry<Mesh> staticMeshes = new ResourceRegistryEntry<>();
-	private ResourceRegistryEntry<Material> materials = new ResourceRegistryEntry<>();
-	private ResourceRegistryEntry<ShaderPart> shaderPartsVertex = new ResourceRegistryEntry<>();
-	private ResourceRegistryEntry<ShaderPart> shaderPartsFragment = new ResourceRegistryEntry<>();
-	private ResourceRegistryEntry<Model> models = new ResourceRegistryEntry<>();
-
+	private Map<Class<? extends ResourceHolder>, ResourceRegistryEntry<ResourceHolder>> resources = new HashMap<>();
 	
-	public ResourceRegistryEntry<Texture> textures() { return this.textures; }
-	public ResourceRegistryEntry<Mesh> staticMeshes() { return this.staticMeshes; }
-	public ResourceRegistryEntry<Material> materials() { return this.materials; }
-	public ResourceRegistryEntry<ShaderPart> vertexShaderParts() { return this.shaderPartsVertex; }
-	public ResourceRegistryEntry<ShaderPart> fragmentShaderParts() { return this.shaderPartsFragment; }
-	public ResourceRegistryEntry<Model> models() { return this.models; }
-	
-	public void cleanup()
+	public ResourceRegistryImpl()
 	{
-		this.textures.clear();
+		addResourceType(Texture.class);
+		addResourceType(Model.class);
+		addResourceType(VertexShaderPart.class);
+		addResourceType(FragmentShaderPart.class);
+		addResourceType(Material.class);
+	}
+	
+	private ResourceRegistryEntry<Mesh> staticMeshes = new ResourceRegistryEntry<>();
+
+	public ResourceRegistryEntry<Mesh> staticMeshes() { return this.staticMeshes; }
+	
+	public void addResourceType(Class<? extends ResourceHolder> type)
+	{
+		this.resources.put(type, new ResourceRegistryEntry<>());
+	}
+	
+	public <T extends ResourceHolder> void addResource(String key, T resource, Class<T> type)
+	{
+		ResourceRegistryEntry<ResourceHolder> entry = this.resources.get(type);
+		if(entry == null) return;
+		
+		entry.add(key, resource);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends ResourceHolder> T get(String key, Class<T> type)
+	{
+		ResourceRegistryEntry<ResourceHolder> entry = this.resources.get(type);
+		if(entry == null) return null;
+		
+		return (T) entry.get(key);
+	}
+	
+	public void release(boolean forced)
+	{
+		for(ResourceRegistryEntry<ResourceHolder> entry : this.resources.values())
+		{
+			entry.release(forced);
+		}
+		
 		this.staticMeshes.clear();
-		this.materials.clear();
-		this.shaderPartsVertex.clear();
-		this.shaderPartsFragment.clear();
-		this.models.clear();
 	}
 }

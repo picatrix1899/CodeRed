@@ -2,7 +2,9 @@ package com.codered.model;
 
 import java.util.List;
 
-public class Model
+import com.codered.ResourceHolder;
+
+public class Model implements ResourceHolder
 {
 	private List<Mesh> meshes;
 	
@@ -14,5 +16,11 @@ public class Model
 	public List<Mesh> getMeshes()
 	{
 		return this.meshes;
+	}
+
+	public void release(boolean forced)
+	{
+		for(Mesh mesh : this.meshes)
+			mesh.release(forced);
 	}
 }

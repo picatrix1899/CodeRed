@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL20;
-
 import com.codered.engine.EngineRegistry;
 import com.codered.utils.GLCommon;
 
@@ -95,7 +94,7 @@ public abstract class ShaderProgram implements Shader
 	
 	public void addVertexShaderPart(String part)
 	{
-		this.fixedVertexShaderParts.add(EngineRegistry.getResourceRegistry().vertexShaderParts().get(part));
+		this.fixedVertexShaderParts.add(EngineRegistry.getResourceRegistry().get(part, VertexShaderPart.class));
 	}
 	
 	public void addVertexShaderPart(ShaderPart part)
@@ -105,7 +104,7 @@ public abstract class ShaderProgram implements Shader
 	
 	public void addFragmentShaderPart(String part)
 	{
-		this.fixedFragmentShaderParts.add(EngineRegistry.getResourceRegistry().fragmentShaderParts().get(part));
+		this.fixedFragmentShaderParts.add(EngineRegistry.getResourceRegistry().get(part, FragmentShaderPart.class));
 	}
 	
 	public void addFragmentShaderPart(ShaderPart part)
@@ -153,7 +152,7 @@ public abstract class ShaderProgram implements Shader
 		}
 	}
 
-	public void release()
+	public void release(boolean forced)
 	{
 		GLCommon.deleteProgram(this.id);
 	}
