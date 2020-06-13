@@ -1,10 +1,8 @@
 package com.codered.rendering.fbo;
 
+import org.barghos.core.tuple.tuple2.Tup2iR;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
-
-import com.codered.CodeRed;
-import com.codered.utils.BindingUtils;
 
 public class MSFBO extends Framebuffer
 {
@@ -13,190 +11,83 @@ public class MSFBO extends Framebuffer
 	public MSFBO(int samples)
 	{
 		super();
-		
 		this.samples = samples;
 	}
 	
-	public MSFBO(int width, int height, int samples)
+	public MSFBO(int samples, Tup2iR size)
 	{
-		super(width, height);
-		
+		super(size);
 		this.samples = samples;
 	}
-
-	public void resize(int width, int height)
+	
+	public MSFBO initDefault()
 	{
-		super.resize(width, height);
+		addRenderbufferAttachment(FBOTarget.DEPTH);
+		addTextureAttachment(FBOTarget.COLOR0);
+		return this;
+	}
+	
+	public void addTextureAttachment(FBOTarget t)
+	{
+		addTextureAttachment(t, false);
+	}
+	
+	public void addTextureAttachment(FBOTarget t, boolean hdr)
+	{
+		int internalformat = 0;
+		if(t != FBOTarget.DEPTH && t != FBOTarget.DEPTH_STENCIL)
+			internalformat = hdr ? GL11.GL_RGBA16 : GL11.GL_RGBA8;
+		else
+			internalformat = t == FBOTarget.DEPTH_STENCIL ? GL30.GL_DEPTH24_STENCIL8 : GL30.GL_DEPTH_COMPONENT32;
 		
-		if(CodeRed.RECREATE_FBOS_ON_RESIZE)
+		FBOAttachment a = new FBOAttachmentMSTexture(this.samples, internalformat, this.size);
+		
+		a.bindToFramebuffer(this, t);
+		
+		this.attachmentList.set(t, a);
+	}
+
+	public void addTextureAttachments(FBOTarget... targets)
+	{
+		addTextureAttachments(false, targets);
+	}
+	
+	public void addTextureAttachments(boolean hdr, FBOTarget... targets)
+	{
+		for(int i = 0; i < targets.length; i++)
 		{
-			BindingUtils.bindFramebuffer(this.id);
+			FBOTarget t = targets[i];
+			int internalformat = 0;
+			if(t != FBOTarget.DEPTH && t != FBOTarget.DEPTH_STENCIL)
+				internalformat = hdr ? GL11.GL_RGBA16 : GL11.GL_RGBA8;
+			else
+				internalformat = t == FBOTarget.DEPTH_STENCIL ? GL30.GL_DEPTH24_STENCIL8 : GL30.GL_DEPTH_COMPONENT32;
 			
-			FBOAttachment att;
-			for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
-			{
-				att = this.attachments[i];
-				
-				if(att != null)
-					if(att.isBuffer())
-						GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL30.GL_RENDERBUFFER, att.getId());
-					else
-						GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.cachedValues()[i].getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
-			}
+			FBOAttachment a = new FBOAttachmentMSTexture(this.samples, internalformat, this.size);
 			
-			if(this.depth != null)
-				if(this.depth.isBuffer())
-					GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, this.depth.getId());
-				else
-					GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, this.depth.getId(), 0);
+			a.bindToFramebuffer(this, t);
+			
+			this.attachmentList.set(t, a);
 		}
 	}
-	
-	public void applyColorTextureAttachment(FBOTarget t, boolean hdr)
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, false, hdr, false, false, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
-		
-		this.attachments[t.getIndex()] = att;
-	}
-	
-	public void applyColorTextureAttachment(int t, boolean hdr)
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, false, hdr, false, false, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
-		
-		this.attachments[t] = att;
-	}
-	
-	public void applyColorTextureAttachment(FBOTarget t, FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, t.getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, attachment.getId(), 0);
-		
-		this.attachments[t.getIndex()] = attachment;
-	}
-	
-	public void applyColorTextureAttachment(int t, FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL32.GL_TEXTURE_2D_MULTISAMPLE, attachment.getId(), 0);
-		
-		this.attachments[t] = attachment;
-	}
-	
-	public void applyDepthTextureAttachment()
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, false, false, true, false, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
-		
-		this.depth = att;
-	}
-	
-	public void applyDepthTextureAttachment(FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, attachment.getId(), 0);
-		
-		this.depth = attachment;
-	}
-	
-	public void applyDepthStencilTextureAttachment()
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, false, false, true, true, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, att.getId(), 0);
-		
-		this.depth = att;
-	}
-	
-	public void applyDepthStencilTextureAttachment(FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL32.GL_TEXTURE_2D_MULTISAMPLE, attachment.getId(), 0);
-		
-		this.depth = attachment;
-	}
-	
-	public void applyColorBufferAttachment(FBOTarget t, boolean hdr)
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, true, hdr, false, false, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-	
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, att.getId());
 
-		this.attachments[t.getIndex()] = att;	
+	public void addRenderbufferAttachment(FBOTarget t)
+	{
+		addRenderbufferAttachment(t, false);
 	}
 	
-	public void applyColorBufferAttachment(int t, boolean hdr)
+	public void addRenderbufferAttachment(FBOTarget t, boolean hdr)
 	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, true, hdr, false, false, false);
+		int internalformat = 0;
+		if(t != FBOTarget.DEPTH && t != FBOTarget.DEPTH_STENCIL)
+			internalformat = hdr ? GL11.GL_RGBA16 : GL11.GL_RGBA8;
+		else
+			internalformat = t == FBOTarget.DEPTH_STENCIL ? GL30.GL_DEPTH24_STENCIL8 : GL30.GL_DEPTH_COMPONENT32;
 		
-		BindingUtils.bindFramebuffer(this.id);
-	
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL30.GL_RENDERBUFFER, att.getId());
-
-		this.attachments[t] = att;	
-	}
-	
-	public void applyColorBufferAttachment(FBOTarget t, FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
+		FBOAttachment a = new FBOAttachmentMSBuffer(this.samples, internalformat, this.size);
 		
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, t.getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
-			
-		this.attachments[t.getIndex()] = attachment;
-	}
-	
-	public void applyColorBufferAttachment(int t, FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
+		a.bindToFramebuffer(this, t);
 		
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, FBOTarget.getByIndex(t).getTarget(), GL30.GL_RENDERBUFFER, attachment.getId());
-			
-		this.attachments[t] = attachment;
-	}
-	
-	public void applyDepthBufferAttachment()
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, true, false, true, false, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
-		
-		this.depth = att;	
-	}
-
-	public void applyDepthBufferAttachment(FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, attachment.getId());
-		
-		this.depth = attachment;	
-	}
-	
-	public void applyDepthStencilBufferAttachment()
-	{
-		FBOAttachment att = FBOAttachment.createNewWithValidation(this.width, this.height, this.samples, true, false, true, true, false);
-		
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, att.getId());
-		
-		this.depth = att;	
-	}
-
-	public void applyDepthStencilBufferAttachment(FBOAttachment attachment)
-	{
-		BindingUtils.bindFramebuffer(this.id);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, attachment.getId());
-		
-		this.depth = attachment;	
+		this.attachmentList.set(t, a);
 	}
 }

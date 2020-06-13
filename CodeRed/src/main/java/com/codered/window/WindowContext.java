@@ -105,5 +105,5 @@ public class WindowContext
 	 * #####################
 	 */
 	
-	public long getWindowId() { return this.window.getWindowId(); }
+	public long getWindowId() { return this.window.getId(); }
 }

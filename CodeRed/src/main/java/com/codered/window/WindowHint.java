@@ -1,4 +1,4 @@
-package com.codered.utils;
+package com.codered.window;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -56,6 +56,11 @@ public class WindowHint
 	public static void doubleBuffering(boolean doublebuffering)
 	{
 		GLFW.glfwWindowHint(GLFW.GLFW_DOUBLEBUFFER, doublebuffering ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+	}
+	
+	public static void autoShowWindow(boolean auto)
+	{
+		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, auto ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
 	}
 	
 	public static enum GLProfile

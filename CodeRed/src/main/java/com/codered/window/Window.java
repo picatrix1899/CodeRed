@@ -80,7 +80,7 @@ public class Window
 		return this.capabilities;
 	}
 	
-	public long getWindowId()
+	public long getId()
 	{
 		return this.window;
 	}

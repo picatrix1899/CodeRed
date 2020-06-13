@@ -25,13 +25,7 @@ public class GLCommon
 	
 	private static long currentWindowId = 0;
 	
-	private static Map<Long, Integer> ACTIVE_TEXTURES = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_BUFFERS = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_VAOS = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_PROGRAMS = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_SHADERS = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_FRAMEBUFFERS = new HashMap<>();
-	private static Map<Long, Integer> ACTIVE_RENDERBUFFERS = new HashMap<>();
+	private static Map<Long, LeakDataMetrics> metrics = new HashMap<>();
 	
 	public static void updateWindowId()
 	{
@@ -42,14 +36,13 @@ public class GLCommon
 	{
 		if(detectLeaks)
 		{
-			ACTIVE_TEXTURES.put(id, 0);
-			ACTIVE_BUFFERS.put(id, 0);
-			ACTIVE_VAOS.put(id, 0);
-			ACTIVE_PROGRAMS.put(id, 0);
-			ACTIVE_SHADERS.put(id, 0);
-			ACTIVE_FRAMEBUFFERS.put(id, 0);
-			ACTIVE_RENDERBUFFERS.put(id, 0);
+			metrics.put(id, new LeakDataMetrics());
 		}
+	}
+	
+	private static LeakDataMetrics getCurrentMetrics()
+	{
+		return metrics.get(currentWindowId);
 	}
 	
 	public static long createWindow(int width, int height, CharSequence title, long monitor, long share)
@@ -66,109 +59,108 @@ public class GLCommon
 	
 	public static int genTexture()
 	{
-		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeTextures++;
 		return GL11.glGenTextures();
 	}
 	
 	public static void genTextures(int[] textures)
 	{
-		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) + textures.length);
+		if(detectLeaks) getCurrentMetrics().activeTextures += textures.length;
 		GL11.glGenTextures(textures);
 	}
 	
 	public static void deleteTexture(int texture)
 	{
-		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeTextures--;
 		GL11.glDeleteTextures(texture);
 	}
 	
 	public static void deleteTextures(int[] textures)
 	{
-		if(detectLeaks) ACTIVE_TEXTURES.put(currentWindowId, ACTIVE_TEXTURES.get(currentWindowId) - textures.length);
+		if(detectLeaks) getCurrentMetrics().activeTextures -= textures.length;
 		GL11.glDeleteTextures(textures);
 	}
 	
 	public static int genBuffers()
 	{
-		if(detectLeaks) ACTIVE_BUFFERS.put(currentWindowId, ACTIVE_BUFFERS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeBuffers++;
 		return GL15.glGenBuffers();
 	}
 	
 	public static void deleteBuffers(int buffer)
 	{
-		if(detectLeaks) ACTIVE_BUFFERS.put(currentWindowId, ACTIVE_BUFFERS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeBuffers--;
 		GL15.glDeleteBuffers(buffer);
 	}
 	
 	public static int genVertexArrays()
 	{
-		if(detectLeaks) ACTIVE_VAOS.put(currentWindowId, ACTIVE_VAOS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeVaos++;
 		return GL30.glGenVertexArrays();
 	}
 	
 	public static void deleteVertexArrays(int array)
 	{
-		if(detectLeaks) ACTIVE_VAOS.put(currentWindowId, ACTIVE_VAOS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeVaos--;
 		GL30.glDeleteVertexArrays(array);
 	}
 	
 	public static int createProgram()
 	{
-		if(detectLeaks) ACTIVE_PROGRAMS.put(currentWindowId, ACTIVE_PROGRAMS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activePrograms++;
 		return GL20.glCreateProgram();
 	}
 	
 	public static void deleteProgram(int program)
 	{
-		if(detectLeaks) ACTIVE_PROGRAMS.put(currentWindowId, ACTIVE_PROGRAMS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activePrograms--;
 		GL20.glDeleteProgram(program);
 	}
 	
 	public static int createShader(int type)
 	{
-		if(detectLeaks) ACTIVE_SHADERS.put(currentWindowId, ACTIVE_SHADERS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeShaders++;
 		return GL20.glCreateShader(type);
 	}
 	
 	public static void deleteShader(int shader)
 	{
-		if(detectLeaks) ACTIVE_SHADERS.put(currentWindowId, ACTIVE_SHADERS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeShaders--;
 		GL20.glDeleteShader(shader);
 	}
 	
 	public static int genFramebuffer()
 	{
-		if(detectLeaks) ACTIVE_FRAMEBUFFERS.put(currentWindowId, ACTIVE_FRAMEBUFFERS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeFramebuffers++;
 		return GL30.glGenFramebuffers();
 	}
 	
 	public static void deleteFramebuffer(int framebuffer)
 	{
-		if(detectLeaks) ACTIVE_FRAMEBUFFERS.put(currentWindowId, ACTIVE_FRAMEBUFFERS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeFramebuffers--;
 		GL30.glDeleteFramebuffers(framebuffer);
 	}
 	
 	public static int genRenderbuffer()
 	{
-		if(detectLeaks) ACTIVE_RENDERBUFFERS.put(currentWindowId, ACTIVE_RENDERBUFFERS.get(currentWindowId) + 1);
+		if(detectLeaks) getCurrentMetrics().activeRenderbuffers++;
 		return GL30.glGenRenderbuffers();
 	}
 	
 	public static void deleteRenderbuffer(int renderbuffer)
 	{
-		if(detectLeaks) ACTIVE_RENDERBUFFERS.put(currentWindowId, ACTIVE_RENDERBUFFERS.get(currentWindowId) - 1);
+		if(detectLeaks) getCurrentMetrics().activeRenderbuffers--;
 		GL30.glDeleteRenderbuffers(renderbuffer);
 	}
 	
 	public static void report(PrintStream stream)
 	{
 		stream.println("ACTIVE_WINDOWS: " + ACTIVE_WINDOWS);
-		stream.println("ACTIVE_TEXTURES: " + ACTIVE_TEXTURES);
-		stream.println("ACTIVE_BUFFERS: " + ACTIVE_BUFFERS);
-		stream.println("ACTIVE_VAOS: " + ACTIVE_VAOS);
-		stream.println("ACTIVE_PROGRAMS: " + ACTIVE_PROGRAMS);
-		stream.println("ACTIVE_SHADERS: " + ACTIVE_SHADERS);
-		stream.println("ACTIVE_FRAMEBUFFERS: " + ACTIVE_FRAMEBUFFERS);
-		stream.println("ACTIVE_RENDERBUFFERS: " + ACTIVE_RENDERBUFFERS);
+		for(long id : metrics.keySet())
+		{
+			stream.println("Window(" + id + ")");
+			metrics.get(id).report(stream);
+			stream.println();
+		}
 	}
 }

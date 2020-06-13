@@ -24,6 +24,8 @@ public class GuiInventory extends GUIWindow
 
 	public boolean entermode;
 	
+	public int pic;
+	
 	public GuiInventory(Routine1 parent, IGuiRenderer renderer, FontType font)
 	{
 		super(renderer);
@@ -36,8 +38,12 @@ public class GuiInventory extends GUIWindow
 		
 		this.button = new GUIEButton(1, this, 0, 0, 60, 82, EngineRegistry.getResourceRegistry().get("res/materials/gray_rsquare.png", Texture.class), this.renderer);
 		this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
-		
 		addElement(this.button);
+	}
+	
+	public void setPic(int id)
+	{
+		this.pic = id;
 	}
 	
 	public void update()
@@ -66,7 +72,9 @@ public class GuiInventory extends GUIWindow
 	
 	public void render()
 	{
-		drawTexturedRect(EngineRegistry.getResourceRegistry().get("res/materials/inventory-background.png", Texture.class), 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+		//drawTexturedRect(EngineRegistry.getResourceRegistry().get("res/materials/inventory-background.png", Texture.class), 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+		
+		drawTexturedRect(this.pic, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
 		super.render();
 	}

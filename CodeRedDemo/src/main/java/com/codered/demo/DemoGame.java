@@ -8,10 +8,10 @@ import com.codered.engine.EngineSetup;
 import com.codered.engine.FixedTimestepTickRoutine;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.GLCommon;
-import com.codered.utils.WindowHint;
-import com.codered.utils.WindowHint.GLProfile;
 import com.codered.window.Window;
 import com.codered.window.WindowContext;
+import com.codered.window.WindowHint;
+import com.codered.window.WindowHint.GLProfile;
 
 public class DemoGame extends Engine
 {
@@ -58,6 +58,7 @@ public class DemoGame extends Engine
 		WindowHint.depthBits(24);
 		WindowHint.doubleBuffering(true);
 		WindowHint.samples(16);
+		WindowHint.autoShowWindow(false);
 	}
 	
 	public void init()

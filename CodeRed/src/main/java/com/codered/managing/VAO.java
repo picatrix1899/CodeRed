@@ -55,8 +55,7 @@ public class VAO implements ResourceHolder
 		else
 			vboID = this.vbos.get(attrib);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		
+		BindingUtils.bindArrayBuffer(vboID);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, drawFlag);
 		
 		GL20.glVertexAttribPointer(attrib, blocksize, GL11.GL_FLOAT, false, stride, pointer);
@@ -76,7 +75,7 @@ public class VAO implements ResourceHolder
 		else
 			vboID = this.vbos.get(attrib);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		BindingUtils.bindArrayBuffer(vboID);
 		
 		FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
 		BufferUtils.copyToFlippedFloatBuffer(buffer, data);
@@ -102,7 +101,7 @@ public class VAO implements ResourceHolder
 		else
 			vboID = this.vbos.get(attrib);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		BindingUtils.bindArrayBuffer(vboID);
 		
 		IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
 		BufferUtils.copyToFlippedIntBuffer(buffer, data);
@@ -128,7 +127,7 @@ public class VAO implements ResourceHolder
 		else
 			vboID = this.vbos.get(attrib);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		BindingUtils.bindArrayBuffer(vboID);
 		
 		FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length * 2);
 		BufferUtils.copyToFlippedTuple2FBuffer(buffer, data);
@@ -154,7 +153,7 @@ public class VAO implements ResourceHolder
 		else
 			vboID = this.vbos.get(attrib);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		BindingUtils.bindArrayBuffer(vboID);
 		
 		FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length * 3);
 		BufferUtils.copyToFlippedTuple3FBuffer(buffer, data);
@@ -172,7 +171,7 @@ public class VAO implements ResourceHolder
 		
 		if(this.indicesVBO == 0) this.indicesVBO = GLCommon.genBuffers();
 
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
+		BindingUtils.bindElementArrayBuffer(this.indicesVBO);
 		
 		IntBuffer buffer = MemoryUtil.memAllocInt(indices.length);
 		BufferUtils.copyToFlippedIntBuffer(buffer, indices);
@@ -188,7 +187,7 @@ public class VAO implements ResourceHolder
 		
 		if(this.indicesVBO == 0) this.indicesVBO = GLCommon.genBuffers();
 
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, this.indicesVBO);
+		BindingUtils.bindElementArrayBuffer(this.indicesVBO);
 				
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, drawflag);
 		
@@ -234,4 +233,6 @@ public class VAO implements ResourceHolder
 		
 		GLCommon.deleteVertexArrays(this.id);
 	}
+
+	
 }

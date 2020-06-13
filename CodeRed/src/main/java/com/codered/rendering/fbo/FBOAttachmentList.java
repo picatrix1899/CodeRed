@@ -1,68 +1,62 @@
 package com.codered.rendering.fbo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.barghos.core.exception.ArgumentNullException;
+import org.barghos.core.tuple.tuple2.Tup2iR;
 
-import com.codered.CodeRed;
+import com.codered.ResourceHolder;
 
-public class FBOAttachmentList
+public class FBOAttachmentList implements ResourceHolder
 {
-	private FBOAttachment[] attachments = new FBOAttachment[CodeRed.AVAILABLE_FBO_ATTACHMENTS];
+	private Map<FBOTarget, FBOAttachment> attachments = new HashMap<>();
 	
-	private FBOAttachment depth;
-	
-	public void resize(int width, int height)
+	public void resize(Tup2iR size)
 	{
-		for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
-			if(this.attachments[i] != null) this.attachments[i].resize(width, height);
-
-		if(this.depth != null) this.depth.resize(width, height);
+		for(FBOTarget key : this.attachments.keySet())
+		{
+			this.attachments.get(key).resize(size);
+		}
 	}
 
-	public void set(FBOT target, FBOAttachment att)
+	public void set(FBOTarget target, FBOAttachment att)
 	{
 		if(target == null) throw new ArgumentNullException("target");
-		if(target.getAttachmentIndex() < -1 || target.getAttachmentIndex() >= CodeRed.AVAILABLE_FBO_ATTACHMENTS) throw new IllegalArgumentException();
 		if(att == null) throw new ArgumentNullException("att");
 		
-		if(target.isDepth())
-			this.depth = att;
-		else
-			this.attachments[target.getAttachmentIndex()] = att;
+		this.attachments.put(target, att);
 	}
 	
-	public FBOAttachment get(FBOT target)
+	public FBOAttachment get(FBOTarget target)
 	{
 		if(target == null) throw new ArgumentNullException("target");
 		
-		return target.isDepth() ? this.depth : this.attachments[target.getAttachmentIndex()];
+		return this.attachments.get(target);
 	}
 	
-	public boolean isAvailable(FBOT target)
+	public boolean isAvailable(FBOTarget target)
 	{
 		if(target == null) throw new ArgumentNullException("target");
 		
-		if(target.isDepth())
-			return this.depth != null;
-		else
-			return this.attachments[target.getAttachmentIndex()] != null;
+		return this.attachments.containsKey(target);
 	}
 	
-	public int getId(FBOT target)
+	public int getId(FBOTarget target)
 	{
 		if(target == null) throw new ArgumentNullException("target");
 		
-		if(target.isDepth())
-			return this.depth != null ? this.depth.getId() : 0;
+		if(this.attachments.containsKey(target))
+			return this.attachments.get(target).getId();
 		else
-			return this.attachments[target.getAttachmentIndex()] != null ? this.attachments[target.getAttachmentIndex()].getId() : 0;
+			return 0;
 	}
-	
-	public void release()
+
+	public void release(boolean forced)
 	{
-		for(int i = 0; i < CodeRed.AVAILABLE_FBO_ATTACHMENTS; i++)
-		{
-			FBOAttachment att = this.attachments[i];
-			if(att != null) att.release();
-		}
+		for(FBOTarget target : this.attachments.keySet())
+			this.attachments.get(target).release(forced);
+		
+		this.attachments.clear();
 	}
 }

@@ -14,7 +14,7 @@ public class GUIEButton extends GUIElement
 {
 	protected Area2 main;
 	
-	public Texture background;
+	public int background;
 	public GUIText text;
 	
 	public GUIEButton(int id, GUIWindow parent, float posX, float posY, float sizeX, float sizeY, Texture background, IGuiRenderer renderer)
@@ -22,7 +22,7 @@ public class GUIEButton extends GUIElement
 		super(id, parent, renderer);
 		
 		this.main = new Area2(new Point2(posX, posY), new Point2(posX + sizeX, posY + sizeY));
-		this.background = background;
+		this.background = background.getId();
 	}
 
 	public void render()

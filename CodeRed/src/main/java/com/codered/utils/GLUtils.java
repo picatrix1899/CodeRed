@@ -75,16 +75,21 @@ public class GLUtils
 	public static void glDrawBuffersAll()
 	{
 		GL20.glDrawBuffers(new int[] {GL30.GL_COLOR_ATTACHMENT0, GL30.GL_COLOR_ATTACHMENT1, GL30.GL_COLOR_ATTACHMENT2, GL30.GL_COLOR_ATTACHMENT3,
-				GL30.GL_COLOR_ATTACHMENT4, GL30.GL_COLOR_ATTACHMENT5, GL30.GL_COLOR_ATTACHMENT6, GL30.GL_COLOR_ATTACHMENT7});
+				GL30.GL_COLOR_ATTACHMENT4, GL30.GL_COLOR_ATTACHMENT5, GL30.GL_COLOR_ATTACHMENT6, GL30.GL_COLOR_ATTACHMENT7, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_DEPTH_STENCIL_ATTACHMENT});
 	}
 	
+	public static void clearColor(float r, float g, float b, float a)
+	{
+		GL11.glClearColor(r, g, b, a);
+	}
+
 	public static void clear(boolean colorBuffer, boolean depthBuffer, boolean stencilBuffer)
 	{
 		int mask = 0;
 		
-		mask |= (colorBuffer ? GL11.GL_COLOR_BUFFER_BIT : 0);
-		mask |= (depthBuffer ? GL11.GL_DEPTH_BUFFER_BIT : 0);
-		mask |= (stencilBuffer ? GL11.GL_STENCIL_BUFFER_BIT : 0);
+		if(colorBuffer) mask |= GL11.GL_COLOR_BUFFER_BIT;
+		if(depthBuffer) mask |= GL11.GL_DEPTH_BUFFER_BIT;
+		if(stencilBuffer) mask |= GL11.GL_STENCIL_BUFFER_BIT;
 		
 		if(mask != 0) GL11.glClear(mask);
 	}
@@ -93,8 +98,8 @@ public class GLUtils
 	{
 		int mask = 0;
 		
-		mask |= (colorBuffer ? GL11.GL_COLOR_BUFFER_BIT : 0);
-		mask |= (depthBuffer ? GL11.GL_DEPTH_BUFFER_BIT : 0);
+		if(colorBuffer) mask |= GL11.GL_COLOR_BUFFER_BIT;
+		if(depthBuffer) mask |= GL11.GL_DEPTH_BUFFER_BIT;
 		
 		if(mask != 0) GL11.glClear(mask);
 	}
@@ -110,6 +115,11 @@ public class GLUtils
 	public static void clearAll() { GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); }
 
 	public static void depthFunc(EvalFunc func)
+	{
+		GL11.glDepthFunc(func.getFunction());
+	}
+	
+	public static void depthFuncAndEnable(EvalFunc func)
 	{
 		GL11.glDepthFunc(func.getFunction());
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

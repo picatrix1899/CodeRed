@@ -23,6 +23,9 @@ import com.codered.entities.StaticModelEntity;
 import com.codered.gui.font.FontType;
 import com.codered.input.InputConfiguration;
 import com.codered.model.Model;
+import com.codered.rendering.fbo.FBO;
+import com.codered.rendering.fbo.FBOTarget;
+import com.codered.rendering.fbo.MSFBO;
 import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.light.DirectionalLight;
 import com.codered.rendering.shader.ShaderProgram;
@@ -30,6 +33,7 @@ import com.codered.rendering.shader.ShaderSession;
 import com.codered.rendering.texture.Texture;
 import com.codered.resource.ResManager;
 import com.codered.resource.ResourceRequestBlock;
+import com.codered.utils.BindingUtils;
 import com.codered.utils.EvalFunc;
 import com.codered.utils.GLUtils;
 import com.codered.window.WindowRoutine;
@@ -60,6 +64,9 @@ public class Routine1 extends WindowRoutine
 	public ResManager manager;
 	
 	public StaticModelEntity ent;
+	
+	public MSFBO fr;
+	public FBO out;
 	
 	public void init()
 	{	
@@ -149,6 +156,14 @@ public class Routine1 extends WindowRoutine
 		
 		this.world = new StaticEntityTreeImpl();
 
+		this.out = new FBO();
+		this.out.addTextureAttachment(FBOTarget.DEPTH, false);
+		this.out.addTextureAttachment(FBOTarget.COLOR0, false);
+		
+		this.fr = new MSFBO(16);
+		this.fr.addTextureAttachment(FBOTarget.DEPTH, false);
+		this.fr.addTextureAttachment(FBOTarget.COLOR0, false);
+		
 		Model model = EngineRegistry.getResourceRegistry().get("res/models/nanosuit.obj", Model.class);
 		
 		this.ent = new StaticModelEntity(model, new Vec3(-10, 0, -10), 0, 0, 0);
@@ -166,6 +181,9 @@ public class Routine1 extends WindowRoutine
 		GLUtils.multisample(true);
 		
 		this.inventory = new GuiInventory(this, this.guiRenderer, this.font);
+		this.inventory.pic = this.out.getAttachment(FBOTarget.COLOR0).getId() ;
+		this.inventory.button.background = this.out.getAttachment(FBOTarget.DEPTH).getId();
+		
 	}
 
 	public void update(double delta)
@@ -189,12 +207,21 @@ public class Routine1 extends WindowRoutine
 	public void render(double delta, double alpha)
 	{
 		GLUtils.clearAll();
-		
+
 		if(DemoGame.getInstance().showInventory)
 		{
 			if(this.inventory.allowWorldProcessing())
 			{
+				GLUtils.blend(false);
+				
+				BindingUtils.bindFramebuffer(this.fr);
+				GLUtils.glDrawBuffersFirst();
+				GLUtils.clearColor(0,0,0,1);
+				GLUtils.clear(true, true);
 				renderWorld(delta);
+				BindingUtils.unbindFramebuffer();
+				
+				this.fr.blitAttachment(this.out, FBOTarget.COLOR0, FBOTarget.COLOR0, true);
 
 				GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			}
@@ -206,15 +233,18 @@ public class Routine1 extends WindowRoutine
 		}
 		else
 		{
+		
 			renderWorld(alpha);
+			
 		}
+		
 	}
 
 	private void renderWorld(double alpha)
 	{
 		Camera cam = this.player.getCamera();
 		
-		GLUtils.depthFunc(EvalFunc.LEQUAL);
+		GLUtils.depthFuncAndEnable(EvalFunc.LEQUAL);
 
 		GLUtils.cullFace(GL11.GL_BACK);
 

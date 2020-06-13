@@ -4,46 +4,26 @@ import org.lwjgl.opengl.GL30;
 
 public enum FBOTarget
 {
+	DEPTH(GL30.GL_DEPTH_ATTACHMENT),
+	DEPTH_STENCIL(GL30.GL_DEPTH_STENCIL_ATTACHMENT),
+	COLOR0(GL30.GL_COLOR_ATTACHMENT0),
+	COLOR1(GL30.GL_COLOR_ATTACHMENT1),
+	COLOR2(GL30.GL_COLOR_ATTACHMENT2),
+	COLOR3(GL30.GL_COLOR_ATTACHMENT3),
+	COLOR4(GL30.GL_COLOR_ATTACHMENT4),
+	COLOR5(GL30.GL_COLOR_ATTACHMENT5),
+	COLOR6(GL30.GL_COLOR_ATTACHMENT6),
+	COLOR7(GL30.GL_COLOR_ATTACHMENT7);
 	
-	COLOR0(0, 0, GL30.GL_COLOR_ATTACHMENT0),
-	COLOR1(1, 0, GL30.GL_COLOR_ATTACHMENT1),
-	COLOR2(2, 0, GL30.GL_COLOR_ATTACHMENT2),
-	COLOR3(3, 0, GL30.GL_COLOR_ATTACHMENT3),
-	COLOR4(4, 0, GL30.GL_COLOR_ATTACHMENT4),
-	COLOR5(5, 0, GL30.GL_COLOR_ATTACHMENT5),
-	COLOR6(6, 0, GL30.GL_COLOR_ATTACHMENT6),
-	COLOR7(7, 0, GL30.GL_COLOR_ATTACHMENT7),
-	DEPTH(-1, 1, GL30.GL_DEPTH_ATTACHMENT)
-	;
-	private final int type;
-	private final int target;
-	private final int index;
-
-	public static final int DST_COLOR = 0;
-	public static final int DST_DEPTH = 1;
+	private int target;
 	
-	private static FBOTarget[] values = FBOTarget.values();
-
-	private FBOTarget(int index, int type, int target)
+	private FBOTarget(int target)
 	{
-		this.index = index;
-		this.type = type;
 		this.target = target;
 	}
-	
-	public int getIndex() { return this.index; }
-	public int getType() { return this.type; }
-	public int getTarget() { return this.target; }
-	
-	public static FBOTarget[] cachedValues()
-	{
-		return FBOTarget.values;
-	}
-	
-	public static FBOTarget getByIndex(int id)
-	{
-		if(id < -1 || id > 7) throw new IllegalArgumentException();
 
-		return id >= 0 ? FBOTarget.values[id] : FBOTarget.DEPTH;
+	public int getTarget()
+	{
+		return this.target;
 	}
 }
