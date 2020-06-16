@@ -21,5 +21,9 @@ public class NoGUIShader extends ShaderProgram
 		{
 			e.printStackTrace();
 		}
+		
+		addFragmentShaderPart("res/shaders/gui_no.fs");
+		addVertexShaderPart("res/shaders/gui_no.vs");
+		compile();
 	}
 }

@@ -22,5 +22,9 @@ public class FontGuiShader extends ShaderProgram
 		{
 			e.printStackTrace();
 		}
+		
+		addFragmentShaderPart("res/shaders/gui_font.fs");
+		addVertexShaderPart("res/shaders/gui_font.vs");
+		compile();
 	}
 }

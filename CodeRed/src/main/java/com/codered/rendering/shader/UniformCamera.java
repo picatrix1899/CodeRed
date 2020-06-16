@@ -35,14 +35,15 @@ public class UniformCamera extends Uniform
 		this.value = v;
 		this.alpha = (float)a;
 		
+		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
+		loadVec3f(this.location_position, this.value.getTotalPos());
 	}
 
 	@Override
 	public void load()
 	{
-		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
-		Vec3 v = this.value.getTotalPos();
-		loadVec3f(this.location_position, v.getX(), v.getY(), v.getZ());
+//		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
+//		loadVec3f(this.location_position, this.value.getTotalPos());
 	}
 
 }

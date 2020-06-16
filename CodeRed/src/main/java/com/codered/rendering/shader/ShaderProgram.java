@@ -19,6 +19,7 @@ public abstract class ShaderProgram implements Shader
 	private List<ShaderPart> fixedGeometryShaderParts = new ArrayList<>();
 	private List<ShaderPart> fixedTessellationControlShaderParts = new ArrayList<>();
 	private List<ShaderPart> fixedTessellationEvaluationShaderParts = new ArrayList<>();
+	private List<ShaderPart> additionalVertexShaderParts = new ArrayList<>();
 	private Map<Integer,Uniform> uniforms = new HashMap<>();
 	private Map<String,Integer> attribs = new HashMap<>();
 

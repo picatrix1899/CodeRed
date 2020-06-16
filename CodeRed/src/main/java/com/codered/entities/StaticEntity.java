@@ -1,5 +1,6 @@
 package com.codered.entities;
 
+import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
 import org.barghos.math.vector.vec3.Vec3;
@@ -12,6 +13,18 @@ public class StaticEntity extends BaseEntity
 	
 	protected TexturedModel model;
 
+	public StaticEntity(TexturedModel model, Vec3 pos, float rx, float ry, float rz, Tup3fR scale)
+	{
+		this.model = model;
+		
+		setPos(pos);
+		setRotX(rx);
+		setRotY(ry);
+		setRotZ(rz);
+		this.transform.setScale(scale);
+		this.transform.swap();
+	}
+	
 	public StaticEntity(TexturedModel model, Vec3 pos, float rx, float ry, float rz)
 	{
 		this.model = model;

@@ -28,5 +28,9 @@ public class DirectionalLightShader extends ShaderProgram
 		{
 			e.printStackTrace();
 		}
+		
+		addVertexShaderPart("res/shaders/o_directionalLight.vs");
+		addFragmentShaderPart("res/shaders/o_directionalLight.fs");
+		compile();
 	}
 }

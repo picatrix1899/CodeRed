@@ -2,6 +2,7 @@ package com.codered.entities;
 
 import java.util.List;
 
+import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.math.geometry.AABB3;
 import org.barghos.math.helper.AABB3Helper;
 import org.barghos.math.matrix.Mat4;
@@ -17,6 +18,13 @@ public class StaticModelEntity extends StaticEntity
 	private Model model;
 	
 	private AABB3 basicAABB;
+	
+	public StaticModelEntity(Model model, Vec3 pos, float rx, float ry, float rz, Tup3fR scale)
+	{
+		super(null, pos, rx, ry, rz, scale);
+		this.model = model;
+	}
+
 	
 	public StaticModelEntity(Model model, Vec3 pos, float rx, float ry, float rz)
 	{

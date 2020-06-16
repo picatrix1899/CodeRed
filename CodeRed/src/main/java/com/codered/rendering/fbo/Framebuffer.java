@@ -46,8 +46,8 @@ public abstract class Framebuffer implements ResourceHolder
 	public void blitAttachment(Framebuffer dstFBO, FBOTarget tSrc, FBOTarget tDst, boolean depth)
 	{
 		BindingUtils.bindFramebuffers(this, dstFBO);
-		//GL11.glReadBuffer(tSrc.getTarget());
-		//GL11.glDrawBuffer(tDst.getTarget());
+		GL11.glReadBuffer(tSrc.getTarget());
+		GL11.glDrawBuffer(tDst.getTarget());
 		GL30.glBlitFramebuffer(0, 0, this.size.getX(), this.size.getY(), 0, 0, dstFBO.getSize().getX(), dstFBO.getSize().getY(), GL11.GL_COLOR_BUFFER_BIT | (depth ? GL11.GL_DEPTH_BUFFER_BIT : 0), GL11.GL_NEAREST);
 		BindingUtils.unbindFramebuffer();
 	}

@@ -20,12 +20,13 @@ public class UniformTexture2D extends Uniform
 		if(!(obj[0] instanceof Integer)) throw new IllegalArgumentException();
 		int i = (int)obj[0];
 		this.texture = i;
+		loadTexture2D(this.location, this.index, this.texture);
 	}
 
 	@Override
 	public void load()
 	{
-		loadTexture2D(this.location, this.index, this.texture);
+//		loadTexture2D(this.location, this.index, this.texture);
 	}
 
 	@Override

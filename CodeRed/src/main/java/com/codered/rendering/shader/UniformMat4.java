@@ -20,12 +20,13 @@ public class UniformMat4 extends Uniform
 		if(!(obj[0] instanceof Mat4)) throw new IllegalArgumentException();
 		Mat4 m = (Mat4)obj[0];
 		mat.set(m);
+		loadMat4(this.location, this.mat);
 	}
 
 	@Override
 	public void load()
 	{
-		loadMat4(this.location, this.mat);
+		//loadMat4(this.location, this.mat);
 	}
 
 	@Override

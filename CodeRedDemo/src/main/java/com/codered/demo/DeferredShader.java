@@ -3,9 +3,9 @@ package com.codered.demo;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.UniformFactory;
 
-public class AmbientLightShader extends ShaderProgram
+public class DeferredShader extends ShaderProgram
 {
-	public AmbientLightShader()
+	public DeferredShader()
 	{
 		super();
 		try
@@ -15,8 +15,6 @@ public class AmbientLightShader extends ShaderProgram
 			addUniform(1, factory.createUniform("T_projection", "mat4"));
 			addUniform(2, factory.createUniform("camera", "camera"));
 			addUniform(3, factory.createUniform("material", "material", 0, 1));
-			addUniform(4, factory.createUniform("ambientLight.base.color", "vec3"));
-			addUniform(5, factory.createUniform("ambientLight.base.intensity", "float"));
 			
 			addAttribute(0, "vertexPos");
 			addAttribute(1, "texCoords");
@@ -28,8 +26,8 @@ public class AmbientLightShader extends ShaderProgram
 			e.printStackTrace();
 		}
 		
-		addVertexShaderPart("res/shaders/o_ambientLight2.vs");
-		addFragmentShaderPart("res/shaders/o_ambientLight2.fs");
+		addVertexShaderPart("res/shaders/o_deferred.vs");
+		addFragmentShaderPart("res/shaders/o_deferred.fs");
 		compile();
 	}
 }

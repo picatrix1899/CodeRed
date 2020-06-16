@@ -21,7 +21,7 @@ public class UniformVec3 extends Uniform
 		{
 			Tup3fR v = (Tup3fR)obj[0];
 			this.value.set(v);
-
+			loadVec3f(this.location, this.value.getX(), this.value.getY(), this.value.getZ());
 		}
 		else
 		{
@@ -32,7 +32,7 @@ public class UniformVec3 extends Uniform
 	@Override
 	public void load()
 	{
-		loadVec3f(this.location, this.value.getX(), this.value.getY(), this.value.getZ());
+//		loadVec3f(this.location, this.value.getX(), this.value.getY(), this.value.getZ());
 	}
 
 	@Override

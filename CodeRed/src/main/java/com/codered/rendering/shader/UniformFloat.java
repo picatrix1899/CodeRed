@@ -17,12 +17,13 @@ public class UniformFloat extends Uniform
 		if(!(obj[0] instanceof Float)) throw new IllegalArgumentException();
 		float v = (float)obj[0];
 		this.value = v;
+		loadFloat(this.location, this.value);
 	}
 
 	@Override
 	public void load()
 	{
-		loadFloat(this.location, this.value);
+//		loadFloat(this.location, this.value);
 	}
 
 	@Override

@@ -74,7 +74,7 @@ public class GuiInventory extends GUIWindow
 	{
 		//drawTexturedRect(EngineRegistry.getResourceRegistry().get("res/materials/inventory-background.png", Texture.class), 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
-		drawTexturedRect(this.pic, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+		//drawTexturedRect(this.pic, 0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 		
 		super.render();
 	}

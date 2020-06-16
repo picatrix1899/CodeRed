@@ -1,5 +1,6 @@
 package com.codered.rendering.shader;
 
+import org.barghos.core.tuple.tuple3.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -41,6 +42,11 @@ public abstract class Uniform
 	protected void loadVec2f(int uniform, float x, float y)
 	{
 		GL20.glUniform2f(uniform, x, y);
+	}
+	
+	protected void loadVec3f(int uniform, Tup3fR t)
+	{
+		GL20.glUniform3f(uniform, t.getX(), t.getY(), t.getZ());
 	}
 	
 	protected void loadVec3f(int uniform, float x, float y, float z)
