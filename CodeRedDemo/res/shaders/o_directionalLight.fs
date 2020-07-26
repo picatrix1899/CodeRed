@@ -32,11 +32,13 @@ in vec3 pass_normal;
 in vec3 pass_worldPos;
 in mat3 pass_tbn;
 in Camera pass_camera;
+in vec4 FragPosLightSpace;
 
 out vec4 out_Color;
 
 uniform DirectionalLight directionalLight;
 uniform Material material;
+uniform sampler2D shadowMap;
 
 float calcBrightness(vec4 color)
 {
@@ -87,6 +89,13 @@ vec4 calcSpecularReflection(BaseLight light, vec3 dir, vec3 camPos, vec3 fragPos
 
 void main(void)
 {
+	float onl = texture(shadowMap, FragPosLightSpace.xy).r;
+	float lightFactor = 1.0;
+	if(FragPosLightSpace.z > onl)
+	{
+		lightFactor = 1.0 - 0.4;
+	}
+
 	vec4 textureColor = texture(material.albedoMap, pass_texCoords);
 	
 	vec3 nrm = normalize(pass_tbn * ((2 * texture(material.normalMap, pass_texCoords).rgb) - 1));
@@ -97,6 +106,6 @@ void main(void)
 	
 	dLight += calcSpecularReflection(directionalLight.base, directionalLight.direction, pass_camera.position, pass_worldPos, nrm, material.specularIntensity, material.specularPower, atten);
 
-	out_Color = textureColor * dLight;
+	out_Color = textureColor * (lightFactor * dLight);
 
 }

@@ -13,6 +13,8 @@ in vec3 tangent;
 
 uniform mat4 T_model;
 uniform mat4 T_projection;
+uniform mat4 T_lightSpace;
+
 uniform Camera camera;
 
 out mat3 pass_tbn;
@@ -20,6 +22,7 @@ out vec2 pass_texCoords;
 out vec3 pass_normal;
 out vec3 pass_worldPos;
 out Camera pass_camera;
+out vec4 FragPosLightSpace;
 
 void main(void)
 {
@@ -39,4 +42,6 @@ void main(void)
 	
 	pass_tbn = mat3(t,b,n);
 	pass_camera = camera;
+	
+	FragPosLightSpace = T_lightSpace * vec4(pass_worldPos, 1.0);
 }

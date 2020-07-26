@@ -19,7 +19,6 @@ public abstract class ShaderProgram implements Shader
 	private List<ShaderPart> fixedGeometryShaderParts = new ArrayList<>();
 	private List<ShaderPart> fixedTessellationControlShaderParts = new ArrayList<>();
 	private List<ShaderPart> fixedTessellationEvaluationShaderParts = new ArrayList<>();
-	private List<ShaderPart> additionalVertexShaderParts = new ArrayList<>();
 	private Map<Integer,Uniform> uniforms = new HashMap<>();
 	private Map<String,Integer> attribs = new HashMap<>();
 
@@ -87,12 +86,6 @@ public abstract class ShaderProgram implements Shader
 		GL20.glUseProgram(0);
 	}
 
-	public void load()
-	{
-		for(Uniform u : this.uniforms.values())
-			u.load();
-	}
-	
 	public void addVertexShaderPart(String part)
 	{
 		this.fixedVertexShaderParts.add(EngineRegistry.getResourceRegistry().get(part, VertexShaderPart.class));

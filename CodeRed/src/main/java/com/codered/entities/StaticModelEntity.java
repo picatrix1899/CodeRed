@@ -2,7 +2,7 @@ package com.codered.entities;
 
 import java.util.List;
 
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.geometry.AABB3;
 import org.barghos.math.helper.AABB3Helper;
 import org.barghos.math.matrix.Mat4;

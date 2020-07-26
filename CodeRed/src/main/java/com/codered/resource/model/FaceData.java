@@ -1,6 +1,6 @@
 package com.codered.resource.model;
 
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3R;
 
@@ -16,6 +16,7 @@ public class FaceData
 		this.vertexA = vA;
 		this.vertexB = vB;
 		this.vertexC = vC;
+		this.normal.set(normal);
 	}
 	
 	public VertexData getVertexA()

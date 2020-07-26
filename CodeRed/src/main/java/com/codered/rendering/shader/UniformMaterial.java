@@ -38,24 +38,19 @@ public class UniformMaterial extends Uniform
 		{
 			Material v = (Material)obj[0];
 			this.value = v;
+			
+			if(this.value.getDiffuse().isPresent())
+				loadTexture2D(this.location_albedoMap, this.index_albedoMap, this.value.getDiffuse().get().getId());
+			else
+				loadTexture2D(this.location_albedoMap, this.index_albedoMap, 0);
+			
+			if(this.value.getNormal().isPresent())
+				loadTexture2D(this.location_normalMap, this.index_normalMap, this.value.getNormal().get().getId());
+			else
+				loadTexture2D(this.location_normalMap, this.index_normalMap, 0);
+			
+			loadFloat(this.location_specularIntensity, 1);
+			loadFloat(this.location_specularPower, 1);
 		}
 	}
-
-	@Override
-	public void load()
-	{
-		if(this.value.getDiffuse().isPresent())
-			loadTexture2D(this.location_albedoMap, this.index_albedoMap, this.value.getDiffuse().get().getId());
-		else
-			loadTexture2D(this.location_albedoMap, this.index_albedoMap, 0);
-		
-		if(this.value.getNormal().isPresent())
-			loadTexture2D(this.location_normalMap, this.index_normalMap, this.value.getNormal().get().getId());
-		else
-			loadTexture2D(this.location_normalMap, this.index_normalMap, 0);
-		
-		loadFloat(this.location_specularIntensity, 1);
-		loadFloat(this.location_specularPower, 1);
-	}
-
 }

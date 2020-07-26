@@ -3,12 +3,13 @@ package com.codered.resource.loader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3;
 import org.barghos.math.geometry.Triangle3;
 import org.barghos.math.vector.vec3.Vec3;
+import org.haze.mtl.MTLReader;
 import org.haze.mtl.MaterialList;
+import org.haze.obj.OBJLoader;
 import org.haze.png.Image;
 import org.haze.png.PNGReader;
 
@@ -36,9 +37,9 @@ public class HazeLoader implements IResourceLoader
 	
 	public ModelData loadModel(String path) throws Exception
 	{
-		org.haze.obj.OBJLoader objloader = new org.haze.obj.OBJLoader();
-		org.haze.mtl.MTLReader mtlreader = new org.haze.mtl.MTLReader();
-		org.haze.png.PNGReader pngreader = new org.haze.png.PNGReader();
+		OBJLoader objloader = new OBJLoader();
+		MTLReader mtlreader = new MTLReader();
+		PNGReader pngreader = new PNGReader();
 
 		String parentPath = new File(path).getParent();
 		
@@ -46,9 +47,9 @@ public class HazeLoader implements IResourceLoader
 		
 		MaterialList mtl = null;
 		
-		boolean hasMaterialList = objmodel.materialList.isPresent();
+		boolean hasMaterialList = !objmodel.materialList.isBlank();
 		
-		if(hasMaterialList) mtl = mtlreader.read(parentPath + File.separator + objmodel.materialList.get());
+		if(hasMaterialList) mtl = mtlreader.read(parentPath + File.separator + objmodel.materialList);
 		
 		List<MeshData> meshes = new ArrayList<>();
 		
@@ -71,44 +72,44 @@ public class HazeLoader implements IResourceLoader
 			
 			int vertexCount = objmesh.faces.size() * 3;
 			
-			Optional<MaterialData> material = Optional.empty();
+			MaterialData material = null;
 			
 			if(hasMaterialList)
 			{
-				if(objmesh.material.isPresent())
+				if(!objmesh.material.isBlank())
 				{
-					org.haze.mtl.Material m = mtl.materials.get(objmesh.material.get());
+					org.haze.mtl.Material m = mtl.materials.get(objmesh.material);
 					
-					Optional<TextureData> diffuse = Optional.empty();
-					Optional<TextureData> normal = Optional.empty();
+					TextureData diffuse = null;
+					TextureData normal = null;
 					
-					if(m.mapDiffuse.isPresent())
+					if(!m.mapDiffuse.isBlank())
 					{
-						Image img = pngreader.read(parentPath + File.separator + m.mapDiffuse.get());
+						Image img = pngreader.read(parentPath + File.separator + m.mapDiffuse);
 						
 						TextureData data = new TextureData();
 						data.pixels = img.pixels;
 						data.height = img.height;
 						data.width = img.width;
-						diffuse = Optional.of(data);
+						diffuse = data;
 					}
 					
-					if(m.mapNormal.isPresent())
+					if(!m.mapNormal.isBlank())
 					{
-						Image img = pngreader.read(parentPath + File.separator + m.mapNormal.get());
+						Image img = pngreader.read(parentPath + File.separator + m.mapNormal);
 						
 						TextureData data = new TextureData();
 						data.pixels = img.pixels;
 						data.height = img.height;
 						data.width = img.width;
-						normal = Optional.of(data);
+						normal = data;
 					}
 					
-					material = Optional.of(new MaterialData(diffuse, normal));
+					material = new MaterialData(diffuse, normal);
 				}
 			}	
 			
-			Optional<ConvexTriangleMesh3> collision = Optional.of(new ConvexTriangleMesh3(triangles));
+			ConvexTriangleMesh3 collision = new ConvexTriangleMesh3(triangles);
 			
 			meshes.add(new MeshData(vertexCount, faces, collision, material));
 		}

@@ -17,11 +17,6 @@ public class UniformInt extends Uniform
 		if(!(obj[0] instanceof Integer)) throw new IllegalArgumentException();
 		int v = (int)obj[0];
 		this.value = v;
-	}
-
-	@Override
-	public void load()
-	{
 		loadInt(this.location, this.value);
 	}
 

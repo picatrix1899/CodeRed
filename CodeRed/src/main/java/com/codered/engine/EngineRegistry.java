@@ -4,53 +4,49 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.codered.resource.registry.ResourceRegistry;
+import com.codered.window.Window;
 import com.codered.window.WindowContext;
 
 public class EngineRegistry
 {
-
-	private static Map<Long, WindowContext> contextsById = new HashMap<>();
-	private static Map<String, WindowContext> contextsByName = new HashMap<>();
-	private static WindowContext currentWindowContext;
+	private static Map<Long, Window> windowsById = new HashMap<>();
+	private static Window currentWindow;
 	
 	private static Map<Long, ResourceRegistry> resourceRegistriesById = new HashMap<>();
-	private static Map<String, ResourceRegistry> resourceRegistriesByName = new HashMap<>();
+	
+	public static void setCurrentWindow(Window window)
+	{
+		currentWindow = window;
+	}
+	
+	public static Window getCurrentWindow()
+	{
+		return currentWindow;
+	}
+	
+	public static Window getWindow(long id)
+	{
+		return windowsById.get(id);
+	}
 	
 	public static WindowContext getWindowContext(long id)
 	{
-		return contextsById.get(id);
-	}
-	
-	public static WindowContext getWindowContext(String name)
-	{
-		return contextsByName.get(name);
+		return windowsById.get(id).getContext();
 	}
 
-	public static void registerWindowContext(String name, long id, WindowContext context)
+	public static void registerWindow(long id, Window window)
 	{
-		contextsById.put(id, context);
-		contextsByName.put(name, context);
+		windowsById.put(id, window);
 	}
-	
-	public static void setCurrentWindowContext(WindowContext context)
-	{
-		currentWindowContext = context;
-	}
-	
+
 	public static WindowContext getCurrentWindowContext()
 	{
-		return currentWindowContext;
+		return currentWindow.getContext();
 	}
 
-	public static void registerResourceRegistry(String contextName, long windowId, ResourceRegistry manager)
+	public static void registerResourceRegistry(long windowId, ResourceRegistry manager)
 	{
 		resourceRegistriesById.put(windowId, manager);
-		resourceRegistriesByName.put(contextName, manager);
-	}
-	
-	public static ResourceRegistry getResourceRegistry(String contextName)
-	{
-		return resourceRegistriesByName.get(contextName);
 	}
 	
 	public static ResourceRegistry getResourceRegistry(long windowId)
@@ -60,17 +56,14 @@ public class EngineRegistry
 	
 	public static ResourceRegistry getResourceRegistry()
 	{
-		return resourceRegistriesById.get(currentWindowContext.getWindowId());
+		return resourceRegistriesById.get(currentWindow.getId());
 	}
 	
 	public static void releaseCurrentContext()
 	{
-		long id = currentWindowContext.getWindowId();
-		String name = currentWindowContext.getName();
+		long id = currentWindow.getId();
 		
-		contextsById.remove(id);
-		contextsByName.remove(name);
+		windowsById.remove(id);
 		resourceRegistriesById.remove(id);
-		resourceRegistriesByName.remove(name);
 	}
 }

@@ -21,12 +21,6 @@ public class UniformFloat extends Uniform
 	}
 
 	@Override
-	public void load()
-	{
-//		loadFloat(this.location, this.value);
-	}
-
-	@Override
 	public void loadUniformLocations(int shaderProgrammId)
 	{
 		this.location = getLocationFor(this.name, shaderProgrammId);

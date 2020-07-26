@@ -69,7 +69,6 @@ public class GUIRenderer implements IGuiRenderer
 		{	
 			this.noGuiShader.setUniformValue(0, this.context.getWindow().getSize());
 			this.noGuiShader.setUniformValue(1, t);
-			this.noGuiShader.load();
 			
 			BindingUtils.bindVAO(vao, 0, 1);
 			GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
@@ -104,7 +103,6 @@ public class GUIRenderer implements IGuiRenderer
 			this.fontGuiShader.setUniformValue(0, this.context.getWindow().getSize());
 			this.fontGuiShader.setUniformValue(1, text.color);
 			this.fontGuiShader.setUniformValue(2, text.font.getTexture().getId());
-			this.fontGuiShader.load();
 			
 			BindingUtils.bindVAO(vao, 0, 1);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vertexCount);

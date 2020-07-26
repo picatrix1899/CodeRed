@@ -14,8 +14,8 @@ import com.codered.ResourceHolder;
 import com.codered.utils.BindingUtils;
 import com.codered.utils.GLCommon;
 
-import org.barghos.core.tuple.tuple2.Tup2fR;
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple2.api.Tup2fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.core.util.BufferUtils;
 
 public class VAO implements ResourceHolder

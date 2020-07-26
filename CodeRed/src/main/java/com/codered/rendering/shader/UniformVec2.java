@@ -21,13 +21,8 @@ public class UniformVec2 extends Uniform
 		{
 			Vec2R v = (Vec2R)obj[0];
 			this.value.set(v);
+			loadVec2f(this.location, this.value.getX(), this.value.getY());
 		}
-	}
-
-	@Override
-	public void load()
-	{
-		loadVec2f(this.location, this.value.getX(), this.value.getY());
 	}
 
 	@Override

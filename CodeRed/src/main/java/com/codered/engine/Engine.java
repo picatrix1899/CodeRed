@@ -9,7 +9,7 @@ public abstract class Engine implements ITickReceiver
 	private boolean forcedShutdown = false;
 	
 	private EngineSetup setup;
-	
+
 	public static Engine getInstance()
 	{
 		return instance;

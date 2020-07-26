@@ -1,6 +1,6 @@
 package com.codered.rendering.fbo;
 
-import org.barghos.core.tuple.tuple2.Tup2iR;
+import org.barghos.core.tuple2.api.Tup2iR;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.utils.BindingUtils;
@@ -39,7 +39,7 @@ public class FBOAttachmentBuffer extends FBOAttachment
 	public void bindToFramebuffer(Framebuffer framebuffer, FBOTarget target)
 	{
 		BindingUtils.bindFramebuffer(framebuffer);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, target.getTarget(), GL30.GL_RENDERBUFFER, this.id);;
+		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, target.getTarget(), GL30.GL_RENDERBUFFER, this.id);
 		BindingUtils.unbindFramebuffer();
 	}
 	

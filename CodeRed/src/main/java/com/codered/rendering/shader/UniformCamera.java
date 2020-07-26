@@ -1,7 +1,5 @@
 package com.codered.rendering.shader;
 
-import org.barghos.math.vector.vec3.Vec3;
-
 import com.codered.entities.Camera;
 
 public class UniformCamera extends Uniform
@@ -38,12 +36,4 @@ public class UniformCamera extends Uniform
 		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
 		loadVec3f(this.location_position, this.value.getTotalPos());
 	}
-
-	@Override
-	public void load()
-	{
-//		loadMat4(this.location_T_view, this.value.getLerpedViewMatrix(alpha));
-//		loadVec3f(this.location_position, this.value.getTotalPos());
-	}
-
 }

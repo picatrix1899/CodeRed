@@ -3,7 +3,7 @@ package com.codered.demo;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.geometry.AABB3;
 import org.barghos.math.geometry.OBB3;
 import org.barghos.math.geometry.OBBOBBResolver;
@@ -33,16 +33,12 @@ public class Player
 	private Camera camera;
 	
 	private WindowContext context;
-	
-	private StaticEntityTreeImpl world;
-	
+
 	private SweptTransform transform = new SweptTransform();
 
-	public Player(StaticEntityTreeImpl world, Tup3fR pos)
+	public Player(Tup3fR pos)
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
-		
-		this.world = world;
 
 		this.aabb = new AABB3(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
 		
@@ -124,7 +120,7 @@ public class Player
 			
 			dir.mul(acceleration, vel);
 
-			vel.set(checkCollisionStatic(vel));
+			//vel.set(checkCollisionStatic(vel));
 			
 			this.transform.setPos(this.transform.getPos().addN(vel));
 			
@@ -136,78 +132,80 @@ public class Player
 	
 	public Camera getCamera() { return this.camera; }
 
-	private Vec3 checkCollisionStatic(Vec3 vel)
-	{
-		Vec3 sum = Vec3Pool.get();
-		Vec3 partial = Vec3Pool.get();
-		Vec3 tempPos = Vec3Pool.get();
-
-		Mat4 translation;
-		
-		this.transform.getTransformedPos().add(vel, tempPos);
-
-		OBB3 tempOBB;
-
-		OBB3 entityOBB;
-
-		AABB3 sweptAABB;
-		translation = Mat4.translation(tempPos);
-		
-		sweptAABB = this.aabb.transform(translation, null);
-
-		ArrayList<StaticEntity> entities = this.world.walker.walk(sweptAABB);
-		
-		for(StaticEntity entity : entities)
-		{
-			if(entity instanceof StaticModelEntity)
-			{
-				for(com.codered.model.Mesh mesh : ((StaticModelEntity)entity).getNewModel().getMeshes())
-				{
-					entityOBB = mesh.getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
-					
-					translation = Mat4.translation(tempPos);
-					
-					sweptAABB = this.aabb.transform(translation, sweptAABB);
-					
-					tempOBB = sweptAABB.getOBB();
-
-					if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-					{
-						partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-						
-						sum.add(partial, sum);
-						tempPos.add(partial, tempPos);
-					}
-				}
-				
-			}
-			else
-			{
-				entityOBB = entity.getModel().getModel().getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
-				
-				translation = Mat4.translation(tempPos);
-				
-				sweptAABB = this.aabb.transform(translation, sweptAABB);
-				
-				tempOBB = sweptAABB.getOBB();
-
-				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
-				{
-					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
-					
-					sum.add(partial, sum);
-					tempPos.add(partial, tempPos);
-				}
-			}
-			
-		}
 	
-		vel.add(sum, vel);
-		
-		Vec3Pool.store(sum, partial, tempPos);
-		
-		return vel;
-	}
+	
+//	private Vec3 checkCollisionStatic(Vec3 vel)
+//	{
+//		Vec3 sum = Vec3Pool.get();
+//		Vec3 partial = Vec3Pool.get();
+//		Vec3 tempPos = Vec3Pool.get();
+//
+//		Mat4 translation;
+//		
+//		this.transform.getTransformedPos().add(vel, tempPos);
+//
+//		OBB3 tempOBB;
+//
+//		OBB3 entityOBB;
+//
+//		AABB3 sweptAABB;
+//		translation = Mat4.translation(tempPos);
+//		
+//		sweptAABB = this.aabb.transform(translation, null);
+//
+//		ArrayList<StaticEntity> entities = this.world.walker.walk(sweptAABB);
+//		
+//		for(StaticEntity entity : entities)
+//		{
+//			if(entity instanceof StaticModelEntity)
+//			{
+//				for(com.codered.model.Mesh mesh : ((StaticModelEntity)entity).getNewModel().getMeshes())
+//				{
+//					entityOBB = mesh.getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+//					
+//					translation = Mat4.translation(tempPos);
+//					
+//					sweptAABB = this.aabb.transform(translation, sweptAABB);
+//					
+//					tempOBB = sweptAABB.getOBB();
+//
+//					if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+//					{
+//						partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+//						
+//						sum.add(partial, sum);
+//						tempPos.add(partial, tempPos);
+//					}
+//				}
+//				
+//			}
+//			else
+//			{
+//				entityOBB = entity.getModel().getModel().getCollisionMesh().get().getOBBf(entity.getTransformationMatrix(), entity.getRotationMatrix());
+//				
+//				translation = Mat4.translation(tempPos);
+//				
+//				sweptAABB = this.aabb.transform(translation, sweptAABB);
+//				
+//				tempOBB = sweptAABB.getOBB();
+//
+//				if(OBBOBBResolver.iOBBOBB3f(tempOBB, entityOBB))
+//				{
+//					partial = OBBOBBResolver.rOBBOBB3f(tempOBB, entityOBB);
+//					
+//					sum.add(partial, sum);
+//					tempPos.add(partial, tempPos);
+//				}
+//			}
+//			
+//		}
+//	
+//		vel.add(sum, vel);
+//		
+//		Vec3Pool.store(sum, partial, tempPos);
+//		
+//		return vel;
+//	}
 	
 	private void updateOrientation()
 	{

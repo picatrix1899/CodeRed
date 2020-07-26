@@ -10,6 +10,4 @@ public interface Shader extends ResourceHolder
 	
 	ShaderSession start();
 	void stop();
-	void load();
-
 }

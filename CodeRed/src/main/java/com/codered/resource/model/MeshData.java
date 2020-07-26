@@ -1,7 +1,6 @@
 package com.codered.resource.model;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3;
 
@@ -10,11 +9,11 @@ import com.codered.resource.material.MaterialData;
 public class MeshData
 {
 	private int vertexCount;
-	private Optional<ConvexTriangleMesh3> collisionMesh;
-	private Optional<MaterialData> material;
+	private ConvexTriangleMesh3 collisionMesh;
+	private MaterialData material;
 	private List<FaceData> faces;
 	
-	public MeshData(int vertexCount, List<FaceData> faces, Optional<ConvexTriangleMesh3> collisionMesh, Optional<MaterialData> material)
+	public MeshData(int vertexCount, List<FaceData> faces, ConvexTriangleMesh3 collisionMesh, MaterialData material)
 	{
 		this.vertexCount = vertexCount;
 		this.faces = faces;
@@ -27,12 +26,12 @@ public class MeshData
 		return this.vertexCount;
 	}
 	
-	public Optional<ConvexTriangleMesh3> getCollisionMesh()
+	public ConvexTriangleMesh3 getCollisionMesh()
 	{
 		return this.collisionMesh;
 	}
 	
-	public Optional<MaterialData> getMaterial()
+	public MaterialData getMaterial()
 	{
 		return this.material;
 	}

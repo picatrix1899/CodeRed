@@ -29,7 +29,7 @@ public class ResourceLoadingTickReceiver implements ITickReceiver
 		GLUtils.clearAll();
 		
 		WindowContext c = EngineRegistry.getCurrentWindowContext();
-		c.getWindow().render(timestep);
+		c.getWindow().render(timestep, alpha);
 		
 		this.loadingScreen.render();
 		return;

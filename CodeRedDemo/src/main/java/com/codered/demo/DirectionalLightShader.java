@@ -18,6 +18,8 @@ public class DirectionalLightShader extends ShaderProgram
 			addUniform(4, factory.createUniform("directionalLight.base.color", "vec3"));
 			addUniform(5, factory.createUniform("directionalLight.base.intensity", "float"));
 			addUniform(6, factory.createUniform("directionalLight.direction", "vec3"));
+			addUniform(7, factory.createUniform("T_lightSpace", "mat4"));
+			addUniform(8, factory.createUniform("shadowMap", "sampler2d", 2));
 			
 			addAttribute(0, "vertexPos");
 			addAttribute(1, "texCoords");

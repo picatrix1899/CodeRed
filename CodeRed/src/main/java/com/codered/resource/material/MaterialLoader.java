@@ -3,7 +3,6 @@ package com.codered.resource.material;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Optional;
 
 import org.haze.png.Image;
 import org.json.JSONObject;
@@ -47,7 +46,7 @@ public class MaterialLoader
 	
 		reader.close();
 		
-		return new MaterialData(Optional.ofNullable(albedoMapData), Optional.ofNullable(normalMapData));
+		return new MaterialData(albedoMapData, normalMapData);
 	}
 
 }

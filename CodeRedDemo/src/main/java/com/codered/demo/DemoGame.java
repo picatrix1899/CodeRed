@@ -9,9 +9,8 @@ import com.codered.engine.FixedTimestepTickRoutine;
 import com.codered.utils.DebugInfo;
 import com.codered.utils.GLCommon;
 import com.codered.window.Window;
-import com.codered.window.WindowContext;
-import com.codered.window.WindowHint;
 import com.codered.window.WindowHint.GLProfile;
+import com.codered.window.WindowHints;
 
 public class DemoGame extends Engine
 {
@@ -19,8 +18,10 @@ public class DemoGame extends Engine
 	
 	public static DemoGame getInstance() { return instance; }
 
-	private WindowContext context1;
-
+	private Window window1;
+	
+	private Routine1 routine;
+	
 	public boolean showInventory = false;
 	public boolean directional = true;
 	
@@ -29,15 +30,22 @@ public class DemoGame extends Engine
 		EngineSetup setup = new EngineSetup();
 		setup.mainTickRoutine = new FixedTimestepTickRoutine();
 		setup.resourceTickRoutine = new FixedTimestepTickRoutine();
-		
+
 		setup(setup);
 		
 		instance = this;
 		Thread.currentThread().setName("CodeRedDemo");
 		
-		Window w1 = new Window(800, 600, "CoderRed 3 Main", 0);
-		w1.setWindowHintCallback(() -> initWindowHints());
-		this.context1 = new WindowContext("main", w1, new Routine1());
+		WindowHints hints = new WindowHints();
+		hints.resizable(true);
+		hints.glVersion("4.5");
+		hints.glProfile(GLProfile.CORE);
+		hints.doubleBuffering(true);
+		hints.samples(16);
+		hints.autoShowWindow(false);
+		
+		window1 = new Window(800, 600, "CoderRed 3 Main", hints);
+		this.routine = new Routine1();
 	}
 
 	private void printDebugInfo()
@@ -50,47 +58,39 @@ public class DemoGame extends Engine
 		info.print();
 	}
 	
-	private void initWindowHints()
-	{
-		WindowHint.resizable(true);
-		WindowHint.glVersion("4.5");
-		WindowHint.glProfile(GLProfile.CORE);
-		WindowHint.depthBits(24);
-		WindowHint.doubleBuffering(true);
-		WindowHint.samples(16);
-		WindowHint.autoShowWindow(false);
-	}
-	
 	public void init()
 	{
-		this.context1.initWindow();
+		this.window1.init();
+		this.window1.WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
 		
-		this.context1.init();
-		
-		this.context1.getWindow().WindowClose.addHandler((arg1) -> Engine.getInstance().stop(false));
+		this.routine.init();
 		
 		printDebugInfo();
 	}
 	
 	public void preUpdate()
 	{
-		this.context1.preUpdate();
+		this.routine.preUpdate();
 	}
 	
 	public void update(double delta)
 	{
-		this.context1.update(delta);
+		this.window1.update(delta);
+		this.routine.update(delta);
+		this.window1.postUpdate(delta);
 	}
 
 	public void render(double delta, double alpha)
 	{
-		this.context1.render(delta, alpha);
+		this.window1.render(delta, alpha);
+		this.routine.render(delta, alpha);
 	}
 
 	
 	public void release(boolean forced)
 	{
-		this.context1.release(forced);
+		this.routine.release(forced);
+		this.window1.release(forced);
 		
 		GLCommon.report(System.out);
 	}

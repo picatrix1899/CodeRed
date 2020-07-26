@@ -11,68 +11,126 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.CodeRed;
+import com.codered.engine.CriticalEngineStateException;
 import com.codered.engine.EngineRegistry;
 import com.codered.utils.BindingUtils;
+import com.codered.utils.GLCommon;
 import com.codered.utils.GLUtils;
 
 public class Window
 {
-	private long window;
-	private long parentWindow;
+	private long windowId;
+	
+	private Window parentWindow;
 	
 	private GLCapabilities capabilities;
 
 	private Vec2 size = new Vec2();
 	private String title = "";
 	
-	private Runnable initWindowHints;
-	
 	private boolean isReleased;
 	
-
+		private WindowContext context;
+	
+	private WindowHints hints;
 	
 	public Event<Vec2> Resize = new Event<>();
 	public Event<Void> WindowClose = new Event<>();
 	
-	public Window(int width, int height, String title, long parentWindow)
+	public Window(int width, int height, String title, WindowHints hints)
 	{
 		this.title = title;
 		this.size.set(width, height);
-		this.parentWindow = parentWindow;
+		this.hints = hints;
+	}
+	
+	public Window(int width, int height, String title, WindowHints hints, Window parent)
+	{
+		this(width, height, title, hints);
+		this.parentWindow = parent;
+	}
+	
+	public void setContext(WindowContext context)
+	{
+		this.context = context;
+	}
+	
+	public WindowContext getContext()
+	{
+		return this.context;
 	}
 	
 	public void makeContextCurrent()
 	{
-		if(glfwGetCurrentContext() != this.window)
-			glfwMakeContextCurrent(this.window);
+		if(glfwGetCurrentContext() != this.windowId)
+			glfwMakeContextCurrent(this.windowId);
 	}
 	
-	public void setWindowHintCallback(Runnable callback)
+	public void makeCurrent()
 	{
-		this.initWindowHints = callback;
+		makeContextCurrent();
+		EngineRegistry.setCurrentWindow(this);
+		GLCommon.updateWindowId();
+	}
+	
+	private void initWindowHints()
+	{
+		if(this.hints.hasGlVersionChanged())
+		{
+			WindowHint.glVersion(this.hints.glVersionMajor(), this.hints.glVersionMinor());
+		}
+		
+		if(this.hints.hasGlProfileChanged())
+		{
+			WindowHint.glProfile(this.hints.glProfile());
+		}
+		
+		if(this.hints.hasSamplesChanged())
+		{
+			WindowHint.samples(this.hints.samples());
+		}
+		
+		if(this.hints.hasAutoShowWindowChanged())
+		{
+			WindowHint.autoShowWindow(this.hints.autoShowWindow());
+		}
+		
+		if(this.hints.hasDoubleBufferingChanged())
+		{
+			WindowHint.doubleBuffering(this.hints.doubleBuffering());
+		}
+		
+		if(this.hints.hasResizableChanged())
+		{
+			WindowHint.resizable(this.hints.resizable());
+		}
 	}
 	
 	public void show()
 	{
-		glfwShowWindow(this.window);
+		glfwShowWindow(this.windowId);
 	}
 	
 	public void init()
 	{
-		this.initWindowHints.run();
-
-		this.window = glfwCreateWindow((int)this.size.getX(), (int)this.size.getY(), this.title, 0, this.parentWindow);
+		initWindowHints();
 		
-		if(window == 0)
+		this.windowId = glfwCreateWindow((int)this.size.getX(), (int)this.size.getY(), this.title, 0, this.parentWindow != null ? this.parentWindow .getId() : 0);
+		
+		if(windowId == 0)
 		{
-			glfwTerminate();
-			System.exit(-1);
+			throw new CriticalEngineStateException(new Exception());
 		}
 
 		makeContextCurrent();
 		this.capabilities = GL.createCapabilities();
 		
-		glfwSetWindowSizeCallback(this.window, (id, w, h) -> { onResize(id, w, h); });
+		glfwSetWindowSizeCallback(this.windowId, (id, w, h) -> { onResize(id, w, h); });
+		
+		this.context = new WindowContext(this);
+		this.context.init();
+		
+		makeCurrent();
 	}
 	
 	public GLCapabilities getCapabilities()
@@ -82,7 +140,7 @@ public class Window
 	
 	public long getId()
 	{
-		return this.window;
+		return this.windowId;
 	}
 	
 	public String getTitle() { return this.title; }
@@ -92,32 +150,44 @@ public class Window
 
 	public void onResize(long id, int width, int height)
 	{
-		if(id == this.window)
+		if(id == this.windowId)
 		{
-			WindowContext oldContext = EngineRegistry.getWindowContext(glfwGetCurrentContext());
-			WindowContext newContext = EngineRegistry.getWindowContext(this.window);
+			Window currentWindow = EngineRegistry.getCurrentWindow();
 			
-			newContext.makeContextCurrent();
+			makeContextCurrent();
 			this.size.set(width, height);
 			
 			GL11.glViewport(0, 0, width, height);
 			
 			this.Resize.fire(new Vec2(width, height));
-			oldContext.makeContextCurrent();
+			currentWindow.makeContextCurrent();
 		}
 	}
 	
 	public void update(double delta)
 	{
+		if(isReleased()) return;
+		
+		makeCurrent();
+
 		glfwPollEvents();
 
-		if(glfwWindowShouldClose(this.window))
+		if(glfwWindowShouldClose(this.windowId))
 			WindowClose.fire(null);
 	}
 	
-	public void render(double delta)
+	public void postUpdate(double delta)
 	{
-		glfwSwapBuffers(this.window);
+		if(isReleased()) return;
+		this.context.postUpdate(delta);
+	}
+	
+	public void render(double delta, double alpha)
+	{
+		if(isReleased()) return;
+		makeCurrent();
+		
+		glfwSwapBuffers(this.windowId);
 		
 		if(CodeRed.AUTORESET_DEFAULT_FBO)
 		{
@@ -126,9 +196,14 @@ public class Window
 		}
 	}
 
-	public void release()
+	public void release(boolean forced)
 	{
-		glfwDestroyWindow(this.window);
+		if(isReleased()) return;
+		makeCurrent();
+		
+		this.context.release(forced);
+		
+		glfwDestroyWindow(this.windowId);
 		this.isReleased = true;
 	}
 	

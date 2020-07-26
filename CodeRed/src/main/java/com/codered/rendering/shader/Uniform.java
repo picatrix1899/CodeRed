@@ -1,6 +1,6 @@
 package com.codered.rendering.shader;
 
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -26,8 +26,6 @@ public abstract class Uniform
 	}
 	
 	public abstract void set(Object... obj);
-	
-	public abstract void load();
 	
 	protected void loadInt(int uniform, int value)
 	{

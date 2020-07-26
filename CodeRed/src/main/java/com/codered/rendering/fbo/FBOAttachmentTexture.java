@@ -2,7 +2,7 @@ package com.codered.rendering.fbo;
 
 import java.nio.ByteBuffer;
 
-import org.barghos.core.tuple.tuple2.Tup2iR;
+import org.barghos.core.tuple2.api.Tup2iR;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL30;
@@ -33,7 +33,7 @@ public class FBOAttachmentTexture extends FBOAttachment
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalformat, this.size.getX(), this.size.getY(), 0, this.isDepth ? GL11.GL_DEPTH_COMPONENT : GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalformat, this.size.getX(), this.size.getY(), 0, this.isDepth ? GL11.GL_DEPTH_COMPONENT : GL11.GL_RGBA, GL11.GL_FLOAT, (ByteBuffer) null);
 	
 		BindingUtils.unbindTexture2D();
 	}

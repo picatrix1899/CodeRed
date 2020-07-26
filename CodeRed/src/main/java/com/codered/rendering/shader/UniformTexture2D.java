@@ -24,12 +24,6 @@ public class UniformTexture2D extends Uniform
 	}
 
 	@Override
-	public void load()
-	{
-//		loadTexture2D(this.location, this.index, this.texture);
-	}
-
-	@Override
 	public void loadUniformLocations(int shaderProgrammId)
 	{
 		this.location = getLocationFor(this.name, shaderProgrammId);

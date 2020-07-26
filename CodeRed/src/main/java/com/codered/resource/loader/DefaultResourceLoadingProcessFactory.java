@@ -140,14 +140,14 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 		Texture diffuse = null;
 		Texture normal = null;
 		
-		if(mdata.getDiffuse().isPresent())
+		if(mdata.getDiffuse() != null)
 		{
-			diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getDiffuse().get());
+			diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getDiffuse());
 		}
 		
-		if(mdata.getNormal().isPresent())
+		if(mdata.getNormal() != null)
 		{
-			normal = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getNormal().get());
+			normal = TextureUtils.genTexture2(GLCommon.genTexture(), mdata.getNormal());
 		}
 		
 		Material m = new Material(diffuse, normal);
@@ -209,25 +209,25 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 			
 			Material material = null;
 			
-			if(dmesh.getMaterial().isPresent())
+			if(dmesh.getMaterial() != null)
 			{
 				Texture diffuse = null;
 				Texture normal = null;
 				
-				if(dmesh.getMaterial().get().getDiffuse().isPresent())
+				if(dmesh.getMaterial().getDiffuse() != null)
 				{
-					diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().get().getDiffuse().get());
+					diffuse = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().getDiffuse());
 				}
 				
-				if(dmesh.getMaterial().get().getNormal().isPresent())
+				if(dmesh.getMaterial().getNormal() != null)
 				{
-					normal = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().get().getNormal().get());
+					normal = TextureUtils.genTexture2(GLCommon.genTexture(), dmesh.getMaterial().getNormal());
 				}
 
 				material = new Material(diffuse, normal);
 			}
 			
-			meshes.add(new Mesh(vao, dmesh.getVertexCount(), dmesh.getCollisionMesh().get(), material));
+			meshes.add(new Mesh(vao, dmesh.getVertexCount(), dmesh.getCollisionMesh(), material));
 		}
 		
 		Model model = new Model(meshes);

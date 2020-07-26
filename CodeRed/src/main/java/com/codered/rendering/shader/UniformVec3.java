@@ -1,6 +1,6 @@
 package com.codered.rendering.shader;
 
-import org.barghos.core.tuple.tuple3.Tup3fR;
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.vector.vec3.Vec3;
 
 public class UniformVec3 extends Uniform
@@ -27,12 +27,6 @@ public class UniformVec3 extends Uniform
 		{
 			throw new IllegalArgumentException();
 		}
-	}
-
-	@Override
-	public void load()
-	{
-//		loadVec3f(this.location, this.value.getX(), this.value.getY(), this.value.getZ());
 	}
 
 	@Override
