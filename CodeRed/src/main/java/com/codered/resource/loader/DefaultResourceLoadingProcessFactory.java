@@ -108,7 +108,7 @@ public class DefaultResourceLoadingProcessFactory implements IResourceLoadingPro
 	
 	private boolean create(ResourceLoadingProcess process, BiConsumer<String,Object> creator)
 	{
-		if(process.exception.isPresent() || process.data.isEmpty()) return false;
+		if(process.exception.isPresent()) return false;
 		
 		creator.accept(process.path, process.data.get());
 		

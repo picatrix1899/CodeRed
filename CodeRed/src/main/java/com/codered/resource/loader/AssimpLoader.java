@@ -159,7 +159,7 @@ public class AssimpLoader implements IResourceLoader
 		TextureData diffuse = null;
 		TextureData normals = null;
 		
-		if(!pathDiffuse.dataString().isBlank())
+		if(!pathDiffuse.dataString().isEmpty())
 		{
 			Image img = pngreader.read(parentPath + File.separator + pathDiffuse.dataString());
 						
@@ -174,7 +174,7 @@ public class AssimpLoader implements IResourceLoader
 		AIString pathNormals = AIString.calloc();
 		Assimp.aiGetMaterialTexture(mat, Assimp.aiTextureType_NORMALS, 0, pathNormals, (IntBuffer) null, null, null, null, null, null);
 		
-		if(!pathNormals.dataString().isBlank())
+		if(!pathNormals.dataString().isEmpty())
 		{
 			Image img = pngreader.read(parentPath + File.separator + pathNormals.dataString());
 						

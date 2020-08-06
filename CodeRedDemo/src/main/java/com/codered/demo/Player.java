@@ -44,7 +44,7 @@ public class Player
 		
 		this.transform.setPos(pos);
 		
-		this.camera = new Camera(0.0f, pos.getY() + 1.8f, 0.0f, 0.0f, 0.0f, 0.0f);
+		this.camera = new Camera(0.0f, pos.getY() + 1.7f, 0.0f, 0.0f, 0.0f, 0.0f);
 		
 		this.camera.getTransform().setParent(this.transform);
 		

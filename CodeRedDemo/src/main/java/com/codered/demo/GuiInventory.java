@@ -48,23 +48,23 @@ public class GuiInventory extends GUIWindow
 	
 	public void update()
 	{
-		if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) close();
-		if(this.context.getInputManager().isMouseButtonPressed(0)) this.button.onClick();
+		//if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) close();
+		//if(this.context.getInputManager().isMouseButtonPressed(0)) this.button.onClick();
 		
-		if(entermode)
-		{
-			int lastKey = this.context.getInputManager().lastFreeKey;
-			
-			if(lastKey != 0)
-			{
-				KeyBindings.main.unregisterKey(KeyBindings.forward);
-				KeyBindings.forward = lastKey;
-				KeyBindings.main.registerKey(KeyBindings.forward);
-				this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
-				this.context.getInputManager().setFreemode(false);
-				this.entermode = false;
-			}
-		}
+//		if(entermode)
+//		{
+//			int lastKey = this.context.getInputManager().lastFreeKey;
+//			
+//			if(lastKey != 0)
+//			{
+//				KeyBindings.main.unregisterKey(KeyBindings.forward);
+//				KeyBindings.forward = lastKey;
+//				KeyBindings.main.registerKey(KeyBindings.forward);
+//				this.button.setText(GLFW.glfwGetKeyName(KeyBindings.forward, 0), 20, this.font, true, true);
+//				this.context.getInputManager().setFreemode(false);
+//				this.entermode = false;
+//			}
+//		}
 
 		
 		super.update();
@@ -81,13 +81,13 @@ public class GuiInventory extends GUIWindow
 	
 	public void open()
 	{
-		this.context.getInputManager().pushInputConfiguration(inventoryInput);
+		//this.context.getInputManager().pushInputConfiguration(inventoryInput);
 	}
 	
 	public void close()
 	{
 		DemoGame.getInstance().showInventory = false;
-		this.context.getInputManager().popInputConfiguration();
+		//this.context.getInputManager().popInputConfiguration();
 	}
 	
 	public boolean allowWorldProcessing()

@@ -157,8 +157,6 @@ public class Window
 			makeContextCurrent();
 			this.size.set(width, height);
 			
-			GL11.glViewport(0, 0, width, height);
-			
 			this.Resize.fire(new Vec2(width, height));
 			currentWindow.makeContextCurrent();
 		}

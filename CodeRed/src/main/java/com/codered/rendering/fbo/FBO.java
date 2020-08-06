@@ -34,7 +34,7 @@ public class FBO extends Framebuffer
 		if(t != FBOTarget.DEPTH && t != FBOTarget.DEPTH_STENCIL)
 			internalformat = hdr ? GL11.GL_RGBA16 : GL11.GL_RGBA8;
 		else
-			internalformat = t == FBOTarget.DEPTH_STENCIL ? GL30.GL_DEPTH24_STENCIL8 : GL30.GL_DEPTH_COMPONENT32;
+			internalformat = t == FBOTarget.DEPTH_STENCIL ? GL30.GL_DEPTH24_STENCIL8 : GL30.GL_DEPTH_COMPONENT32F;
 		
 		FBOAttachment a = new FBOAttachmentTexture(internalformat, this.size, t == FBOTarget.DEPTH || t == FBOTarget.DEPTH_STENCIL);
 		

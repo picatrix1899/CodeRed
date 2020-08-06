@@ -1,11 +1,14 @@
 package com.codered.rendering.shader;
 
+import java.nio.FloatBuffer;
+
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
+import org.lwjgl.system.MemoryUtil;
 
 public abstract class Uniform
 {
@@ -59,7 +62,12 @@ public abstract class Uniform
 	
 	protected void loadMat4(int uniform, Mat4 mat)
 	{
-		GL20.glUniformMatrix4fv(uniform, false, mat.toArrayColumnMajor());
+		FloatBuffer buffer = MemoryUtil.memAllocFloat(Mat4.ROWS * Mat4.COLUMNS);
+		mat.toBufferColumnMajor(buffer);
+
+		GL20.glUniformMatrix4fv(uniform, false, buffer);
+		
+		MemoryUtil.memFree(buffer);
 	}
 	
 	protected void loadTexture2D(int uniform, int attrib, int texturedId)

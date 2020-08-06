@@ -1,5 +1,6 @@
 package com.codered.demo;
 
+import org.barghos.core.debug.Debug;
 import org.barghos.math.Maths;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
@@ -8,6 +9,7 @@ import org.barghos.math.vector.vec4.Vec4;
 
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
+import com.codered.window.Window;
 import com.codered.window.WindowContext;
 
 
@@ -113,7 +115,6 @@ public class ShadowBox {
 			}
 		}
 		maxZ += OFFSET;
-
 	}
 
 	/**
@@ -179,6 +180,7 @@ public class ShadowBox {
 		Vec3 upVector = rotation.transform(UP, new Vec3());
 		Vec3 rightVector = forwardVector.cross(upVector, null);
 		Vec3 downVector = upVector.invert(null);
+		
 		Vec3 leftVector = rightVector.invert(null);
 		Vec3 farTop = centerFar.addN(upVector.mulN(farHeight));
 		Vec3 farBottom = centerFar.addN(downVector.mulN(farHeight));
@@ -223,7 +225,7 @@ public class ShadowBox {
 	 */
 	private Mat4 calculateCameraRotationMatrix()
 	{
-		Mat4 rotation = new Mat4();
+		Mat4 rotation = Mat4.identity();
 		rotation.rotate(Quat.getFromAxis(new Vec3(0.0f, 1.0f, 0.0f), -cam.getTransform().getRotation().getEulerYaw()));
 		rotation.rotate(Quat.getFromAxis(new Vec3(1.0f, 0.0f, 0.0f), -cam.getTransform().getRotation().getEulerPitch()));
 		return rotation;
@@ -249,8 +251,8 @@ public class ShadowBox {
 	 */
 	private float getAspectRatio()
 	{
-		WindowContext c = EngineRegistry.getCurrentWindowContext();
-		return (float) c.getWindow().getWidth() / (float) c.getWindow().getHeight();
+		Window w = EngineRegistry.getCurrentWindow();
+		return (float) w.getWidth() / (float) w.getHeight();
 	}
 
 }

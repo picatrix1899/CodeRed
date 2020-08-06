@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.barghos.core.debug.Debug;
 import org.barghos.core.tuple2.Tup2i;
 import org.barghos.core.tuple3.Tup3f;
 import org.barghos.math.Maths;
@@ -45,6 +46,9 @@ import com.codered.window.WindowRoutine;
 public class Routine1 extends WindowRoutine
 {
 	private Mat4 projection;
+	private Mat4 proj;
+	private Mat4 pr;
+	private boolean p;
 	
 	private Player player;
 
@@ -63,6 +67,7 @@ public class Routine1 extends WindowRoutine
 	public ShaderProgram noGuiShader;
 	public ShaderProgram fontGuiShader;
 	public ShaderProgram deferredShader;
+	public ShaderProgram coloredShader;
 	
 	public FontType font;
 	
@@ -146,6 +151,8 @@ public class Routine1 extends WindowRoutine
 		bl0.loadVertexShaderPart("res/shaders/o_directionalLight.vs");
 		bl0.loadFragmentShaderPart("res/shaders/o_deferred.fs");
 		bl0.loadVertexShaderPart("res/shaders/o_deferred.vs");
+		bl0.loadFragmentShaderPart("res/shaders/o_colored.fs");
+		bl0.loadVertexShaderPart("res/shaders/o_colored.vs");
 		bl0.loadVertexShaderPart("res/shaders/shadowVertexShader.txt");
 		bl0.loadFragmentShaderPart("res/shaders/shadowFragmentShader.txt");
 		bl0.loadModel("res/models/nanosuit.obj");
@@ -155,14 +162,19 @@ public class Routine1 extends WindowRoutine
 		directionalLightShader = new DirectionalLightShader();
 		deferredShader = new DeferredShader();
 		shadowShader = new ShadowShader();
+		coloredShader = new ColoredShader();
 		
 		RenderHelper.ambientLightShader = ambientShader;
 		RenderHelper.directionalLightShader = directionalLightShader;
 		RenderHelper.deferredShader = deferredShader;
 		RenderHelper.shadowShader = shadowShader;
+		RenderHelper.coloredShader = coloredShader;
 		
 		this.projection = Mat4.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
-
+		this.proj = this.projection;
+//		this.pr = new Mat4().initOrtho(-400, 400, -300, 300, 0.01f, 1000f).transpose();
+		this.pr = new Mat4().initOrtho2(this.context.getWindow().getWidth(), this.context.getWindow().getHeight(), 60f, 0.01f, 1000f).transpose();
+		
 		this.w = new World();
 
 		this.out = new FBO();
@@ -180,7 +192,6 @@ public class Routine1 extends WindowRoutine
 		this.ent.getTransform().setPos(new Tup3f(-10, -aabb.getMin().getY(), -10));
 		this.w.add(ent);
 		
-		this.w.add(new StaticModelEntity(model, new Vec3(0, 0, -1), 0, 0, 0, mscale));
 		this.w.add(new StaticModelEntity(model, new Vec3(-10, 0, -30), 0, 0, 0, mscale));
 		this.w.add(new StaticModelEntity(model, new Vec3(-10, 0, -40), 0, 0, 0, mscale));
 		this.w.add(new StaticModelEntity(model, new Vec3(-20, 0, -10), 0, 0, 0, mscale));
@@ -196,12 +207,12 @@ public class Routine1 extends WindowRoutine
 		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -30), 0, 0, 0, mscale));
 		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -40), 0, 0, 0, mscale));
 		
-		this.ambient = new AmbientLight(120, 100, 100, 3);
-		this.directionalLight = new DirectionalLight(200, 100, 100, 2, 0.0f, 0.0f, -1.0f);
+		this.ambient = new AmbientLight(120, 100, 100, 1);
+		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
 		
-		this.player = new Player(new Point3(-5, 0, -5));
+		this.player = new Player(new Point3(0, 0, 0));
 		
-		shadowBox = new ShadowBox(lightViewMatrix, this.player.getCamera(), 60f, 0.001f);
+		shadowBox = new ShadowBox(lightViewMatrix, this.player.getCamera(), 60f, 0.1f);
 		
 		shadowFbo = new FBO(new Tup2i(SHADOW_MAP_SIZE));
 		shadowFbo.addTextureAttachment(FBOTarget.DEPTH);
@@ -219,13 +230,27 @@ public class Routine1 extends WindowRoutine
 
 	public void update(double delta)
 	{
-		if(!DemoGame.getInstance().showInventory)
+//		if(!DemoGame.getInstance().showInventory)
 			if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
 
 //			if(!DemoGame.getInstance().showInventory)
 //			{
 				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
-				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB)) { DemoGame.getInstance().showInventory = true; this.inventory.open(); }
+				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB))
+				{ 
+					if(p)
+					{
+						this.projection = this.proj;
+						
+					}
+					else
+					{
+						this.projection = this.pr;
+						GL11.glViewport(0, 0, 800, 600);
+					}
+					p = !p;
+				}
+				
 				this.player.update(delta);
 				ent.rotate(new Vec3(Vec3Axis.AXIS_NY), 2);
 				
@@ -233,14 +258,26 @@ public class Routine1 extends WindowRoutine
 //			}
 //			else
 //			{
-//				this.inventory.update();
+//				if(DemoGame.getInstance().showInventory)
+//				{
+					this.inventory.update();
+//				}
+				//this.inventory.update();
 //			}
+					
+		Vec3 headPos = this.ent.getTransform().getTransformedPos().addN(0,1.6f,0);
+		Quat rot = this.ent.getTransform().getTransformedRot();
+		Vec3 lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3()).normal();	
+		this.directionalLight.direction.set(lookDir);
+		this.directionalLight.pos.set(headPos);
 	}
 
 	public void render(double delta, double alpha)
 	{
 		GLUtils.clearAll();
 
+//		renderWorld(alpha);
+		
 //		if(DemoGame.getInstance().showInventory)
 //		{
 //			if(this.inventory.allowWorldProcessing())
@@ -252,7 +289,7 @@ public class Routine1 extends WindowRoutine
 //				//GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 //			}
 //
-			//this.inventory.render();
+			this.inventory.render();
 //			
 //			if(this.inventory.allowWorldProcessing())
 //				GLUtils.blend(false);
@@ -264,19 +301,38 @@ public class Routine1 extends WindowRoutine
 //			
 //		}
 		
+		
+		renderAxis(alpha);
 	}
 
+	private void renderAxis(double alpha)
+	{
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(10, 0, 0), new Tup3f(1,0,0), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 10, 0), new Tup3f(0,1,0), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 0, 10), new Tup3f(0,0,1), alpha);
+		
+		Vec3 headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
+		Quat rot = this.ent.getTransform().getTransformedRot((float)alpha);
+		Vec3 lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3()).normal();
+		
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(0, 0, -1), new Tup3f(1,0,0), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(lookDir), new Tup3f(0,1,0), alpha);
+	}
+	
 	Vec3 playerPos = new Vec3();
 	
 	private void renderShadowMap(double alpha)
 	{
-		shadowBox.update();
-		this.projectionMatrix.initOrtho(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
-		updateLightViewMatrix(new Vec3(10000, 15000, -10000), shadowBox.getCenter());
-		Mat4.mul(projectionMatrix, lightViewMatrix, projectionViewMatrix);
-
-		BindingUtils.bindFramebuffer(this.shadowFbo);
+		Mat4 lightProjection = Mat4.ortho(-10f, 10f, -10f, 10f, 0.001f, 1000f);
+		
+		Vec3 pos = this.directionalLight.pos;
+		
+		Mat4 lightView = Mat4.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3Axis.AXIS_Y);
+		
+		Mat4 lightSpace = lightProjection.mul(lightView);
+		
 		GL11.glViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+		BindingUtils.bindFramebuffer(this.shadowFbo);
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
@@ -287,7 +343,7 @@ public class Routine1 extends WindowRoutine
 		
 		for(Model model : m.keySet())
 		{
-			RenderHelper.renderShadowMap(model, m.get(model), this.projectionViewMatrix, alpha);
+			RenderHelper.renderShadowMap(model, m.get(model), lightSpace, alpha);
 		}
 		
 		BindingUtils.unbindFramebuffer();
@@ -296,6 +352,38 @@ public class Routine1 extends WindowRoutine
 		
 		GL11.glViewport(0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
 	}
+	
+//	private void renderShadowMap(double alpha)
+//	{
+//		shadowBox.update();
+//		
+//		Vec3 lightDirection = this.directionalLight.pos.invert(null);
+//		//this.projectionMatrix.initOrtho(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
+//		this.projectionMatrix.initOrtho(-10, 10, -10, 10, 0.001f, 1000f);
+//		updateLightViewMatrix(lightDirection, shadowBox.getCenter());
+//		Mat4.mul(projectionMatrix, lightViewMatrix, projectionViewMatrix);
+//
+//		GL11.glViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+//		BindingUtils.bindFramebuffer(this.shadowFbo);
+//		
+//		GL11.glEnable(GL11.GL_DEPTH_TEST);
+//		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+//
+//		GLUtils.cullFace(GL11.GL_FRONT);
+//		
+//		Map<Model, List<StaticModelEntity>> m = this.w.getMapByModel();
+//		
+//		for(Model model : m.keySet())
+//		{
+//			RenderHelper.renderShadowMap(model, m.get(model), this.projectionViewMatrix, alpha);
+//		}
+//		
+//		BindingUtils.unbindFramebuffer();
+//		
+//		GLUtils.cullFace(false);
+//		
+//		GL11.glViewport(0, 0, this.context.getWindow().getWidth(), this.context.getWindow().getHeight());
+//	}
 	
 	private void renderDeferred(double alpha)
 	{
@@ -325,7 +413,7 @@ public class Routine1 extends WindowRoutine
 		
 		Map<Model, List<StaticModelEntity>> m = this.w.getMapByModel();
 		
-		//renderShadowMap(alpha);
+		renderShadowMap(alpha);
 		
 		for(Model model : m.keySet())
 		{
@@ -368,16 +456,18 @@ public class Routine1 extends WindowRoutine
 	}
 	
 	private void updateLightViewMatrix(Vec3 direction, Vec3 center) {
-		direction.normal();
-		center.invert();
-		lightViewMatrix.initIdentity();
-		float pitch = (float) Math.acos(new Vec2(direction.getX(), direction.getZ()).length());
-		lightViewMatrix.rotate(Quat.getFromAxis( new Vec3(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
+//		direction.normal();
+//		center.invert();
+//		lightViewMatrix.initIdentity();
+//		float pitch = (float) Math.acos(new Vec2(direction.getX(), direction.getZ()).length());
+//		lightViewMatrix.rotate(Quat.getFromAxis( new Vec3(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
+//		
+//		float yaw = (float) (((float) Math.atan(direction.getX() / direction.getZ())) * Maths.RAD_TO_DEG);
+//		yaw = direction.getZ() > 0 ? yaw - 180 : yaw;
+//		lightViewMatrix.rotate(Quat.getFromAxis(new Vec3(0, 1, 0), -yaw));
+//		lightViewMatrix.translate(center);
 		
-		float yaw = (float) (((float) Math.atan(direction.getX() / direction.getZ())) * Maths.RAD_TO_DEG);
-		yaw = direction.getZ() > 0 ? yaw - 180 : yaw;
-		lightViewMatrix.rotate(Quat.getFromAxis(new Vec3(0, 1, 0), -yaw));
-		lightViewMatrix.translate(center);
+		 lightViewMatrix.initLookAt(center, center.addN(direction), Vec3Axis.AXIS_Y);
 	}
 	
 	public Mat4 getToShadowMapSpaceMatrix() {

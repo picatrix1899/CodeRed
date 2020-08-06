@@ -1,19 +1,19 @@
 package com.codered.demo;
 
-import java.util.Iterator;
 import java.util.List;
 
+import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import com.codered.entities.Camera;
-import com.codered.entities.StaticEntity;
 import com.codered.entities.StaticModelEntity;
+import com.codered.managing.VAO;
 import com.codered.model.Mesh;
 import com.codered.model.Model;
 import com.codered.rendering.light.AmbientLight;
 import com.codered.rendering.light.DirectionalLight;
-import com.codered.rendering.shader.Shader;
 import com.codered.rendering.shader.ShaderProgram;
 import com.codered.rendering.shader.ShaderSession;
 import com.codered.utils.BindingUtils;
@@ -26,6 +26,7 @@ public class RenderHelper
 	public static ShaderProgram ambientLightShader;
 	public static ShaderProgram deferredShader;
 	public static ShaderProgram shadowShader;
+	public static ShaderProgram coloredShader;
 	
 	public static void renderAmbientLight(Model model, List<StaticModelEntity> entities, Camera cam, Mat4 projection,
 			AmbientLight light, double alpha)
@@ -136,4 +137,71 @@ public class RenderHelper
 			}
 		}
 	}
+	
+	private static VAO vao = new VAO();
+	
+	public static void renderPoint(Mat4 projection, Camera cam, Tup3fR p, Tup3fR color, float size, double alpha)
+	{
+		vao.storeData(0, new Tup3fR[] {p}, 0, 0, GL20.GL_STATIC_DRAW);
+		vao.storeIndices(new int[] {0}, GL20.GL_STATIC_DRAW);
+		
+		try(ShaderSession ss = coloredShader.start())
+		{
+			coloredShader.setUniformValue(0, Mat4.IDENTITY);
+			coloredShader.setUniformValue(1, projection);
+			coloredShader.setUniformValue(2, cam.getLerpedViewMatrix((float)alpha));
+			coloredShader.setUniformValue(3, color);
+			
+			BindingUtils.bindVAO(vao, 0);
+			
+			GL11.glPointSize(size);
+			GL11.glDrawElements(GL11.GL_POINTS, 1, GL11.GL_UNSIGNED_INT, 0);
+		}
+	}
+
+	public static void renderLine(Mat4 projection, Camera cam, Tup3fR start, Tup3fR end, Tup3fR color, double alpha)
+	{
+		vao.storeData(0, new Tup3fR[] {start, end}, 0, 0, GL20.GL_STATIC_DRAW);
+		vao.storeIndices(new int[] {0, 1}, GL20.GL_STATIC_DRAW);
+		
+		try(ShaderSession ss = coloredShader.start())
+		{
+			coloredShader.setUniformValue(0, Mat4.IDENTITY);
+			coloredShader.setUniformValue(1, projection);
+			coloredShader.setUniformValue(2, cam.getLerpedViewMatrix((float)alpha));
+			coloredShader.setUniformValue(3, color);
+			
+			BindingUtils.bindVAO(vao, 0);
+			
+			//GL11.glPointSize(10f);
+			GL11.glDrawElements(GL11.GL_LINES, 2, GL11.GL_UNSIGNED_INT, 0);
+		}
+	}
+
+	public static void renderArrow(Mat4 projection, Camera cam, Tup3fR start, Tup3fR end, Tup3fR color, double alpha)
+	{
+		try(ShaderSession ss = coloredShader.start())
+		{
+			coloredShader.setUniformValue(0, Mat4.IDENTITY);
+			coloredShader.setUniformValue(1, projection);
+			coloredShader.setUniformValue(2, cam.getLerpedViewMatrix((float)alpha));
+			coloredShader.setUniformValue(3, color);
+			
+			vao.storeData(0, new Tup3fR[] {start, end}, 0, 0, GL20.GL_STATIC_DRAW);
+			vao.storeIndices(new int[] {0, 1}, GL20.GL_STATIC_DRAW);
+			
+			BindingUtils.bindVAO(vao, 0);
+			
+			GL11.glDrawElements(GL11.GL_LINES, 2, GL11.GL_UNSIGNED_INT, 0);
+			
+			vao.storeData(0, new Tup3fR[] {end}, 0, 0, GL20.GL_STATIC_DRAW);
+			vao.storeIndices(new int[] {0}, GL20.GL_STATIC_DRAW);
+
+			BindingUtils.bindVAO(vao, 0);
+
+			GL11.glPointSize(10f);
+			GL11.glDrawElements(GL11.GL_POINTS, 1, GL11.GL_UNSIGNED_INT, 0);
+		}
+	}
+	
 }

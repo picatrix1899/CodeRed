@@ -47,7 +47,7 @@ public class HazeLoader implements IResourceLoader
 		
 		MaterialList mtl = null;
 		
-		boolean hasMaterialList = !objmodel.materialList.isBlank();
+		boolean hasMaterialList = !objmodel.materialList.isEmpty();
 		
 		if(hasMaterialList) mtl = mtlreader.read(parentPath + File.separator + objmodel.materialList);
 		
@@ -76,14 +76,14 @@ public class HazeLoader implements IResourceLoader
 			
 			if(hasMaterialList)
 			{
-				if(!objmesh.material.isBlank())
+				if(!objmesh.material.isEmpty())
 				{
 					org.haze.mtl.Material m = mtl.materials.get(objmesh.material);
 					
 					TextureData diffuse = null;
 					TextureData normal = null;
 					
-					if(!m.mapDiffuse.isBlank())
+					if(!m.mapDiffuse.isEmpty())
 					{
 						Image img = pngreader.read(parentPath + File.separator + m.mapDiffuse);
 						
@@ -94,7 +94,7 @@ public class HazeLoader implements IResourceLoader
 						diffuse = data;
 					}
 					
-					if(!m.mapNormal.isBlank())
+					if(!m.mapNormal.isEmpty())
 					{
 						Image img = pngreader.read(parentPath + File.separator + m.mapNormal);
 						
