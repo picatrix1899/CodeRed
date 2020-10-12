@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3;
 import org.barghos.math.geometry.Triangle3;
-import org.barghos.math.vector.vec2.Vec2;
-import org.barghos.math.vector.vec2.Vec2Pool;
+import org.barghos.math.vector.vec2.Vec2f;
+import org.barghos.math.vector.vec2.pool.Vec2fPool;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Pool;
 import org.barghos.math.vector.vec3.Vec3R;
@@ -92,7 +92,7 @@ public class AssimpLoader implements IResourceLoader
 		Vec3 pos = Vec3Pool.get();
 		Vec3 nrm = Vec3Pool.get();
 		Vec3 tng = Vec3Pool.get();
-		Vec2 uv = Vec2Pool.get();
+		Vec2f uv = Vec2fPool.get();
 		
 		for(int i = 0; i < rawMesh.mNumVertices(); i++)
 		{
@@ -189,5 +189,8 @@ public class AssimpLoader implements IResourceLoader
 		
 		MeshData mesh = new MeshData(vertices.size(), faces, collision, material);
 		meshes.add(mesh);
+		
+		Vec3Pool.store(pos, nrm, tng);
+		Vec2fPool.store(uv);
 	}
 }

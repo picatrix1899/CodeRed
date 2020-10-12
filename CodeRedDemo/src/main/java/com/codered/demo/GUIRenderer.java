@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec2.Vec2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
@@ -46,18 +46,18 @@ public class GUIRenderer implements IGuiRenderer
 	@Override
 	public void drawTexturedRect(int t, float posX, float posY, float sizeX, float sizeY)
 	{
-		Vec2[] vertices = new Vec2[] {
-			new Vec2(posX, posY + sizeY),
-			new Vec2(posX, posY),
-			new Vec2(posX + sizeX, posY),	
-			new Vec2(posX + sizeX, posY +sizeY),
+		Vec2f[] vertices = new Vec2f[] {
+			new Vec2f(posX, posY + sizeY),
+			new Vec2f(posX, posY),
+			new Vec2f(posX + sizeX, posY),	
+			new Vec2f(posX + sizeX, posY +sizeY),
 		};
 		
-		Vec2[] uvs = new Vec2[] {
-			new Vec2(0,1),	
-			new Vec2(0,0),				
-			new Vec2(1,0),	
-			new Vec2(1,1),		
+		Vec2f[] uvs = new Vec2f[] {
+			new Vec2f(0,1),	
+			new Vec2f(0,0),				
+			new Vec2f(1,0),	
+			new Vec2f(1,1),		
 		};
 
 		vao.clearVBOs();

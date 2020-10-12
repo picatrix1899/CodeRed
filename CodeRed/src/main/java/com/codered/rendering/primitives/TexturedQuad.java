@@ -1,7 +1,7 @@
 package com.codered.rendering.primitives;
 
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec2.Vec2f;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
 
@@ -40,7 +40,7 @@ public class TexturedQuad
 		
 		this.vao = new VAO();
 		this.vao.storeData(0, v, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(1, new Vec2[] { new Vec2(0,0), new Vec2(0,1), new Vec2(1,1), new Vec2(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(1, new Vec2f[] { new Vec2f(0,0), new Vec2f(0,1), new Vec2f(1,1), new Vec2f(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(2, new Vec3[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(3, new Vec3[] {tangent, tangent, tangent, tangent}, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeIndices(new int[] {0, 1, 2, 2, 3, 0}, GL15.GL_STATIC_DRAW);
@@ -51,12 +51,12 @@ public class TexturedQuad
 		Vec3 deltaPos1 = new Vec3(newX);
 		Vec3 deltaPos2 = new Vec3(newZ);
 		
-		Vec2 uv0 = new Vec2(0,1);
-		Vec2 uv1 = new Vec2(1,1);
-		Vec2 uv2 = new Vec2(0,0);
+		Vec2f uv0 = new Vec2f(0,1);
+		Vec2f uv1 = new Vec2f(1,1);
+		Vec2f uv2 = new Vec2f(0,0);
 		
-		Vec2 deltaUv1 = uv1.sub(uv0, null);
-		Vec2 deltaUv2 = uv2.sub(uv0, null);
+		Vec2f deltaUv1 = uv1.sub(uv0, null);
+		Vec2f deltaUv2 = uv2.sub(uv0, null);
 
 		float r = 1.0f / (deltaUv1.getX() * deltaUv2.getY() - deltaUv1.getY() * deltaUv2.getX());
 	

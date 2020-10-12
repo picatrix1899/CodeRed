@@ -1,6 +1,6 @@
 package com.codered.rendering.light;
 
-import org.barghos.core.color.Color3R;
+import org.barghos.core.color.api.Color3R;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.point.Point3;
 

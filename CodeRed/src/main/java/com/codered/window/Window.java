@@ -2,12 +2,11 @@ package com.codered.window;
 
 import org.barghos.core.event.Event;
 
-import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec2.Vec2f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 
 import com.codered.CodeRed;
@@ -25,7 +24,7 @@ public class Window
 	
 	private GLCapabilities capabilities;
 
-	private Vec2 size = new Vec2();
+	private Vec2f size = new Vec2f();
 	private String title = "";
 	
 	private boolean isReleased;
@@ -34,7 +33,7 @@ public class Window
 	
 	private WindowHints hints;
 	
-	public Event<Vec2> Resize = new Event<>();
+	public Event<Vec2f> Resize = new Event<>();
 	public Event<Void> WindowClose = new Event<>();
 	
 	public Window(int width, int height, String title, WindowHints hints)
@@ -146,7 +145,7 @@ public class Window
 	public String getTitle() { return this.title; }
 	public int getWidth() { return (int)this.size.getX(); }
 	public int getHeight() { return (int)this.size.getY(); }
-	public Vec2 getSize() { return new Vec2(this.size); }
+	public Vec2f getSize() { return new Vec2f(this.size); }
 
 	public void onResize(long id, int width, int height)
 	{
@@ -157,7 +156,7 @@ public class Window
 			makeContextCurrent();
 			this.size.set(width, height);
 			
-			this.Resize.fire(new Vec2(width, height));
+			this.Resize.fire(new Vec2f(width, height));
 			currentWindow.makeContextCurrent();
 		}
 	}

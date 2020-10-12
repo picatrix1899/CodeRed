@@ -83,11 +83,6 @@
   		<version>4.1.0</version>
   	</dependency>
   	<dependency>
-  		<groupId>barghos</groupId>
-  		<artifactId>barghos-structs</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
   		<groupId>haze</groupId>
   		<artifactId>haze</artifactId>
   		<version>0.0.1-SNAPSHOT</version>

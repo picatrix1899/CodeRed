@@ -1,8 +1,8 @@
 package com.codered.gui.elements;
 
 import org.barghos.math.geometry.Area2;
-import org.barghos.math.point.Point2;
-import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.point.Point2f;
+import org.barghos.math.vector.vec2.Vec2f;
 
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;
@@ -21,14 +21,14 @@ public class GUIEButton extends GUIElement
 	{
 		super(id, parent, renderer);
 		
-		this.main = new Area2(new Point2(posX, posY), new Point2(posX + sizeX, posY + sizeY));
+		this.main = new Area2(new Point2f(posX, posY), new Point2f(posX + sizeX, posY + sizeY));
 		this.background = background.getId();
 	}
 
 	public void render()
 	{
-		Point2 min = this.main.getMin(new Point2());
-		Point2 max = this.main.getMax(new Point2());
+		Point2f min = this.main.getMin(new Point2f());
+		Point2f max = this.main.getMax(new Point2f());
 		
 		drawTexturedRect(background, min.getX(), min.getY(), max.getX(), max.getY());
 		if(text != null) drawText(text);
@@ -36,15 +36,15 @@ public class GUIEButton extends GUIElement
 
 	public void setText(String text, int fontsize, FontType font, boolean centeredHorizontal, boolean centeredVertical)
 	{
-		Point2 min = this.main.getMin(new Point2());
-		Point2 max = this.main.getMax(new Point2());
+		Point2f min = this.main.getMin(new Point2f());
+		Point2f max = this.main.getMax(new Point2f());
 		
 		this.text = new GUIText(text, fontsize, min.getX(), min.getY(), max.getX(), max.getY(), font, centeredHorizontal, centeredVertical);
 	}
 	
 	public void onClick()
 	{
-		Vec2 mousePos = this.context.getMouse().getCurrentPos();
+		Vec2f mousePos = this.context.getMouse().getCurrentPos();
 		if(main.isPointInside(mousePos))
 		{
 			this.parent.response(this);

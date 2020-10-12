@@ -3,8 +3,8 @@ package com.codered.entities;
 import java.util.List;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.geometry.AABB3;
-import org.barghos.math.helper.AABB3Helper;
+import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.helper.AABB3fHelper;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
@@ -17,7 +17,7 @@ public class StaticModelEntity extends StaticEntity
 
 	private Model model;
 	
-	private AABB3 basicAABB;
+	private AABB3f basicAABB;
 	
 	public StaticModelEntity(Model model, Vec3 pos, float rx, float ry, float rz, Tup3fR scale)
 	{
@@ -37,17 +37,17 @@ public class StaticModelEntity extends StaticEntity
 		return this.model;
 	}
 	
-	public AABB3 getAABB()
+	public AABB3f getAABB()
 	{
 		if(basicAABB != null) return this.basicAABB;
 
 		List<Mesh> meshes = this.model.getMeshes();
 		
-		AABB3 out = new AABB3(meshes.get(0).getCollisionMesh().get().getAABBf());
+		AABB3f out = new AABB3f(meshes.get(0).getCollisionMesh().get().getAABBf());
 		
 		for(int i = 1; i < meshes.size(); i++)
 		{
-			AABB3Helper.merge(out, meshes.get(i).getCollisionMesh().get().getAABBf(), out);
+			AABB3fHelper.merge(out, meshes.get(i).getCollisionMesh().get().getAABBf(), out);
 		}
 		
 		return out;

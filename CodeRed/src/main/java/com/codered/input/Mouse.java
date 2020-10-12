@@ -1,6 +1,6 @@
 package com.codered.input;
 
-import org.barghos.math.vector.vec2.Vec2;
+import org.barghos.math.vector.vec2.Vec2f;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.window.WindowContext;
@@ -11,10 +11,10 @@ public class Mouse
 	
 	private boolean grabbed;
 	
-	private Vec2 currentPos = new Vec2();
-	private Vec2 deltaPos = new Vec2();
+	private Vec2f currentPos = new Vec2f();
+	private Vec2f deltaPos = new Vec2f();
 	
-	private Vec2 returnPos = new Vec2();
+	private Vec2f returnPos = new Vec2f();
 	
 	public Mouse(WindowContext context)
 	{
@@ -22,7 +22,7 @@ public class Mouse
 		GLFW.glfwSetCursorPosCallback(this.windowId, (w, x, y) -> cursorPosCallback(w, x, y));
 	}
 	
-	public void setMousePos(Vec2 pos)
+	public void setMousePos(Vec2f pos)
 	{
 		GLFW.glfwSetCursorPos(this.windowId, pos.getX(), pos.getY());
 	}
@@ -69,12 +69,12 @@ public class Mouse
 		}
 	}
 	
-	public Vec2 getCurrentPos()
+	public Vec2f getCurrentPos()
 	{
 		return this.currentPos;
 	}
 	
-	public Vec2 getDeltaPos()
+	public Vec2f getDeltaPos()
 	{
 		return this.deltaPos;
 	}

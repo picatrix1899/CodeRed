@@ -1,9 +1,9 @@
 package com.codered.rendering.light;
 
 
-import org.barghos.core.color.Color3R;
 import org.barghos.core.color.HDRColor3;
 import org.barghos.core.color.LDRColor3;
+import org.barghos.core.color.api.Color3R;
 import org.barghos.math.vector.vec3.Vec3;
 
 public class DirectionalLight

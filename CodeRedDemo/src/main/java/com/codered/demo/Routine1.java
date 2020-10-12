@@ -4,15 +4,13 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.barghos.core.debug.Debug;
 import org.barghos.core.tuple2.Tup2i;
 import org.barghos.core.tuple3.Tup3f;
 import org.barghos.math.Maths;
-import org.barghos.math.geometry.AABB3;
+import org.barghos.math.geometry.AABB3f;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.point.Point3;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec2.Vec2;
 import org.barghos.math.vector.vec3.Vec3;
 import org.barghos.math.vector.vec3.Vec3Axis;
 import org.lwjgl.glfw.GLFW;
@@ -185,7 +183,7 @@ public class Routine1 extends WindowRoutine
 		Model model = EngineRegistry.getResourceRegistry().get("res/models/nanosuit.obj", Model.class);
 		
 		this.ent = new StaticModelEntity(model, new Vec3(-10, 0, -10), 0, 0, 0);
-		AABB3 aabb = this.ent.getAABB();
+		AABB3f aabb = this.ent.getAABB();
 		float height = aabb.getHalfExtend().mul(2.0f).getY();
 		Tup3f mscale = new Tup3f(1.8f / height);
 		this.ent.getTransform().setScale(mscale);
@@ -245,8 +243,12 @@ public class Routine1 extends WindowRoutine
 					}
 					else
 					{
-						this.projection = this.pr;
-						GL11.glViewport(0, 0, 800, 600);
+						Mat4 m = Mat4.identity();
+						//m.m[0][2] = (float)Maths.sin(40.0f * Maths.DEG_TO_RAD);
+						
+						this.projection = m.mul(this.proj, new Mat4());
+						//this.projection = this.pr;
+						//GL11.glViewport(0, 0, 800, 600);
 					}
 					p = !p;
 				}

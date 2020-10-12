@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.geometry.AABB3;
+import org.barghos.math.geometry.AABB3f;
 import org.barghos.math.geometry.OBB3;
 import org.barghos.math.geometry.OBBOBBResolver;
 import org.barghos.math.matrix.Mat4;
@@ -26,7 +26,7 @@ import com.codered.window.WindowContext;
 
 public class Player
 {
-	public AABB3 aabb;
+	public AABB3f aabb;
 
 	public GUIWindow window;
 	
@@ -40,7 +40,7 @@ public class Player
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
 
-		this.aabb = new AABB3(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
+		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
 		
 		this.transform.setPos(pos);
 		
@@ -148,7 +148,7 @@ public class Player
 //
 //		OBB3 entityOBB;
 //
-//		AABB3 sweptAABB;
+//		AABB3f sweptAABB;
 //		translation = Mat4.translation(tempPos);
 //		
 //		sweptAABB = this.aabb.transform(translation, null);
