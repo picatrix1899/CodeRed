@@ -2,9 +2,9 @@ package com.codered.entities;
 
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 import org.barghos.math.vector.vec3.Vec3fPool;
 
 import com.codered.SweptTransform;
@@ -104,16 +104,16 @@ public class Camera
 	public float getMinRotRoll() { return this.minRotRoll; }
 	public float getMaxRotRoll() { return this.maxRotRoll; }
 	
-	public Quat getRelativeRot() { return this.transform.getRot(); }
-	public Quat getTotalRot() { return this.transform.getTransformedRot(); }
+	public Quatf getRelativeRot() { return this.transform.getRot(); }
+	public Quatf getTotalRot() { return this.transform.getTransformedRot(); }
 	
 	public float getPitchSpeed() { return this.speedPitch; }
 	public float getYawSpeed() { return this.speedYaw; }
 	public float getRollSpeed() { return this.speedRoll; }
 	
-	public Quat getPitch() { return this.transform.getRotation().getRotationPitch(); }
-	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
-	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
+	public Quatf getPitch() { return this.transform.getRotation().getRotationPitch(); }
+	public Quatf getYaw() { return this.transform.getRotation().getRotationYaw(); }
+	public Quatf getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
 	public Camera setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
 	public Camera moveBy(Vec3f velocity) { this.transform.setPos(this.transform.getPos().addN(velocity)); return this; }
@@ -141,18 +141,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount < this.maxRotPitch)
-					this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(-this.transform.getRotation().getEulerPitch() + this.speedPitch * amount > this.minRotPitch)
-					this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3Axis.AXIS_NX, this.speedPitch * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_NX, this.speedPitch * amount);
 		}
 
 		return this;
@@ -188,18 +188,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount < this.maxRotYaw)
-					this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerYaw() + this.speedYaw * amount > this.minRotYaw)
-					this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3Axis.AXIS_Y, this.speedYaw * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_Y, this.speedYaw * amount);
 		}
 
 		return this;
@@ -213,18 +213,18 @@ public class Camera
 			if(amount > 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount < this.maxRotRoll)
-					this.transform.rotate(Vec3Axis.AXIS_Z, this.speedYaw * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedYaw * amount);
 			}
 			else if(amount < 0.0f)
 			{
 				if(this.transform.getRotation().getEulerRoll() + this.speedRoll * amount > this.minRotRoll)
-					this.transform.rotate(Vec3Axis.AXIS_Z, this.speedRoll * amount);
+					this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
 			}
 		}
 		else
 		{
 			if(amount != 0.0f && amount != -0.0f)
-				this.transform.rotate(Vec3Axis.AXIS_Z, this.speedRoll * amount);
+				this.transform.rotate(Vec3fAxis.AXIS_Z, this.speedRoll * amount);
 		}
 
 		return this;

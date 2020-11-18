@@ -2,7 +2,7 @@ package com.codered.model;
 
 import java.util.Optional;
 
-import org.barghos.math.geometry.ConvexTriangleMesh3;
+import org.barghos.math.geometry.ConvexTriangleMesh3f;
 
 import com.codered.ResourceHolder;
 import com.codered.managing.VAO;
@@ -13,10 +13,10 @@ public class Mesh implements ResourceHolder
 	
 	private VAO vao;
 	private int vertexCount;
-	private ConvexTriangleMesh3 collisionMesh;
+	private ConvexTriangleMesh3f collisionMesh;
 	private Material material;
 
-	public Mesh(VAO vao, int vertexCount, ConvexTriangleMesh3 collisionMesh, Material material)
+	public Mesh(VAO vao, int vertexCount, ConvexTriangleMesh3f collisionMesh, Material material)
 	{
 		this.vao = vao;
 		this.vertexCount = vertexCount;
@@ -34,7 +34,7 @@ public class Mesh implements ResourceHolder
 		return this.vertexCount;
 	}
 	
-	public Optional<ConvexTriangleMesh3> getCollisionMesh()
+	public Optional<ConvexTriangleMesh3f> getCollisionMesh()
 	{
 		return Optional.ofNullable(this.collisionMesh);
 	}

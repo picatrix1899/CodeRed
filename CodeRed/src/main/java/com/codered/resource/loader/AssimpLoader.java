@@ -5,8 +5,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.barghos.math.geometry.ConvexTriangleMesh3;
-import org.barghos.math.geometry.Triangle3;
+import org.barghos.math.geometry.ConvexTriangleMesh3f;
+import org.barghos.math.geometry.Triangle3f;
 import org.barghos.math.vector.vec2.Vec2f;
 import org.barghos.math.vector.vec2.pool.Vec2fPool;
 import org.barghos.math.vector.vec3.Vec3f;
@@ -117,7 +117,7 @@ public class AssimpLoader implements IResourceLoader
 		}
 		
 		List<FaceData> faces = new ArrayList<>();
-		List<Triangle3> triangles = new ArrayList<>();
+		List<Triangle3f> triangles = new ArrayList<>();
 		
 		for(int i = 0; i < rawMesh.mNumFaces(); i++)
 		{
@@ -146,11 +146,11 @@ public class AssimpLoader implements IResourceLoader
 			FaceData f = new FaceData(v1, v2, v3, n);
 			faces.add(f);
 			
-			Triangle3 tr = new Triangle3(v1.getPosition(), v2.getPosition(), v3.getPosition());
+			Triangle3f tr = new Triangle3f(v1.getPosition(), v2.getPosition(), v3.getPosition());
 			triangles.add(tr);
 		}
 		
-		ConvexTriangleMesh3 collision = new ConvexTriangleMesh3(triangles);
+		ConvexTriangleMesh3f collision = new ConvexTriangleMesh3f(triangles);
 		
 		AIMaterial mat = AIMaterial.create(scene.mMaterials().get(rawMesh.mMaterialIndex()));
 		AIString pathDiffuse = AIString.calloc();

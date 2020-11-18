@@ -2,18 +2,18 @@ package com.codered.resource.model;
 
 import java.util.List;
 
-import org.barghos.math.geometry.ConvexTriangleMesh3;
+import org.barghos.math.geometry.ConvexTriangleMesh3f;
 
 import com.codered.resource.material.MaterialData;
 
 public class MeshData
 {
 	private int vertexCount;
-	private ConvexTriangleMesh3 collisionMesh;
+	private ConvexTriangleMesh3f collisionMesh;
 	private MaterialData material;
 	private List<FaceData> faces;
 	
-	public MeshData(int vertexCount, List<FaceData> faces, ConvexTriangleMesh3 collisionMesh, MaterialData material)
+	public MeshData(int vertexCount, List<FaceData> faces, ConvexTriangleMesh3f collisionMesh, MaterialData material)
 	{
 		this.vertexCount = vertexCount;
 		this.faces = faces;
@@ -26,7 +26,7 @@ public class MeshData
 		return this.vertexCount;
 	}
 	
-	public ConvexTriangleMesh3 getCollisionMesh()
+	public ConvexTriangleMesh3f getCollisionMesh()
 	{
 		return this.collisionMesh;
 	}

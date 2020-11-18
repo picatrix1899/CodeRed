@@ -1,11 +1,11 @@
 package com.codered.rendering.shader;
 
 import org.barghos.core.tuple4.api.Tup4fR;
-import org.barghos.math.vector.vec4.Vec4;
+import org.barghos.math.vector.vec4.Vec4f;
 
 public class UniformVec4 extends Uniform
 {
-	private Vec4 value = new Vec4();
+	private Vec4f value = new Vec4f();
 	
 	private int location = -1;
 	

@@ -9,10 +9,10 @@ import org.barghos.core.tuple3.Tup3f;
 import org.barghos.math.Maths;
 import org.barghos.math.boundary.AABB3f;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.point.Point3;
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.point.Point3f;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -208,7 +208,7 @@ public class Routine1 extends WindowRoutine
 		this.ambient = new AmbientLight(120, 100, 100, 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
 		
-		this.player = new Player(new Point3(0, 0, 0));
+		this.player = new Player(new Point3f(0, 0, 0));
 		
 		shadowBox = new ShadowBox(lightViewMatrix, this.player.getCamera(), 60f, 0.1f);
 		
@@ -254,7 +254,7 @@ public class Routine1 extends WindowRoutine
 				}
 				
 				this.player.update(delta);
-				ent.rotate(new Vec3f(Vec3Axis.AXIS_NY), 2);
+				ent.rotate(new Vec3f(Vec3fAxis.AXIS_NY), 2);
 				
 				playerPos.set(this.player.getEyePos());
 //			}
@@ -268,8 +268,8 @@ public class Routine1 extends WindowRoutine
 //			}
 					
 		Vec3f headPos = this.ent.getTransform().getTransformedPos().addN(0,1.6f,0);
-		Quat rot = this.ent.getTransform().getTransformedRot();
-		Vec3f lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3f()).normal();	
+		Quatf rot = this.ent.getTransform().getTransformedRot();
+		Vec3f lookDir = rot.transform(Vec3fAxis.AXIS_Z, new Vec3f()).normal();	
 		this.directionalLight.direction.set(lookDir);
 		this.directionalLight.pos.set(headPos);
 	}
@@ -309,13 +309,13 @@ public class Routine1 extends WindowRoutine
 
 	private void renderAxis(double alpha)
 	{
-		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(10, 0, 0), new Tup3f(1,0,0), alpha);
-		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 10, 0), new Tup3f(0,1,0), alpha);
-		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 0, 10), new Tup3f(0,0,1), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(10, 0, 0), new Tup3f(1,0,0), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(0, 10, 0), new Tup3f(0,1,0), alpha);
+		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(0, 0, 10), new Tup3f(0,0,1), alpha);
 		
 		Vec3f headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
-		Quat rot = this.ent.getTransform().getTransformedRot((float)alpha);
-		Vec3f lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3f()).normal();
+		Quatf rot = this.ent.getTransform().getTransformedRot((float)alpha);
+		Vec3f lookDir = rot.transform(Vec3fAxis.AXIS_Z, new Vec3f()).normal();
 		
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(0, 0, -1), new Tup3f(1,0,0), alpha);
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(lookDir), new Tup3f(0,1,0), alpha);
@@ -329,7 +329,7 @@ public class Routine1 extends WindowRoutine
 		
 		Vec3f pos = this.directionalLight.pos;
 		
-		Mat4 lightView = Mat4.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3Axis.AXIS_Y);
+		Mat4 lightView = Mat4.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3fAxis.AXIS_Y);
 		
 		Mat4 lightSpace = lightProjection.mul(lightView);
 		
@@ -462,14 +462,14 @@ public class Routine1 extends WindowRoutine
 //		center.invert();
 //		lightViewMatrix.initIdentity();
 //		float pitch = (float) Math.acos(new Vec2(direction.getX(), direction.getZ()).length());
-//		lightViewMatrix.rotate(Quat.getFromAxis( new Vec3f(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
+//		lightViewMatrix.rotate(Quatf.getFromAxis( new Vec3f(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
 //		
 //		float yaw = (float) (((float) Math.atan(direction.getX() / direction.getZ())) * Maths.RAD_TO_DEG);
 //		yaw = direction.getZ() > 0 ? yaw - 180 : yaw;
-//		lightViewMatrix.rotate(Quat.getFromAxis(new Vec3f(0, 1, 0), -yaw));
+//		lightViewMatrix.rotate(Quatf.getFromAxis(new Vec3f(0, 1, 0), -yaw));
 //		lightViewMatrix.translate(center);
 		
-		 lightViewMatrix.initLookAt(center, center.addN(direction), Vec3Axis.AXIS_Y);
+		 lightViewMatrix.initLookAt(center, center.addN(direction), Vec3fAxis.AXIS_Y);
 	}
 	
 	public Mat4 getToShadowMapSpaceMatrix() {

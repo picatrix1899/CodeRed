@@ -1,7 +1,7 @@
 package com.codered.demo;
 
 import org.barghos.core.debug.Debug;
-import org.barghos.math.vector.quat.QuatPool;
+import org.barghos.math.vector.quat.QuatfPool;
 import org.barghos.math.vector.vec3.Vec3fPool;
 
 import com.codered.engine.EngineBootstrap;
@@ -16,7 +16,7 @@ public class App
 		Debug.PRINT_STACK_ELEMENT = true;
 		
 		Vec3fPool.ensure(16);
-		QuatPool.ensure(16);
+		QuatfPool.ensure(16);
 		
 		GLCommon.isLeakDetectionEnabled(false);
 		

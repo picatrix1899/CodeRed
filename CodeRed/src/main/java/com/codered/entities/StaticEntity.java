@@ -2,9 +2,9 @@ package com.codered.entities;
 
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 
 import com.codered.model.TexturedModel;
 
@@ -48,11 +48,11 @@ public class StaticEntity extends BaseEntity
 
 	public Vec3f getPos() { return super.getPos(); }
 	
-	public Quat getRot() { return super.getRot(); }
+	public Quatf getRot() { return super.getRot(); }
 
 	public Mat4 getTransformationMatrix()
 	{
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
+		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
 		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
@@ -73,7 +73,7 @@ public class StaticEntity extends BaseEntity
 	public Mat4 Test()
 	{
 	
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
+		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 	
 		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)

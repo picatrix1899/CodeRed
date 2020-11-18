@@ -2,7 +2,7 @@ package com.codered;
 
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
 
 public interface ITransform
@@ -24,11 +24,11 @@ public interface ITransform
 	
 	ITransform rotate(float pitch, float yaw, float roll);
 	ITransform rotate(Tup3fR v, float angle);
-	Quat getRot(float alpha);
-	Quat getRot();
+	Quatf getRot(float alpha);
+	Quatf getRot();
 	
-	Quat getTransformedRot(float alpha);
-	Quat getTransformedRot();
+	Quatf getTransformedRot(float alpha);
+	Quatf getTransformedRot();
 	
 	ITransform setScale(Tup3fR scale);
 	Vec3f getScale(float alpha);

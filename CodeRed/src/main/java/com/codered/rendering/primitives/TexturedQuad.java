@@ -3,7 +3,7 @@ package com.codered.rendering.primitives;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.vec2.Vec2f;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 
 
 import org.lwjgl.opengl.GL15;
@@ -73,7 +73,7 @@ public class TexturedQuad
 	public Mat4 getTransformationMatrix()
 	{
 		
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
+		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
 		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)

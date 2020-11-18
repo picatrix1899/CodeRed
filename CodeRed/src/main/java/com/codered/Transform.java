@@ -2,7 +2,7 @@ package com.codered;
 
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
 
 public class Transform implements ITransform
@@ -35,8 +35,8 @@ public class Transform implements ITransform
 	
 	public Transform rotate(float pitch, float yaw, float roll) { this.newRot.rotate(pitch, yaw, roll); return this; }
 	public Transform rotate(Tup3fR v, float angle) { this.newRot.rotate(v, angle); return this; }
-	public Quat getRot() { return this.newRot.getRotation(); }
-	public Quat getTransformedRot()
+	public Quatf getRot() { return this.newRot.getRotation(); }
+	public Quatf getTransformedRot()
 	{
 		if(this.parent != null)
 			return this.parent.getTransformedRot().mul(this.newRot.getRotation(), null);
@@ -69,12 +69,12 @@ public class Transform implements ITransform
 		return getTransformedPos();
 	}
 
-	public Quat getRot(float alpha)
+	public Quatf getRot(float alpha)
 	{
 		return getRot();
 	}
 
-	public Quat getTransformedRot(float alpha)
+	public Quatf getTransformedRot(float alpha)
 	{
 		return getTransformedRot();
 	}

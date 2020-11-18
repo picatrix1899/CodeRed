@@ -1,8 +1,8 @@
 package com.codered;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.quat.Quatf;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 
 public class EulerRotation
 {
@@ -26,7 +26,7 @@ public class EulerRotation
 		return this;
 	}
 	
-	public Quat getRotation()
+	public Quatf getRotation()
 	{	
 		return getRotationRoll().mul(getRotationYaw().mul(getRotationPitch()));
 	}
@@ -58,19 +58,19 @@ public class EulerRotation
 		return this.rotRoll;
 	}
 	
-	public Quat getRotationPitch()
+	public Quatf getRotationPitch()
 	{
-		return Quat.getFromAxis(Vec3Axis.AXIS_NX, getEulerPitch());
+		return Quatf.getFromAxis(Vec3fAxis.AXIS_NX, getEulerPitch());
 	}
 
-	public Quat getRotationYaw()
+	public Quatf getRotationYaw()
 	{
-		return Quat.getFromAxis(Vec3Axis.AXIS_Y, getEulerYaw());
+		return Quatf.getFromAxis(Vec3fAxis.AXIS_Y, getEulerYaw());
 	}
 
-	public Quat getRotationRoll()
+	public Quatf getRotationRoll()
 	{
-		return Quat.getFromAxis(Vec3Axis.AXIS_Z, getEulerRoll());
+		return Quatf.getFromAxis(Vec3fAxis.AXIS_Z, getEulerRoll());
 	}
 	
 }

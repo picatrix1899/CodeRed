@@ -7,7 +7,7 @@ import org.barghos.math.boundary.AABB3f;
 import org.barghos.math.boundary.AABB3fHelper;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 
 import com.codered.model.Mesh;
 import com.codered.model.Model;
@@ -55,7 +55,7 @@ public class StaticModelEntity extends StaticEntity
 	
 	public Mat4 getTransformationMatrix()
 	{
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3Axis.ONE);
+		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
 		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)

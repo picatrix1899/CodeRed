@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import org.lwjgl.glfw.GLFW;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.boundary.AABB3f;
-import org.barghos.math.boundary.OBB3;
+import org.barghos.math.boundary.OBB3f;
 import org.barghos.math.boundary.OBBOBBResolver;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.point.Point3;
+import org.barghos.math.point.Point3f;
 import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3Axis;
+import org.barghos.math.vector.vec3.Vec3fAxis;
 import org.barghos.math.vector.vec3.Vec3fPool;
 
 import com.codered.SweptTransform;
@@ -40,7 +40,7 @@ public class Player
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
 
-		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3f(0.4f, 0.9f, 0.4f));
+		this.aabb = new AABB3f(new Point3f(0f, 0.9f, 0f), new Vec3f(0.4f, 0.9f, 0.4f));
 		
 		this.transform.setPos(pos);
 		
@@ -92,22 +92,22 @@ public class Player
 		
 		if(this.context.getInputManager().isKeyHold(KeyBindings.forward))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_Z, t).normal());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_Z, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_D))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_NX, t).normal());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NX, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_A))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_X, t).normal());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_X, t).normal());
 		}
 		
 		if(this.context.getInputManager().isKeyHold(GLFW.GLFW_KEY_S))
 		{
-			dir.sub(this.camera.getYaw().transform(Vec3Axis.AXIS_NZ, t).normal());
+			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal());
 		}
 
 		if(!dir.isZero(0.0f))
@@ -144,9 +144,9 @@ public class Player
 //		
 //		this.transform.getTransformedPos().add(vel, tempPos);
 //
-//		OBB3 tempOBB;
+//		OBB3f tempOBB;
 //
-//		OBB3 entityOBB;
+//		OBB3f entityOBB;
 //
 //		AABB3f sweptAABB;
 //		translation = Mat4.translation(tempPos);

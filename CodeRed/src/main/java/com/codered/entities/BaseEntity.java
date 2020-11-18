@@ -1,6 +1,6 @@
 package com.codered.entities;
 
-import org.barghos.math.vector.quat.Quat;
+import org.barghos.math.vector.quat.Quatf;
 import org.barghos.math.vector.vec3.Vec3f;
 
 import com.codered.Transform;
@@ -14,7 +14,7 @@ public abstract class BaseEntity
 	public Transform getTransform() { return this.transform; }
 	
 	public Vec3f getPos() { return this.transform.getPos(); }
-	public Quat getRot() { return this.transform.getRot(); }
+	public Quatf getRot() { return this.transform.getRot(); }
 	
 	public long id;
 
