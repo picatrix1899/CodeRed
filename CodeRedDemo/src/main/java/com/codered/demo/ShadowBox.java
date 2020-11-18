@@ -4,7 +4,7 @@ import org.barghos.core.debug.Debug;
 import org.barghos.math.Maths;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec4.Vec4;
 
 import com.codered.engine.EngineRegistry;
@@ -29,8 +29,8 @@ import com.codered.window.WindowContext;
 public class ShadowBox {
 
 	private static final float OFFSET = 10;
-	private static final Vec3 UP = new Vec3(0, 1, 0);
-	private static final Vec3 FORWARD = new Vec3(0, 0, -1);
+	private static final Vec3f UP = new Vec3f(0, 1, 0);
+	private static final Vec3f FORWARD = new Vec3f(0, 0, -1);
 	private static final float SHADOW_DISTANCE = 100;
 
 	private float minX, maxX;
@@ -75,13 +75,13 @@ public class ShadowBox {
 	protected void update()
 	{
 		Mat4 rotation = calculateCameraRotationMatrix();
-		Vec3 forwardVector = rotation.transform(FORWARD, new Vec3());
+		Vec3f forwardVector = rotation.transform(FORWARD, new Vec3f());
 
-		Vec3 toFar = forwardVector.mulN(SHADOW_DISTANCE);
-		Vec3 toNear = forwardVector.mulN(near_plane);
+		Vec3f toFar = forwardVector.mulN(SHADOW_DISTANCE);
+		Vec3f toNear = forwardVector.mulN(near_plane);
 		
-		Vec3 centerNear = toNear.addN(cam.getTotalPos());
-		Vec3 centerFar  =toFar.addN(cam.getTotalPos());
+		Vec3f centerNear = toNear.addN(cam.getTotalPos());
+		Vec3f centerFar  =toFar.addN(cam.getTotalPos());
 
 		Vec4[] points = calculateFrustumVertices(rotation, forwardVector, centerNear,
 				centerFar);
@@ -123,7 +123,7 @@ public class ShadowBox {
 	 * 
 	 * @return The center of the "view cuboid" in world space.
 	 */
-	protected Vec3 getCenter()
+	protected Vec3f getCenter()
 	{
 		float x = (minX + maxX) / 2f;
 		float y = (minY + maxY) / 2f;
@@ -132,7 +132,7 @@ public class ShadowBox {
 		Mat4 invertedLight = lightViewMatrix.invertN();
 		Vec4 r = invertedLight.transform(cen, new Vec4());
 		
-		return new Vec3(r.getX(), r.getY(), r.getZ());
+		return new Vec3f(r.getX(), r.getY(), r.getZ());
 	}
 
 	/**
@@ -175,17 +175,17 @@ public class ShadowBox {
 	 *            plane.
 	 * @return The positions of the vertices of the frustum in light space.
 	 */
-	private Vec4[] calculateFrustumVertices(Mat4 rotation, Vec3 forwardVector, Vec3 centerNear, Vec3 centerFar)
+	private Vec4[] calculateFrustumVertices(Mat4 rotation, Vec3f forwardVector, Vec3f centerNear, Vec3f centerFar)
 	{
-		Vec3 upVector = rotation.transform(UP, new Vec3());
-		Vec3 rightVector = forwardVector.cross(upVector, null);
-		Vec3 downVector = upVector.invert(null);
+		Vec3f upVector = rotation.transform(UP, new Vec3f());
+		Vec3f rightVector = forwardVector.cross(upVector, null);
+		Vec3f downVector = upVector.invert(null);
 		
-		Vec3 leftVector = rightVector.invert(null);
-		Vec3 farTop = centerFar.addN(upVector.mulN(farHeight));
-		Vec3 farBottom = centerFar.addN(downVector.mulN(farHeight));
-		Vec3 nearTop = centerNear.addN(upVector.mulN(nearHeight));
-		Vec3 nearBottom = centerNear.addN(downVector.mulN(nearHeight));
+		Vec3f leftVector = rightVector.invert(null);
+		Vec3f farTop = centerFar.addN(upVector.mulN(farHeight));
+		Vec3f farBottom = centerFar.addN(downVector.mulN(farHeight));
+		Vec3f nearTop = centerNear.addN(upVector.mulN(nearHeight));
+		Vec3f nearBottom = centerNear.addN(downVector.mulN(nearHeight));
 		
 		Vec4[] points = new Vec4[8];
 		
@@ -212,9 +212,9 @@ public class ShadowBox {
 	 *            - the distance of the corner from the start point.
 	 * @return - The relevant corner vertex of the view frustum in light space.
 	 */
-	private Vec4 calculateLightSpaceFrustumCorner(Vec3 startPoint, Vec3 direction, float width)
+	private Vec4 calculateLightSpaceFrustumCorner(Vec3f startPoint, Vec3f direction, float width)
 	{
-		Vec3 point = startPoint.addN(direction.getX() * width, direction.getY() * width, direction.getZ() * width);
+		Vec3f point = startPoint.addN(direction.getX() * width, direction.getY() * width, direction.getZ() * width);
 		Vec4 point4f = new Vec4(point.getX(), point.getY(), point.getZ(), 1f);
 		Mat4.transform(lightViewMatrix, point4f, point4f);
 		return point4f;
@@ -226,8 +226,8 @@ public class ShadowBox {
 	private Mat4 calculateCameraRotationMatrix()
 	{
 		Mat4 rotation = Mat4.identity();
-		rotation.rotate(Quat.getFromAxis(new Vec3(0.0f, 1.0f, 0.0f), -cam.getTransform().getRotation().getEulerYaw()));
-		rotation.rotate(Quat.getFromAxis(new Vec3(1.0f, 0.0f, 0.0f), -cam.getTransform().getRotation().getEulerPitch()));
+		rotation.rotate(Quat.getFromAxis(new Vec3f(0.0f, 1.0f, 0.0f), -cam.getTransform().getRotation().getEulerYaw()));
+		rotation.rotate(Quat.getFromAxis(new Vec3f(1.0f, 0.0f, 0.0f), -cam.getTransform().getRotation().getEulerPitch()));
 		return rotation;
 	}
 

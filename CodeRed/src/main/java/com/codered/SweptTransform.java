@@ -4,7 +4,7 @@ import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.VectorInterpolation;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 
 public class SweptTransform implements ITransform
 {
@@ -36,27 +36,27 @@ public class SweptTransform implements ITransform
 		return this.newTransform.getRotation();
 	}
 	
-	public Vec3 getPos(float alpha)
+	public Vec3f getPos(float alpha)
 	{
 		return VectorInterpolation.lerp(this.oldTransform.getPos(), this.newTransform.getPos(), alpha, null);
 	}
 
-	public Vec3 getPos()
+	public Vec3f getPos()
 	{
 		return this.newTransform.getPos();
 	}
 
-	public Vec3 getTransformedPos(float alpha)
+	public Vec3f getTransformedPos(float alpha)
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), new Vec3());
+			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), new Vec3f());
 		return getPos(alpha);
 	}
 
-	public Vec3 getTransformedPos()
+	public Vec3f getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(getPos(), new Vec3());
+			return this.parent.getTransformationMatrix().transform(getPos(), new Vec3f());
 		return getPos();
 	}
 
@@ -84,12 +84,12 @@ public class SweptTransform implements ITransform
 		return getRot();
 	}
 
-	public Vec3 getScale(float alpha)
+	public Vec3f getScale(float alpha)
 	{
 		return VectorInterpolation.lerp(this.oldTransform.getScale(), this.newTransform.getScale(), alpha, null);
 	}
 
-	public Vec3 getScale()
+	public Vec3f getScale()
 	{
 		return this.newTransform.getScale();
 	}

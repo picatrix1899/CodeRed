@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.geometry.AABB3f;
-import org.barghos.math.geometry.OBB3;
-import org.barghos.math.geometry.OBBOBBResolver;
+import org.barghos.math.boundary.AABB3f;
+import org.barghos.math.boundary.OBB3;
+import org.barghos.math.boundary.OBBOBBResolver;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.point.Point3;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
-import org.barghos.math.vector.vec3.Vec3Pool;
+import org.barghos.math.vector.vec3.Vec3fPool;
 
 import com.codered.SweptTransform;
 import com.codered.engine.EngineRegistry;
@@ -40,7 +40,7 @@ public class Player
 	{
 		this.context = EngineRegistry.getCurrentWindowContext();
 
-		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3(0.4f, 0.9f, 0.4f));
+		this.aabb = new AABB3f(new Point3(0f, 0.9f, 0f), new Vec3f(0.4f, 0.9f, 0.4f));
 		
 		this.transform.setPos(pos);
 		
@@ -87,8 +87,8 @@ public class Player
 	
 	public void updateMovement(double delta)
 	{
-		Vec3 dir = Vec3Pool.get();
-		Vec3 t = Vec3Pool.get();
+		Vec3f dir = Vec3fPool.get();
+		Vec3f t = Vec3fPool.get();
 		
 		if(this.context.getInputManager().isKeyHold(KeyBindings.forward))
 		{
@@ -116,7 +116,7 @@ public class Player
 			
 			float acceleration = 2.5f * (float)delta;
 
-			Vec3 vel = Vec3Pool.get();
+			Vec3f vel = Vec3fPool.get();
 			
 			dir.mul(acceleration, vel);
 
@@ -124,21 +124,21 @@ public class Player
 			
 			this.transform.setPos(this.transform.getPos().addN(vel));
 			
-			Vec3Pool.store(vel);
+			Vec3fPool.store(vel);
 		}
 		
-		Vec3Pool.store(dir, t);
+		Vec3fPool.store(dir, t);
 	}
 	
 	public Camera getCamera() { return this.camera; }
 
 	
 	
-//	private Vec3 checkCollisionStatic(Vec3 vel)
+//	private Vec3f checkCollisionStatic(Vec3f vel)
 //	{
-//		Vec3 sum = Vec3Pool.get();
-//		Vec3 partial = Vec3Pool.get();
-//		Vec3 tempPos = Vec3Pool.get();
+//		Vec3f sum = Vec3fPool.get();
+//		Vec3f partial = Vec3fPool.get();
+//		Vec3f tempPos = Vec3fPool.get();
 //
 //		Mat4 translation;
 //		
@@ -202,7 +202,7 @@ public class Player
 //	
 //		vel.add(sum, vel);
 //		
-//		Vec3Pool.store(sum, partial, tempPos);
+//		Vec3fPool.store(sum, partial, tempPos);
 //		
 //		return vel;
 //	}
@@ -215,8 +215,8 @@ public class Player
 
 	}
 	
-	public Vec3 getPos() { return this.transform.getPos(); }
+	public Vec3f getPos() { return this.transform.getPos(); }
 	
-	public Vec3 getEyePos() { return this.transform.getPos().addN(0.0f, 18.0f, 0.0f); }
+	public Vec3f getEyePos() { return this.transform.getPos().addN(0.0f, 18.0f, 0.0f); }
 
 }

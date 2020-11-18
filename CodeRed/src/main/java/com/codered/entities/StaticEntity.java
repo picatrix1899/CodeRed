@@ -3,7 +3,7 @@ package com.codered.entities;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
 
 import com.codered.model.TexturedModel;
@@ -13,7 +13,7 @@ public class StaticEntity extends BaseEntity
 	
 	protected TexturedModel model;
 
-	public StaticEntity(TexturedModel model, Vec3 pos, float rx, float ry, float rz, Tup3fR scale)
+	public StaticEntity(TexturedModel model, Vec3f pos, float rx, float ry, float rz, Tup3fR scale)
 	{
 		this.model = model;
 		
@@ -25,7 +25,7 @@ public class StaticEntity extends BaseEntity
 		this.transform.swap();
 	}
 	
-	public StaticEntity(TexturedModel model, Vec3 pos, float rx, float ry, float rz)
+	public StaticEntity(TexturedModel model, Vec3f pos, float rx, float ry, float rz)
 	{
 		this.model = model;
 		
@@ -36,7 +36,7 @@ public class StaticEntity extends BaseEntity
 		this.transform.swap();
 	}
 	
-	public StaticEntity setPos(Vec3 pos) { super.setPos(pos); return this; }
+	public StaticEntity setPos(Vec3f pos) { super.setPos(pos); return this; }
 
 	public StaticEntity setRotX(float rx) { super.rotatePitch(rx); return this; }
 	
@@ -46,7 +46,7 @@ public class StaticEntity extends BaseEntity
 
 	public TexturedModel getModel() { return this.model; }
 
-	public Vec3 getPos() { return super.getPos(); }
+	public Vec3f getPos() { return super.getPos(); }
 	
 	public Quat getRot() { return super.getRot(); }
 

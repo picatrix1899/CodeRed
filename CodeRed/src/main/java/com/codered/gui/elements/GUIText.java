@@ -1,6 +1,6 @@
 package com.codered.gui.elements;
 
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 
 import com.codered.gui.font.FontType;
 
@@ -21,7 +21,7 @@ public class GUIText
 	
 	public int fontsize;
 	
-	public Vec3 color = new Vec3(0f, 0f, 0f);
+	public Vec3f color = new Vec3f(0f, 0f, 0f);
 
 	public int numberOfLines;
 

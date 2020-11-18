@@ -3,9 +3,9 @@ package com.codered.entities;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
-import org.barghos.math.vector.vec3.Vec3Pool;
+import org.barghos.math.vector.vec3.Vec3fPool;
 
 import com.codered.SweptTransform;
 
@@ -34,7 +34,7 @@ public class Camera
 		this.transform = new SweptTransform();
 	}
 	
-	public Camera(Vec3 pos, float pitch, float yaw, float roll)
+	public Camera(Vec3f pos, float pitch, float yaw, float roll)
 	{
 		this();
 		setPos(pos);
@@ -47,7 +47,7 @@ public class Camera
 	public Camera(float posX, float posY, float posZ, float pitch, float yaw, float roll)
 	{
 		this();
-		setPos(new Vec3(posX, posY, posZ));
+		setPos(new Vec3f(posX, posY, posZ));
 		rotatePitch(pitch);
 		rotateYaw(yaw);
 		rotateRoll(roll);
@@ -115,10 +115,10 @@ public class Camera
 	public Quat getYaw() { return this.transform.getRotation().getRotationYaw(); }
 	public Quat getRoll() { return this.transform.getRotation().getRotationRoll(); }
 	
-	public Camera setPos(Vec3 pos) { this.transform.setPos(pos); return this; }
-	public Camera moveBy(Vec3 velocity) { this.transform.setPos(this.transform.getPos().addN(velocity)); return this; }
-	public Vec3 getRelativePos() { return this.transform.getPos(); }
-	public Vec3 getTotalPos() { return this.transform.getTransformedPos(); }
+	public Camera setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
+	public Camera moveBy(Vec3f velocity) { this.transform.setPos(this.transform.getPos().addN(velocity)); return this; }
+	public Vec3f getRelativePos() { return this.transform.getPos(); }
+	public Vec3f getTotalPos() { return this.transform.getTransformedPos(); }
 	
 	public Mat4 getViewMatrix()
 	{
@@ -160,15 +160,15 @@ public class Camera
 	
 	public double getAngle(Tup3fR a, Tup3fR b)
 	{
-		Vec3 va = Vec3Pool.get(a);
-		Vec3 vb = Vec3Pool.get(b);
+		Vec3f va = Vec3fPool.get(a);
+		Vec3f vb = Vec3fPool.get(b);
 		double combinedLength = va.lengthSafe() * vb.lengthSafe();
-		Vec3 cross = va.cross(vb, null);
+		Vec3f cross = va.cross(vb, null);
 
 		double sin = cross.length() / combinedLength;
 		double cos = va.dot(vb) / combinedLength;
 		
-		Vec3 n = cross.normal(null);
+		Vec3f n = cross.normal(null);
 		
 		double sign = n.dot(cross);
 	
@@ -176,7 +176,7 @@ public class Camera
 		
 		if(sign < 0) out = -out;
 		
-		Vec3Pool.store(va, vb);
+		Vec3fPool.store(va, vb);
 		
 		return out;
 	}

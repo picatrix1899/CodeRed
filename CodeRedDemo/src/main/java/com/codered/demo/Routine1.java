@@ -7,11 +7,11 @@ import java.util.Map;
 import org.barghos.core.tuple2.Tup2i;
 import org.barghos.core.tuple3.Tup3f;
 import org.barghos.math.Maths;
-import org.barghos.math.geometry.AABB3f;
+import org.barghos.math.boundary.AABB3f;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.point.Point3;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -182,7 +182,7 @@ public class Routine1 extends WindowRoutine
 		
 		Model model = EngineRegistry.getResourceRegistry().get("res/models/nanosuit.obj", Model.class);
 		
-		this.ent = new StaticModelEntity(model, new Vec3(-10, 0, -10), 0, 0, 0);
+		this.ent = new StaticModelEntity(model, new Vec3f(-10, 0, -10), 0, 0, 0);
 		AABB3f aabb = this.ent.getAABB();
 		float height = aabb.getHalfExtend().mul(2.0f).getY();
 		Tup3f mscale = new Tup3f(1.8f / height);
@@ -190,20 +190,20 @@ public class Routine1 extends WindowRoutine
 		this.ent.getTransform().setPos(new Tup3f(-10, -aabb.getMin().getY(), -10));
 		this.w.add(ent);
 		
-		this.w.add(new StaticModelEntity(model, new Vec3(-10, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-10, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-20, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-20, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-20, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-20, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-30, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-30, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-30, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-30, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3(-40, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -40), 0, 0, 0, mscale));
 		
 		this.ambient = new AmbientLight(120, 100, 100, 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
@@ -254,7 +254,7 @@ public class Routine1 extends WindowRoutine
 				}
 				
 				this.player.update(delta);
-				ent.rotate(new Vec3(Vec3Axis.AXIS_NY), 2);
+				ent.rotate(new Vec3f(Vec3Axis.AXIS_NY), 2);
 				
 				playerPos.set(this.player.getEyePos());
 //			}
@@ -267,9 +267,9 @@ public class Routine1 extends WindowRoutine
 				//this.inventory.update();
 //			}
 					
-		Vec3 headPos = this.ent.getTransform().getTransformedPos().addN(0,1.6f,0);
+		Vec3f headPos = this.ent.getTransform().getTransformedPos().addN(0,1.6f,0);
 		Quat rot = this.ent.getTransform().getTransformedRot();
-		Vec3 lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3()).normal();	
+		Vec3f lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3f()).normal();	
 		this.directionalLight.direction.set(lookDir);
 		this.directionalLight.pos.set(headPos);
 	}
@@ -313,21 +313,21 @@ public class Routine1 extends WindowRoutine
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 10, 0), new Tup3f(0,1,0), alpha);
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3(0,0,0), new Point3(0, 0, 10), new Tup3f(0,0,1), alpha);
 		
-		Vec3 headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
+		Vec3f headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
 		Quat rot = this.ent.getTransform().getTransformedRot((float)alpha);
-		Vec3 lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3()).normal();
+		Vec3f lookDir = rot.transform(Vec3Axis.AXIS_Z, new Vec3f()).normal();
 		
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(0, 0, -1), new Tup3f(1,0,0), alpha);
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(lookDir), new Tup3f(0,1,0), alpha);
 	}
 	
-	Vec3 playerPos = new Vec3();
+	Vec3f playerPos = new Vec3f();
 	
 	private void renderShadowMap(double alpha)
 	{
 		Mat4 lightProjection = Mat4.ortho(-10f, 10f, -10f, 10f, 0.001f, 1000f);
 		
-		Vec3 pos = this.directionalLight.pos;
+		Vec3f pos = this.directionalLight.pos;
 		
 		Mat4 lightView = Mat4.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3Axis.AXIS_Y);
 		
@@ -359,7 +359,7 @@ public class Routine1 extends WindowRoutine
 //	{
 //		shadowBox.update();
 //		
-//		Vec3 lightDirection = this.directionalLight.pos.invert(null);
+//		Vec3f lightDirection = this.directionalLight.pos.invert(null);
 //		//this.projectionMatrix.initOrtho(shadowBox.getWidth(), shadowBox.getHeight(), shadowBox.getLength());
 //		this.projectionMatrix.initOrtho(-10, 10, -10, 10, 0.001f, 1000f);
 //		updateLightViewMatrix(lightDirection, shadowBox.getCenter());
@@ -457,16 +457,16 @@ public class Routine1 extends WindowRoutine
 		this.player.preUpdate();
 	}
 	
-	private void updateLightViewMatrix(Vec3 direction, Vec3 center) {
+	private void updateLightViewMatrix(Vec3f direction, Vec3f center) {
 //		direction.normal();
 //		center.invert();
 //		lightViewMatrix.initIdentity();
 //		float pitch = (float) Math.acos(new Vec2(direction.getX(), direction.getZ()).length());
-//		lightViewMatrix.rotate(Quat.getFromAxis( new Vec3(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
+//		lightViewMatrix.rotate(Quat.getFromAxis( new Vec3f(1, 0, 0), (float) (pitch * Maths.RAD_TO_DEG)));
 //		
 //		float yaw = (float) (((float) Math.atan(direction.getX() / direction.getZ())) * Maths.RAD_TO_DEG);
 //		yaw = direction.getZ() > 0 ? yaw - 180 : yaw;
-//		lightViewMatrix.rotate(Quat.getFromAxis(new Vec3(0, 1, 0), -yaw));
+//		lightViewMatrix.rotate(Quat.getFromAxis(new Vec3f(0, 1, 0), -yaw));
 //		lightViewMatrix.translate(center);
 		
 		 lightViewMatrix.initLookAt(center, center.addN(direction), Vec3Axis.AXIS_Y);
@@ -478,8 +478,8 @@ public class Routine1 extends WindowRoutine
 	
 	private Mat4 createOffset() {
 		Mat4 offset = new Mat4();
-		offset.translate(new Vec3(0.5f, 0.5f, 0.5f));
-		offset.scale(new Vec3(0.5f, 0.5f, 0.5f));
+		offset.translate(new Vec3f(0.5f, 0.5f, 0.5f));
+		offset.scale(new Vec3f(0.5f, 0.5f, 0.5f));
 		return offset;
 	}
 }

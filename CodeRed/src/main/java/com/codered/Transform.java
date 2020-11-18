@@ -3,21 +3,21 @@ package com.codered;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 
 public class Transform implements ITransform
 {
-	private Vec3 newPos;
+	private Vec3f newPos;
 	private EulerRotation newRot;
-	private Vec3 newScale;
+	private Vec3f newScale;
 	
 	private ITransform parent;
 	
 	public Transform()
 	{
-		this.newPos = new Vec3();
+		this.newPos = new Vec3f();
 		this.newRot = new EulerRotation();
-		this.newScale = new Vec3(1, 1, 1);
+		this.newScale = new Vec3f(1, 1, 1);
 	}
 	
 	public void swap()
@@ -27,7 +27,7 @@ public class Transform implements ITransform
 	
 	
 	public Transform setScale(Tup3fR scale) { this.newScale.set(scale); return this; }
-	public Vec3 getScale() { return this.newScale; }
+	public Vec3f getScale() { return this.newScale; }
 	
 	public Transform setParent(ITransform parent) { this.parent = parent; return this; }
 	public ITransform getParent() { return this.parent; }
@@ -43,11 +43,11 @@ public class Transform implements ITransform
 		return this.newRot.getRotation();
 	}	
 	public Transform setPos(Tup3fR pos) { this.newPos.set(pos); return this; }
-	public Vec3 getPos() { return this.newPos; }
-	public Vec3 getTransformedPos()
+	public Vec3f getPos() { return this.newPos; }
+	public Vec3f getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(this.newPos, new Vec3());
+			return this.parent.getTransformationMatrix().transform(this.newPos, new Vec3f());
 		return this.newPos;
 	}
 
@@ -59,12 +59,12 @@ public class Transform implements ITransform
 		return this.parent.getTransformationMatrix().mul(Mat4.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale), null);
 	}
 
-	public Vec3 getPos(float alpha)
+	public Vec3f getPos(float alpha)
 	{
 		return getPos();
 	}
 
-	public Vec3 getTransformedPos(float alpha)
+	public Vec3f getTransformedPos(float alpha)
 	{
 		return getTransformedPos();
 	}
@@ -79,7 +79,7 @@ public class Transform implements ITransform
 		return getTransformedRot();
 	}
 
-	public Vec3 getScale(float alpha)
+	public Vec3f getScale(float alpha)
 	{
 		return getScale();
 	}

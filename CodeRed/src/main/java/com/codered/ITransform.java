@@ -3,7 +3,7 @@ package com.codered;
 import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.quat.Quat;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 
 public interface ITransform
 {
@@ -16,11 +16,11 @@ public interface ITransform
 	EulerRotation getRotation();
 	
 	ITransform setPos(Tup3fR pos);
-	Vec3 getPos(float alpha);
-	Vec3 getPos();
+	Vec3f getPos(float alpha);
+	Vec3f getPos();
 	
-	Vec3 getTransformedPos(float alpha);
-	Vec3 getTransformedPos();
+	Vec3f getTransformedPos(float alpha);
+	Vec3f getTransformedPos();
 	
 	ITransform rotate(float pitch, float yaw, float roll);
 	ITransform rotate(Tup3fR v, float angle);
@@ -31,8 +31,8 @@ public interface ITransform
 	Quat getTransformedRot();
 	
 	ITransform setScale(Tup3fR scale);
-	Vec3 getScale(float alpha);
-	Vec3 getScale();
+	Vec3f getScale(float alpha);
+	Vec3f getScale();
 	
 	Mat4 getTransformationMatrix(float alpha);
 	Mat4 getTransformationMatrix();

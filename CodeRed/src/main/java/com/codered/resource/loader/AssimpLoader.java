@@ -9,9 +9,9 @@ import org.barghos.math.geometry.ConvexTriangleMesh3;
 import org.barghos.math.geometry.Triangle3;
 import org.barghos.math.vector.vec2.Vec2f;
 import org.barghos.math.vector.vec2.pool.Vec2fPool;
-import org.barghos.math.vector.vec3.Vec3;
-import org.barghos.math.vector.vec3.Vec3Pool;
-import org.barghos.math.vector.vec3.Vec3R;
+import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.vector.vec3.Vec3fPool;
+import org.barghos.math.vector.vec3.Vec3fR;
 
 import org.haze.png.Image;
 import org.haze.png.PNGReader;
@@ -89,9 +89,9 @@ public class AssimpLoader implements IResourceLoader
 		
 		List<VertexData> vertices = new ArrayList<>();
 		
-		Vec3 pos = Vec3Pool.get();
-		Vec3 nrm = Vec3Pool.get();
-		Vec3 tng = Vec3Pool.get();
+		Vec3f pos = Vec3fPool.get();
+		Vec3f nrm = Vec3fPool.get();
+		Vec3f tng = Vec3fPool.get();
 		Vec2f uv = Vec2fPool.get();
 		
 		for(int i = 0; i < rawMesh.mNumVertices(); i++)
@@ -127,14 +127,14 @@ public class AssimpLoader implements IResourceLoader
 			VertexData v2 = vertices.get(face.mIndices().get(1));
 			VertexData v3 = vertices.get(face.mIndices().get(2));
 			
-			Vec3 tv1 = Vec3Pool.get(v2.getPosition()).sub(v1.getPosition());
-			Vec3 tv2 = Vec3Pool.get(v3.getPosition()).sub(v1.getPosition());
+			Vec3f tv1 = Vec3fPool.get(v2.getPosition()).sub(v1.getPosition());
+			Vec3f tv2 = Vec3fPool.get(v3.getPosition()).sub(v1.getPosition());
 			
-			Vec3 n = tv1.cross(tv2);
+			Vec3f n = tv1.cross(tv2);
 			
-			Vec3R vn1 = v1.getNormal();
-			Vec3R vn2 = v2.getNormal();
-			Vec3R vn3 = v3.getNormal();
+			Vec3fR vn1 = v1.getNormal();
+			Vec3fR vn2 = v2.getNormal();
+			Vec3fR vn3 = v3.getNormal();
 			
 			if((n.dot(vn1) < 0.0f && n.dot(vn2) < 0.0f) ||
 				(n.dot(vn2) < 0.0f && n.dot(vn3) < 0.0f) ||
@@ -190,7 +190,7 @@ public class AssimpLoader implements IResourceLoader
 		MeshData mesh = new MeshData(vertices.size(), faces, collision, material);
 		meshes.add(mesh);
 		
-		Vec3Pool.store(pos, nrm, tng);
+		Vec3fPool.store(pos, nrm, tng);
 		Vec2fPool.store(uv);
 	}
 }

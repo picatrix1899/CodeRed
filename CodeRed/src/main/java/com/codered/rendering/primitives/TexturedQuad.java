@@ -2,7 +2,7 @@ package com.codered.rendering.primitives;
 
 import org.barghos.math.matrix.Mat4;
 import org.barghos.math.vector.vec2.Vec2f;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
 
 
@@ -18,38 +18,38 @@ public class TexturedQuad
 	
 	private Transform transform = new Transform();
 	
-	private Vec3 newX = new Vec3();
-	private Vec3 newZ = new Vec3();
+	private Vec3f newX = new Vec3f();
+	private Vec3f newZ = new Vec3f();
 	
 	private VAO vao;
 	
-	public TexturedQuad(Vec3 newX, Vec3 newZ, Material mat)
+	public TexturedQuad(Vec3f newX, Vec3f newZ, Material mat)
 	{
 		this.newX.set(newX);
 		this.newZ.set(newZ);
 		this.mat = mat;
 
-		Vec3[] v = new Vec3[4];
-		v[0] = new Vec3().add(newZ);
-		v[1] = new Vec3();
-		v[2] = new Vec3().add(newX);
-		v[3] = new Vec3().add(newX).add(newZ);
+		Vec3f[] v = new Vec3f[4];
+		v[0] = new Vec3f().add(newZ);
+		v[1] = new Vec3f();
+		v[2] = new Vec3f().add(newX);
+		v[3] = new Vec3f().add(newX).add(newZ);
 		
-		Vec3 normal = newX.cross(newZ, null).normal();
-		Vec3 tangent = calculateTangents();
+		Vec3f normal = newX.cross(newZ, null).normal();
+		Vec3f tangent = calculateTangents();
 		
 		this.vao = new VAO();
 		this.vao.storeData(0, v, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeData(1, new Vec2f[] { new Vec2f(0,0), new Vec2f(0,1), new Vec2f(1,1), new Vec2f(1,0) }, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(2, new Vec3[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
-		this.vao.storeData(3, new Vec3[] {tangent, tangent, tangent, tangent}, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(2, new Vec3f[] {normal, normal, normal, normal}, 0, 0, GL15.GL_STATIC_DRAW);
+		this.vao.storeData(3, new Vec3f[] {tangent, tangent, tangent, tangent}, 0, 0, GL15.GL_STATIC_DRAW);
 		this.vao.storeIndices(new int[] {0, 1, 2, 2, 3, 0}, GL15.GL_STATIC_DRAW);
 	}
 	
-	private Vec3 calculateTangents()
+	private Vec3f calculateTangents()
 	{
-		Vec3 deltaPos1 = new Vec3(newX);
-		Vec3 deltaPos2 = new Vec3(newZ);
+		Vec3f deltaPos1 = new Vec3f(newX);
+		Vec3f deltaPos2 = new Vec3f(newZ);
 		
 		Vec2f uv0 = new Vec2f(0,1);
 		Vec2f uv1 = new Vec2f(1,1);
@@ -63,7 +63,7 @@ public class TexturedQuad
 		deltaPos1.mul(deltaUv2.getY(), deltaPos1);
 		deltaPos2.mul(deltaUv1.getY(), deltaPos2);
 		
-		Vec3 tangent = deltaPos1.subN(deltaPos2);
+		Vec3f tangent = deltaPos1.subN(deltaPos2);
 		
 		tangent.mul(r, tangent);
 		

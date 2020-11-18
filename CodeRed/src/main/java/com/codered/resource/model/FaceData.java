@@ -1,15 +1,15 @@
 package com.codered.resource.model;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.vector.vec3.Vec3;
-import org.barghos.math.vector.vec3.Vec3R;
+import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.vector.vec3.Vec3fR;
 
 public class FaceData
 {
 	private VertexData vertexA;
 	private VertexData vertexB;
 	private VertexData vertexC;
-	private Vec3 normal = new Vec3();
+	private Vec3f normal = new Vec3f();
 	
 	public FaceData(VertexData vA, VertexData vB, VertexData vC, Tup3fR normal)
 	{
@@ -34,7 +34,7 @@ public class FaceData
 		return this.vertexC;
 	}
 	
-	public Vec3R getNormal()
+	public Vec3fR getNormal()
 	{
 		return this.normal;
 	}

@@ -3,10 +3,10 @@ package com.codered.entities;
 import java.util.List;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.geometry.AABB3f;
-import org.barghos.math.helper.AABB3fHelper;
+import org.barghos.math.boundary.AABB3f;
+import org.barghos.math.boundary.AABB3fHelper;
 import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.barghos.math.vector.vec3.Vec3Axis;
 
 import com.codered.model.Mesh;
@@ -19,14 +19,14 @@ public class StaticModelEntity extends StaticEntity
 	
 	private AABB3f basicAABB;
 	
-	public StaticModelEntity(Model model, Vec3 pos, float rx, float ry, float rz, Tup3fR scale)
+	public StaticModelEntity(Model model, Vec3f pos, float rx, float ry, float rz, Tup3fR scale)
 	{
 		super(null, pos, rx, ry, rz, scale);
 		this.model = model;
 	}
 
 	
-	public StaticModelEntity(Model model, Vec3 pos, float rx, float ry, float rz)
+	public StaticModelEntity(Model model, Vec3f pos, float rx, float ry, float rz)
 	{
 		super(null, pos, rx, ry, rz);
 		this.model = model;

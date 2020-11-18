@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3;
 import org.barghos.math.geometry.Triangle3;
-import org.barghos.math.vector.vec3.Vec3;
+import org.barghos.math.vector.vec3.Vec3f;
 import org.haze.mtl.MTLReader;
 import org.haze.mtl.MaterialList;
 import org.haze.obj.OBJLoader;
@@ -63,7 +63,7 @@ public class HazeLoader implements IResourceLoader
 				VertexData va = new VertexData(face.vertexA.position, face.vertexA.normal, face.vertexA.tangent, face.vertexA.uv);
 				VertexData vb = new VertexData(face.vertexB.position, face.vertexB.normal, face.vertexB.tangent, face.vertexB.uv);
 				VertexData vc = new VertexData(face.vertexC.position, face.vertexC.normal, face.vertexC.tangent, face.vertexC.uv);
-				Vec3 normal = face.normal;
+				Vec3f normal = face.normal;
 				
 				faces.add(new FaceData(va, vb, vc, normal));
 				
