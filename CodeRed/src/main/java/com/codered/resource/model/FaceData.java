@@ -1,8 +1,8 @@
 package com.codered.resource.model;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fR;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.api.Vec3fR;
 
 public class FaceData
 {

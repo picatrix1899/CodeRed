@@ -1,9 +1,9 @@
 package com.codered;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quatf;
-import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.quat.Quatf;
+import org.barghos.math.vec3.Vec3f;
 
 public class Transform implements ITransform
 {
@@ -47,16 +47,16 @@ public class Transform implements ITransform
 	public Vec3f getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(this.newPos, new Vec3f());
+			return this.parent.getTransformationMatrix().transform(this.newPos, true, new Vec3f());
 		return this.newPos;
 	}
 
-	public Mat4 getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
 		if(this.parent == null)
-			return Mat4.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale);
+			return Mat4f.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale);
 
-		return this.parent.getTransformationMatrix().mul(Mat4.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale), null);
+		return this.parent.getTransformationMatrix().mul(Mat4f.modelMatrix(this.newPos, this.newRot.getRotation(), this.newScale), new Mat4f());
 	}
 
 	public Vec3f getPos(float alpha)
@@ -84,7 +84,7 @@ public class Transform implements ITransform
 		return getScale();
 	}
 
-	public Mat4 getTransformationMatrix(float alpha)
+	public Mat4f getTransformationMatrix(float alpha)
 	{
 		return getTransformationMatrix();
 	}

@@ -1,6 +1,6 @@
 package com.codered.input;
 
-import org.barghos.math.vector.vec2.Vec2f;
+import org.barghos.math.vec2.Vec2f;
 import org.lwjgl.glfw.GLFW;
 
 import com.codered.window.WindowContext;

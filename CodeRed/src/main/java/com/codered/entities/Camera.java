@@ -1,11 +1,11 @@
 package com.codered.entities;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quatf;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fAxis;
-import org.barghos.math.vector.vec3.Vec3fPool;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.quat.Quatf;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3fAxis;
+import org.barghos.math.vec3.pool.Vec3fPool;
 
 import com.codered.SweptTransform;
 
@@ -120,14 +120,14 @@ public class Camera
 	public Vec3f getRelativePos() { return this.transform.getPos(); }
 	public Vec3f getTotalPos() { return this.transform.getTransformedPos(); }
 	
-	public Mat4 getViewMatrix()
+	public Mat4f getViewMatrix()
 	{
-		return Mat4.viewMatrix(getTotalPos(), getTotalRot());
+		return Mat4f.viewMatrix(getTotalPos(), getTotalRot());
 	}
 	
-	public Mat4 getLerpedViewMatrix(float alpha)
+	public Mat4f getLerpedViewMatrix(float alpha)
 	{
-		return Mat4.viewMatrix(this.transform.getTransformedPos(alpha), this.transform.getRot(alpha));
+		return Mat4f.viewMatrix(this.transform.getTransformedPos(alpha), this.transform.getRot(alpha));
 	}
 	
 	public Camera rotatePitch(float amount)

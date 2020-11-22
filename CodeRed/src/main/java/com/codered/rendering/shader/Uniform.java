@@ -3,7 +3,7 @@ package com.codered.rendering.shader;
 import java.nio.FloatBuffer;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.matrix.Mat4;
+import org.barghos.math.matrix.Mat4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -60,9 +60,9 @@ public abstract class Uniform
 		GL20.glUniform4f(uniform, x, y, z, w);
 	}
 	
-	protected void loadMat4(int uniform, Mat4 mat)
+	protected void loadMat4(int uniform, Mat4f mat)
 	{
-		FloatBuffer buffer = MemoryUtil.memAllocFloat(Mat4.ROWS * Mat4.COLUMNS);
+		FloatBuffer buffer = MemoryUtil.memAllocFloat(Mat4f.ROWS * Mat4f.COLUMNS);
 		mat.toBufferColumnMajor(buffer);
 
 		GL20.glUniformMatrix4fv(uniform, false, buffer);

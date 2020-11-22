@@ -1,8 +1,8 @@
 package com.codered.demo;
 
 import org.barghos.core.debug.Debug;
-import org.barghos.math.vector.quat.QuatfPool;
-import org.barghos.math.vector.vec3.Vec3fPool;
+import org.barghos.math.quat.pool.QuatfPool;
+import org.barghos.math.vec3.pool.Vec3fPool;
 
 import com.codered.engine.EngineBootstrap;
 import com.codered.utils.GLCommon;

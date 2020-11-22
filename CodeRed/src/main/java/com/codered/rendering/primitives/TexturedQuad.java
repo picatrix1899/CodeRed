@@ -1,11 +1,9 @@
 package com.codered.rendering.primitives;
 
-import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.vec2.Vec2f;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fAxis;
-
-
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.vec2.Vec2f;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3fAxis;
 import org.lwjgl.opengl.GL15;
 
 import com.codered.Transform;
@@ -70,15 +68,15 @@ public class TexturedQuad
 		return tangent.normal();
 	}
 	
-	public Mat4 getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
 		
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
-		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
+		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling3D(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
 		{
-			Mat4 parentTransformation = this.transform.getParent().getTransformationMatrix();
+			Mat4f parentTransformation = this.transform.getParent().getTransformationMatrix();
 			
 			return parentTransformation.mul(ownTransformation, null);
 		}

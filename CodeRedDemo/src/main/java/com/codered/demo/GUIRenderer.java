@@ -1,6 +1,6 @@
 package com.codered.demo;
 
-import org.barghos.math.vector.vec2.Vec2f;
+import org.barghos.math.vec2.Vec2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 

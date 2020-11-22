@@ -1,7 +1,7 @@
 package com.codered.rendering.shader;
 
-import org.barghos.math.vector.vec2.Vec2f;
-import org.barghos.math.vector.vec2.api.Vec2fR;
+import org.barghos.math.vec2.Vec2f;
+import org.barghos.math.vec2.api.Vec2fR;
 
 public class UniformVec2 extends Uniform
 {

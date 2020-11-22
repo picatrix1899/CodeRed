@@ -1,7 +1,7 @@
 package com.codered.rendering.shader;
 
 import org.barghos.core.tuple4.api.Tup4fR;
-import org.barghos.math.vector.vec4.Vec4f;
+import org.barghos.math.vec4.Vec4f;
 
 public class UniformVec4 extends Uniform
 {

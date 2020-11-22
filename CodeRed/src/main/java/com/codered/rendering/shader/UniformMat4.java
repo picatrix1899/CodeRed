@@ -1,11 +1,11 @@
 package com.codered.rendering.shader;
 
-import org.barghos.math.matrix.Mat4;
+import org.barghos.math.matrix.Mat4f;
 
 public class UniformMat4 extends Uniform
 {
 
-	private Mat4 mat = new Mat4();
+	private Mat4f mat = new Mat4f();
 	
 	private int location = -1;
 	
@@ -17,8 +17,8 @@ public class UniformMat4 extends Uniform
 	@Override
 	public void set(Object... obj)
 	{
-		if(!(obj[0] instanceof Mat4)) throw new IllegalArgumentException();
-		Mat4 m = (Mat4)obj[0];
+		if(!(obj[0] instanceof Mat4f)) throw new IllegalArgumentException();
+		Mat4f m = (Mat4f)obj[0];
 		mat.set(m);
 		loadMat4(this.location, this.mat);
 	}

@@ -7,11 +7,11 @@ import org.barghos.core.tuple3.api.Tup3fR;
 import org.barghos.math.boundary.AABB3f;
 import org.barghos.math.boundary.OBB3f;
 import org.barghos.math.boundary.OBBOBBResolver;
-import org.barghos.math.matrix.Mat4;
+import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fAxis;
-import org.barghos.math.vector.vec3.Vec3fPool;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3fAxis;
+import org.barghos.math.vec3.pool.Vec3fPool;
 
 import com.codered.SweptTransform;
 import com.codered.engine.EngineRegistry;
@@ -34,7 +34,7 @@ public class Player
 	
 	private WindowContext context;
 
-	private SweptTransform transform = new SweptTransform();
+	public SweptTransform transform = new SweptTransform();
 
 	public Player(Tup3fR pos)
 	{
@@ -109,7 +109,7 @@ public class Player
 		{
 			dir.sub(this.camera.getYaw().transform(Vec3fAxis.AXIS_NZ, t).normal());
 		}
-
+		
 		if(!dir.isZero(0.0f))
 		{
 			dir.normal();

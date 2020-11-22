@@ -1,8 +1,7 @@
 package com.codered.window;
 
 import org.barghos.core.event.Event;
-
-import org.barghos.math.vector.vec2.Vec2f;
+import org.barghos.math.vec2.Vec2f;
 
 import static org.lwjgl.glfw.GLFW.*;
 

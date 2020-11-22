@@ -2,7 +2,7 @@ package com.codered.gui.elements;
 
 import org.barghos.math.geometry.Area2;
 import org.barghos.math.point.Point2f;
-import org.barghos.math.vector.vec2.Vec2f;
+import org.barghos.math.vec2.Vec2f;
 
 import com.codered.gui.GUIElement;
 import com.codered.gui.GUIWindow;

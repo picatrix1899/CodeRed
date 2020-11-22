@@ -2,10 +2,10 @@ package com.codered.resource.model;
 
 import org.barghos.core.tuple2.api.Tup2fR;
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.vector.vec2.Vec2f;
-import org.barghos.math.vector.vec2.api.Vec2fR;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fR;
+import org.barghos.math.vec2.Vec2f;
+import org.barghos.math.vec2.api.Vec2fR;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.api.Vec3fR;
 
 public class VertexData
 {

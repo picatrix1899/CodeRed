@@ -1,15 +1,15 @@
 package com.codered;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.VectorInterpolation;
-import org.barghos.math.vector.quat.Quatf;
-import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.quat.Quatf;
+import org.barghos.math.utils.VectorInterpolation;
+import org.barghos.math.vec3.Vec3f;
 
 public class SweptTransform implements ITransform
 {
-	private Transform oldTransform = new Transform();
-	private Transform newTransform = new Transform();
+	public Transform oldTransform = new Transform();
+	public Transform newTransform = new Transform();
 	
 	private ITransform parent;
 	
@@ -49,14 +49,14 @@ public class SweptTransform implements ITransform
 	public Vec3f getTransformedPos(float alpha)
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), new Vec3f());
+			return this.parent.getTransformationMatrix(alpha).transform(getPos(alpha), true, new Vec3f());
 		return getPos(alpha);
 	}
 
 	public Vec3f getTransformedPos()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().transform(getPos(), new Vec3f());
+			return this.parent.getTransformationMatrix().transform(getPos(), true, new Vec3f());
 		return getPos();
 	}
 
@@ -94,18 +94,23 @@ public class SweptTransform implements ITransform
 		return this.newTransform.getScale();
 	}
 
-	public Mat4 getTransformationMatrix(float alpha)
+	public Mat4f getTransformationMatrix(float alpha)
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix(alpha).mul(Mat4.modelMatrix(getPos(alpha), getRot(alpha),getScale(alpha)), null);
-		return Mat4.modelMatrix(getPos(alpha), getRot(alpha), getScale(alpha));
+			return this.parent.getTransformationMatrix(alpha).mul(Mat4f.modelMatrix(getPos(alpha), getRot(alpha),getScale(alpha)), new Mat4f());
+		return Mat4f.modelMatrix(getPos(alpha), getRot(alpha), getScale(alpha));
 	}
 
-	public Mat4 getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
 		if(this.parent != null)
-			return this.parent.getTransformationMatrix().mul(Mat4.modelMatrix(getPos(), getRot(),getScale()), null);
-		return Mat4.modelMatrix(getPos(), getRot(), getScale());
+			return this.parent.getTransformationMatrix().mul(Mat4f.modelMatrix(getPos(), getRot(),getScale()), new Mat4f());
+		return Mat4f.modelMatrix(getPos(), getRot(), getScale());
+	}
+	
+	public Mat4f getModelMatrix()
+	{
+		return Mat4f.modelMatrix(getPos(), getRot(), getScale());
 	}
 
 	public SweptTransform setPos(Tup3fR pos)

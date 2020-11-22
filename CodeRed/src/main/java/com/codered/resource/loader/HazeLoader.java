@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3f;
 import org.barghos.math.geometry.Triangle3f;
-import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3f;
 import org.haze.mtl.MTLReader;
 import org.haze.mtl.MaterialList;
 import org.haze.obj.OBJLoader;

@@ -19,11 +19,8 @@ uniform Camera camera;
 void main(void)
 {
 	vec4 posRelativeToCam = camera.T_view * T_model * vec4(vertexPos, 1.0);
-	//vec4 t = vec4(posRelativeToCam.x * cos(radians(10 + 0.5 * posRelativeToCam.z)), posRelativeToCam.y, posRelativeToCam.z, posRelativeToCam.w);
-	//gl_Position = T_projection * t;
-	
-	vec4 t = T_projection * posRelativeToCam;
-	gl_Position = vec4(t.x * cos(radians(40 + t.z)), t.y, t.z, t.w);
+
+	gl_Position = T_projection * posRelativeToCam;
 	
 	pass_texCoords = texCoords;
 }

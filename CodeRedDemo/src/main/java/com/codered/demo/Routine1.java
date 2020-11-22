@@ -6,19 +6,20 @@ import java.util.Map;
 
 import org.barghos.core.tuple2.Tup2i;
 import org.barghos.core.tuple3.Tup3f;
-import org.barghos.math.Maths;
 import org.barghos.math.boundary.AABB3f;
-import org.barghos.math.matrix.Mat4;
+import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3f;
-import org.barghos.math.vector.quat.Quatf;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fAxis;
+import org.barghos.math.quat.Quatf;
+import org.barghos.math.utils.Maths;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3fAxis;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import com.codered.MemoryWatchdog;
 import com.codered.MemoryWatchdog.MemorySession;
+import com.codered.SweptTransform;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -43,9 +44,9 @@ import com.codered.window.WindowRoutine;
 
 public class Routine1 extends WindowRoutine
 {
-	private Mat4 projection;
-	private Mat4 proj;
-	private Mat4 pr;
+	private Mat4f projection;
+	private Mat4f proj;
+	private Mat4f pr;
 	private boolean p;
 	
 	private Player player;
@@ -79,10 +80,10 @@ public class Routine1 extends WindowRoutine
 	private FBO shadowFbo;
 	private ShadowShader shadowShader;
 	private ShadowBox shadowBox;
-	private Mat4 projectionMatrix = Mat4.identity();
-	private Mat4 lightViewMatrix = Mat4.identity();
-	private Mat4 projectionViewMatrix =  Mat4.identity();
-	private Mat4 offset = createOffset();
+	private Mat4f projectionMatrix = Mat4f.identity();
+	private Mat4f lightViewMatrix = Mat4f.identity();
+	private Mat4f projectionViewMatrix =  Mat4f.identity();
+	private Mat4f offset = createOffset();
 
 	private WindowContext context;
 	
@@ -168,10 +169,7 @@ public class Routine1 extends WindowRoutine
 		RenderHelper.shadowShader = shadowShader;
 		RenderHelper.coloredShader = coloredShader;
 		
-		this.projection = Mat4.perspective(this.context.getWindow().getWidth(), 60f, 0.1f, 1000f);
-		this.proj = this.projection;
-//		this.pr = new Mat4().initOrtho(-400, 400, -300, 300, 0.01f, 1000f).transpose();
-		this.pr = new Mat4().initOrtho2(this.context.getWindow().getWidth(), this.context.getWindow().getHeight(), 60f, 0.01f, 1000f).transpose();
+		this.projection = Mat4f.perspective(this.context.getWindow().getWidth(), this.context.getWindow().getHeight(), 60f, 0.1f, 1000f);
 		
 		this.w = new World();
 
@@ -191,19 +189,19 @@ public class Routine1 extends WindowRoutine
 		this.w.add(ent);
 		
 		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -40), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -10), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -20), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -30), 0, 0, 0, mscale));
-		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -40), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -40), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -10), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -20), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -30), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -40), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -10), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -20), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -30), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -40), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -10), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -20), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -30), 0, 0, 0, mscale));
+//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -40), 0, 0, 0, mscale));
 		
 		this.ambient = new AmbientLight(120, 100, 100, 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
@@ -222,88 +220,30 @@ public class Routine1 extends WindowRoutine
 		GLUtils.multisample(true);
 		
 		this.inventory = new GuiInventory(this, this.guiRenderer, this.font);
-		//this.inventory.pic = this.out.getAttachment(FBOTarget.COLOR1).getId() ;
 		this.inventory.button.background = this.shadowFbo.getAttachmentId(FBOTarget.COLOR0);
 	}
 
 	public void update(double delta)
 	{
-//		if(!DemoGame.getInstance().showInventory)
-			if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
+		if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) Engine.getInstance().stop(false);
+			
+		if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
+		
+		this.player.update(delta);
 
-//			if(!DemoGame.getInstance().showInventory)
-//			{
-				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_Q)) { DemoGame.getInstance().directional = !DemoGame.getInstance().directional; }
-				if(this.context.getInputManager().isKeyPressed(GLFW.GLFW_KEY_TAB))
-				{ 
-					if(p)
-					{
-						this.projection = this.proj;
-						
-					}
-					else
-					{
-						Mat4 m = Mat4.identity();
-						//m.m[0][2] = (float)Maths.sin(40.0f * Maths.DEG_TO_RAD);
-						
-						this.projection = m.mul(this.proj, new Mat4());
-						//this.projection = this.pr;
-						//GL11.glViewport(0, 0, 800, 600);
-					}
-					p = !p;
-				}
-				
-				this.player.update(delta);
-				ent.rotate(new Vec3f(Vec3fAxis.AXIS_NY), 2);
-				
-				playerPos.set(this.player.getEyePos());
-//			}
-//			else
-//			{
-//				if(DemoGame.getInstance().showInventory)
-//				{
-					this.inventory.update();
-//				}
-				//this.inventory.update();
-//			}
-					
-		Vec3f headPos = this.ent.getTransform().getTransformedPos().addN(0,1.6f,0);
-		Quatf rot = this.ent.getTransform().getTransformedRot();
-		Vec3f lookDir = rot.transform(Vec3fAxis.AXIS_Z, new Vec3f()).normal();	
-		this.directionalLight.direction.set(lookDir);
-		this.directionalLight.pos.set(headPos);
+		playerPos.set(this.player.getEyePos());
+
+		this.inventory.update();
 	}
 
 	public void render(double delta, double alpha)
 	{
 		GLUtils.clearAll();
 
-//		renderWorld(alpha);
-		
-//		if(DemoGame.getInstance().showInventory)
-//		{
-//			if(this.inventory.allowWorldProcessing())
-//			{
-//				GLUtils.blend(false);
-//
-				
-//				
-//				//GLUtils.blend(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//			}
-//
-			this.inventory.render();
-//			
-//			if(this.inventory.allowWorldProcessing())
-//				GLUtils.blend(false);
-//		}
-//		else
-//		{
-//		
-			renderWorld(alpha);
-//			
-//		}
-		
-		
+		this.inventory.render();
+
+		renderWorld(alpha);
+
 		renderAxis(alpha);
 	}
 
@@ -312,6 +252,9 @@ public class Routine1 extends WindowRoutine
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(10, 0, 0), new Tup3f(1,0,0), alpha);
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(0, 10, 0), new Tup3f(0,1,0), alpha);
 		RenderHelper.renderArrow(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(0, 0, 10), new Tup3f(0,0,1), alpha);
+		
+		RenderHelper.renderArc(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(10, 0, 0), new Point3f(0, 10, 0),
+				16, new Tup3f(1,1,0), alpha);
 		
 		Vec3f headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
 		Quatf rot = this.ent.getTransform().getTransformedRot((float)alpha);
@@ -325,13 +268,13 @@ public class Routine1 extends WindowRoutine
 	
 	private void renderShadowMap(double alpha)
 	{
-		Mat4 lightProjection = Mat4.ortho(-10f, 10f, -10f, 10f, 0.001f, 1000f);
+		Mat4f lightProjection = Mat4f.ortho(-10f, 10f, -10f, 10f, 0.001f, 1000f);
 		
 		Vec3f pos = this.directionalLight.pos;
 		
-		Mat4 lightView = Mat4.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3fAxis.AXIS_Y);
+		Mat4f lightView = Mat4f.lookAt(pos, pos.addN(this.directionalLight.direction), Vec3fAxis.AXIS_Y);
 		
-		Mat4 lightSpace = lightProjection.mul(lightView);
+		Mat4f lightSpace = lightProjection.mul(lightView);
 		
 		GL11.glViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
 		BindingUtils.bindFramebuffer(this.shadowFbo);
@@ -472,14 +415,14 @@ public class Routine1 extends WindowRoutine
 		 lightViewMatrix.initLookAt(center, center.addN(direction), Vec3fAxis.AXIS_Y);
 	}
 	
-	public Mat4 getToShadowMapSpaceMatrix() {
-		return Mat4.mul(offset, projectionViewMatrix, null);
+	public Mat4f getToShadowMapSpaceMatrix() {
+		return Mat4f.mul(offset, projectionViewMatrix, null);
 	}
 	
-	private Mat4 createOffset() {
-		Mat4 offset = new Mat4();
-		offset.translate(new Vec3f(0.5f, 0.5f, 0.5f));
-		offset.scale(new Vec3f(0.5f, 0.5f, 0.5f));
+	private Mat4f createOffset() {
+		Mat4f offset = new Mat4f();
+		offset.translate3D(new Vec3f(0.5f, 0.5f, 0.5f));
+		offset.scale3D(new Vec3f(0.5f, 0.5f, 0.5f));
 		return offset;
 	}
 }

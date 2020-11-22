@@ -7,12 +7,11 @@ import java.util.List;
 
 import org.barghos.math.geometry.ConvexTriangleMesh3f;
 import org.barghos.math.geometry.Triangle3f;
-import org.barghos.math.vector.vec2.Vec2f;
-import org.barghos.math.vector.vec2.pool.Vec2fPool;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fPool;
-import org.barghos.math.vector.vec3.Vec3fR;
-
+import org.barghos.math.vec2.Vec2f;
+import org.barghos.math.vec2.pool.Vec2fPool;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.api.Vec3fR;
+import org.barghos.math.vec3.pool.Vec3fPool;
 import org.haze.png.Image;
 import org.haze.png.PNGReader;
 

@@ -1,6 +1,6 @@
 package com.codered.gui.elements;
 
-import org.barghos.math.vector.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3f;
 
 import com.codered.gui.font.FontType;
 

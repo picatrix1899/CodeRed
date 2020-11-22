@@ -1,10 +1,10 @@
 package com.codered.entities;
 
 import org.barghos.core.tuple3.api.Tup3fR;
-import org.barghos.math.matrix.Mat4;
-import org.barghos.math.vector.quat.Quatf;
-import org.barghos.math.vector.vec3.Vec3f;
-import org.barghos.math.vector.vec3.Vec3fAxis;
+import org.barghos.math.matrix.Mat4f;
+import org.barghos.math.quat.Quatf;
+import org.barghos.math.vec3.Vec3f;
+import org.barghos.math.vec3.Vec3fAxis;
 
 import com.codered.model.TexturedModel;
 
@@ -50,14 +50,14 @@ public class StaticEntity extends BaseEntity
 	
 	public Quatf getRot() { return super.getRot(); }
 
-	public Mat4 getTransformationMatrix()
+	public Mat4f getTransformationMatrix()
 	{
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 		
-		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
+		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling3D(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
 		{
-			Mat4 parentTransformation = this.transform.getParent().getTransformationMatrix();
+			Mat4f parentTransformation = this.transform.getParent().getTransformationMatrix();
 			
 			return parentTransformation.mul(ownTransformation, null);
 		}
@@ -65,20 +65,20 @@ public class StaticEntity extends BaseEntity
 		return ownTransformation;
 	}
 	
-	public Mat4 getTMatrix()
+	public Mat4f getTMatrix()
 	{
-		return Mat4.translation(this.transform.getPos());
+		return Mat4f.translation3D(this.transform.getPos());
 	}
 	
-	public Mat4 Test()
+	public Mat4f Test()
 	{
 	
-		Mat4 baseTransformation = Mat4.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
+		Mat4f baseTransformation = Mat4f.modelMatrix(getTransform().getPos(), getTransform().getRot(), Vec3fAxis.ONE);
 	
-		Mat4 ownTransformation = baseTransformation.mul(Mat4.scaling(getTransform().getScale()), null);
+		Mat4f ownTransformation = baseTransformation.mul(Mat4f.scaling3D(getTransform().getScale()), null);
 		if(this.transform.getParent() != null)
 		{
-			Mat4 parentTransformation = this.transform.getParent().getTransformationMatrix();
+			Mat4f parentTransformation = this.transform.getParent().getTransformationMatrix();
 			
 			return parentTransformation.mul(ownTransformation, null);
 		}
@@ -87,14 +87,14 @@ public class StaticEntity extends BaseEntity
 		
 	}
 	
-	public Mat4 getRotationMatrix()
+	public Mat4f getRotationMatrix()
 	{
-		return Mat4.rotation(this.transform.getRot());
+		return Mat4f.rotation3D(this.transform.getRot());
 	}
 	
-	public Mat4 getTransformedScaleMatrix()
+	public Mat4f getTransformedScaleMatrix()
 	{
-		Mat4 ownTransformation = Mat4.scaling(getTransform().getScale());
+		Mat4f ownTransformation = Mat4f.scaling3D(getTransform().getScale());
 		
 		return ownTransformation;
 	}
