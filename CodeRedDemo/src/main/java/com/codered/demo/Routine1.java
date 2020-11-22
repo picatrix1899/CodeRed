@@ -9,8 +9,6 @@ import org.barghos.core.tuple3.Tup3f;
 import org.barghos.math.boundary.AABB3f;
 import org.barghos.math.matrix.Mat4f;
 import org.barghos.math.point.Point3f;
-import org.barghos.math.quat.Quatf;
-import org.barghos.math.utils.Maths;
 import org.barghos.math.vec3.Vec3f;
 import org.barghos.math.vec3.Vec3fAxis;
 import org.lwjgl.glfw.GLFW;
@@ -19,7 +17,6 @@ import org.lwjgl.opengl.GL30;
 
 import com.codered.MemoryWatchdog;
 import com.codered.MemoryWatchdog.MemorySession;
-import com.codered.SweptTransform;
 import com.codered.engine.Engine;
 import com.codered.engine.EngineRegistry;
 import com.codered.entities.Camera;
@@ -45,9 +42,6 @@ import com.codered.window.WindowRoutine;
 public class Routine1 extends WindowRoutine
 {
 	private Mat4f projection;
-	private Mat4f proj;
-	private Mat4f pr;
-	private boolean p;
 	
 	private Player player;
 
@@ -181,27 +175,27 @@ public class Routine1 extends WindowRoutine
 		Model model = EngineRegistry.getResourceRegistry().get("res/models/nanosuit.obj", Model.class);
 		
 		this.ent = new StaticModelEntity(model, new Vec3f(-10, 0, -10), 0, 0, 0);
-		AABB3f aabb = this.ent.getAABB();
+		AABB3f aabb = this.ent.getModel().getAABB();
 		float height = aabb.getHalfExtend().mul(2.0f).getY();
 		Tup3f mscale = new Tup3f(1.8f / height);
-		this.ent.getTransform().setScale(mscale);
-		this.ent.getTransform().setPos(new Tup3f(-10, -aabb.getMin().getY(), -10));
+		this.ent.setScale(mscale);
+		this.ent.setPos(new Tup3f(-10, -aabb.getMin().getY(), -10));
 		this.w.add(ent);
 		
 		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -30), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -40), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -10), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -20), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -30), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -40), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -10), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -20), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -30), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -40), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -10), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -20), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -30), 0, 0, 0, mscale));
-//		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-10, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-20, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-30, 0, -40), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -10), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -20), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -30), 0, 0, 0, mscale));
+		this.w.add(new StaticModelEntity(model, new Vec3f(-40, 0, -40), 0, 0, 0, mscale));
 		
 		this.ambient = new AmbientLight(120, 100, 100, 1);
 		this.directionalLight = new DirectionalLight(200, 100, 100, 10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f);
@@ -256,12 +250,12 @@ public class Routine1 extends WindowRoutine
 		RenderHelper.renderArc(this.projection, this.player.getCamera(), new Point3f(0,0,0), new Point3f(10, 0, 0), new Point3f(0, 10, 0),
 				16, new Tup3f(1,1,0), alpha);
 		
-		Vec3f headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
-		Quatf rot = this.ent.getTransform().getTransformedRot((float)alpha);
-		Vec3f lookDir = rot.transform(Vec3fAxis.AXIS_Z, new Vec3f()).normal();
+//		Vec3f headPos = this.ent.getTransform().getTransformedPos((float)alpha).addN(0,1.6f,0);
+//		Quatf rot = this.ent.getTransform().getTransformedRot((float)alpha);
+//		Vec3f lookDir = rot.transform(Vec3fAxis.AXIS_Z, new Vec3f()).normal();
 		
-		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(0, 0, -1), new Tup3f(1,0,0), alpha);
-		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(lookDir), new Tup3f(0,1,0), alpha);
+//		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(0, 0, -1), new Tup3f(1,0,0), alpha);
+//		RenderHelper.renderArrow(this.projection, this.player.getCamera(), headPos, headPos.addN(lookDir), new Tup3f(0,1,0), alpha);
 	}
 	
 	Vec3f playerPos = new Vec3f();

@@ -20,7 +20,7 @@ public class World
 	
 	public Map<Model, List<StaticModelEntity>> getMapByModel()
 	{
-		return entities.stream().collect(Collectors.groupingBy(p -> p.getNewModel()));
+		return entities.stream().collect(Collectors.groupingBy(p -> p.getModel()));
 	}
 	
 	public Iterator<StaticModelEntity> iterator()

@@ -1,26 +1,18 @@
 package com.codered.entities;
 
-import org.barghos.math.quat.Quatf;
-import org.barghos.math.vec3.Vec3f;
-
-import com.codered.Transform;
+import org.barghos.core.tuple3.api.Tup3fR;
+import org.barghos.math.utils.Transform3f;
 
 public abstract class BaseEntity
 {
-	protected Transform transform = new Transform();
+	protected Transform3f transform = new Transform3f();
 	
 	protected BaseEntity parent;
 	
-	public Transform getTransform() { return this.transform; }
-	
-	public Vec3f getPos() { return this.transform.getPos(); }
-	public Quatf getRot() { return this.transform.getRot(); }
-	
-	public long id;
-
 	public BaseEntity setParent(BaseEntity entity)
 	{
 		this.parent = entity;
+		
 		this.transform.setParent(this.parent.getTransform());
 		
 		return this;
@@ -31,10 +23,8 @@ public abstract class BaseEntity
 		return this.parent;
 	}
 	
-	public BaseEntity setPos(Vec3f pos) { this.transform.setPos(pos); return this; }
-	public BaseEntity rotatePitch(float rx)  { this.transform.rotate(rx, 0.0f, 0.0f); return this; }
-	public BaseEntity rotateYaw(float ry)  { this.transform.rotate(0.0f, ry, 0.0f); return this; }
-	public BaseEntity rotateZ(float rz)  { this.transform.rotate(0.0f, 0.0f, rz); return this; }
-	public BaseEntity rotate(Vec3f v, float angle) {this.transform.rotate(v, angle); return this;}
+	public Transform3f getTransform() { return this.transform; }
 	
+	public BaseEntity setPos(Tup3fR pos) { this.transform.setRelativePosition(pos); return this; }
+	public BaseEntity setScale(Tup3fR scale) { this.transform.setRelativeScale(scale); return this; }
 }
